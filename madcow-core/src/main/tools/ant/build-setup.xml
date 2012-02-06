@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Ant build file to define tasks used by the Madcow Ant script.
+-->
+<project name="build-setup" basedir="../../../..">
+
+    <target name="-banner">
+        <echo message="Madcow version: ${madcow.version}"/>
+        <echo message="Java Runtime Environment version: ${java.version}"/>
+        <echo message="Java Runtime Environment vendor: ${java.vendor}"/>
+        <echo message="Ant version: ${ant.version}"/>
+        <echo message="Operating system name: ${os.name}"/>
+        <echo message="Operating system architecture: ${os.arch}"/>
+        <echo message="Operating system version: ${os.version}"/>
+        <echo message="Base directory: ${basedir}"/>
+        <echo message="Java Home: ${java.home}"/>
+    </target>
+
+    <target name="-defineTasks" unless="defineTasks.done">
+
+        <path id="defineTasks.classpath">
+            <path path="${maven.runtime.classpath}"/>
+        </path>
+
+        <path id="cobertua.classpath">
+            <path path="${net.sourceforge.cobertura:cobertura:jar}"/>
+            <path path="${log4j:log4j:jar}"/>
+            <path path="${asm:asm-tree:jar}"/>
+            <path path="${asm:asm:jar}"/>
+            <path path="${oro:oro:jar}"/>
+        </path>
+
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties"
+                 classpathref="defineTasks.classpath"/>
+        <taskdef name="groovyc"
+                 classname="org.codehaus.groovy.ant.Groovyc"
+                 classpathref="defineTasks.classpath"/>
+        <taskdef name="groovydoc"
+                 classname="org.codehaus.groovy.ant.Groovydoc"
+                 classpathref="defineTasks.classpath"/>
+        <taskdef name="junit"
+                 classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"
+                 classpathref="defineTasks.classpath"/>
+        <taskdef name="junitreport"
+                 classname="org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator"
+                 classpathref="defineTasks.classpath"/>
+        <taskdef resource="tasks.properties"
+                 classpathref="cobertua.classpath"/>
+
+        <property name="defineTasks.done" value="true" description="Avoid this target to be called twice in a run"/>
+    </target>
+
+</project>

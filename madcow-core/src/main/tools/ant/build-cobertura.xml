@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Ant build file to define tasks used by the Madcow Ant script.
+-->
+<project name="build-cobertura" basedir="../../../..">
+
+    <target name="instrument" description="Instrument compiled classes">
+        <delete dir="${target.cobertura.instrumented.dir}" quiet="true" />
+        <cobertura-instrument todir="${target.cobertura.instrumented.dir}" datafile="${target.cobertura.instrumented.dir}/cobertura.ser">
+            <fileset dir="${target.classes.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </cobertura-instrument>
+    </target>
+
+</project>

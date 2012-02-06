@@ -1,0 +1,94 @@
+/* Javadoc style sheet */
+
+body {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: "Helvetica Neue", "Helvetica", Sans-Serif;
+}
+
+h1, h2 {
+    font-size: 145%;
+    color: #E86F00;
+}
+
+/* Links */
+a:link, a:visited {
+    color: #1279C6;
+    text-decoration: none;
+}
+
+a:hover {
+    font-weight: bold;
+    color: #1279C6;
+    text-decoration: underline;
+}
+
+/* HR and table borders*/
+hr, table {
+    border-style: solid;
+}
+
+th {
+    border-style: none;
+}
+
+/* Table colors */
+.TableHeadingColor {
+    background: #1279C6;
+    color: #FFFFFF;
+}
+
+.TableSubHeadingColor {
+    background: #1279C6;
+    color: #FFFFFF;
+}
+
+.TableRowColor {
+    background: #FFFFFF;
+    color: #000000;
+}
+
+/* Font used in left-hand frame lists */
+.FrameTitleFont {
+    font-size: 100%;
+    color: #E86F00
+}
+
+.FrameHeadingFont {
+    font-size: 90%;
+    color: #E86F00
+}
+
+.FrameItemFont {
+    font-size: 90%;
+    color: #E86F00
+}
+
+/* Navigation bar fonts and colors */
+.NavBarCell1 {
+    background-color: #1279C6;
+    color: #000000
+}
+
+.NavBarCell1Rev {
+    background-color: #04469D;
+    color: #FFFFFF
+}
+
+.NavBarFont1 {
+    color: #FFFFFF;
+}
+
+.NavBarFont1Rev {
+    color: #FFFFFF;
+}
+
+.NavBarCell2 {
+    background-color: #FFFFFF;
+    color: #000000
+}
+
+.NavBarCell3 {
+    background-color: #FFFFFF;
+    color: #000000
+}

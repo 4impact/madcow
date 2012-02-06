@@ -1,0 +1,10 @@
+target/
+junitvmwatcher*.properties
+.idea/workspace.xml
+
+# OS generated files #
+######################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db

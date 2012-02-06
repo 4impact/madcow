@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+Parent Maven POM for Madcow
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>au.com.ps4impact.madcow</groupId>
+    <artifactId>madcow-parent-pom</artifactId>
+    <name>Madcow Parent POM</name>
+    <packaging>pom</packaging>
+
+    <version>2.0-alpha-1-SNAPSHOT</version>
+
+    <description>
+        Madcow: Test automation for the rest of us.
+    </description>
+
+    <url>http://madcow.4impact.net.au</url>
+
+    <organization>
+        <name>4impact Professional Services</name>
+        <url>http://www.4impact.com.au</url>
+    </organization>
+
+    <scm>
+        <connection>scm:git:ssh://git@github.com/4impact/madcow.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/4impact/madcow.git</developerConnection>
+        <url>git@github.com:4impact/madcow.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>gbunney</id>
+            <name>Gavin Bunney</name>
+            <email>gbunney@4impact.com.au</email>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <ant.runtime.version>1.8.2</ant.runtime.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>${ant.runtime.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ant</groupId>
+                    <artifactId>ant</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant-junit</artifactId>
+            <version>${ant.runtime.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.cobertura</groupId>
+            <artifactId>cobertura</artifactId>
+            <version>1.9.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+    </dependencies>
+</project>
