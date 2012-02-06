@@ -21,6 +21,56 @@ Maven, like POM
 
     <version>2.0-alpha-1-SNAPSHOT</version>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant</artifactId>
+                        <version>${ant.runtime.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>compile-project</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <tasks>
+                                <property name="maven.compile.classpath" refid="maven.compile.classpath"/>
+                                <property name="maven.runtime.classpath" refid="maven.runtime.classpath"/>
+                                <property name="madcow.version" value="${project.version}"/>
+                                <ant antfile="${basedir}/build.xml" target="compile"/>
+                                <ant antfile="${basedir}/build.xml" target="generate-docs"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>junit-test</id>
+                        <phase>test</phase>
+                        <configuration>
+                            <tasks>
+                                <property name="maven.test.classpath" refid="maven.test.classpath"/>
+                                <property name="maven.runtime.classpath" refid="maven.runtime.classpath"/>
+                                <property name="madcow.version" value="${project.version}"/>
+                                <ant antfile="${basedir}/build.xml" target="test"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>

@@ -3,7 +3,7 @@
 <!--
 Ant build file to define tasks used by the Madcow Ant script.
 -->
-<project name="build-setup" basedir="../../../..">
+<project name="build-setup" basedir="../..">
 
     <target name="-banner">
         <echo message="Madcow version: ${madcow.version}"/>

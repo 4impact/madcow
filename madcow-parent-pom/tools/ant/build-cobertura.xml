@@ -3,7 +3,7 @@
 <!--
 Ant build file to define tasks used by the Madcow Ant script.
 -->
-<project name="build-cobertura" basedir="../../../..">
+<project name="build-cobertura" basedir="../..">
 
     <target name="instrument" description="Instrument compiled classes">
         <delete dir="${target.cobertura.instrumented.dir}" quiet="true" />

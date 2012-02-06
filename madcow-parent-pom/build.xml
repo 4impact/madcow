@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Ant build file for Madcow.
+-->
+<project name="Madcow" basedir=".">
+
+    <!-- !!! need to override this in the module ant files !!! -->
+    <property name="parent.pom.dir" value="${basedir}"/>
+
+    <!-- all these properties are automatically overridden in the other ant scripts as 'basedir' will change -->
+    <property name="target.dir" value="${basedir}/target"/>
+    <property name="target.classes.dir" value="${target.dir}/classes"/>
+    <property name="target.cobertura.instrumented.dir" value="${target.dir}/instrumented-classes"/>
+    <property name="target.cobertura.report.dir" value="${target.dir}/cobertura-report"/>
+    <property name="target.docs.dir" value="${target.dir}/html"/>
+    <property name="target.test.dir" value="${target.dir}/test-classes"/>
+    <property name="target.test.results.dir" value="${target.dir}/test-results"/>
+    <property name="target.test.report.dir" value="${target.dir}/test-report"/>
+    <property name="src.dir" value="${basedir}/src/main"/>
+    <property name="src.groovy.dir" value="${basedir}/src/main/groovy"/>
+    <property name="src.test.dir" value="${basedir}/src/test"/>
+    <property name="tools.dir" value="${parent.pom.dir}/tools"/>
+
+    <import file="${tools.dir}/ant/build-setup.xml"/>
+    <import file="${tools.dir}/ant/build-cobertura.xml"/>
+
+    <path id="compile.classpath">
+        <pathelement location="${build.compile.dir}"/>
+        <path path="${maven.compile.classpath}"/>
+    </path>
+
+    <path id="test.classpath">
+        <pathelement location="target/instrumented-classes"/>
+        <pathelement location="${target.classes.dir}"/>
+        <pathelement location="${target.test.dir}"/>
+        <pathelement path="${maven.test.classpath}"/>
+    </path>
+
+    <target name="-verifyMavenRuntime">
+        <fail message="!!! This build file should only be called from Maven, not directly !!! "
+              unless="maven.compile.classpath"/>
+        <echo message="mvn classpath: ${maven.compile.classpath}"/>
+    </target>
+
+    <target name="clean" description="Clean up build artifacts.">
+        <delete dir="${target.dir}" quiet="true"/>
+    </target>
+
+    <target name="compile" description="Compile Madcow." depends="-defineTasks,-banner,-verifyMavenRuntime">
+        <delete dir="${target.classes.dir}" quiet="true"/>
+        <mkdir dir="${target.classes.dir}"/>
+        <groovyc srcdir="${src.groovy.dir}" destdir="${target.classes.dir}">
+            <classpath refid="compile.classpath"/>
+            <javac debug="on"/>
+        </groovyc>
+    </target>
+
+    <target name="generate-docs" depends="-defineTasks">
+        <delete dir="${target.docs.dir}" quiet="true"/>
+        <mkdir dir="${target.docs.dir}"/>
+        <tstamp>
+            <format property="current.year" pattern="yyyy"/>
+        </tstamp>
+        <groovydoc sourcepath="${src.groovy.dir}"
+                   packagenames="**.*"
+                   use="true"
+                   windowtitle="${project.name} ${madcow.version}"
+                   doctitle="${project.name} ${madcow.version}"
+                   header="${project.name} ${madcow.version}"
+                   footer="Copyright &amp;copy; 2010-${current.year} 4impact Professional Services. All rights reserved."
+                   destdir="${target.docs.dir}"/>
+        <copy todir="${target.docs.dir}" file="${tools.dir}/doc/stylesheet.css" overwrite="true"/>
+    </target>
+
+    <target name="test" depends="-defineTasks,instrument">
+
+        <delete dir="${target.test.dir}" quiet="true"/>
+        <delete dir="${target.test.results.dir}" quiet="true"/>
+        <delete dir="${target.test.report.dir}" quiet="true" />
+        <mkdir dir="${target.test.dir}"/>
+        <mkdir dir="${target.test.results.dir}"/>
+        <mkdir dir="${target.test.report.dir}"/>
+
+        <groovyc srcdir="${src.test.dir}" destdir="${target.test.dir}">
+            <classpath refid="test.classpath"/>
+        </groovyc>
+
+        <junit printsummary="yes" haltonerror="no" haltonfailure="no" fork="yes" errorproperty="test.error" failureproperty="test.failure">
+            <sysproperty key="net.sourceforge.cobertura.datafile"
+                    file="${target.cobertura.instrumented.dir}/cobertura.ser" />
+            <formatter type="xml" />
+            <batchtest todir="${target.test.results.dir}">
+                <fileset dir="${target.test.dir}" includes="**/*Test.class"/>
+            </batchtest>
+            <classpath refid="test.classpath"/>
+        </junit>
+
+        <if>
+            <or>
+                <isset property="test.error" />
+                <isset property="test.failure" />
+            </or>
+            <then>
+                <junitreport todir="${target.test.report.dir}">
+                    <fileset dir="${target.test.results.dir}" includes="**/*" />
+                    <report todir="${target.test.report.dir}" />
+                </junitreport>
+                <condition property="open.junit.executable" value="/usr/bin/open" else="firefox">
+                    <os family="mac"/>
+                </condition>
+                <exec executable="${open.junit.executable}" spawn="true">
+                    <arg line="${target.test.report.dir}/index.html"/>
+                </exec>
+            </then>
+        </if>
+
+        <delete dir="${target.cobertura.report.dir}" quiet="true"/>
+        <mkdir dir="${target.cobertura.report.dir}"/>
+        <cobertura-report srcdir="${src.groovy.dir}" destdir="${target.cobertura.report.dir}" datafile="${target.cobertura.instrumented.dir}/cobertura.ser" />
+
+        <fail if="test.error" message="Unable to execute tests"/>
+        <fail if="test.failure" message="There were test failures"/>
+    </target>
+
+</project>
