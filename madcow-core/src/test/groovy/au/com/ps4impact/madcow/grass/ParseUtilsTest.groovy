@@ -29,6 +29,7 @@ public class ParseUtilsTest extends GroovyTestCase {
         assertEquals('Queen\'sland', ParseUtils.evalMe("Queen'sland"));
 
         assertEquals('"Queensland\'', ParseUtils.evalMe("\"Queensland'"));
+        assertEquals('Queensland', ParseUtils.evalMe("'Queensland'"));
     }
 
     public void testEvalMeLists() {
@@ -55,6 +56,6 @@ public class ParseUtilsTest extends GroovyTestCase {
     public void testEvalMeGroovyCode() {
         assertEquals('{ new String(\'tent\') }', ParseUtils.evalMe("{ new String('tent') }"));
         assertEquals('2 + 2', ParseUtils.evalMe("2 + 2"));
-        assertEquals('\'2\' + \'2\'', ParseUtils.evalMe("'2' + '2'"));
+        assertEquals('2\' + \'2', ParseUtils.evalMe("'2' + '2'"));
     }
 }

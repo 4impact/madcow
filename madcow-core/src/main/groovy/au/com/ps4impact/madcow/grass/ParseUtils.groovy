@@ -42,8 +42,9 @@ class ParseUtils {
      * If it is a String, then it is returned as a String.<br/>
      */
     static def evalMe(String stringToEval) {
+        stringToEval = unquote(stringToEval);
         try {
-            def evaledValue = Eval.me(unDollarify(unquote(stringToEval)));
+            def evaledValue = Eval.me(unDollarify(stringToEval));
             switch (evaledValue) {
                 case Map:
                     return evaledValue as Map;

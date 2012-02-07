@@ -3,8 +3,7 @@ package au.com.ps4impact.madcow.runner.webdriver
 import au.com.ps4impact.madcow.MadcowTestCase
 
 /**
- * User: gbunney
- * Date: 7/02/12 10:53 AM
+ * Test for running WebDriver grass
  */
 class WebDriverStepRunnerTest extends GroovyTestCase {
 
