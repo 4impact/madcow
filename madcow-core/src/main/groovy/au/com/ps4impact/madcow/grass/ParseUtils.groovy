@@ -22,13 +22,28 @@ class ParseUtils {
     }
 
     /**
+     * Attempts to escape the $ signs
+     * @param originalString the string with the $ signs in it
+     * @return the originalString with the $ signs escaped
+     */
+    static String unDollarify(String originalString){
+        //if finds dollar sign
+        if (originalString.contains('$'))
+        {
+            //treat this as a replacement GString-age
+            originalString = originalString.replaceAll($/\$$/$,'\\\\\\$');
+        }
+        return originalString;
+    }
+
+    /**
      * Calls the groovy Eval.me for the string.<br/>
      * Returns an object of the results; if it is a Map/List, then it is just returned.<br/>
      * If it is a String, then it is returned as a String.<br/>
      */
     static def evalMe(String stringToEval) {
         try {
-            def evaledValue = Eval.me(unquote(stringToEval));
+            def evaledValue = Eval.me(unDollarify(unquote(stringToEval)));
             switch (evaledValue) {
                 case Map:
                     return evaledValue as Map;

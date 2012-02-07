@@ -59,6 +59,31 @@ public class GrassBladeTest extends GroovyTestCase {
         checkBladeProperties(equationListMapParam2Blade, """addressbook_search_country.verifySelectFieldOptions = [[country : 'Australia'], [country: 'New Zealand']]""", 'verifySelectFieldOptions', null, [[country : 'Australia'], [country: 'New Zealand']], 'addressbook_search_country');
     }
 
+    public void testEquationDollarInProperties() {
+        GrassBlade equationDollarInBlade = new GrassBlade('addressbook_recoveries_cost.verifyText = $2,000.00', grassParser);
+        checkBladeProperties(equationDollarInBlade, 'addressbook_recoveries_cost.verifyText = $2,000.00', 'verifyText', null, '$2,000.00', 'addressbook_recoveries_cost');
+
+        GrassBlade equationDollarInBlade2 = new GrassBlade('addressbook_recoveries_cost.verifyText = ${someValue}', grassParser);
+        checkBladeProperties(equationDollarInBlade2, 'addressbook_recoveries_cost.verifyText = ${someValue}', 'verifyText', null, '${someValue}', 'addressbook_recoveries_cost');
+
+        GrassBlade equationDollarInBlade3 = new GrassBlade("""addressbook_recoveries_cost.verifyText = \${someAmount\$20}""", grassParser);
+        checkBladeProperties(equationDollarInBlade3, 'addressbook_recoveries_cost.verifyText = \${someAmount\$20}', 'verifyText', null, "\${someAmount\$20}", 'addressbook_recoveries_cost');
+    }
+
+    public void testEquationWithListAndDollarParameterProperties() {
+        GrassBlade equationListDollarParam1Blade = new GrassBlade("""addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]""", grassParser);
+        checkBladeProperties(equationListDollarParam1Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]""", 'verifySelectFieldOptions', null, [options: ["\$10.00", "\$20.00"]], 'addressbook_search_costs');
+
+        GrassBlade equationListDollarParam2Blade = new GrassBlade("""addressbook_search_costs.verifySelectFieldOptions = [options : ['\$10.00', "\$20.00"]]""", grassParser);
+        checkBladeProperties(equationListDollarParam2Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ['\$10.00', "\$20.00"]]""", 'verifySelectFieldOptions', null, [options: ['\$10.00', "\$20.00"]], 'addressbook_search_costs');
+
+        GrassBlade equationListDollarParam3Blade = new GrassBlade("""addressbook_search_costs.verifySelectFieldOptions = [options : ["\$20,000.00", "\$20.00"]]""", grassParser);
+        checkBladeProperties(equationListDollarParam3Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ["\$20,000.00", "\$20.00"]]""", 'verifySelectFieldOptions', null, [options: ["\$20,000.00", "\$20.00"]], 'addressbook_search_costs');
+
+        GrassBlade equationListDollarParam4Blade = new GrassBlade('addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]', grassParser);
+        checkBladeProperties(equationListDollarParam4Blade, 'addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]', 'verifySelectFieldOptions', null, [options: ['$10.00', '$20.00']], 'addressbook_search_costs');
+    }
+
     public void testStatementProperties() {
         GrassBlade statementBlade = new GrassBlade('addressbook_search_button.clickLink', grassParser);
         checkBladeProperties(statementBlade, 'addressbook_search_button.clickLink', 'clickLink', null, null, 'addressbook_search_button');
