@@ -3,7 +3,7 @@
 <!--
 Ant build file for Madcow.
 -->
-<project name="Madcow" basedir=".">
+<project name="Madcow Core" basedir=".">
 
     <property name="parent.pom.dir" value="${basedir}/../madcow-parent-pom/"/>
     <import file="${basedir}/../madcow-parent-pom/build.xml"/>

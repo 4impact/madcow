@@ -3,7 +3,7 @@
 <!--
 Ant build file for Madcow.
 -->
-<project name="Madcow" basedir=".">
+<project name="Madcow Parent POM" basedir=".">
 
     <!-- !!! need to override this in the module ant files !!! -->
     <property name="parent.pom.dir" value="${basedir}"/>
@@ -21,6 +21,7 @@ Ant build file for Madcow.
     <property name="src.groovy.dir" value="${basedir}/src/main/groovy"/>
     <property name="src.test.dir" value="${basedir}/src/test"/>
     <property name="tools.dir" value="${parent.pom.dir}/tools"/>
+    <property name="quick.build" value="false"/>
 
     <import file="${tools.dir}/ant/build-setup.xml"/>
     <import file="${tools.dir}/ant/build-cobertura.xml"/>
@@ -58,26 +59,43 @@ Ant build file for Madcow.
 
     <target name="generate-docs" depends="-defineTasks">
         <delete dir="${target.docs.dir}" quiet="true"/>
-        <mkdir dir="${target.docs.dir}"/>
-        <tstamp>
-            <format property="current.year" pattern="yyyy"/>
-        </tstamp>
-        <groovydoc sourcepath="${src.groovy.dir}"
-                   packagenames="**.*"
-                   use="true"
-                   windowtitle="${project.name} ${madcow.version}"
-                   doctitle="${project.name} ${madcow.version}"
-                   header="${project.name} ${madcow.version}"
-                   footer="Copyright &amp;copy; 2010-${current.year} 4impact Professional Services. All rights reserved."
-                   destdir="${target.docs.dir}"/>
-        <copy todir="${target.docs.dir}" file="${tools.dir}/doc/stylesheet.css" overwrite="true"/>
+        <if>
+            <not>
+                <equals arg1="${quick.build}" arg2="true"/>
+            </not>
+            <then>
+                <mkdir dir="${target.docs.dir}"/>
+                <tstamp>
+                    <format property="current.year" pattern="yyyy"/>
+                </tstamp>
+                <groovydoc sourcepath="${src.groovy.dir}"
+                           packagenames="**.*"
+                           use="true"
+                           windowtitle="${project.name} ${madcow.version}"
+                           doctitle="${project.name} ${madcow.version}"
+                           header="${project.name} ${madcow.version}"
+                           footer="Copyright &amp;copy; 2010-${current.year} 4impact Professional Services. All rights reserved."
+                           destdir="${target.docs.dir}"/>
+                <copy todir="${target.docs.dir}" file="${tools.dir}/doc/stylesheet.css" overwrite="true"/>
+            </then>
+        </if>
     </target>
 
-    <target name="test" depends="-defineTasks,instrument">
+    <target name="test" depends="-defineTasks">
 
         <delete dir="${target.test.dir}" quiet="true"/>
         <delete dir="${target.test.results.dir}" quiet="true"/>
         <delete dir="${target.test.report.dir}" quiet="true" />
+
+        <if>
+            <not>
+                <equals arg1="${quick.build}" arg2="true"/>
+            </not>
+            <then>
+                <antcall target="instrument"/>
+            </then>
+        </if>
+
         <mkdir dir="${target.test.dir}"/>
         <mkdir dir="${target.test.results.dir}"/>
         <mkdir dir="${target.test.report.dir}"/>
@@ -86,7 +104,7 @@ Ant build file for Madcow.
             <classpath refid="test.classpath"/>
         </groovyc>
 
-        <junit printsummary="yes" haltonerror="no" haltonfailure="no" fork="yes" errorproperty="test.error" failureproperty="test.failure">
+        <junit printsummary="yes" haltonerror="no" showoutput="yes" haltonfailure="no" fork="yes"  errorproperty="test.error" failureproperty="test.failure">
             <sysproperty key="net.sourceforge.cobertura.datafile"
                     file="${target.cobertura.instrumented.dir}/cobertura.ser" />
             <formatter type="xml" />
@@ -116,8 +134,16 @@ Ant build file for Madcow.
         </if>
 
         <delete dir="${target.cobertura.report.dir}" quiet="true"/>
-        <mkdir dir="${target.cobertura.report.dir}"/>
-        <cobertura-report srcdir="${src.groovy.dir}" destdir="${target.cobertura.report.dir}" datafile="${target.cobertura.instrumented.dir}/cobertura.ser" />
+
+        <if>
+            <not>
+                <equals arg1="${quick.build}" arg2="true"/>
+            </not>
+            <then>
+                <mkdir dir="${target.cobertura.report.dir}"/>
+                <cobertura-report srcdir="${src.groovy.dir}" destdir="${target.cobertura.report.dir}" datafile="${target.cobertura.instrumented.dir}/cobertura.ser" />
+            </then>
+        </if>
 
         <fail if="test.error" message="Unable to execute tests"/>
         <fail if="test.failure" message="There were test failures"/>
