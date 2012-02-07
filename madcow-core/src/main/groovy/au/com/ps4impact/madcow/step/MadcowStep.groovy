@@ -8,8 +8,7 @@ class MadcowStep {
 
     enum MadcowStepResult {
         PASS,
-        FAIL,
-        SKIP
+        FAIL
     }
 
     GrassBlade blade;
@@ -24,5 +23,9 @@ class MadcowStep {
         this.blade = blade;
         this.parent = parent;
         this.children = new ArrayList<MadcowStep>();
+    }
+    
+    String toString() {
+        return "[blade: $blade, parent: $parent, childen: $children]";
     }
 }

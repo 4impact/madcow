@@ -42,7 +42,7 @@ class GrassParser {
             testCase.steps.add(step);
             if (step.blade.type == GrassBlade.GrassBladeType.IMPORT)
             {
-                // TODO: Load from disk and recursivly callback
+                // TODO: Load from disk and recursively callback
                 processScript(testCase, [], step);
             }
         }
