@@ -10,15 +10,11 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
     public void testRunIt() {
         String grassScriptString = """
-            @expectedValue = Australia
+            invokeUrl = http://www.4impact.com.au
+            @expectedValue = bum on a seat
 
-            # verify the expected country
-            addressbook_search_country.verifyText = @expectedValue
-            addressbook_search_country.verifySelectFieldOptions = ['One', 'Two']
-
-            # perform a search and check the field options
-            addressbook_search_button.clickLink
-            addressbook_search_country.verifySelectFieldOptions = [options : ['@expectedValue', 'New Zealand']]
+            # verify the text exists on the page
+            verifyText = @expectedValue
         """;
         ArrayList<String> grassScript = new ArrayList<String>();
         grassScriptString.eachLine { line -> grassScript.add(line) }

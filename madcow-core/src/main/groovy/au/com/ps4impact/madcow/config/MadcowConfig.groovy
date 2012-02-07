@@ -1,4 +1,4 @@
-package au.com.ps4impact.madcow
+package au.com.ps4impact.madcow.config
 
 
 /**

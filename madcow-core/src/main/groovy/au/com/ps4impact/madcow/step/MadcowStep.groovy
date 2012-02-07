@@ -8,7 +8,8 @@ class MadcowStep {
 
     enum MadcowStepResult {
         PASS,
-        FAIL
+        FAIL,
+        NO_OPERATION
     }
 
     GrassBlade blade;
