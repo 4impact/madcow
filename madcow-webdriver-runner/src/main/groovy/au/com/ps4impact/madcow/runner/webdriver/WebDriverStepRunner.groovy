@@ -6,6 +6,7 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.apache.commons.lang3.StringUtils
+import au.com.ps4impact.madcow.step.MadcowStepResult
 
 /**
  * Implementation of the WebDriver step runner.
@@ -21,6 +22,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public void execute(MadcowTestCase testCase, MadcowStep step) {
 
         WebDriverBladeRunner bladeRunner = WebDriverBladeRunner.getBladeRunner(StringUtils.capitalize(step.blade.operation));
-        bladeRunner.execute(this, step);
+        try {
+            bladeRunner.execute(this, step);
+        } catch (e) {
+            step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
+        }
     }
 }

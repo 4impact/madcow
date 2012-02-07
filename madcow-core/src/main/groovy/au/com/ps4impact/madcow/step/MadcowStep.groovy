@@ -6,12 +6,6 @@ import au.com.ps4impact.madcow.grass.GrassBlade;
  */
 class MadcowStep {
 
-    enum MadcowStepResult {
-        PASS,
-        FAIL,
-        NO_OPERATION
-    }
-
     GrassBlade blade;
     MadcowStep parent;
     ArrayList<MadcowStep> children;
