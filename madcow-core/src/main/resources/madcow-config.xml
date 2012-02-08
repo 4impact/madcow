@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<madcow>
+    <execution>
+        <runner>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</runner>
+    </execution>
+
+    <environments>
+        <environment name="DEV">
+            <invokeUrl>
+                <ADDRESSBOOK>http://test-site.projectmadcow.com:8080/madcow-test-site/</ADDRESSBOOK>
+            </invokeUrl>
+        </environment>
+    </environments>
+</madcow>
