@@ -21,7 +21,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
     public void execute(MadcowTestCase testCase, MadcowStep step) {
 
-        WebDriverBladeRunner bladeRunner = WebDriverBladeRunner.getBladeRunner(StringUtils.capitalize(step.blade.operation));
+        WebDriverBladeRunner bladeRunner = WebDriverBladeRunner.getBladeRunner(WebDriverBladeRunner.BLADE_PACKAGE, StringUtils.capitalize(step.blade.operation)) as WebDriverBladeRunner;
         try {
             bladeRunner.execute(this, step);
         } catch (e) {

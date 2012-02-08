@@ -2,31 +2,14 @@ package au.com.ps4impact.madcow.runner.webdriver
 
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.step.IBladeRunner
+import au.com.ps4impact.madcow.step.BladeRunner
 
 /**
  * Base WebDriver plugin class.
  */
-abstract class WebDriverBladeRunner implements IBladeRunner {
+abstract class WebDriverBladeRunner extends BladeRunner {
 
-    protected static final String BLADE_PACKAGE = 'au.com.ps4impact.madcow.runner.webdriver.blade';
-
-    /**
-     * Retrieve an instance of the specified BladeRunner.
-     */
-    public static WebDriverBladeRunner getBladeRunner(String bladeClassName) {
-        WebDriverBladeRunner bladeRunner;
-
-        try {
-            return Class.forName("$BLADE_PACKAGE.$bladeClassName").newInstance() as WebDriverBladeRunner;
-        } catch (ClassNotFoundException cnfe) {
-            throw new Exception("The specified WebDriverBladeRunner '${bladeClassName}' cannot be found\n\n$cnfe");
-        } catch (ClassCastException cce) {
-            throw new Exception("The specified WebDriverBladeRunner '${bladeClassName}' isn't a WebDriverBladeRunner!\n\n$cce");
-        } catch (e) {
-            throw new Exception("Unexpected error creating the WebDriverBladeRunner '${bladeClassName}'\n\n$e");
-        }
-    }
+    public static final String BLADE_PACKAGE = 'au.com.ps4impact.madcow.runner.webdriver.blade';
 
     /**
      * Called to execute a particular step operation.
