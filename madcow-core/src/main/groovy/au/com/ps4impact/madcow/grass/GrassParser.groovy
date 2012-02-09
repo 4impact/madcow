@@ -38,7 +38,7 @@ class GrassParser {
             if (line.startsWith('#') || StringUtils.isEmpty(line))
                 return;
 
-            MadcowStep step = new MadcowStep(new GrassBlade(line, this), parentStep);
+            MadcowStep step = new MadcowStep(testCase, new GrassBlade(line, this), parentStep);
             testCase.steps.add(step);
             if (step.blade.type == GrassBlade.GrassBladeType.IMPORT)
             {

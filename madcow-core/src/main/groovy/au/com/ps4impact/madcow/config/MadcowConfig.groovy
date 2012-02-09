@@ -6,9 +6,10 @@ package au.com.ps4impact.madcow.config
  */
 class MadcowConfig {
 
-    static Node ConfigData;
-    static Node EnvironmentData;
-    static String StepRunner //= "au.com.ps4impact.madcow.runner";
+    public Node execution;
+    public Node environment;
+
+    public String stepRunner;
 
     MadcowConfig(String envName = null, String configPath = null)
     {
@@ -18,10 +19,13 @@ class MadcowConfig {
         this.parseConfig(xmlFile.text);
     }
 
-    public static void parseConfig(String configXML) {
-        ConfigData = new XmlParser().parseText(configXML);
-        EnvironmentData = ConfigData.environments.environment.find{it.'@name'=="DEV"}
-        StepRunner = ConfigData.execution.runner.text();
+    protected void parseConfig(String configXML) {
+        def configData = new XmlParser().parseText(configXML);
+
+        this.execution = configData.execution[0];
+        this.stepRunner = this.execution.runner.text();
+
+        this.environment = configData.environments.environment.find{it.'@name'=="DEV"} as Node;
         // TODO - validate config data
     }
 

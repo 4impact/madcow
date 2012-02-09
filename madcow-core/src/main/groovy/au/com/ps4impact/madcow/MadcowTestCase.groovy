@@ -19,14 +19,23 @@ class MadcowTestCase {
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
 
-    public static MadcowConfig madcowConfig = new MadcowConfig();
+    public MadcowConfig madcowConfig;
 
     /**
      * Create a new MadcowTestCase, parsing the given grassScript if specified.
      */
-    public MadcowTestCase(ArrayList<String> grassScript = null) {
-        //parse the grass script
-        this.parseScript(grassScript);
+    public MadcowTestCase(MadcowConfig madcowConfig = new MadcowConfig(), ArrayList<String> grassScript = null) {
+        this.madcowConfig = madcowConfig;
+
+        if (grassScript != null)
+            this.parseScript(grassScript);
+    }
+
+    /**
+     * Overloaded constructor to allow only grass script to be specified.
+     */
+    public MadcowTestCase(ArrayList<String> grassScript) {
+        this(new MadcowConfig(), grassScript);
     }
 
     /**
@@ -45,13 +54,13 @@ class MadcowTestCase {
         MadcowStepRunner stepRunner;
 
         try {
-            stepRunner = Class.forName(MadcowConfig.StepRunner).newInstance() as MadcowStepRunner;
+            stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance() as MadcowStepRunner;
         } catch (ClassNotFoundException cnfe) {
-            throw new Exception("The specified MadcowStepRunner '${MadcowConfig.StepRunner}' cannot be found\n\n$cnfe");
+            throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
-            throw new Exception("The specified MadcowStepRunner '${MadcowConfig.StepRunner}' isn't a MadcowStepRunner!\n\n$cce");
+            throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' isn't a MadcowStepRunner!\n\n$cce");
         } catch (e) {
-            throw new Exception("Unexpected error creating the MadcowStepRunner '${MadcowConfig.StepRunner}'\n\n$e");
+            throw new Exception("Unexpected error creating the MadcowStepRunner '${this.madcowConfig.stepRunner}'\n\n$e");
         }
         
         steps.each { step ->
