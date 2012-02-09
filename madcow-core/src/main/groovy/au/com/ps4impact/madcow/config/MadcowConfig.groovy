@@ -10,7 +10,7 @@ class MadcowConfig {
     static Node EnvironmentData;
     static String StepRunner //= "au.com.ps4impact.madcow.runner";
 
-    MadcowConfig(String envName, String configPath = null)
+    MadcowConfig(String envName = null, String configPath = null)
     {
         //read in file
         def xmlFile = new File('./madcow-core/src/resources/project-template/conf/madcow-config.xml');
