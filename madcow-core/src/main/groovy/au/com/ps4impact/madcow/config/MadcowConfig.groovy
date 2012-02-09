@@ -3,7 +3,6 @@ package au.com.ps4impact.madcow.config
 
 /**
  *  The MadcowConfig class which holds all the initialisation information
- *  @author Tom Romano, Gavin Bunney
  */
 class MadcowConfig {
 
@@ -11,10 +10,10 @@ class MadcowConfig {
     static Node EnvironmentData;
     static String StepRunner //= "au.com.ps4impact.madcow.runner";
 
-    MadcowConfig()
+    MadcowConfig(String envName, String configPath = null)
     {
         //read in file
-        def xmlFile = new File('./madcow-core/src/test/resources/madcow-config.xml');
+        def xmlFile = new File('./madcow-core/src/resources/project-template/conf/madcow-config.xml');
         //parse xml config file
         this.parseConfig(xmlFile.text);
     }
