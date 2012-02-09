@@ -16,16 +16,24 @@ class MadcowConfig {
         //read in file
         def xmlFile = new File('./madcow-core/src/resources/project-template/conf/madcow-config.xml');
         //parse xml config file
-        this.parseConfig(xmlFile.text);
+        this.parseConfig(xmlFile.text, envName);
     }
 
-    protected void parseConfig(String configXML) {
+    protected void parseConfig(String configXML, String envName) {
         def configData = new XmlParser().parseText(configXML);
-
+        //get the default execution params and step runner to use
         this.execution = configData.execution[0];
         this.stepRunner = this.execution.runner.text();
+        //get the default environment and use it if none is set
+        def defaultEnvironment = this.execution."default.env".text()
+        if (defaultEnvironment!=null
+            && envName == null)
+        {
+            envName = defaultEnvironment;
+        }
+        //setup the environment to use
+        this.environment = configData.environments.environment.find{it.'@name'== envName} as Node;
 
-        this.environment = configData.environments.environment.find{it.'@name'=="DEV"} as Node;
         // TODO - validate config data
     }
 

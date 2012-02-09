@@ -2,6 +2,7 @@
 <madcow>
     <execution>
         <runner>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</runner>
+        <default.env>DEV</default.env>
     </execution>
 
     <environments>
