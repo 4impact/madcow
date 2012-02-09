@@ -1,14 +1,15 @@
-package au.com.ps4impact.madcow;
+package au.com.ps4impact.madcow.execution;
 
 import groovyjarjarcommonscli.ParseException;
-import groovyjarjarcommonscli.Option;
+import groovyjarjarcommonscli.Option
+import au.com.ps4impact.madcow.MadcowTestRunner;
 
 /**
  * Run Madcow from the Command Line.
  */
 public class MadcowCLI {
 
-    protected static def parseArgs(incomingArgs) throws ParseException {
+    public static def parseArgs(String[] incomingArgs) throws ParseException {
         def cli = new CliBuilder(usage:'runMadcow [options]', header:'Options:')
 
         cli.with {
@@ -32,11 +33,10 @@ public class MadcowCLI {
     /**
      * Entry point.
      */
-    static main(args)
+    static main(String[] args)
     {
         def options = parseArgs(args);
-
-        MadcowTestCase testCase = new MadcowTestCase()
+        MadcowTestRunner.executeTests(options.e ?: null, options.ts as ArrayList<String>);
     }
 
 }

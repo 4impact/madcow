@@ -10,18 +10,14 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:1.8.5" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.1" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.16" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.ant:ant:1.8.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.8.2" level="project" />
-    <orderEntry type="library" name="Maven: ant-contrib:ant-contrib:1.0b3" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.ant:ant-junit:1.8.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.1" level="project" />
-    <orderEntry type="library" name="Maven: net.sourceforge.cobertura:cobertura:1.9.4.1" level="project" />
-    <orderEntry type="library" name="Maven: oro:oro:2.0.8" level="project" />
-    <orderEntry type="library" name="Maven: asm:asm:3.0" level="project" />
-    <orderEntry type="library" name="Maven: asm:asm-tree:3.0" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.16" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.cobertura:cobertura:1.9.4.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: oro:oro:2.0.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: asm:asm:3.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: asm:asm-tree:3.0" level="project" />
   </component>
 </module>
 

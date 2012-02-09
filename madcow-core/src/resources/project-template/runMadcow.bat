@@ -16,6 +16,5 @@ set CLASSPATH=!CLASSPATH!;./conf
 
 set CLASSPATH=!CLASSPATH!"
 
-rem java com.projectmadcow.ant.MadcowAntProject %*
-echo Nothing... yet...
+java au.com.ps4impact.madcow.execution.MadcowCLI %*
 pause
