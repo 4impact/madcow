@@ -11,7 +11,14 @@ import au.com.ps4impact.madcow.step.MadcowStepResult
 class InvokeUrl extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
-        stepRunner.driver.get(step.blade.parameters as String);
+        def found = step.env.invokeUrl."${step.blade.parameters}".text();
+        if (found!=null)
+        {
+            stepRunner.driver.get(found);
+        }else{
+            stepRunner.driver.get(step.blade.parameters as String);
+        }
+
         step.result = MadcowStepResult.PASS("Page title: ${stepRunner.driver.title}");
     }
 

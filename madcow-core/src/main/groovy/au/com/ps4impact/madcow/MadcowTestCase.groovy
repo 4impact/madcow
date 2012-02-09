@@ -19,10 +19,13 @@ class MadcowTestCase {
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
 
+    public static MadcowConfig madcowConfig = new MadcowConfig();
+
     /**
      * Create a new MadcowTestCase, parsing the given grassScript if specified.
      */
     public MadcowTestCase(ArrayList<String> grassScript = null) {
+        //parse the grass script
         this.parseScript(grassScript);
     }
 

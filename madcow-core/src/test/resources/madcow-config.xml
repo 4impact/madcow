@@ -7,7 +7,12 @@
     <environments>
         <environment name="DEV">
             <invokeUrl>
-                <ADDRESSBOOK>http://test-site.projectmadcow.com:8080/madcow-test-site/</ADDRESSBOOK>
+                <ADDRESSBOOK>http://www.4impact.com.au</ADDRESSBOOK>
+            </invokeUrl>
+        </environment>
+        <environment name="TEST">
+            <invokeUrl>
+                <ADDRESSBOOK>http://testing-site.projectmadcow.com:8081/madcow-test-site/</ADDRESSBOOK>
             </invokeUrl>
         </environment>
     </environments>

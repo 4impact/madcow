@@ -3,7 +3,7 @@ package au.com.ps4impact.madcow.grass;
 import org.apache.log4j.Logger
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.step.MadcowStep;
+import au.com.ps4impact.madcow.step.MadcowStep
 
 /**
  * The Grass Parser.
