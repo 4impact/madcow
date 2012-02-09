@@ -33,6 +33,32 @@ Maven, like POM
                         <artifactId>ant</artifactId>
                         <version>${ant.runtime.version}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-junit</artifactId>
+                        <version>${ant.runtime.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>junit</groupId>
+                                <artifactId>junit</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
                 </dependencies>
                 <executions>
                     <execution>

@@ -53,7 +53,7 @@ Ant build file for Madcow.
         <mkdir dir="${target.classes.dir}"/>
         <groovyc srcdir="${src.groovy.dir}" destdir="${target.classes.dir}">
             <classpath refid="compile.classpath"/>
-            <javac debug="on"/>
+            <javac source="1.5" target="1.5" debug="on" />
         </groovyc>
     </target>
 
@@ -102,6 +102,7 @@ Ant build file for Madcow.
 
         <groovyc srcdir="${src.test.dir}" destdir="${target.test.dir}">
             <classpath refid="test.classpath"/>
+            <javac source="1.5" target="1.5" debug="on" />
         </groovyc>
 
         <junit printsummary="yes" haltonerror="no" showoutput="yes" haltonfailure="no" fork="yes"  errorproperty="test.error" failureproperty="test.failure">

@@ -33,6 +33,32 @@ Maven, like POM
                         <artifactId>ant</artifactId>
                         <version>${ant.runtime.version}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-junit</artifactId>
+                        <version>${ant.runtime.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>junit</groupId>
+                                <artifactId>junit</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
                 </dependencies>
                 <executions>
                     <execution>
@@ -64,6 +90,25 @@ Maven, like POM
                         </configuration>
                         <goals>
                             <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/resources/assembly/assembly-install.xml</descriptor>
+                        <descriptor>src/resources/assembly/assembly-upgrade.xml</descriptor>
+                        <descriptor>src/resources/assembly/assembly-javadoc.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
