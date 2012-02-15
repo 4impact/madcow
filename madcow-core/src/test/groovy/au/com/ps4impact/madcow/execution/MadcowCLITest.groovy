@@ -5,7 +5,14 @@ package au.com.ps4impact.madcow.execution
  */
 class MadcowCLITest extends GroovyTestCase {
 
-    void testOptions() {
-       // MadcowCLI.main(['-t', '/Users/gbunney/dev/madcow/madcow-2.0/madcow-core/src/resources/project-template/tests/AddressTest.grass'].toArray() as String[])
+    void testTestToRunOption() {
+        def options = MadcowCLI.parseArgs(['-t', 'AddressTest.grass'].toArray() as String[]);
+        assertEquals('AddressTest.grass', options.ts.first());
+
+        options = MadcowCLI.parseArgs(['-t', 'AddressTest.grass,AddressTest2.grass'].toArray() as String[]);
+        assertArrayEquals(['AddressTest.grass', 'AddressTest2.grass'].toArray(), options.ts.toArray());
+
+        options = MadcowCLI.parseArgs(['-t', '"AddressTest.grass,AddressTest2.grass"'].toArray() as String[]);
+        assertArrayEquals(['AddressTest.grass', 'AddressTest2.grass'].toArray(), options.ts.toArray());
     }
 }
