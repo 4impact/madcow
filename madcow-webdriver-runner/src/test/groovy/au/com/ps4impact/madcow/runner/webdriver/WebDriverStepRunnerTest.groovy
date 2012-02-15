@@ -9,9 +9,8 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
     public void testRunIt() {
         String grassScriptString = """
-            #invokeUrl = http://www.4impact.com.au
             invokeUrl = ADDRESSBOOK
-            @expectedValue = bum on a seat
+            @expectedValue = Search Address
 
             # verify the text exists on the page
             verifyText = @expectedValue

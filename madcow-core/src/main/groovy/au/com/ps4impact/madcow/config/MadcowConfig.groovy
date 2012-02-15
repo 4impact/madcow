@@ -28,7 +28,7 @@ class MadcowConfig {
     /**
      * Validate the Config file against the madcow-config.xsd
      */
-    protected void validateConfigFormat(String configXML) throws FileNotFoundException, SAXParseException {
+    public void validateConfigFormat(String configXML) throws FileNotFoundException, SAXParseException {
 
         def xsd = ResourceFinder.locateResourceOnClasspath(this.getClass().getClassLoader(), 'madcow-config.xsd');
 
@@ -42,7 +42,7 @@ class MadcowConfig {
     /**
      * Parse the configuration xml.
      */
-    protected void parseConfig(String configXML, String envName) {
+    public void parseConfig(String configXML, String envName) {
 
         def configData = new XmlParser().parseText(configXML);
 
@@ -52,7 +52,7 @@ class MadcowConfig {
 
         // verify the expected elements are there
         if (StringUtils.isEmpty(this.stepRunner))
-            throw new Exception("<runner> needs to be specifed!");
+            throw new Exception("<runner> needs to be specified!");
 
         // get the default environment and use it if none is set
         def defaultEnvironment = this.execution."env.default".text();
@@ -62,6 +62,9 @@ class MadcowConfig {
         
         // setup the environment to use
         this.environment = configData.environments.environment.find {it.'@name' == envName} as Node;
+        
+        if (this.environment == null && StringUtils.isNotEmpty(envName))
+            throw new Exception("Environment '$envName' specified, but not found in config!");
     }
 
 }
