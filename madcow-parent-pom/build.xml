@@ -39,9 +39,23 @@ Ant build file for Madcow.
     </path>
 
     <target name="-verifyMavenRuntime">
-        <fail message="!!! This build file should only be called from Maven, not directly !!! "
-              unless="maven.compile.classpath"/>
-        <echo message="mvn classpath: ${maven.compile.classpath}"/>
+        <if>
+            <isset property="maven.compile.classpath"/>
+            <then>
+                <echo message="mvn compile classpath: ${maven.compile.classpath}"/>
+            </then>
+            <else>
+                <if>
+                    <isset property="maven.test.classpath"/>
+                    <then>
+                        <echo message="mvn test classpath: ${maven.test.classpath}"/>
+                    </then>
+                    <else>
+                        <fail message="!!! This build file should only be called from Maven, not directly !!! "/>
+                    </else>
+                </if>
+            </else>
+        </if>
     </target>
 
     <target name="clean" description="Clean up build artifacts.">
@@ -49,7 +63,6 @@ Ant build file for Madcow.
     </target>
 
     <target name="compile" description="Compile Madcow." depends="-defineTasks,-banner,-verifyMavenRuntime">
-        <delete dir="${target.classes.dir}" quiet="true"/>
         <mkdir dir="${target.classes.dir}"/>
         <groovyc srcdir="${src.groovy.dir}" destdir="${target.classes.dir}">
             <classpath refid="compile.classpath"/>
@@ -81,11 +94,7 @@ Ant build file for Madcow.
         </if>
     </target>
 
-    <target name="test" depends="-defineTasks">
-
-        <delete dir="${target.test.dir}" quiet="true"/>
-        <delete dir="${target.test.results.dir}" quiet="true"/>
-        <delete dir="${target.test.report.dir}" quiet="true" />
+    <target name="test" depends="-defineTasks,-banner,-verifyMavenRuntime">
 
         <if>
             <not>

@@ -1,5 +1,7 @@
 package au.com.ps4impact.madcow
 
+import au.com.ps4impact.madcow.config.MadcowConfig
+
 /**
  * Test for the MadcowTestCase class.
  */
@@ -21,7 +23,7 @@ class MadcowTestCaseTest extends GroovyTestCase {
         ArrayList<String> grassScript = new ArrayList<String>();
         grassScriptString.eachLine { line -> grassScript.add(line) }
 
-        MadcowTestCase testCase = new MadcowTestCase(grassScript);
+        MadcowTestCase testCase = new MadcowTestCase(new MadcowConfig(null), grassScript);
         assertEquals("Verify number of steps, ignoring comments and blank lines", 5, testCase.steps.size());
     }
 }
