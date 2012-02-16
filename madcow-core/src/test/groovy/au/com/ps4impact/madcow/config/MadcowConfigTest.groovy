@@ -9,8 +9,16 @@ class MadcowConfigTest extends GroovyTestCase {
         MadcowConfig config = new MadcowConfig();
         assertNotNull(config.execution);
 
-        config = new MadcowConfig("DEV");
+        config = new MadcowConfig('DEV');
         assertNotNull(config.execution);
+
+        try {
+            config = new MadcowConfig('UNKNOWN ENV');
+            fail('should always exception');
+        } catch (e)
+        {
+            assertEquals('Check for exception defaulting to unknown env', "Environment 'UNKNOWN ENV' specified, but not found in config!", e.message);
+        }
     }
 
     void testParseMissingStepRunner() {
@@ -28,6 +36,39 @@ class MadcowConfigTest extends GroovyTestCase {
         }
     }
 
+    void testParseEnv() {
+        MadcowConfig config = new MadcowConfig();
+        config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
+                                <madcow>
+                                    <execution>
+                                        <runner>some runner</runner>
+                                        <env.default>DEV</env.default>
+                                    </execution>
+                                    <environments>
+                                        <environment name="DEV" />
+                                        <environment name="TEST" />
+                                    </environments>
+                                </madcow>""", 'TEST');
+        assertEquals('Verify environment found and loaded', 'TEST', config.environment.attribute('name'));
+
+        try {
+            config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
+                                    <madcow>
+                                        <execution>
+                                            <runner>some runner</runner>
+                                        </execution>
+                                        <environments>
+                                            <environment name="DEV" />
+                                            <environment name="TEST" />
+                                        </environments>
+                                    </madcow>""", 'UNKNOWN ENV');
+            fail("Should always exception");
+        } catch (e) {
+            assertEquals('Check for exception defaulting to unknown env', "Environment 'UNKNOWN ENV' specified, but not found in config!", e.message);
+        }
+
+    }
+
     void testParseDefaultEnv() {
         MadcowConfig config = new MadcowConfig();
         config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
@@ -42,6 +83,19 @@ class MadcowConfigTest extends GroovyTestCase {
                                     </environments>
                                 </madcow>""", null);
         assertEquals('Verify default environment found and loaded', 'DEV', config.environment.attribute('name'));
+
+        config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
+                                <madcow>
+                                    <execution>
+                                        <runner>some runner</runner>
+                                        <env.default>DEV</env.default>
+                                    </execution>
+                                    <environments>
+                                        <environment name="DEV" />
+                                        <environment name="TEST" />
+                                    </environments>
+                                </madcow>""", 'TEST');
+        assertEquals('Verify default environment not used, as env specified', 'TEST', config.environment.attribute('name'));
 
         config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
                                 <madcow>
