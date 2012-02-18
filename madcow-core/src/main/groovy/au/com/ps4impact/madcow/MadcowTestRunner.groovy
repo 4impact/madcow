@@ -7,7 +7,7 @@ import au.com.ps4impact.madcow.config.MadcowConfig
  */
 class MadcowTestRunner {
 
-    static void executeTests(String environment = null, ArrayList<String> testNames = []) {
+    static void executeTests(ArrayList<String> testNames = [], String environment = null) {
 
         MadcowConfig config = new MadcowConfig(environment);
         

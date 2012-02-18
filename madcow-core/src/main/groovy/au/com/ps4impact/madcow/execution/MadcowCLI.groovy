@@ -38,7 +38,7 @@ public class MadcowCLI {
         if (options.help)
             System.exit(0);
         
-        MadcowTestRunner.executeTests(options.env ?: null, options.testss as ArrayList<String>);
+        MadcowTestRunner.executeTests(options.testss as ArrayList<String>, options.env ?: null);
     }
 
 }
