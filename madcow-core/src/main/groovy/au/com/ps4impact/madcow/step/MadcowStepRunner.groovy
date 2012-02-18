@@ -7,6 +7,14 @@ import au.com.ps4impact.madcow.MadcowTestCase
  */
 abstract class MadcowStepRunner {
 
+    MadcowStepRunner() {
+        this(new HashMap<String, String>());
+    }
+    
+    MadcowStepRunner(HashMap<String, String> parameters) {
+        // overridden in children
+    }
+
     /**
      * Execute a MadcowStep. This is the main entry point for calling
      * out to a MadcowStepRunner.

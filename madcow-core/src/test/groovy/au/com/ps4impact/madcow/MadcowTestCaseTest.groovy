@@ -7,8 +7,7 @@ import au.com.ps4impact.madcow.config.MadcowConfig
  */
 class MadcowTestCaseTest extends GroovyTestCase {
 
-    void testCreateAndParse() {
-
+    protected ArrayList<String> getGrassScript() {
         String grassScriptString = """
             @expectedValue = Australia
 
@@ -22,14 +21,38 @@ class MadcowTestCaseTest extends GroovyTestCase {
         """;
         ArrayList<String> grassScript = new ArrayList<String>();
         grassScriptString.eachLine { line -> grassScript.add(line) }
+        return grassScript;
+    }
 
-        MadcowTestCase testCase = new MadcowTestCase('testCreateAndParse', new MadcowConfig(), grassScript);
+    void testCreateAndParse() {
+        MadcowTestCase testCase = new MadcowTestCase('testCreateAndParse', new MadcowConfig(), getGrassScript());
         assertEquals("Verify number of steps, ignoring comments and blank lines", 5, testCase.steps.size());
     }
 
-    void testDefaultedMadcowConfig() {
-        MadcowTestCase testCase = new MadcowTestCase('testDefaultedMadcowConfig');
-        assertEquals('testDefaultedMadcowConfig', testCase.name);
+    void testMadcowConfigConstructorParams() {
+        MadcowTestCase testCase = new MadcowTestCase('CheckDefaultedMadcowConfig');
+        assertEquals('CheckDefaultedMadcowConfig', testCase.name);
         assertNotNull(testCase.madcowConfig);
+
+        def someConfig = new MadcowConfig();
+        testCase = new MadcowTestCase('testDefaultedMadcowConfig', someConfig);
+        assertEquals(someConfig, testCase.madcowConfig);
+    }
+
+    void testExecuteMockedRunner() {
+        MadcowTestCase testCase = new MadcowTestCase('testExecuteMockedRunner', new MadcowConfig(), getGrassScript());
+        testCase.madcowConfig.stepRunner = 'au.com.ps4impact.madcow.step.MockMadcowStepRunner';
+        testCase.execute();
+    }
+
+    void testExecuteRunnerDoesNotExist() {
+        try {
+            MadcowTestCase testCase = new MadcowTestCase('testExecuteRunnerDoesNotExist', new MadcowConfig(), getGrassScript());
+            testCase.madcowConfig.stepRunner = '.tent';
+            testCase.execute();
+            fail('should always exception with ClassNotFoundException');
+        } catch (e) {
+            assertTrue( e.message.startsWith("The specified MadcowStepRunner '.tent' cannot be found"));
+        }
     }
 }

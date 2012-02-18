@@ -56,7 +56,7 @@ class MadcowTestCase {
         MadcowStepRunner stepRunner;
 
         try {
-            stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this.madcowConfig.stepRunnerParameters] as Object[]) as MadcowStepRunner;
+            stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
