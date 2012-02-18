@@ -15,6 +15,7 @@ class MadcowTestCase {
 
     private static final Logger LOG = Logger.getLogger(MadcowTestCase.class);
 
+    public String name;
     public GrassParser grassParser = null;
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
@@ -24,7 +25,8 @@ class MadcowTestCase {
     /**
      * Create a new MadcowTestCase, parsing the given grassScript if specified.
      */
-    public MadcowTestCase(MadcowConfig madcowConfig = new MadcowConfig(), ArrayList<String> grassScript = null) {
+    public MadcowTestCase(String name, MadcowConfig madcowConfig = new MadcowConfig(), ArrayList<String> grassScript = null) {
+        this.name = name;
         this.madcowConfig = madcowConfig;
 
         if (grassScript != null)
@@ -34,8 +36,8 @@ class MadcowTestCase {
     /**
      * Overloaded constructor to allow only grass script to be specified.
      */
-    public MadcowTestCase(ArrayList<String> grassScript) {
-        this(new MadcowConfig(), grassScript);
+    public MadcowTestCase(String name, ArrayList<String> grassScript) {
+        this(name, new MadcowConfig(), grassScript);
     }
 
     /**
@@ -54,7 +56,7 @@ class MadcowTestCase {
         MadcowStepRunner stepRunner;
 
         try {
-            stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance() as MadcowStepRunner;
+            stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this.madcowConfig.stepRunnerParameters] as Object[]) as MadcowStepRunner;
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
@@ -84,5 +86,8 @@ class MadcowTestCase {
 
         step.children.each { child -> executeStep (stepRunner, child) }
     }
-    
+
+    public String toString() {
+        return name;
+    }
 }

@@ -23,7 +23,7 @@ class MadcowTestCaseTest extends GroovyTestCase {
         ArrayList<String> grassScript = new ArrayList<String>();
         grassScriptString.eachLine { line -> grassScript.add(line) }
 
-        MadcowTestCase testCase = new MadcowTestCase(new MadcowConfig(null), grassScript);
+        MadcowTestCase testCase = new MadcowTestCase('testStepsCreated', new MadcowConfig(null), grassScript);
         assertEquals("Verify number of steps, ignoring comments and blank lines", 5, testCase.steps.size());
     }
 }

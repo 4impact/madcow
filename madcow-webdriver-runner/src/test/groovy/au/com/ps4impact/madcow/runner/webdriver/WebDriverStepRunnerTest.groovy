@@ -18,7 +18,7 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
         ArrayList<String> grassScript = new ArrayList<String>();
         grassScriptString.eachLine { line -> grassScript.add(line) }
 
-        MadcowTestCase testCase = new MadcowTestCase(grassScript);
+        MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest-testRunIt', grassScript);
         testCase.execute();
         println("Results!!!! : " + testCase.steps.result);
     }

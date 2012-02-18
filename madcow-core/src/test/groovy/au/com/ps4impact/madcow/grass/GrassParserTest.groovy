@@ -70,7 +70,7 @@ class GrassParserTest extends GroovyTestCase {
 
     public void testGrassParsingScript() {
         
-        MadcowTestCase testCase = new MadcowTestCase();
+        MadcowTestCase testCase = new MadcowTestCase('testGrassParsingScript');
         ArrayList<String> grassScript = new ArrayList<String>();
         String grassScriptString = """
             @expectedValue = Australia

@@ -7,7 +7,7 @@ import au.com.ps4impact.madcow.MadcowTestCase;
  */
 public class GrassBladeTest extends GroovyTestCase {
 
-    protected MadcowTestCase madcowTestCase = new MadcowTestCase([]);
+    protected MadcowTestCase madcowTestCase = new MadcowTestCase('GrassBladeTest', []);
     protected GrassParser grassParser = madcowTestCase.grassParser;
 
     private void checkBladeProperties(GrassBlade blade, def line, def operation, def selector, def parameters, def mapping) {

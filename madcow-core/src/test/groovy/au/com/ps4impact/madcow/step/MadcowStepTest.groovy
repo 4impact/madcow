@@ -8,6 +8,6 @@ import au.com.ps4impact.madcow.MadcowTestCase
 class MadcowStepTest extends GroovyTestCase {
 
     void testToString() {
-      //  assertToString(new MadcowStep(new MadcowTestCase(), null, null), "[testCase: null, blade: null, parent: null, children: []]") ;
+        assertToString(new MadcowStep(new MadcowTestCase('StepTest'), null, null), "[testCase: StepTest, blade: null, parent: null, children: []]") ;
     }
 }

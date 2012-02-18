@@ -13,7 +13,7 @@ class MadcowTestRunner {
         
         testNames.each { String testName ->
             // TODO: Load test case file... from some fancy directories
-            MadcowTestCase testCase = new MadcowTestCase(config, new File(testName).readLines() as ArrayList<String>);
+            MadcowTestCase testCase = new MadcowTestCase(testName, config, new File(testName).readLines() as ArrayList<String>);
             testCase.execute();
         }
     }
