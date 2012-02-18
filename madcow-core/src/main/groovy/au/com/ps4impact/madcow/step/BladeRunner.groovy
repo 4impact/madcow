@@ -15,15 +15,16 @@ abstract class BladeRunner {
      */
     public static BladeRunner getBladeRunner(String bladePackage, String bladeClassName) {
         BladeRunner bladeRunner;
+        String fqn = "$bladePackage.$bladeClassName";
 
         try {
-            return Class.forName("$bladePackage.$bladeClassName").newInstance() as BladeRunner;
+            return Class.forName(fqn).newInstance() as BladeRunner;
         } catch (ClassNotFoundException cnfe) {
-            throw new Exception("The specified BladeRunner '${bladeClassName}' cannot be found\n\n$cnfe");
+            throw new Exception("The specified BladeRunner '$fqn' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
-            throw new Exception("The specified BladeRunner '${bladeClassName}' isn't a BladeRunner!\n\n$cce");
+            throw new Exception("The specified BladeRunner '$fqn' isn't a BladeRunner!\n\n$cce");
         } catch (e) {
-            throw new Exception("Unexpected error creating the BladeRunner '${bladeClassName}'\n\n$e");
+            throw new Exception("Unexpected error creating the BladeRunner '$fqn'\n\n$e");
         }
     }
 }

@@ -15,7 +15,7 @@ class ResourceFinder {
 
         def resources = locateResourcesOnClasspath(classLoader, resourcePattern);
         if (resources.size() > 1)
-            throw new Exception("Multiple resource matches found for $resourcePattern");
+            throw new Exception("Multiple resource matches found for '$resourcePattern'");
 
         return resources.first();
     }
@@ -29,7 +29,7 @@ class ResourceFinder {
         Resource[] resources = resourceLoader.getResources("classpath*:$resourcePattern");
 
         if (resources.size() == 0)
-            throw new FileNotFoundException("Unable to find matches on the classpath for $resourcePattern");
+            throw new FileNotFoundException("Unable to find matches on the classpath for '$resourcePattern'");
         
         return resources;
     }
