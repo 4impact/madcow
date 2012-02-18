@@ -36,12 +36,54 @@ class MadcowConfigTest extends GroovyTestCase {
         }
     }
 
+    void testParseRunnerParameters() {
+        MadcowConfig config = new MadcowConfig();
+        config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
+                                <madcow>
+                                    <execution>
+                                        <runner>
+                                            <type>some runner</type>
+                                        </runner>
+                                    </execution>
+                                </madcow>""", null);
+        assertTrue('Verify no parameters defined at all is ok', config.stepRunnerParameters.isEmpty());
+
+        config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
+                                <madcow>
+                                    <execution>
+                                        <runner>
+                                            <type>some runner</type>
+                                            <parameters/>
+                                        </runner>
+                                    </execution>
+                                </madcow>""", null);
+        assertTrue('Verify parameters defined but none is ok', config.stepRunnerParameters.isEmpty());
+
+        config = new MadcowConfig();
+        try {
+            config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
+                                    <madcow>
+                                        <execution>
+                                            <runner>
+                                                <type>some runner</type>
+                                                <parameters>
+                                                    <browser/>
+                                                </parameters>
+                                            </runner>
+                                        </execution>
+                                    </madcow>""", null);
+            fail("Should always exception");
+        } catch (e) {
+            assertEquals("Runner parameter 'browser' defined without content!", e.message)
+        }
+    }
+
     void testParseEnv() {
         MadcowConfig config = new MadcowConfig();
         config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
                                 <madcow>
                                     <execution>
-                                        <runner>some runner</runner>
+                                        <runner><type>some runner</type></runner>
                                         <env.default>DEV</env.default>
                                     </execution>
                                     <environments>
@@ -55,7 +97,7 @@ class MadcowConfigTest extends GroovyTestCase {
             config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
                                     <madcow>
                                         <execution>
-                                            <runner>some runner</runner>
+                                            <runner><type>some runner</type></runner>
                                         </execution>
                                         <environments>
                                             <environment name="DEV" />
@@ -74,7 +116,7 @@ class MadcowConfigTest extends GroovyTestCase {
         config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
                                 <madcow>
                                     <execution>
-                                        <runner>some runner</runner>
+                                        <runner><type>some runner</type></runner>
                                         <env.default>DEV</env.default>
                                     </execution>
                                     <environments>
@@ -87,7 +129,7 @@ class MadcowConfigTest extends GroovyTestCase {
         config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
                                 <madcow>
                                     <execution>
-                                        <runner>some runner</runner>
+                                        <runner><type>some runner</type></runner>
                                         <env.default>DEV</env.default>
                                     </execution>
                                     <environments>
@@ -100,7 +142,7 @@ class MadcowConfigTest extends GroovyTestCase {
         config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
                                 <madcow>
                                     <execution>
-                                        <runner>some runner</runner>
+                                        <runner><type>some runner</type></runner>
                                     </execution>
                                     <environments>
                                         <environment name="DEV" />
@@ -113,7 +155,7 @@ class MadcowConfigTest extends GroovyTestCase {
             config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
                                     <madcow>
                                         <execution>
-                                            <runner>some runner</runner>
+                                            <runner><type>some runner</type></runner>
                                             <env.default>UNKNOWN ENV</env.default>
                                         </execution>
                                         <environments>

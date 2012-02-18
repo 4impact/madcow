@@ -16,6 +16,7 @@ class MadcowConfig {
     public Node environment;
 
     public String stepRunner;
+    public HashMap<String, String> stepRunnerParameters;
 
     MadcowConfig(String envName = null) {
 
@@ -44,15 +45,27 @@ class MadcowConfig {
      */
     public void parseConfig(String configXML, String envName) {
 
+        this.stepRunner = null;
+        this.stepRunnerParameters = new HashMap<String, String>();
+
         def configData = new XmlParser().parseText(configXML);
+        this.execution = configData.execution[0];
 
         // get the default execution params and step runner to use
-        this.execution = configData.execution[0];
-        this.stepRunner = this.execution.runner.text();
+        this.stepRunner = this.execution.runner.type.text();
 
-        // verify the expected elements are there
         if (StringUtils.isEmpty(this.stepRunner))
             throw new Exception("<runner> needs to be specified!");
+
+        NodeList runnerParams = (this.execution.runner as NodeList).parameters as NodeList;
+        if ((runnerParams != null) && (!runnerParams.isEmpty())) {
+            runnerParams.first().children().each { child ->
+                Node node = child as Node;
+                if (StringUtils.isEmpty(node.text()))
+                    throw new Exception("Runner parameter '${node.name() as String}' defined without content!");
+                this.stepRunnerParameters.put(node.name() as String, node.text());
+            }
+        }
 
         // get the default environment and use it if none is set
         def defaultEnvironment = this.execution."env.default".text();

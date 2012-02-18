@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <madcow>
     <execution>
-        <runner>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</runner>
+        <runner>
+            <type>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</type>
+            <parameters>
+                <browser>org.openqa.selenium.htmlunit.HtmlUnitDriver</browser>
+            </parameters>
+        </runner>
         <env.default>DEV</env.default>
     </execution>
 
