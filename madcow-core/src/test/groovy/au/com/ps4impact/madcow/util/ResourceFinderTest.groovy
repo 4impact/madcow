@@ -1,12 +1,14 @@
 package au.com.ps4impact.madcow.util
 
+import au.com.ps4impact.madcow.MadcowProject
+
 /**
  * Test class for Resource Finder.
  */
 class ResourceFinderTest extends GroovyTestCase {
 
     void testLocateSingleResource() {
-        ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'conf/madcow-config.xml');
+        ResourceFinder.locateResourceOnClasspath(this.class.classLoader, MadcowProject.CONFIGURATION_FILE);
     }
 
     void testLocateMultipleResources() {

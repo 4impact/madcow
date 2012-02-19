@@ -6,6 +6,7 @@ import javax.xml.validation.SchemaFactory
 import org.xml.sax.SAXParseException
 import au.com.ps4impact.madcow.util.ResourceFinder
 import org.apache.commons.lang3.StringUtils
+import au.com.ps4impact.madcow.MadcowProject
 
 /**
  *  The MadcowConfig class which holds all the initialisation information
@@ -20,7 +21,7 @@ class MadcowConfig {
 
     MadcowConfig(String envName = null) {
 
-        String xmlFileContents = ResourceFinder.locateResourceOnClasspath(this.getClass().getClassLoader(), "conf/madcow-config.xml").file.text;
+        String xmlFileContents = ResourceFinder.locateResourceOnClasspath(this.getClass().getClassLoader(), MadcowProject.CONFIGURATION_FILE).file.text;
 
         validateConfigFormat(xmlFileContents);
         parseConfig(xmlFileContents, envName);
