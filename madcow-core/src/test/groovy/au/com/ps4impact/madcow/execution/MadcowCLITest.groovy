@@ -33,22 +33,33 @@ class MadcowCLITest extends GroovyTestCase {
         assertEquals('DEV', options.env);
     }
 
-    void testHelp() {
+    protected void checkHelpOutput(Closure functionCall) {
 
         // capture the system output stream so we can look at the help printed stuff
         ByteArrayOutputStream systemOutOutputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(systemOutOutputStream));
 
-        MadcowCLI.parseArgs(['-h'].toArray() as String[]);
+        functionCall.call();
+
         String systemOutput = systemOutOutputStream.toString();
 
-        assertEquals("""usage: runMadcow [options]
+        def expectedHelpMessage = """usage: runMadcow [options]
 Options:
  -e,--env <env-name>    environment to load from the madcow-config.xml
  -h,--help              Show Usage Information
  -t,--test <testname>   comma seperated list of test names
-""", systemOutput);
+""";
+
+        assertEquals(expectedHelpMessage, systemOutput);
+
+        MadcowCLI.main(['-h'] as String[])
+        assertEquals(expectedHelpMessage, systemOutput);
 
         System.setOut(null);
+    }
+
+    void testHelp() {
+        checkHelpOutput({MadcowCLI.parseArgs(['-h'].toArray() as String[])});
+        checkHelpOutput({MadcowCLI.main(['-h'] as String[])});
     }
 }

@@ -18,8 +18,6 @@ public class MadcowCLI {
             t(longOpt : 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName : 'testname', 'comma seperated list of test names')
         }
 
-        cli.stopAtNonOption = true;
-
         def options = cli.parse(incomingArgs);
 
         if (options.help) {
@@ -36,8 +34,8 @@ public class MadcowCLI {
     {
         def options = parseArgs(args);
         if (options.help)
-            System.exit(0);
-        
+            return;
+
         MadcowTestRunner.executeTests(options.testss as ArrayList<String>, options.env ?: null);
     }
 
