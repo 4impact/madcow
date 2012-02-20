@@ -1,6 +1,6 @@
 package au.com.ps4impact.madcow.step
 
-import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.grass.GrassBlade
 
 /**
  * A Step Runner is the invocation hook for executing an individual MadcowStep.
@@ -19,5 +19,11 @@ abstract class MadcowStepRunner {
      * Execute a MadcowStep. This is the main entry point for calling
      * out to a MadcowStepRunner.
      */
-    public abstract void execute(MadcowTestCase testCase, MadcowStep step);
+    public abstract void execute(MadcowStep step);
+
+    /**
+     * Determine if the step runner has a blade runner capable of executing the step.
+     * This is used during test 'compilation' to see if it can even be done.
+     */
+    public abstract boolean hasBladeRunner(GrassBlade blade);
 }

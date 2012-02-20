@@ -112,6 +112,13 @@ class GrassBlade {
         return this.type != null ? this.type : isSettingDataParameter ? GrassBladeType.DATA_PARAMETER : GrassBladeType.EQUATION;
     }
 
+    /**
+     * Determines if the Grass Blade is executable, that is, an Equation or Statement.
+     */
+    boolean executable() {
+        return (this.type == GrassBlade.GrassBladeType.EQUATION || this.type == GrassBlade.GrassBladeType.STATEMENT)
+    }
+
     String toString() {
         return "operation: {${this.operation}} | selector: {${this.selector}} | " +
                (this.type != GrassBladeType.STATEMENT ? "params: {${this.parameters}} | " : '') +

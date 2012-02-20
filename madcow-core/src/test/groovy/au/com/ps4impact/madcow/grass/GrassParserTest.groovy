@@ -1,6 +1,7 @@
 package au.com.ps4impact.madcow.grass
 
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.mock.MockMadcowConfig
 
 /**
  * Test for the GrassParser.
@@ -70,7 +71,7 @@ class GrassParserTest extends GroovyTestCase {
 
     public void testGrassParsingScript() {
         
-        MadcowTestCase testCase = new MadcowTestCase('testGrassParsingScript');
+        MadcowTestCase testCase = new MadcowTestCase('testGrassParsingScript', MockMadcowConfig.getMadcowConfig());
         ArrayList<String> grassScript = new ArrayList<String>();
         String grassScriptString = """
             @expectedValue = Australia
@@ -86,6 +87,29 @@ class GrassParserTest extends GroovyTestCase {
         grassScriptString.eachLine { line -> grassScript.add(line) }
 
         GrassParser parser = new GrassParser(testCase, grassScript);
+        assertNotNull(parser);
         assertEquals("Verify number of steps, ignoring comments and blank lines", 5, testCase.steps.size());
+    }
+
+
+    public void testGrassParsingInvalidOp() {
+
+        MadcowTestCase testCase = new MadcowTestCase('testGrassParsingInvalidOp', MockMadcowConfig.getMadcowConfig());
+        ArrayList<String> grassScript = new ArrayList<String>();
+        String grassScriptString = """
+            @expectedValue = Australia
+
+            # verify the expected country
+            addressbook_search_country.verifyText = @expectedValue
+            addressbook_search_country.notAValidOperation = this will fail!
+        """;
+        grassScriptString.eachLine { line -> grassScript.add(line) }
+
+        try {
+            GrassParser parser = new GrassParser(testCase, grassScript);
+            fail('should always expection');
+        } catch (GrassParseException gpe) {
+            assertEquals("Unsupported operation 'notAValidOperation'", gpe.message);
+        }
     }
 }

@@ -1,13 +1,14 @@
 package au.com.ps4impact.madcow.grass
 
-import au.com.ps4impact.madcow.MadcowTestCase;
+import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.mock.MockMadcowConfig;
 
 /**
  * Test class for GrassBlade.
  */
 public class GrassBladeTest extends GroovyTestCase {
 
-    protected MadcowTestCase madcowTestCase = new MadcowTestCase('GrassBladeTest', []);
+    protected MadcowTestCase madcowTestCase = new MadcowTestCase('GrassBladeTest', MockMadcowConfig.getMadcowConfig(), []);
     protected GrassParser grassParser = madcowTestCase.grassParser;
 
     private void checkBladeProperties(GrassBlade blade, def line, def operation, def selector, def parameters, def mapping) {

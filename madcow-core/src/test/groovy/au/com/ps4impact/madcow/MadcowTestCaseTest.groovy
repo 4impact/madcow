@@ -1,6 +1,6 @@
 package au.com.ps4impact.madcow
 
-import au.com.ps4impact.madcow.config.MadcowConfig
+import au.com.ps4impact.madcow.mock.MockMadcowConfig
 
 /**
  * Test for the MadcowTestCase class.
@@ -25,30 +25,18 @@ class MadcowTestCaseTest extends GroovyTestCase {
     }
 
     void testCreateAndParse() {
-        MadcowTestCase testCase = new MadcowTestCase('testCreateAndParse', new MadcowConfig(), getGrassScript());
+        MadcowTestCase testCase = new MadcowTestCase('testCreateAndParse', MockMadcowConfig.getMadcowConfig(), getGrassScript());
         assertEquals("Verify number of steps, ignoring comments and blank lines", 5, testCase.steps.size());
     }
 
-    void testMadcowConfigConstructorParams() {
-        MadcowTestCase testCase = new MadcowTestCase('CheckDefaultedMadcowConfig');
-        assertEquals('CheckDefaultedMadcowConfig', testCase.name);
-        assertNotNull(testCase.madcowConfig);
-
-        def someConfig = new MadcowConfig();
-        testCase = new MadcowTestCase('testDefaultedMadcowConfig', someConfig);
-        assertEquals(someConfig, testCase.madcowConfig);
-    }
-
     void testExecuteMockedRunner() {
-        MadcowTestCase testCase = new MadcowTestCase('testExecuteMockedRunner', new MadcowConfig(), getGrassScript());
-        testCase.madcowConfig.stepRunner = 'au.com.ps4impact.madcow.step.MockMadcowStepRunner';
+        MadcowTestCase testCase = new MadcowTestCase('testExecuteMockedRunner', MockMadcowConfig.getMadcowConfig(), getGrassScript());
+        testCase.madcowConfig.stepRunner = 'au.com.ps4impact.madcow.mock.MockMadcowStepRunner';
         testCase.execute();
     }
 
     void testExecuteMockedRunnerFailure() {
-        MadcowTestCase testCase = new MadcowTestCase('testExecuteMockedRunner', new MadcowConfig(), getGrassScript());
-        testCase.madcowConfig.stepRunner = 'au.com.ps4impact.madcow.step.MockMadcowStepRunner';
-        testCase.madcowConfig.stepRunnerParameters = ['alwaysPass' : 'false'];
+        MadcowTestCase testCase = new MadcowTestCase('testExecuteMockedRunner', MockMadcowConfig.getMadcowConfig(false), getGrassScript());
         try {
             testCase.execute();
             fail('should always exception due to step failure')
@@ -59,8 +47,7 @@ class MadcowTestCaseTest extends GroovyTestCase {
 
     void testExecuteRunnerDoesNotExist() {
         try {
-            MadcowTestCase testCase = new MadcowTestCase('testExecuteRunnerDoesNotExist', new MadcowConfig(), getGrassScript());
-            testCase.madcowConfig.stepRunner = '.tent';
+            MadcowTestCase testCase = new MadcowTestCase('testExecuteRunnerDoesNotExist', MockMadcowConfig.getMadcowConfig(true, '.tent'), getGrassScript());
             testCase.execute();
             fail('should always exception with ClassNotFoundException');
         } catch (e) {
@@ -70,8 +57,7 @@ class MadcowTestCaseTest extends GroovyTestCase {
 
     void testExecuteRunnerUnknownException() {
         try {
-            MadcowTestCase testCase = new MadcowTestCase('testExecuteRunnerUnknownException', new MadcowConfig(), getGrassScript());
-            testCase.madcowConfig.stepRunner = 'au.com.ps4impact.madcow.util.ResourceFinder';
+            MadcowTestCase testCase = new MadcowTestCase('testExecuteRunnerUnknownException', MockMadcowConfig.getMadcowConfig(true, 'au.com.ps4impact.madcow.util.ResourceFinder'), getGrassScript());
             testCase.execute();
             fail('should always exception with Exception');
         } catch (e) {

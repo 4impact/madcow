@@ -9,7 +9,7 @@ class MadcowTestRunnerTest extends GroovyTestCase {
 
     void testExecuteTest() {
         def config = new MadcowConfig();
-        config.stepRunner = "au.com.ps4impact.madcow.step.MockMadcowStepRunner";
+        config.stepRunner = "au.com.ps4impact.madcow.mock.MockMadcowStepRunner";
 
         MadcowTestRunner.executeTests(['DataParameterTest'], config);
         MadcowTestRunner.executeTests(['DataParameterTest.grass'], config);
