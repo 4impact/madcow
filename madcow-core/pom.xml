@@ -92,6 +92,22 @@ Maven, like POM
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>verify-madcow-project</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <tasks>
+                                <!-- test the madcow project distribution zip -->
+                                <unzip src="target/madcow-core-${project.version}-install.zip" dest="target/test-project" />
+                                <exec dir="target/test-project" executable="bash" failonerror="true">
+                                    <arg line="runMadcow.sh" />
+                                </exec>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>

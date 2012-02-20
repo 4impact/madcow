@@ -21,7 +21,7 @@ public class MadcowCLI {
 
         def options = cli.parse(incomingArgs);
 
-        if (options.help) {
+        if (options.help || incomingArgs.size() == 0) {
             cli.usage();
         }
 
@@ -31,10 +31,11 @@ public class MadcowCLI {
     /**
      * Entry point.
      */
-    static main(String[] args)
+    static main(def args)
     {
+        args = args ?: new String()[];
         def options = parseArgs(args);
-        if (options.help)
+        if (options.help || args.size() == 0)
             return;
 
         MadcowConfig config = new MadcowConfig(options.env ?: null);
