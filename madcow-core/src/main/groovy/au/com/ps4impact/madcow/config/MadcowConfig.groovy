@@ -21,7 +21,7 @@ class MadcowConfig {
 
     MadcowConfig(String envName = null) {
 
-        String xmlFileContents = ResourceFinder.locateResourceOnClasspath(this.getClass().getClassLoader(), MadcowProject.CONFIGURATION_FILE).file.text;
+        String xmlFileContents = ResourceFinder.locateFileOnClasspath(this.getClass().getClassLoader(), MadcowProject.CONFIGURATION_FILE).text;
 
         validateConfigFormat(xmlFileContents);
         parseConfig(xmlFileContents, envName);
