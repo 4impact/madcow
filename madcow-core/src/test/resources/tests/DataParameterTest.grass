@@ -1,0 +1,2 @@
+import = AustraliaTemplate
+@winner = The winner is @{country}!

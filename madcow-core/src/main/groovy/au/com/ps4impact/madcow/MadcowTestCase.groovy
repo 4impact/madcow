@@ -19,6 +19,7 @@ class MadcowTestCase {
     public GrassParser grassParser = null;
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
+    public MadcowStep lastExecutedStep;
 
     public MadcowConfig madcowConfig;
 
@@ -81,6 +82,7 @@ class MadcowTestCase {
         else
             step.result = MadcowStepResult.NO_OPERATION("${step.blade.type} has no operation to execute");
 
+        this.lastExecutedStep = step;
         if (step.result.failed())
             throw new Exception("Step failed - ${step.result}");
 

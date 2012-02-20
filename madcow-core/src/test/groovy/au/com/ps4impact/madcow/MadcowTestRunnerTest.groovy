@@ -8,7 +8,10 @@ import au.com.ps4impact.madcow.config.MadcowConfig
 class MadcowTestRunnerTest extends GroovyTestCase {
 
     void testExecuteTest() {
+        def config = new MadcowConfig();
+        config.stepRunner = "au.com.ps4impact.madcow.step.MockMadcowStepRunner";
 
-        MadcowTestRunner.executeTests([], new MadcowConfig());
+        MadcowTestRunner.executeTests(['DataParameterTest'], config);
+        MadcowTestRunner.executeTests(['DataParameterTest.grass'], config);
     }
 }

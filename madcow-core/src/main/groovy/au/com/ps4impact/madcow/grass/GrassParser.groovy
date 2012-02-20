@@ -4,6 +4,8 @@ import org.apache.log4j.Logger
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.step.MadcowStep
+import au.com.ps4impact.madcow.util.ResourceFinder
+import au.com.ps4impact.madcow.MadcowProject
 
 /**
  * The Grass Parser.
@@ -16,7 +18,7 @@ class GrassParser {
 
     protected Map<String, String> dataParameters;
 
-    public GrassParser(MadcowTestCase testCase, ArrayList<String> grassScript) {
+    public GrassParser(MadcowTestCase testCase, List<String> grassScript) {
         clearDataParameters();
         processScript(testCase, grassScript);
     }
@@ -26,7 +28,7 @@ class GrassParser {
      * such as when processing an importTemplate command, the created steps are given
      * that parent.
      */
-    protected void processScript(MadcowTestCase testCase, ArrayList<String> grassScript, MadcowStep parentStep = null) {
+    protected void processScript(MadcowTestCase testCase, List<String> grassScript, MadcowStep parentStep = null) {
         if (grassScript == null)
             return;
 
@@ -42,8 +44,9 @@ class GrassParser {
             testCase.steps.add(step);
             if (step.blade.type == GrassBlade.GrassBladeType.IMPORT)
             {
-                // TODO: Load from disk and recursively callback
-                processScript(testCase, [], step);
+                // recursive callback to self for the template file
+                def template = ResourceFinder.locateFileOnClasspath(this.class.classLoader, "**/" + ResourceFinder.addFileExtensionIfRequired(step.blade.parameters, '.grass'), MadcowProject.TEMPLATES_DIRECTORY);
+                processScript(testCase, template.readLines(), step);
             }
         }
     }
@@ -55,7 +58,6 @@ class GrassParser {
     public void clearDataParameters() {
         dataParameters = new HashMap<String, String>();
         dataParameters.putAll(globalDataParameters.clone() as Map);
-        LOG.debug("dataParameters after adding global : $dataParameters");
     }
 
     /**
