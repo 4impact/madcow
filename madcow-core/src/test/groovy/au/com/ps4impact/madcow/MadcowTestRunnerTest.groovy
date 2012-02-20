@@ -9,6 +9,6 @@ class MadcowTestRunnerTest extends GroovyTestCase {
 
     void testExecuteTest() {
 
-        MadcowTestRunner.executeTests([]);
+        MadcowTestRunner.executeTests([], new MadcowConfig());
     }
 }

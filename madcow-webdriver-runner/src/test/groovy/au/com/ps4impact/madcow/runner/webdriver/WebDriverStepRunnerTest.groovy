@@ -1,6 +1,8 @@
 package au.com.ps4impact.madcow.runner.webdriver
 
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.MadcowTestRunner
+import au.com.ps4impact.madcow.config.MadcowConfig
 
 /**
  * Test for running WebDriver grass
@@ -23,4 +25,7 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
         println("Results!!!! : " + testCase.steps.result);
     }
 
+    public void testDoIt() {
+        MadcowTestRunner.executeTests(['AddressTest'], new MadcowConfig())
+    }
 }

@@ -3,6 +3,7 @@ package au.com.ps4impact.madcow.execution;
 import groovyjarjarcommonscli.ParseException;
 import groovyjarjarcommonscli.Option
 import au.com.ps4impact.madcow.MadcowTestRunner
+import au.com.ps4impact.madcow.config.MadcowConfig
 
 /**
  * Run Madcow from the Command Line.
@@ -36,7 +37,8 @@ public class MadcowCLI {
         if (options.help)
             return;
 
-        MadcowTestRunner.executeTests(options.testss as ArrayList<String>, options.env ?: null);
+        MadcowConfig config = new MadcowConfig(options.env ?: null);
+        MadcowTestRunner.executeTests(options.testss as ArrayList<String>, config);
     }
 
 }
