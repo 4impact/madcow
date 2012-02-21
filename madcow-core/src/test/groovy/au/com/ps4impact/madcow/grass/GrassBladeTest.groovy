@@ -177,4 +177,18 @@ public class GrassBladeTest extends GroovyTestCase {
         assertEquals(GrassBlade.GrassBladeType.IMPORT, importBlade.type);
         checkBladeProperties(importBlade, 'importTemplate = CountryTemplate', 'importTemplate', null, 'CountryTemplate', null);
     }
+
+    public void testEvalMacro() {
+        GrassBlade equationBlade = new GrassBlade('addressbook_search_country.verifyText = madcow.eval({return \'Australia\'})', grassParser);
+        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = madcow.eval({return \'Australia\'})', 'verifyText', null, 'Australia', 'addressbook_search_country');
+
+        equationBlade = new GrassBlade('addressbook_search_country.verifyText = Winner is madcow.eval({return \'Australia\'})', grassParser);
+        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = Winner is madcow.eval({return \'Australia\'})', 'verifyText', null, 'Winner is Australia', 'addressbook_search_country');
+
+        equationBlade = new GrassBlade('addressbook_search_country.verifyText = The year is madcow.eval({ new Date().format(\'yyyy\')}) - awesome!', grassParser);
+        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = The year is madcow.eval({ new Date().format(\'yyyy\')}) - awesome!', 'verifyText', null, 'The year is 2012 - awesome!', 'addressbook_search_country');
+
+        equationBlade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = [[country : 'madcow.eval({return 'Australia'})'], [country: 'New Zealand']]""", grassParser);
+        checkBladeProperties(equationBlade, """addressbook_search_country.verifySelectFieldOptions = [[country : 'madcow.eval({return 'Australia'})'], [country: 'New Zealand']]""", 'verifySelectFieldOptions', null, [[country : 'Australia'], [country: 'New Zealand']], 'addressbook_search_country');
+    }
 }

@@ -18,6 +18,10 @@ class GrassParser {
 
     protected Map<String, String> dataParameters;
 
+    static {
+        globalDataParameters = new GlobalDataParametersFileHelper().initProcessProperties()
+    }
+
     public GrassParser(MadcowTestCase testCase, List<String> grassScript) {
         clearDataParameters();
         processScript(testCase, grassScript);

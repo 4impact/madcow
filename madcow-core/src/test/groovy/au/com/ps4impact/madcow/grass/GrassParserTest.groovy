@@ -91,7 +91,6 @@ class GrassParserTest extends GroovyTestCase {
         assertEquals("Verify number of steps, ignoring comments and blank lines", 5, testCase.steps.size());
     }
 
-
     public void testGrassParsingInvalidOp() {
 
         MadcowTestCase testCase = new MadcowTestCase('testGrassParsingInvalidOp', MockMadcowConfig.getMadcowConfig());
@@ -111,5 +110,17 @@ class GrassParserTest extends GroovyTestCase {
         } catch (GrassParseException gpe) {
             assertEquals("Unsupported operation 'notAValidOperation'", gpe.message);
         }
+    }
+
+    public void testGlobalDataParameters() {
+        MadcowTestCase testCase = new MadcowTestCase('testGlobalDataParameters', MockMadcowConfig.getMadcowConfig());
+
+        // check retrieval of global params
+        GrassParser parser = new GrassParser(testCase, null);
+        assertEquals("madcow.eval({ new Date().format('dd/MM/yyyy')})", parser.getDataParameter("@global.currentDate"));
+
+        // check global are parsed in script
+        parser.processScript(testCase, ['addressbook_currentDate.verifyText = @global.currentDate']);
+        assertEquals("[testCase: testGlobalDataParameters, blade: operation: {verifyText} | selector: {null} | params: {${new Date().format('dd/MM/yyyy')}} | line: {addressbook_currentDate.verifyText = @global.currentDate} | mapping: {addressbook_currentDate}, parent: null, children: []]", testCase.steps.first().toString());
     }
 }

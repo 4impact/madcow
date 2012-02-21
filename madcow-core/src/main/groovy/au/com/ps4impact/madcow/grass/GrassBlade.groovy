@@ -43,6 +43,8 @@ class GrassBlade {
 
     protected static final String DATA_PARAMETER_INLINE_REGEX = '@\\{([^}]+)\\}';
 
+    protected static final String EVAL_MACRO_INLINE_REGEX = 'madcow.eval\\(\\{([^}]+)\\}\\)';
+
     /**
      * Create a new Blade of grass for the given line.<br/>
      * The line is split into the operation, parameters and mapping properties.
@@ -100,6 +102,17 @@ class GrassBlade {
 
         if (parametersString.startsWith(DATA_PARAMETER_KEY)) {
             parametersString = parser.getDataParameter(parametersString);
+        }
+
+        Matcher inlineMacros = parametersString =~ EVAL_MACRO_INLINE_REGEX;
+        if (inlineMacros.size() > 0) {
+            inlineMacros.each { String macroMatch, String macroContents ->
+                try {
+                    parametersString = StringUtils.replace(parametersString, macroMatch, (new GroovyShell().evaluate(macroContents)) as String);
+                } catch (e) {
+                    throw new GrassParseException("Unable to evaluate $macroMatch - is it a valid groovy command?\n\n$e");
+                }
+            }
         }
 
         boolean isSettingDataParameter = false;
