@@ -16,6 +16,9 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
             # verify the text exists on the page
             verifyText = @expectedValue
+
+            testsite_menu_createAddress.clickLink
+            verifyText = Check For Duplicates
         """;
         ArrayList<String> grassScript = new ArrayList<String>();
         grassScriptString.eachLine { line -> grassScript.add(line) }

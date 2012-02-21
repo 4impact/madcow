@@ -1,4 +1,6 @@
-package au.com.ps4impact.madcow.mappings;
+package au.com.ps4impact.madcow.mappings
+
+import au.com.ps4impact.madcow.MadcowTestCase;
 
 /**
  * Representation of Mappings files, providing static
@@ -10,15 +12,14 @@ class MadcowMappings {
     static Map mappings;
 
     static {
-        def mappingsHelper = new MappingsFileHelper()
-        mappings = mappingsHelper.initProcessProperties()
+        mappings = new MappingsFileHelper().initProcessProperties()
     }
 
-    static Map<String, String> getMappedHtmlElementReference(String htmlElementReference) {
-        if (mappings.containsKey(htmlElementReference)) {
-            return mappings.get(htmlElementReference).clone() as Map
+    static Map<String, String> getSelectorFromMapping(MadcowTestCase testCase, String mapping) {
+        if (mappings.containsKey(mapping)) {
+            return mappings.get(mapping).clone() as Map;
         } else {
-            return ['htmlId': htmlElementReference]
+            return ["${testCase.stepRunner.defaultSelector}" : mapping];
         }
     }
 }

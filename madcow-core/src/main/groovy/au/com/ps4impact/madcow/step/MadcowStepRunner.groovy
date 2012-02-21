@@ -26,4 +26,10 @@ abstract class MadcowStepRunner {
      * This is used during test 'compilation' to see if it can even be done.
      */
     public abstract boolean hasBladeRunner(GrassBlade blade);
+
+    /**
+     * Retrieve the default mappings selector this step runner.
+     * This is used as the 'type' of selector when no type is given.
+     */
+    public abstract String getDefaultSelector();
 }

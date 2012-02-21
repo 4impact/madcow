@@ -3,6 +3,7 @@ package au.com.ps4impact.madcow.grass
 import java.util.regex.Matcher
 import org.apache.commons.lang3.StringUtils
 import org.apache.log4j.Logger
+import au.com.ps4impact.madcow.mappings.MadcowMappings
 
 /**
  * A blade of grass.
@@ -35,7 +36,8 @@ class GrassBlade {
     def     parameters;
     String  line;
     String  mapping;
-    HashMap selector;
+    String  mappingSelectorType;
+    String  mappingSelectorValue;
 
     protected static final Logger LOG = Logger.getLogger(GrassBlade.class);
 
@@ -57,13 +59,13 @@ class GrassBlade {
 
         if (this.line.contains('=')) {
             def equation = this.line.split('=', 2);
-            parseStatement(equation[0].trim());
+            parseStatement(parser, equation[0].trim());
             this.type = parseParameters(equation[1].trim(), parser);
 
         } else {
             this.type = GrassBladeType.STATEMENT;
             this.parameters = null;
-            parseStatement(this.line.trim());
+            parseStatement(parser, this.line.trim());
         }
     }
 
@@ -71,11 +73,15 @@ class GrassBlade {
      * Parse the statement into the Operation and Mapping properties.
      * This isn't just for Statement blades, as even equations have a statement!
      */
-    protected void parseStatement(String statement) {
+    protected void parseStatement(GrassParser parser, String statement) {
         if (statement.contains('.')) {
             def operations = statement.split('\\.', 2);
             this.operation = operations[1].trim();
             this.mapping = operations[0].trim();
+            
+            def selector = MadcowMappings.getSelectorFromMapping(parser.testCase, this.mapping);
+            this.mappingSelectorType = selector.keySet().toArray().first();
+            this.mappingSelectorValue = selector.values().toArray().first();
         } else {
             this.operation = statement;
         }
@@ -133,7 +139,7 @@ class GrassBlade {
     }
 
     String toString() {
-        return "operation: {${this.operation}} | selector: {${this.selector}} | " +
+        return "operation: {${this.operation}} | selector: {${this.mappingSelectorType}:${this.mappingSelectorValue}} | " +
                (this.type != GrassBladeType.STATEMENT ? "params: {${this.parameters}} | " : '') +
                "line: {${this.line}} | " + "mapping: {${this.mapping}}";
     }

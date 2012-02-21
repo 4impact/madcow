@@ -18,13 +18,16 @@ class GrassParser {
 
     protected Map<String, String> dataParameters;
 
+    public MadcowTestCase testCase;
+
     static {
         globalDataParameters = new GlobalDataParametersFileHelper().initProcessProperties()
     }
 
     public GrassParser(MadcowTestCase testCase, List<String> grassScript) {
+        this.testCase = testCase;
         clearDataParameters();
-        processScript(testCase, grassScript);
+        processScript(grassScript);
     }
 
     /**
@@ -32,7 +35,7 @@ class GrassParser {
      * such as when processing an importTemplate command, the created steps are given
      * that parent.
      */
-    protected void processScript(MadcowTestCase testCase, List<String> grassScript, MadcowStep parentStep = null) {
+    protected void processScript(List<String> grassScript, MadcowStep parentStep = null) {
         if (grassScript == null)
             return;
 
@@ -57,7 +60,7 @@ class GrassParser {
             {
                 // recursive callback to self for the template file
                 def template = ResourceFinder.locateFileOnClasspath(this.class.classLoader, "**/" + ResourceFinder.addFileExtensionIfRequired(step.blade.parameters, '.grass'), MadcowProject.TEMPLATES_DIRECTORY);
-                processScript(testCase, template.readLines(), step);
+                processScript(template.readLines(), step);
             }
         }
     }

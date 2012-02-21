@@ -11,9 +11,15 @@ public class GrassBladeTest extends GroovyTestCase {
     protected MadcowTestCase madcowTestCase = new MadcowTestCase('GrassBladeTest', MockMadcowConfig.getMadcowConfig(), []);
     protected GrassParser grassParser = madcowTestCase.grassParser;
 
-    private void checkBladeProperties(GrassBlade blade, def line, def operation, def selector, def parameters, def mapping) {
+    private void checkBladeProperties(GrassBlade blade, def line, def operation, Map<String, String> selector, def parameters, def mapping) {
         assertEquals("Check operation", operation, blade.operation);
-        assertEquals("Check selector", selector, blade.selector);
+        if (selector != null) {
+            assertArrayEquals(selector?.keySet()?.toArray(), blade.mappingSelectorType);
+            assertArrayEquals(selector?.values()?.toArray(), blade.mappingSelectorValue);
+        } else {
+            assertNull(blade.mappingSelectorType);
+            assertNull(blade.mappingSelectorValue);
+        }
         assertEquals("Check parameters", parameters, blade.parameters);
         assertEquals("Check mapping", mapping, blade.mapping);
         assertEquals("Check line", line, blade.line);
@@ -21,21 +27,21 @@ public class GrassBladeTest extends GroovyTestCase {
 
     public void testEquationProperties() {
         GrassBlade equationBlade = new GrassBlade('addressbook_search_country.verifyText = Australia', grassParser);
-        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = Australia', 'verifyText', null, 'Australia', 'addressbook_search_country');
+        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = Australia', 'verifyText', ['htmlid' : 'addressbook_search_country'], 'Australia', 'addressbook_search_country');
     }
 
     public void testEquationWithListParameterProperties() {
         GrassBlade equationListParam1Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = ['One', 'Two']""", grassParser);
-        checkBladeProperties(equationListParam1Blade, """addressbook_search_country.verifySelectFieldOptions = ['One', 'Two']""", 'verifySelectFieldOptions', null, ['One', 'Two'], 'addressbook_search_country');
+        checkBladeProperties(equationListParam1Blade, """addressbook_search_country.verifySelectFieldOptions = ['One', 'Two']""", 'verifySelectFieldOptions', ['htmlid' : 'addressbook_search_country'], ['One', 'Two'], 'addressbook_search_country');
 
         GrassBlade equationListParam2Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = ["One", "Two"]""", grassParser);
-        checkBladeProperties(equationListParam2Blade, """addressbook_search_country.verifySelectFieldOptions = ["One", "Two"]""", 'verifySelectFieldOptions', null, ['One', 'Two'], 'addressbook_search_country');
+        checkBladeProperties(equationListParam2Blade, """addressbook_search_country.verifySelectFieldOptions = ["One", "Two"]""", 'verifySelectFieldOptions', ['htmlid' : 'addressbook_search_country'], ['One', 'Two'], 'addressbook_search_country');
 
         GrassBlade equationListParam3Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = ['One\\'s', "Two"]""", grassParser);
-        checkBladeProperties(equationListParam3Blade, """addressbook_search_country.verifySelectFieldOptions = ['One\\'s', "Two"]""", 'verifySelectFieldOptions', null, ['One\'s', 'Two'], 'addressbook_search_country');
+        checkBladeProperties(equationListParam3Blade, """addressbook_search_country.verifySelectFieldOptions = ['One\\'s', "Two"]""", 'verifySelectFieldOptions', ['htmlid' : 'addressbook_search_country'], ['One\'s', 'Two'], 'addressbook_search_country');
 
         GrassBlade equationListParam4Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = ["One's", "Two"]""", grassParser);
-        checkBladeProperties(equationListParam4Blade, """addressbook_search_country.verifySelectFieldOptions = ["One's", "Two"]""", 'verifySelectFieldOptions', null, ['One\'s', 'Two'], 'addressbook_search_country');
+        checkBladeProperties(equationListParam4Blade, """addressbook_search_country.verifySelectFieldOptions = ["One's", "Two"]""", 'verifySelectFieldOptions', ['htmlid' : 'addressbook_search_country'], ['One\'s', 'Two'], 'addressbook_search_country');
     }
 
     public void testEquationWithMapParameterProperties() {
@@ -54,40 +60,40 @@ public class GrassBladeTest extends GroovyTestCase {
 
     public void testEquationWithListAndMapParameterProperties() {
         GrassBlade equationListMapParam1Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = [options : ['Australia', 'New Zealand']]""", grassParser);
-        checkBladeProperties(equationListMapParam1Blade, """addressbook_search_country.verifySelectFieldOptions = [options : ['Australia', 'New Zealand']]""", 'verifySelectFieldOptions', null, [options: ['Australia', 'New Zealand']], 'addressbook_search_country');
+        checkBladeProperties(equationListMapParam1Blade, """addressbook_search_country.verifySelectFieldOptions = [options : ['Australia', 'New Zealand']]""", 'verifySelectFieldOptions', ['htmlid' : 'addressbook_search_country'], [options: ['Australia', 'New Zealand']], 'addressbook_search_country');
 
         GrassBlade equationListMapParam2Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = [[country : 'Australia'], [country: 'New Zealand']]""", grassParser);
-        checkBladeProperties(equationListMapParam2Blade, """addressbook_search_country.verifySelectFieldOptions = [[country : 'Australia'], [country: 'New Zealand']]""", 'verifySelectFieldOptions', null, [[country : 'Australia'], [country: 'New Zealand']], 'addressbook_search_country');
+        checkBladeProperties(equationListMapParam2Blade, """addressbook_search_country.verifySelectFieldOptions = [[country : 'Australia'], [country: 'New Zealand']]""", 'verifySelectFieldOptions', ['htmlid' : 'addressbook_search_country'], [[country : 'Australia'], [country: 'New Zealand']], 'addressbook_search_country');
     }
 
     public void testEquationDollarInProperties() {
         GrassBlade equationDollarInBlade = new GrassBlade('addressbook_recoveries_cost.verifyText = $2,000.00', grassParser);
-        checkBladeProperties(equationDollarInBlade, 'addressbook_recoveries_cost.verifyText = $2,000.00', 'verifyText', null, '$2,000.00', 'addressbook_recoveries_cost');
+        checkBladeProperties(equationDollarInBlade, 'addressbook_recoveries_cost.verifyText = $2,000.00', 'verifyText', [htmlid : 'addressbook_recoveries_cost'], '$2,000.00', 'addressbook_recoveries_cost');
 
         GrassBlade equationDollarInBlade2 = new GrassBlade('addressbook_recoveries_cost.verifyText = ${someValue}', grassParser);
-        checkBladeProperties(equationDollarInBlade2, 'addressbook_recoveries_cost.verifyText = ${someValue}', 'verifyText', null, '${someValue}', 'addressbook_recoveries_cost');
+        checkBladeProperties(equationDollarInBlade2, 'addressbook_recoveries_cost.verifyText = ${someValue}', 'verifyText', [htmlid : 'addressbook_recoveries_cost'], '${someValue}', 'addressbook_recoveries_cost');
 
         GrassBlade equationDollarInBlade3 = new GrassBlade("""addressbook_recoveries_cost.verifyText = \${someAmount\$20}""", grassParser);
-        checkBladeProperties(equationDollarInBlade3, 'addressbook_recoveries_cost.verifyText = \${someAmount\$20}', 'verifyText', null, "\${someAmount\$20}", 'addressbook_recoveries_cost');
+        checkBladeProperties(equationDollarInBlade3, 'addressbook_recoveries_cost.verifyText = \${someAmount\$20}', 'verifyText', [htmlid : 'addressbook_recoveries_cost'], "\${someAmount\$20}", 'addressbook_recoveries_cost');
     }
 
     public void testEquationWithListAndDollarParameterProperties() {
         GrassBlade equationListDollarParam1Blade = new GrassBlade("""addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]""", grassParser);
-        checkBladeProperties(equationListDollarParam1Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]""", 'verifySelectFieldOptions', null, [options: ["\$10.00", "\$20.00"]], 'addressbook_search_costs');
+        checkBladeProperties(equationListDollarParam1Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]""", 'verifySelectFieldOptions', [htmlid : 'addressbook_search_costs'], [options: ["\$10.00", "\$20.00"]], 'addressbook_search_costs');
 
         GrassBlade equationListDollarParam2Blade = new GrassBlade("""addressbook_search_costs.verifySelectFieldOptions = [options : ['\$10.00', "\$20.00"]]""", grassParser);
-        checkBladeProperties(equationListDollarParam2Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ['\$10.00', "\$20.00"]]""", 'verifySelectFieldOptions', null, [options: ['\$10.00', "\$20.00"]], 'addressbook_search_costs');
+        checkBladeProperties(equationListDollarParam2Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ['\$10.00', "\$20.00"]]""", 'verifySelectFieldOptions', [htmlid : 'addressbook_search_costs'], [options: ['\$10.00', "\$20.00"]], 'addressbook_search_costs');
 
         GrassBlade equationListDollarParam3Blade = new GrassBlade("""addressbook_search_costs.verifySelectFieldOptions = [options : ["\$20,000.00", "\$20.00"]]""", grassParser);
-        checkBladeProperties(equationListDollarParam3Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ["\$20,000.00", "\$20.00"]]""", 'verifySelectFieldOptions', null, [options: ["\$20,000.00", "\$20.00"]], 'addressbook_search_costs');
+        checkBladeProperties(equationListDollarParam3Blade, """addressbook_search_costs.verifySelectFieldOptions = [options : ["\$20,000.00", "\$20.00"]]""", 'verifySelectFieldOptions', [htmlid : 'addressbook_search_costs'], [options: ["\$20,000.00", "\$20.00"]], 'addressbook_search_costs');
 
         GrassBlade equationListDollarParam4Blade = new GrassBlade('addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]', grassParser);
-        checkBladeProperties(equationListDollarParam4Blade, 'addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]', 'verifySelectFieldOptions', null, [options: ['$10.00', '$20.00']], 'addressbook_search_costs');
+        checkBladeProperties(equationListDollarParam4Blade, 'addressbook_search_costs.verifySelectFieldOptions = [options : ["\$10.00", "\$20.00"]]', 'verifySelectFieldOptions', [htmlid : 'addressbook_search_costs'], [options: ['$10.00', '$20.00']], 'addressbook_search_costs');
     }
 
     public void testStatementProperties() {
         GrassBlade statementBlade = new GrassBlade('addressbook_search_button.clickLink', grassParser);
-        checkBladeProperties(statementBlade, 'addressbook_search_button.clickLink', 'clickLink', null, null, 'addressbook_search_button');
+        checkBladeProperties(statementBlade, 'addressbook_search_button.clickLink', 'clickLink', ['htmlid' : 'addressbook_search_button'], null, 'addressbook_search_button');
     }
 
     public void testEquationNoMappingProperties() {
@@ -96,13 +102,13 @@ public class GrassBladeTest extends GroovyTestCase {
     }
 
     public void testToString() {
-        assertToString(new GrassBlade('verifyText = Australia', grassParser), "operation: {verifyText} | selector: {null} | params: {Australia} | line: {verifyText = Australia} | mapping: {null}");
-        assertToString(new GrassBlade('addressbook_search_country.verifyText = Australia', grassParser), "operation: {verifyText} | selector: {null} | params: {Australia} | line: {addressbook_search_country.verifyText = Australia} | mapping: {addressbook_search_country}");
-        assertToString(new GrassBlade('addressbook_search_button.clickLink', grassParser), "operation: {clickLink} | selector: {null} | line: {addressbook_search_button.clickLink} | mapping: {addressbook_search_button}");
+        assertToString(new GrassBlade('verifyText = Australia', grassParser), "operation: {verifyText} | selector: {null:null} | params: {Australia} | line: {verifyText = Australia} | mapping: {null}");
+        assertToString(new GrassBlade('addressbook_search_country.verifyText = Australia', grassParser), "operation: {verifyText} | selector: {htmlid:addressbook_search_country} | params: {Australia} | line: {addressbook_search_country.verifyText = Australia} | mapping: {addressbook_search_country}");
+        assertToString(new GrassBlade('addressbook_search_button.clickLink', grassParser), "operation: {clickLink} | selector: {htmlid:addressbook_search_button} | line: {addressbook_search_button.clickLink} | mapping: {addressbook_search_button}");
     }
 
     public void testTrimLine() {
-        assertToString(new GrassBlade('verifyText =          Australia            ', grassParser), "operation: {verifyText} | selector: {null} | params: {Australia} | line: {verifyText =          Australia            } | mapping: {null}");
+        assertToString(new GrassBlade('verifyText =          Australia            ', grassParser), "operation: {verifyText} | selector: {null:null} | params: {Australia} | line: {verifyText =          Australia            } | mapping: {null}");
     }
 
     public void testEmptyLineBlade() {
@@ -180,15 +186,15 @@ public class GrassBladeTest extends GroovyTestCase {
 
     public void testEvalMacro() {
         GrassBlade equationBlade = new GrassBlade('addressbook_search_country.verifyText = madcow.eval({return \'Australia\'})', grassParser);
-        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = madcow.eval({return \'Australia\'})', 'verifyText', null, 'Australia', 'addressbook_search_country');
+        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = madcow.eval({return \'Australia\'})', 'verifyText', [htmlid : 'addressbook_search_country'], 'Australia', 'addressbook_search_country');
 
         equationBlade = new GrassBlade('addressbook_search_country.verifyText = Winner is madcow.eval({return \'Australia\'})', grassParser);
-        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = Winner is madcow.eval({return \'Australia\'})', 'verifyText', null, 'Winner is Australia', 'addressbook_search_country');
+        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = Winner is madcow.eval({return \'Australia\'})', 'verifyText', [htmlid : 'addressbook_search_country'], 'Winner is Australia', 'addressbook_search_country');
 
         equationBlade = new GrassBlade('addressbook_search_country.verifyText = The year is madcow.eval({ new Date().format(\'yyyy\')}) - awesome!', grassParser);
-        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = The year is madcow.eval({ new Date().format(\'yyyy\')}) - awesome!', 'verifyText', null, 'The year is 2012 - awesome!', 'addressbook_search_country');
+        checkBladeProperties(equationBlade, 'addressbook_search_country.verifyText = The year is madcow.eval({ new Date().format(\'yyyy\')}) - awesome!', 'verifyText', [htmlid : 'addressbook_search_country'], 'The year is 2012 - awesome!', 'addressbook_search_country');
 
         equationBlade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = [[country : 'madcow.eval({return 'Australia'})'], [country: 'New Zealand']]""", grassParser);
-        checkBladeProperties(equationBlade, """addressbook_search_country.verifySelectFieldOptions = [[country : 'madcow.eval({return 'Australia'})'], [country: 'New Zealand']]""", 'verifySelectFieldOptions', null, [[country : 'Australia'], [country: 'New Zealand']], 'addressbook_search_country');
+        checkBladeProperties(equationBlade, """addressbook_search_country.verifySelectFieldOptions = [[country : 'madcow.eval({return 'Australia'})'], [country: 'New Zealand']]""", 'verifySelectFieldOptions', [htmlid : 'addressbook_search_country'], [[country : 'Australia'], [country: 'New Zealand']], 'addressbook_search_country');
     }
 }

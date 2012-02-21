@@ -120,7 +120,7 @@ class GrassParserTest extends GroovyTestCase {
         assertEquals("madcow.eval({ new Date().format('dd/MM/yyyy')})", parser.getDataParameter("@global.currentDate"));
 
         // check global are parsed in script
-        parser.processScript(testCase, ['addressbook_currentDate.verifyText = @global.currentDate']);
-        assertEquals("[testCase: testGlobalDataParameters, blade: operation: {verifyText} | selector: {null} | params: {${new Date().format('dd/MM/yyyy')}} | line: {addressbook_currentDate.verifyText = @global.currentDate} | mapping: {addressbook_currentDate}, parent: null, children: []]", testCase.steps.first().toString());
+        parser.processScript(['addressbook_currentDate.verifyText = @global.currentDate']);
+        assertEquals("[testCase: testGlobalDataParameters, blade: operation: {verifyText} | selector: {htmlid:addressbook_currentDate} | params: {${new Date().format('dd/MM/yyyy')}} | line: {addressbook_currentDate.verifyText = @global.currentDate} | mapping: {addressbook_currentDate}, parent: null, children: []]", testCase.steps.first().toString());
     }
 }
