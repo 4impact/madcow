@@ -46,7 +46,7 @@ abstract class AbstractGrassFileHelper {
         return processProperties(testCase, localProperties)
     }
 
-    List duplicateProperties(Properties baseProperties, Properties propertiesToCompare) {
+    List<String> duplicateProperties(Properties baseProperties, Properties propertiesToCompare) {
         def duplicateProperties = []
         propertiesToCompare.each { key, value ->
             if (baseProperties.getProperty(key as String)){

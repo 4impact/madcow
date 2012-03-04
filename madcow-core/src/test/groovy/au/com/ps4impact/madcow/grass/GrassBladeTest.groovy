@@ -203,22 +203,22 @@ public class GrassBladeTest extends GroovyTestCase {
             GrassBlade macroBlade = new GrassBlade('addressbook_search_country.verifyText = madcow.eval({return RARR!})', grassParser);
             fail('should always exception');
         } catch (e) {
-            assertTrue(e.message.startsWith('Unable to evaluate'));
-            assertTrue(e.message.contains('is it a valid groovy command?'));
+            assertEquals(true, e.message.startsWith('Unable to evaluate'));
+            assertEquals(true, e.message.contains('is it a valid groovy command?'));
         }
     }
 
     public void testIsExecutable() {
         GrassBlade statementBlade = new GrassBlade('addressbook_search_country.clickLink', grassParser);
-        assertTrue(statementBlade.executable());
-
+        assertEquals(true, statementBlade.executable());
+        
         GrassBlade equationBlade = new GrassBlade('addressbook_search_country.verifyText = Winner is Australia', grassParser);
-        assertTrue(equationBlade.executable());
+        assertEquals(true, equationBlade.executable());
 
         GrassBlade importBlade = new GrassBlade('import = CountryTemplate', grassParser);
-        assertFalse(importBlade.executable());
+        assertEquals(false, importBlade.executable());
 
         GrassBlade dataBlade = new GrassBlade('@country = Australia', grassParser);
-        assertFalse(dataBlade.executable());
+        assertEquals(false, dataBlade.executable());
     }
 }

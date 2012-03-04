@@ -23,24 +23,36 @@ class MappingsFileHelperTest extends GroovyTestCase {
     }
 
     public void testProcessProperties() {
-
         Properties properties = new Properties();
         properties.setProperty('nice-key.text', 'nice-value');
 
         def fileHelper = new MappingsFileHelper();
         def processed = fileHelper.processProperties(testCase, properties);
         assertEquals('[text:nice-value]', processed['nice-key'].toString());
-
     }
 
     public void testProcessPropertiesDefaultSelector() {
-        
         Properties properties = new Properties();
         properties.setProperty('nice-key', 'nice-value');
 
         def fileHelper = new MappingsFileHelper();
         def processed = fileHelper.processProperties(testCase, properties);
         assertEquals('[htmlid:nice-value]', processed['nice-key'].toString());
+    }
 
+    public void testDuplicateProperties() {
+        Properties baseProperties = new Properties();
+        baseProperties.setProperty('nice-key.text', 'nice-value');
+        
+        Properties otherProperties = new Properties();
+        
+        def fileHelper = new MappingsFileHelper();
+        def duplicates = fileHelper.duplicateProperties(baseProperties, otherProperties);
+        assertEquals(0, duplicates.size());
+
+        otherProperties.setProperty('nice-key.text', 'nice-value');
+        duplicates = fileHelper.duplicateProperties(baseProperties, otherProperties);
+        assertEquals(1, duplicates.size());
+        assertEquals('nice-key.text', duplicates.first());
     }
 }
