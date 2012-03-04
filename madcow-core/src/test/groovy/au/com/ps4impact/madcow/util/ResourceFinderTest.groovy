@@ -19,7 +19,7 @@ class ResourceFinderTest extends GroovyTestCase {
 
     void testLocateMultipleResources() {
         assertNotNull(ResourceFinder.locateResourcesOnClasspath(this.class.classLoader, '**/*.xml'));
-        assertNotNull(ResourceFinder.locateFileOnClasspath(this.class.classLoader, '**/*.xml'));
+        assertNotNull(ResourceFinder.locateFilesOnClasspath(this.class.classLoader, '**/*.xml'));
     }
 
     void testLocateSingleResourceMultipleFound() {

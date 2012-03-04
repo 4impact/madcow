@@ -4,6 +4,7 @@ import org.apache.log4j.Logger
 import org.springframework.core.io.Resource
 import au.com.ps4impact.madcow.MadcowProject
 import au.com.ps4impact.madcow.grass.AbstractGrassFileHelper
+import au.com.ps4impact.madcow.MadcowTestCase
 
 /**
  * Helper class for Mappings file reading/mapping;
@@ -19,12 +20,16 @@ class MappingsFileHelper extends AbstractGrassFileHelper {
     }
     
     String getPropertiesFilePrettyName() {
-        "Mappings"
+        'Mappings'
     }
     
-    String getResourcePatternMatchingClasspath(){
-        "classpath*:${MadcowProject.MAPPINGS_DIRECTORY}/**/*.grass"
+    String getFileLocatorFilePattern(){
+        return '**/*.grass';
     }    
+    
+    String getFileLocatorBasedir() {
+        return MadcowProject.MAPPINGS_DIRECTORY;
+    }
 
 
 	/**
@@ -57,14 +62,14 @@ class MappingsFileHelper extends AbstractGrassFileHelper {
 		properties
 	}
 
-	Map processProperties(Properties properties) {
+	Map processProperties(MadcowTestCase testCase, Properties properties) {
 		Map mappings = new HashMap<String, Map>();
 		properties.each {String key, String value ->
 
-            String id = null, prop = null
+            String id, prop;
             (id, prop) = key.tokenize(".")
 			if (prop == null) {
-				prop = "htmlId";
+				prop = testCase.stepRunner.defaultSelector;
 			}
 			Map attr = new HashMap<String, String>()
 			attr."$prop" = value?.trim()

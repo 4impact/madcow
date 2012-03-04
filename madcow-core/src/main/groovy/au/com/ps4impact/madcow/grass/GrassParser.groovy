@@ -22,6 +22,7 @@ class GrassParser {
 
     static {
         globalDataParameters = new GlobalDataParametersFileHelper().initProcessProperties()
+        LOG.debug("Global data parameters: $globalDataParameters");
     }
 
     public GrassParser(MadcowTestCase testCase, List<String> grassScript) {

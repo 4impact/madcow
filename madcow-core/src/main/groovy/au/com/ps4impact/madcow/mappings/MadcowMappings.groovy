@@ -9,13 +9,14 @@ import au.com.ps4impact.madcow.MadcowTestCase;
  */
 class MadcowMappings {
 
-    static Map mappings;
-
-    static {
-        mappings = new MappingsFileHelper().initProcessProperties()
-    }
+    protected static Map mappings;
 
     static Map<String, String> getSelectorFromMapping(MadcowTestCase testCase, String mapping) {
+
+        if (mappings == null) {
+            mappings = new MappingsFileHelper().initProcessProperties(testCase);
+        }
+
         if (mappings.containsKey(mapping)) {
             return mappings.get(mapping).clone() as Map;
         } else {

@@ -13,7 +13,8 @@ import au.com.ps4impact.madcow.step.MadcowStepResult
 class ClickLink extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
-        
+
+        //TODO - this sort of handling of the selector type needs some work! common functions, not string matching etc
         WebElement link;
         switch (step.blade.mappingSelectorType) {
             case 'text':
