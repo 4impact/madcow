@@ -197,4 +197,28 @@ public class GrassBladeTest extends GroovyTestCase {
         equationBlade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = [[country : 'madcow.eval({return 'Australia'})'], [country: 'New Zealand']]""", grassParser);
         checkBladeProperties(equationBlade, """addressbook_search_country.verifySelectFieldOptions = [[country : 'madcow.eval({return 'Australia'})'], [country: 'New Zealand']]""", 'verifySelectFieldOptions', [htmlid : 'addressbook_search_country'], [[country : 'Australia'], [country: 'New Zealand']], 'addressbook_search_country');
     }
+
+    public void testEvalInvalidMacro() {
+        try {
+            GrassBlade macroBlade = new GrassBlade('addressbook_search_country.verifyText = madcow.eval({return RARR!})', grassParser);
+            fail('should always exception');
+        } catch (e) {
+            assertTrue(e.message.startsWith('Unable to evaluate'));
+            assertTrue(e.message.contains('is it a valid groovy command?'));
+        }
+    }
+
+    public void testIsExecutable() {
+        GrassBlade statementBlade = new GrassBlade('addressbook_search_country.clickLink', grassParser);
+        assertTrue(statementBlade.executable());
+
+        GrassBlade equationBlade = new GrassBlade('addressbook_search_country.verifyText = Winner is Australia', grassParser);
+        assertTrue(equationBlade.executable());
+
+        GrassBlade importBlade = new GrassBlade('import = CountryTemplate', grassParser);
+        assertFalse(importBlade.executable());
+
+        GrassBlade dataBlade = new GrassBlade('@country = Australia', grassParser);
+        assertFalse(dataBlade.executable());
+    }
 }
