@@ -9,7 +9,7 @@ import au.com.ps4impact.madcow.config.MadcowConfig
  */
 class WebDriverStepRunnerTest extends GroovyTestCase {
 
-    public void testRunIt() {
+    public void testRunInlineScript() {
         String grassScriptString = """
             invokeUrl = ADDRESSBOOK
             @expectedValue = Search Address
@@ -25,10 +25,28 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
         MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest-testRunIt', grassScript);
         testCase.execute();
-        println("Results!!!! : " + testCase.steps.result);
     }
 
-    public void testDoIt() {
+    public void testExecuteTestFromFile() {
         MadcowTestRunner.executeTests(['AddressTest'], new MadcowConfig())
+    }
+    
+    public void testDefaultSelector() {
+        WebDriverStepRunner stepRunner = new WebDriverStepRunner([:]);
+        assertEquals('htmlid', stepRunner.defaultSelector);
+    }
+
+    public void testDefaultBrowser() {
+        WebDriverStepRunner stepRunner = new WebDriverStepRunner([:]);
+        assertEquals(org.openqa.selenium.htmlunit.HtmlUnitDriver.class, stepRunner.driver.class);
+    }
+
+    public void testBrowserNotFound() {
+        try {
+            WebDriverStepRunner stepRunner = new WebDriverStepRunner(['browser':'tent.tent.tennis.tent']);
+            fail('should always exception with ClassNotFoundException');
+        } catch (e) {
+            assertTrue( e.message.startsWith("The specified Browser 'tent.tent.tennis.tent' cannot be found"));
+        }
     }
 }
