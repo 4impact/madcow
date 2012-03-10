@@ -46,6 +46,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
         WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
         try {
             bladeRunner.execute(this, step);
+        } catch (NoSuchElementException nsee) {
+            step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
         } catch (e) {
             step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
         }

@@ -20,6 +20,14 @@ class ClickLink extends WebDriverBladeRunner {
                 link = stepRunner.driver.findElement(By.linkText(step.blade.mappingSelectorValue));
                 break;
 
+            case BLADE_MAPPING_SELECTOR_TYPE.NAME:
+                link = stepRunner.driver.findElement(By.name(step.blade.mappingSelectorValue));
+                break;
+
+            case BLADE_MAPPING_SELECTOR_TYPE.XPATH:
+                link = stepRunner.driver.findElement(By.xpath(step.blade.mappingSelectorValue));
+                break;
+
             case BLADE_MAPPING_SELECTOR_TYPE.HTMLID:
             default:
                 link = stepRunner.driver.findElement(By.id(step.blade.mappingSelectorValue));

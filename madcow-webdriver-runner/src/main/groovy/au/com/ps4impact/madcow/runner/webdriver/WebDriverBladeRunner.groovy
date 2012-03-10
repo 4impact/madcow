@@ -15,6 +15,11 @@ abstract class WebDriverBladeRunner extends BladeRunner {
     public static final String BLADE_PACKAGE = 'au.com.ps4impact.madcow.runner.webdriver.blade';
 
     /**
+     * All WebDriver blade mapping selector types.
+     */
+    public static enum BLADE_MAPPING_SELECTOR_TYPE { HTMLID, TEXT, NAME, XPATH }
+
+    /**
      * Called to execute a particular step operation.
      */
     public void execute(MadcowStepRunner stepRunner, MadcowStep step) {
@@ -50,11 +55,6 @@ abstract class WebDriverBladeRunner extends BladeRunner {
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
         return GrassBlade.GrassBladeType.values();
     }
-
-    /**
-     * All WebDriver blade mapping selector types.
-     */
-    public static enum BLADE_MAPPING_SELECTOR_TYPE { HTMLID, TEXT, NAME, XPATH }
 
     /**
      * Get the list of selector types supported by this blade runner.

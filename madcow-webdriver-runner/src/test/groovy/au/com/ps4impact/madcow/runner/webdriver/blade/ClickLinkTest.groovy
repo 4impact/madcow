@@ -2,25 +2,44 @@ package au.com.ps4impact.madcow.runner.webdriver.blade
 
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.mock.MockMadcowConfig
 import au.com.ps4impact.madcow.grass.GrassParser
+import au.com.ps4impact.madcow.step.MadcowStep
+import au.com.ps4impact.madcow.config.MadcowConfig
 
 /**
  * Test for the ClickLink BladeRunner.
  */
 class ClickLinkTest extends GroovyTestCase {
 
-    void testMappingSelectorInvalidRequired() {
+    MadcowTestCase testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
+    GrassParser grassParser = testCase.grassParser;
+    def clickLink = new ClickLink();
 
-        MadcowTestCase testCase = new MadcowTestCase('testIsValidBladeToExecute', MockMadcowConfig.getMadcowConfig(), []);
-        GrassParser grassParser = testCase.grassParser;
-        GrassBlade blade = new GrassBlade('addressbook_search_country.clickLink', grassParser);
+    protected verifyLinkExecution(GrassBlade blade, boolean shouldPass) {
+        testCase.stepRunner.driver.get('http://test-site.projectmadcow.com:8080/madcow-test-site-2');
+        MadcowStep step = new MadcowStep(testCase, blade, null);
+        testCase.stepRunner.execute(step);
+        assertEquals(shouldPass, step.result.passed());
+    }
 
-        // default will make the selector htmlid, so verify it is ok
-        def clickLink = new ClickLink();
+    void testLinkByMapping() {
+        GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', grassParser);
+        verifyLinkExecution(blade, true);
+    }
+
+    void testLinkDoesNotExist() {
+        GrassBlade blade = new GrassBlade('testsite_menu_createAddress_DoesntExist.clickLink', grassParser);
+        verifyLinkExecution(blade, false);
+    }
+
+    void testDefaultMappingSelector() {
+        GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', grassParser);
         assertTrue(clickLink.isValidBladeToExecute(blade));
+    }
 
+    void testMappingSelectorInvalidRequired() {
         try {
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', grassParser);
             blade.mappingSelectorType = 'invalidOne';
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
@@ -30,11 +49,8 @@ class ClickLinkTest extends GroovyTestCase {
     }
 
     void testMappingSelectorRequired() {
-        MadcowTestCase testCase = new MadcowTestCase('testIsValidBladeToExecute', MockMadcowConfig.getMadcowConfig(), []);
-        GrassParser grassParser = testCase.grassParser;
-        GrassBlade blade = new GrassBlade('addressbook_search_country.clickLink', grassParser);
-        def clickLink = new ClickLink();
         try {
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', grassParser);
             blade.mappingSelectorType = null;
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
