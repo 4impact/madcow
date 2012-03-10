@@ -1,5 +1,0 @@
-invokeUrl = ADDRESSBOOK
-@expectedValue = Search Address
-
-# verify the text exists on the page
-verifyText = @expectedValue
