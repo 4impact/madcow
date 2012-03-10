@@ -22,4 +22,10 @@ class InvokeUrl extends WebDriverBladeRunner {
         step.result = MadcowStepResult.PASS("Page title: ${stepRunner.driver.title}");
     }
 
+    /**
+     * Allow null selectors.
+     */
+    protected boolean allowNullSelectorType() {
+        return true;
+    }
 }

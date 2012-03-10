@@ -80,7 +80,7 @@ class GrassBlade {
             this.mapping = operations[0].trim();
             
             def selector = MadcowMappings.getSelectorFromMapping(parser.testCase, this.mapping);
-            this.mappingSelectorType = selector.keySet().toArray().first();
+            this.mappingSelectorType = StringUtils.lowerCase(selector.keySet().toArray().first() as String);
             this.mappingSelectorValue = selector.values().toArray().first();
         } else {
             this.operation = statement;

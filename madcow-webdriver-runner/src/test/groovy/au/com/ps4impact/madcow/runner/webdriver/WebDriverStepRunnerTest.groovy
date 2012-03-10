@@ -28,7 +28,7 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
     }
 
     public void testExecuteTestFromFile() {
-        MadcowTestRunner.executeTests(['AddressTest'], new MadcowConfig())
+        MadcowTestRunner.executeTests(['SearchAddressTest'], new MadcowConfig())
     }
     
     public void testDefaultSelector() {

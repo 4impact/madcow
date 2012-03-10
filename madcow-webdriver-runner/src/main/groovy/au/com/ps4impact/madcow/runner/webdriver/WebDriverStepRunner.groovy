@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
+import au.com.ps4impact.madcow.grass.GrassParseException
 
 /**
  * Implementation of the WebDriver step runner.
@@ -56,8 +57,14 @@ class WebDriverStepRunner extends MadcowStepRunner {
      */
     public boolean hasBladeRunner(GrassBlade blade) {
         try {
-            // TODO - should we also check the parameters to the blade runner are ok? probably...
-            return getBladeRunner(blade) != null;
+            WebDriverBladeRunner bladeRunner = getBladeRunner(blade);
+            if (bladeRunner == null)
+                return false;
+
+            return bladeRunner.isValidBladeToExecute(blade);
+
+        } catch (GrassParseException gpe) {
+            throw gpe;
         } catch (e) {
             // swallow the exception as blade runner wasn't found
             return false;

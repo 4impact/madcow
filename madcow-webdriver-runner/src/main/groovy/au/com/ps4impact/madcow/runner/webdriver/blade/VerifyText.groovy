@@ -4,6 +4,8 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
+import au.com.ps4impact.madcow.grass.GrassBlade
+import au.com.ps4impact.madcow.grass.GrassParseException
 
 /**
  * VerifyText.
@@ -17,4 +19,10 @@ class VerifyText extends WebDriverBladeRunner {
             step.result = MadcowStepResult.FAIL("Page doesn't contain text '${step.blade.parameters as String}'");
     }
 
+    /**
+     * Allow null selectors.
+     */
+    protected boolean allowNullSelectorType() {
+        return true;
+    }
 }

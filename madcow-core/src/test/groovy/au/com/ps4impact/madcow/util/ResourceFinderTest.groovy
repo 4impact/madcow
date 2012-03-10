@@ -34,7 +34,7 @@ class ResourceFinderTest extends GroovyTestCase {
             ResourceFinder.locateFileOnClasspath(this.class.classLoader, '**/*.*');
             fail('Should always exception');
         } catch (e) {
-            assertEquals('Multiple resource matches found for \'**/*.*\'', e.message);
+            assertEquals('Multiple resource file matches found for \'**/*.*\'', e.message);
         }
     }
 

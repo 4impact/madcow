@@ -14,14 +14,13 @@ class ClickLink extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        //TODO - this sort of handling of the selector type needs some work! common functions, not string matching etc
         WebElement link;
-        switch (step.blade.mappingSelectorType) {
-            case 'text':
+        switch (getSelectorType(step.blade.mappingSelectorType)) {
+            case BLADE_MAPPING_SELECTOR_TYPE.TEXT:
                 link = stepRunner.driver.findElement(By.linkText(step.blade.mappingSelectorValue));
                 break;
 
-            case 'htmlid':
+            case BLADE_MAPPING_SELECTOR_TYPE.HTMLID:
             default:
                 link = stepRunner.driver.findElement(By.id(step.blade.mappingSelectorValue));
                 break;
@@ -31,5 +30,4 @@ class ClickLink extends WebDriverBladeRunner {
 
         step.result = MadcowStepResult.PASS("URL now ${stepRunner.driver.currentUrl}");
     }
-
 }

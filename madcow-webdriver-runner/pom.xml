@@ -21,6 +21,10 @@ Maven, like POM
 
     <version>2.0-alpha-1-SNAPSHOT</version>
 
+    <properties>
+        <madcow.version>2.0-alpha-1-SNAPSHOT</madcow.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -106,7 +110,14 @@ Maven, like POM
         <dependency>
             <groupId>au.com.ps4impact.madcow</groupId>
             <artifactId>madcow-core</artifactId>
-            <version>2.0-alpha-1-SNAPSHOT</version>
+            <version>${madcow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>au.com.ps4impact.madcow</groupId>
+            <artifactId>madcow-core</artifactId>
+            <version>${madcow.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

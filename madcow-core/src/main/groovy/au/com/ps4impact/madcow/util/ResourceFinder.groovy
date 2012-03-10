@@ -15,14 +15,11 @@ class ResourceFinder {
      */
     static File locateFileOnClasspath(ClassLoader classLoader, String resourcePattern, String basedir = '') throws Exception {
 
-        def resource = locateResourceOnClasspath(classLoader, resourcePattern, basedir);
-        
-        try {
-            if (resource.file.exists())
-                return resource.file;
-        } catch (e) { }
-        
-        throw new Exception("Unable to find a file on the classpath for '$resourcePattern'");
+        def files = locateFilesOnClasspath(classLoader, resourcePattern, basedir);
+        if (files.size() > 1)
+            throw new Exception("Multiple resource file matches found for '$resourcePattern'");
+
+        return files.first();
     }
 
     /**
