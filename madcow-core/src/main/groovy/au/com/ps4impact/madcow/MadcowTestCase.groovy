@@ -81,7 +81,7 @@ class MadcowTestCase {
 
         this.lastExecutedStep = step;
         if (step.result.failed())
-            throw new Exception("Step failed - ${step.result}");
+            throw new RuntimeException("Step failed - ${step.result}");
 
         step.children.each { child -> executeStep (child) }
     }

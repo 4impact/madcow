@@ -29,6 +29,26 @@ Maven, like POM
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <artifactSet>
+                        <excludes>
+                            <exclude>au.com.ps4impact.madcow:madcow-core</exclude>
+                        </excludes>
+                    </artifactSet>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <dependencies>
@@ -90,6 +110,44 @@ Maven, like POM
                                 <property name="maven.runtime.classpath" refid="maven.runtime.classpath"/>
                                 <property name="madcow.version" value="${project.version}"/>
                                 <ant antfile="${basedir}/build.xml" target="test"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>acceptance-test</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <tasks>
+                                <property environment="myEnv" />
+
+                                <!-- unzip madcow project -->
+                                <delete dir="target/acceptance-test"/>
+                                <unzip src="${basedir}/../madcow-core/target/madcow-core-${project.version}-install.zip" dest="target/acceptance-test" />
+
+                                <!-- copy in the webdriver step runner -->
+                                <copy todir="target/acceptance-test/lib" file="${basedir}/target/madcow-webdriver-runner-${project.version}.jar"/>
+
+                                <!-- copy in the acceptance test directories -->
+                                <delete dir="target/acceptance-test/tests" />
+                                <copy todir="target/acceptance-test/tests">
+                                    <fileset dir="${basedir}/src/acceptance-test/tests" />
+                                </copy>
+                                <delete dir="target/acceptance-test/mappings" />
+                                <copy todir="target/acceptance-test/mappings">
+                                    <fileset dir="${basedir}/src/acceptance-test/mappings" />
+                                </copy>
+                                <delete dir="target/acceptance-test/templates" />
+                                <copy todir="target/acceptance-test/templates">
+                                    <fileset dir="${basedir}/src/acceptance-test/templates" />
+                                </copy>
+
+                                <!-- run the merged project and acceptance tests -->
+                                <exec dir="target/acceptance-test" executable="bash" failonerror="true">
+                                    <arg line="runMadcow.sh --all" />
+                                </exec>
                             </tasks>
                         </configuration>
                         <goals>

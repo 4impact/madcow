@@ -14,9 +14,10 @@ public class MadcowCLI {
         def cli = new CliBuilder(usage:'runMadcow [options]', header:'Options:')
 
         cli.with {
-            h(longOpt : 'help', 'Show Usage Information')
-            e(longOpt : 'env',  args: 1, argName: 'env-name', 'environment to load from the madcow-config.xml')
-            t(longOpt : 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName : 'testname', 'comma seperated list of test names')
+            h(longOpt : 'help', 'Show usage information')
+            e(longOpt : 'env',  args: 1, argName: 'env-name', 'Environment to load from the madcow-config.xml')
+            t(longOpt : 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName : 'testname', 'Comma seperated list of test names')
+            a(longOpt : 'all',  'Run all tests')
         }
 
         def options = cli.parse(incomingArgs);
@@ -39,7 +40,11 @@ public class MadcowCLI {
             return;
 
         MadcowConfig config = new MadcowConfig(options.env ?: null);
-        MadcowTestRunner.executeTests(options.testss as ArrayList<String>, config);
+
+        if (options.test)
+            MadcowTestRunner.executeTests(options.testss as ArrayList<String>, config);
+        else
+            MadcowTestRunner.executeTests(config);
     }
 
 }

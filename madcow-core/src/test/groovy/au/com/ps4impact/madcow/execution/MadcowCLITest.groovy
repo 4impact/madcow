@@ -45,9 +45,10 @@ class MadcowCLITest extends GroovyTestCase {
 
         def expectedHelpMessage = """usage: runMadcow [options]
 Options:
- -e,--env <env-name>    environment to load from the madcow-config.xml
- -h,--help              Show Usage Information
- -t,--test <testname>   comma seperated list of test names
+ -a,--all               Run all tests
+ -e,--env <env-name>    Environment to load from the madcow-config.xml
+ -h,--help              Show usage information
+ -t,--test <testname>   Comma seperated list of test names
 """;
 
         assertEquals(expectedHelpMessage, systemOutput);
