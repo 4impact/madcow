@@ -6,6 +6,8 @@ import au.com.ps4impact.madcow.step.BladeRunner
 import org.apache.commons.lang.StringUtils
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.grass.GrassParseException
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.By
 
 /**
  * Base WebDriver plugin class.
@@ -36,14 +38,27 @@ abstract class WebDriverBladeRunner extends BladeRunner {
      */
     public boolean isValidBladeToExecute(GrassBlade blade) throws GrassParseException {
 
-        if (!this.allowNullSelectorType() && blade.mappingSelectorType == null)
+        if (!this.getSupportedBladeTypes().contains(blade.type))
+            throw new GrassParseException("Unsupported grass format. Only grass blades of type '${this.getSupportedBladeTypes()}' are supported.");
+
+        if (!this.allowNullSelectorType() && !this.enforceNullSelectorType() && blade.mappingSelectorType == null)
             throw new GrassParseException("Mapping selector must be supplied. One of ${this.getSupportedSelectorTypes()} are supported.");
+
+        if (this.enforceNullSelectorType() && blade.mappingSelectorType != null)
+            throw new GrassParseException("Mapping selector must not be supplied.");
 
         if (blade.mappingSelectorType != null && !this.getSupportedSelectorTypesAsStringArray().contains(blade.mappingSelectorType))
             throw new GrassParseException("Unsupported mapping selector type '${blade.mappingSelectorType}'. Only ${this.getSupportedSelectorTypes()} are supported.");
 
-        if (!this.getSupportedBladeTypes().contains(blade.type))
-            throw new GrassParseException("Unsupported grass format. Only grass blades of type '${this.getSupportedBladeTypes()}' are supported.");
+        if (this.getSupportedBladeTypes().contains(GrassBlade.GrassBladeType.EQUATION)) {
+            if (!this.allowEmptyParameterValue()
+                    && (   (blade.parameters == null)
+                    || (blade.parameters.toString() == "")))
+                throw new GrassParseException("Unsupported grass format. Parameter must have a value supplied.");
+
+            if (this.getSupportedParameterTypes() != null && !this.getSupportedParameterTypes().contains(blade.parameters.class))
+                throw new GrassParseException("Unsupported grass format. Only parameters of type '${this.getSupportedParameterTypes()}' are supported.");
+        }
 
         return true;
     }
@@ -78,6 +93,14 @@ abstract class WebDriverBladeRunner extends BladeRunner {
     protected boolean allowNullSelectorType() {
         return false;
     }
+
+    /**
+     * Determine if this blade runner must have a null mapping selector.
+     * By default, always expect non-null selector.
+     */
+    protected boolean enforceNullSelectorType() {
+        return false;
+    }
     
     /**
      * Convert the given collection of blade mapping selector types to a string array.
@@ -99,5 +122,42 @@ abstract class WebDriverBladeRunner extends BladeRunner {
                 return type;
         }
         return null
+    }
+
+    /**
+     * Get the list of supported parameter types.
+     * By default only String is supported.
+     */
+    protected List getSupportedParameterTypes() {
+        return [String.class];
+    }
+
+    /**
+     * Determine if this blade runner allows an empty parameter value.
+     * By default, it doesn't
+     */
+    protected boolean allowEmptyParameterValue() {
+        return false;
+    }
+
+    /**
+     * Locate an element for the mapped blade.
+     */
+    protected WebElement findElement(WebDriverStepRunner stepRunner, MadcowStep step) {
+
+        switch (getSelectorType(step.blade.mappingSelectorType)) {
+            case BLADE_MAPPING_SELECTOR_TYPE.TEXT:
+                return stepRunner.driver.findElement(By.linkText(step.blade.mappingSelectorValue));
+
+            case BLADE_MAPPING_SELECTOR_TYPE.NAME:
+                return stepRunner.driver.findElement(By.name(step.blade.mappingSelectorValue));
+
+            case BLADE_MAPPING_SELECTOR_TYPE.XPATH:
+                return stepRunner.driver.findElement(By.xpath(step.blade.mappingSelectorValue));
+
+            case BLADE_MAPPING_SELECTOR_TYPE.HTMLID:
+            default:
+                return stepRunner.driver.findElement(By.id(step.blade.mappingSelectorValue));
+        }
     }
 }

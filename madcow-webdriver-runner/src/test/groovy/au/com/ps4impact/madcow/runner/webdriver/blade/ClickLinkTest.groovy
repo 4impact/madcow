@@ -72,7 +72,7 @@ class ClickLinkTest extends GroovyTestCase {
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals(e.message, 'Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH] are supported.', );
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH] are supported.', e.message);
         }
     }
 
@@ -83,7 +83,17 @@ class ClickLinkTest extends GroovyTestCase {
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals(e.message, 'Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH] are supported.', );
+            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH] are supported.', e.message);
+        }
+    }
+
+    void testEquationNotSupported() {
+        try {
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink = yeah yeah', grassParser);
+            assertFalse(clickLink.isValidBladeToExecute(blade));
+            fail('should always exception');
+        } catch (e) {
+            assertEquals('Unsupported grass format. Only grass blades of type \'[STATEMENT]\' are supported.', e.message);
         }
     }
 }
