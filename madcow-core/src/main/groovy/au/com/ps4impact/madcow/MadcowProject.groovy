@@ -27,4 +27,8 @@ class MadcowProject {
      */
     public static final String MAPPINGS_DIRECTORY = 'mappings';
 
+    /**
+     * Location of the results directory.
+     */
+    public static final String RESULTS_DIRECTORY = 'results';
 }

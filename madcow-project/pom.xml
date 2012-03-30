@@ -11,7 +11,9 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+    <groupId>au.com.ps4impact.madcow</groupId>
     <artifactId>madcow-project</artifactId>
+    <name>Madcow Project</name>
 
     <build>
         <plugins>

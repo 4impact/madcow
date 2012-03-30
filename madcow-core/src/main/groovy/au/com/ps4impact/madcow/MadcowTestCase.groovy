@@ -6,6 +6,9 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.step.MadcowStepResult
+import groovy.text.GStringTemplateEngine
+import au.com.ps4impact.madcow.util.ResourceFinder
+import org.apache.commons.lang3.StringUtils
 
 /**
  * A Madcow Test Case.
@@ -15,7 +18,8 @@ class MadcowTestCase {
     private static final Logger LOG = Logger.getLogger(MadcowTestCase.class);
 
     public String name;
-    public GrassParser grassParser = null;
+    public ArrayList<String> grassScript;
+    public GrassParser grassParser;
     public MadcowStepRunner stepRunner;
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
@@ -29,6 +33,7 @@ class MadcowTestCase {
     public MadcowTestCase(String name, MadcowConfig madcowConfig = new MadcowConfig(), ArrayList<String> grassScript = null) {
         this.name = name;
         this.madcowConfig = madcowConfig;
+        this.grassScript = grassScript;
 
         try {
             this.stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
@@ -39,9 +44,6 @@ class MadcowTestCase {
         } catch (e) {
             throw new Exception("Unexpected error creating the MadcowStepRunner '${this.madcowConfig.stepRunner}'\n\n$e");
         }
-
-        if (grassScript != null)
-            this.parseScript(grassScript);
     }
 
     /**
@@ -54,8 +56,9 @@ class MadcowTestCase {
     /**
      * Parse the given grass script through a new GrassParser instance.
      */
-    public void parseScript(ArrayList<String> grassScript) {
+    public GrassParser parseScript() {
         grassParser = new GrassParser(this, grassScript);
+        return grassParser;
     }
 
     /**
@@ -63,6 +66,10 @@ class MadcowTestCase {
      * MadcowStepRunner specified by configuration for handling the step execution.
      */
     public void execute() {
+
+        if (grassParser == null)
+            parseScript();
+
         steps.each { step ->
             executeStep(step);
         }
@@ -84,6 +91,28 @@ class MadcowTestCase {
             throw new RuntimeException("Step failed - ${step.result}");
 
         step.children.each { child -> executeStep (child) }
+    }
+
+    /**
+     * Create the result files.
+     */
+    public void createResult() {
+
+        // TODO - refactor out into some fancy facade thing
+
+        def binding = ['errorCount' : '0',
+                       'failureCount' : this.lastExecutedStep.result.failed() ? '1' : '0',
+                       'hostname' : InetAddress.getLocalHost().getHostName(),
+                       'testName' : name,
+                       'time' : '',
+                       'timestamp': '',
+                      ];
+        def engine = new GStringTemplateEngine();
+        def template = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-junit.gtemplate').URL).make(binding);
+        
+        String templateContents = template.toString();
+        def result = new File(MadcowProject.RESULTS_DIRECTORY + "/TEST-${StringUtils.replace(name, '/', '_')}.xml");
+        result << templateContents;
     }
 
     public String toString() {

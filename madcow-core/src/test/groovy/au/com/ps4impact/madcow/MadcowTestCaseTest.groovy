@@ -26,6 +26,7 @@ class MadcowTestCaseTest extends GroovyTestCase {
 
     void testCreateAndParse() {
         MadcowTestCase testCase = new MadcowTestCase('testCreateAndParse', MockMadcowConfig.getMadcowConfig(), getGrassScript());
+        testCase.parseScript();
         assertEquals("Verify number of steps, ignoring comments and blank lines", 5, testCase.steps.size());
     }
 
