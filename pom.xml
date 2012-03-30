@@ -14,5 +14,6 @@
         <module>madcow-parent-pom</module>
         <module>madcow-core</module>
         <module>madcow-webdriver-runner</module>
+        <module>madcow-project</module>
     </modules>
 </project>

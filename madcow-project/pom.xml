@@ -1,42 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>au.com.ps4impact.madcow</groupId>
         <artifactId>madcow-parent-pom</artifactId>
-        <relativePath>./../madcow-parent-pom/pom.xml</relativePath>
         <version>2.0-SNAPSHOT</version>
+        <relativePath>../madcow-parent-pom/pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>au.com.ps4impact.madcow</groupId>
-    <artifactId>madcow-webdriver-runner</artifactId>
-    <name>Madcow WebDriver Runner</name>
-    <packaging>jar</packaging>
+    <artifactId>madcow-project</artifactId>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.2.1</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/resources/assembly/assembly-install.xml</descriptor>
+                        <descriptor>src/resources/assembly/assembly-upgrade.xml</descriptor>
+                    </descriptors>
+                </configuration>
                 <executions>
                     <execution>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <artifactSet>
-                        <excludes>
-                            <exclude>au.com.ps4impact.madcow:madcow-core</exclude>
-                        </excludes>
-                    </artifactSet>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -77,30 +72,37 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>compile-project</id>
-                        <phase>compile</phase>
+                        <id>acceptance-test</id>
+                        <phase>verify</phase>
                         <configuration>
                             <tasks>
-                                <property name="maven.compile.classpath" refid="maven.compile.classpath"/>
-                                <property name="maven.runtime.classpath" refid="maven.runtime.classpath"/>
-                                <property name="madcow.version" value="${project.version}"/>
-                                <ant antfile="${basedir}/build.xml" target="compile"/>
-                                <ant antfile="${basedir}/build.xml" target="generate-docs"/>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>junit-test</id>
-                        <phase>test</phase>
-                        <configuration>
-                            <tasks>
-                                <property name="maven.test.classpath" refid="maven.test.classpath"/>
-                                <property name="maven.runtime.classpath" refid="maven.runtime.classpath"/>
-                                <property name="madcow.version" value="${project.version}"/>
-                                <ant antfile="${basedir}/build.xml" target="test"/>
+                                <property environment="myEnv" />
+
+                                <!-- unzip madcow project -->
+                                <delete dir="target/acceptance-test"/>
+                                <unzip src="${basedir}/target/madcow-project-${project.version}-install.zip" dest="target/acceptance-test" />
+
+                                <!-- copy in the webdriver step runner -->
+                                <copy todir="target/acceptance-test/lib" file="${basedir}/../madcow-webdriver-runner/target/madcow-webdriver-runner-${project.version}.jar"/>
+
+                                <!-- copy in the acceptance test directories -->
+                                <delete dir="target/acceptance-test/tests" />
+                                <copy todir="target/acceptance-test/tests">
+                                    <fileset dir="${basedir}/src/acceptance-test/tests" />
+                                </copy>
+                                <delete dir="target/acceptance-test/mappings" />
+                                <copy todir="target/acceptance-test/mappings">
+                                    <fileset dir="${basedir}/src/acceptance-test/mappings" />
+                                </copy>
+                                <delete dir="target/acceptance-test/templates" />
+                                <copy todir="target/acceptance-test/templates">
+                                    <fileset dir="${basedir}/src/acceptance-test/templates" />
+                                </copy>
+
+                                <!-- run the merged project and acceptance tests -->
+                                <exec dir="target/acceptance-test" executable="bash" failonerror="true">
+                                    <arg line="runMadcow.sh --all" />
+                                </exec>
                             </tasks>
                         </configuration>
                         <goals>
@@ -114,21 +116,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>2.18.0</version>
-        </dependency>
-        <dependency>
             <groupId>au.com.ps4impact.madcow</groupId>
             <artifactId>madcow-core</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>au.com.ps4impact.madcow</groupId>
-            <artifactId>madcow-core</artifactId>
+            <artifactId>madcow-webdriver-runner</artifactId>
             <version>${parent.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
         </dependency>
     </dependencies>
+
 </project>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<madcow>
+    <execution>
+        <runner>
+            <type>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</type>
+            <parameters>
+                <browser>org.openqa.selenium.htmlunit.HtmlUnitDriver</browser>
+            </parameters>
+        </runner>
+        <env.default>DEV</env.default>
+    </execution>
+
+    <environments>
+        <environment name="DEV">
+            <invokeUrl>
+                <ADDRESSBOOK>http://test-site.projectmadcow.com:8080/madcow-test-site-2</ADDRESSBOOK>
+            </invokeUrl>
+        </environment>
+        <environment name="TEST">
+            <invokeUrl>
+                <ADDRESSBOOK>http://test-site.projectmadcow.com:8080/madcow-test-site-2</ADDRESSBOOK>
+            </invokeUrl>
+        </environment>
+    </environments>
+</madcow>
