@@ -5,6 +5,7 @@ import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.MadcowProject
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.MadcowTestCase
+import java.text.DecimalFormat
 
 /**
  * JUnit specific Test Case Report
@@ -12,6 +13,7 @@ import au.com.ps4impact.madcow.MadcowTestCase
 class JUnitTestCaseReport extends MadcowTestCaseReport {
 
     protected static final String JUNIT_RESULTS_DIRECTORY = MadcowProject.RESULTS_DIRECTORY + "/junit-results";
+    protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("#.###");
 
     public static void prepareResultsDirectory() {
 
@@ -30,7 +32,7 @@ class JUnitTestCaseReport extends MadcowTestCaseReport {
                         'failureCount' : testCase.lastExecutedStep.result.failed() ? '1' : '0',
                         'hostname'     : InetAddress.localHost.hostName,
                         'testName'     : testCase.name,
-                        'time'         : (testCase.endTime.time - testCase.startTime.time) / (1000 * 60 * 60),
+                        'time'         : TIME_SECONDS_FORMAT.format((testCase.endTime.time - testCase.startTime.time) / (1000 * 60)),
                         'timestamp'    : testCase.endTime.format("yyyy-MM-dd'T'HH:mm:ss"),
         ];
 
