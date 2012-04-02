@@ -1,0 +1,1 @@
+searchButton.xpath=//button[@type='submit']

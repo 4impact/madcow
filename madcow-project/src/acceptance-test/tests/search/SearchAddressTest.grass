@@ -1,5 +1,8 @@
 invokeUrl = ADDRESSBOOK
-@expectedValue = Search Address
 
 # verify the text exists on the page
+@expectedValue = Search Address
 verifyText = @expectedValue
+
+testsite_search_searchButton.clickLink
+verifyText = Address Search Results

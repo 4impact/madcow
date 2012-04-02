@@ -14,6 +14,7 @@ import au.com.ps4impact.madcow.grass.GrassParseException
 class WebDriverStepRunner extends MadcowStepRunner {
 
     public WebDriver driver;
+    public String lastPageSource;
 
     WebDriverStepRunner(HashMap<String, String> parameters) {
 
@@ -46,6 +47,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
         WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
         try {
             bladeRunner.execute(this, step);
+            if (!driver.pageSource.equals(lastPageSource)) {
+                new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << driver.pageSource;
+                lastPageSource = driver.pageSource;
+            }
         } catch (NoSuchElementException nsee) {
             step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
         } catch (e) {
@@ -67,7 +72,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
         } catch (GrassParseException gpe) {
             throw gpe;
-        } catch (e) {
+        } catch (ignored) {
             // swallow the exception as blade runner wasn't found
             return false;
         }

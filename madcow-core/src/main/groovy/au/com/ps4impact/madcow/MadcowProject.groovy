@@ -31,4 +31,9 @@ class MadcowProject {
      * Location of the results directory.
      */
     public static final String RESULTS_DIRECTORY = 'results';
+
+    /**
+     * Location of the madcow report directory.
+     */
+    public static final String MADCOW_REPORT_DIRECTORY = RESULTS_DIRECTORY + '/madcow-report';
 }

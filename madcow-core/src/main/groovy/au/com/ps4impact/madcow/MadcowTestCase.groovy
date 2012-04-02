@@ -91,6 +91,14 @@ class MadcowTestCase {
         step.children.each { child -> executeStep (child) }
     }
 
+    public File getResultDirectory() {
+        File resultDir = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/${this.name}");
+        if (!resultDir.exists())
+            resultDir.mkdirs();
+
+        return resultDir;
+    }
+
     public String toString() {
         return name;
     }

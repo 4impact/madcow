@@ -56,7 +56,9 @@ class MadcowTestRunner {
             String testName = StringUtils.removeEnd(PathFormatter.formatPathToPackage(testFile.canonicalPath, new File(MadcowProject.TESTS_DIRECTORY).canonicalPath), '.grass');
             testSuite.add(new MadcowTestCase(testName, madcowConfig, testFile.readLines() as ArrayList<String>));
         }
-        
+
+        LOG.info("Found ${testSuite.size()} test cases to run")
+
         // TODO - paraleleleleleleleise
         testSuite.each { MadcowTestCase testCase ->
 
@@ -66,7 +68,7 @@ class MadcowTestRunner {
                 testCase.execute();
                 LOG.info("Test ${testCase.name} Passed");
             } catch (e) {
-                LOG.error("Test ${testCase.name} Failed!");
+                LOG.error("Test ${testCase.name} Failed!\n\nException: $e");
             }
 
             JUnitTestCaseReport.createTestCaseResult(testCase);
