@@ -30,7 +30,7 @@ class JUnitTestCaseReport extends MadcowTestCaseReport {
                         'failureCount' : testCase.lastExecutedStep.result.failed() ? '1' : '0',
                         'hostname'     : InetAddress.localHost.hostName,
                         'testName'     : testCase.name,
-                        'time'         : testCase.endTime.time - testCase.startTime.time,
+                        'time'         : (testCase.endTime.time - testCase.startTime.time) / (1000 * 60 * 60),
                         'timestamp'    : testCase.endTime.format("yyyy-MM-dd'T'HH:mm:ss"),
         ];
 
