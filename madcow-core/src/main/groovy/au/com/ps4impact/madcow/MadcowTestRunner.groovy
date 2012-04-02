@@ -5,6 +5,7 @@ import au.com.ps4impact.madcow.util.ResourceFinder
 import org.apache.log4j.Logger
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.util.PathFormatter
+import au.com.ps4impact.madcow.report.JUnitTestCaseReport
 
 /**
  * Madcow Test Coordinator class.
@@ -23,6 +24,8 @@ class MadcowTestRunner {
             new File(MadcowProject.RESULTS_DIRECTORY).delete();
 
         new File(MadcowProject.RESULTS_DIRECTORY).mkdir();
+
+        JUnitTestCaseReport.prepareResultsDirectory();
     }
 
     /**
@@ -66,7 +69,7 @@ class MadcowTestRunner {
                 LOG.error("Test ${testCase.name} Failed!");
             }
 
-            testCase.createResult();
+            JUnitTestCaseReport.createTestCaseResult(testCase);
         }
     }
 

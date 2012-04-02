@@ -1,21 +1,15 @@
 package au.com.ps4impact.madcow;
 
-import org.apache.log4j.Logger
 import au.com.ps4impact.madcow.grass.GrassParser
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.step.MadcowStepResult
-import groovy.text.GStringTemplateEngine
-import au.com.ps4impact.madcow.util.ResourceFinder
-import org.apache.commons.lang3.StringUtils
 
 /**
  * A Madcow Test Case.
  */
 class MadcowTestCase {
-
-    private static final Logger LOG = Logger.getLogger(MadcowTestCase.class);
 
     public String name;
     public ArrayList<String> grassScript;
@@ -91,28 +85,6 @@ class MadcowTestCase {
             throw new RuntimeException("Step failed - ${step.result}");
 
         step.children.each { child -> executeStep (child) }
-    }
-
-    /**
-     * Create the result files.
-     */
-    public void createResult() {
-
-        // TODO - refactor out into some fancy facade thing
-
-        def binding = ['errorCount' : '0',
-                       'failureCount' : this.lastExecutedStep.result.failed() ? '1' : '0',
-                       'hostname' : InetAddress.getLocalHost().getHostName(),
-                       'testName' : name,
-                       'time' : '',
-                       'timestamp': '',
-                      ];
-        def engine = new GStringTemplateEngine();
-        def template = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-junit.gtemplate').URL).make(binding);
-        
-        String templateContents = template.toString();
-        def result = new File(MadcowProject.RESULTS_DIRECTORY + "/TEST-${StringUtils.replace(name, '/', '_')}.xml");
-        result << templateContents;
     }
 
     public String toString() {
