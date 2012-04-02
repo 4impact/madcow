@@ -36,8 +36,8 @@ class JUnitTestCaseReport extends MadcowTestCaseReport {
                         'testName'     : testCase.name,
                         'time'         : TIME_SECONDS_FORMAT.format((testCase.endTime.time - testCase.startTime.time) / (1000 * 60)),
                         'timestamp'    : testCase.endTime.format("yyyy-MM-dd'T'HH:mm:ss"),
-                        'systemOut'    : testCaseResult.passed() ? testCaseResult.toString() : '',
-                        'systemErr'    : testCaseResult.failed() ? testCaseResult.toString() : '',
+                        'systemOut'    : testCaseResult.passed() ? "Passed" : '',
+                        'systemErr'    : testCaseResult.failed() ? "Failed: " + testCaseResult.message : '',
         ];
 
         def engine = new GStringTemplateEngine();
