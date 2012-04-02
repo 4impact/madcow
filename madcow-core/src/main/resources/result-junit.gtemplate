@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite errors="$errorCount" failures="$failureCount" hostname="$hostname" name="$testName" tests="1" time="$time" timestamp="$timestamp">
-    <testcase classname="$testName" name="$testName" time="0.0" />
+    <testcase classname="$testName" name="$testName" time="$time" />
     <system-out><![CDATA[]]></system-out>
     <system-err><![CDATA[]]></system-err>
 </testsuite>

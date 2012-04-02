@@ -18,6 +18,8 @@ class MadcowTestCase {
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
     public MadcowStep lastExecutedStep;
+    public Date startTime;
+    public Date endTime;
 
     public MadcowConfig madcowConfig;
 
@@ -64,9 +66,11 @@ class MadcowTestCase {
         if (grassParser == null)
             parseScript();
 
+        startTime = new Date();
         steps.each { step ->
             executeStep(step);
         }
+        endTime = new Date();
     }
 
     /**

@@ -30,8 +30,8 @@ class JUnitTestCaseReport extends MadcowTestCaseReport {
                         'failureCount' : testCase.lastExecutedStep.result.failed() ? '1' : '0',
                         'hostname'     : InetAddress.localHost.hostName,
                         'testName'     : testCase.name,
-                        'time'         : '',
-                        'timestamp'    : '',
+                        'time'         : testCase.endTime.time - testCase.startTime.time,
+                        'timestamp'    : testCase.endTime.format("yyyy-MM-dd'T'HH:mm:ss"),
         ];
 
         def engine = new GStringTemplateEngine();
