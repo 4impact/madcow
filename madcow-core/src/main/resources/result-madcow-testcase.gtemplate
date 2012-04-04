@@ -17,12 +17,12 @@
         <style type="text/css">
             @media screen,print {
                 body {
-                    padding-top: 40px;
+                    padding-top: 60px;
                 }
-            }
 
-            .body {
-                padding-top: 10px;
+                .table td {
+                    vertical-align: middle;
+                }
             }
         </style>
         <link href="../.assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>
@@ -44,6 +44,7 @@
                         <thead>
                             <tr>
                                 <th>Grass</th>
+                                <th>Status</th>
                                 <th>Result</th>
                             </tr>
                         </thead>
@@ -51,6 +52,11 @@
                             <% steps.each { step -> %>
                             <tr>
                                 <td>${step.blade.line}</td>
+                                <% if (step.result.passed()) { %>
+                                <td><a class="btn btn-success"><i class="icon-ok icon-white"></i></a></td>
+                                <% } else { %>
+                                <td><a class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>
+                                <% } %>
                                 <td>${step.result}</td>
                             </tr>
                             <% } %>
