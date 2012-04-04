@@ -10,7 +10,7 @@ import java.text.DecimalFormat
 /**
  * JUnit specific Test Case Report
  */
-class JUnitTestCaseReport extends MadcowTestCaseReport {
+class JUnitTestCaseReport {
 
     public static final String JUNIT_RESULTS_DIRECTORY = MadcowProject.RESULTS_DIRECTORY + "/junit-results";
     public static final String JUNIT_RESULTS_XML_DIRECTORY = JUNIT_RESULTS_DIRECTORY + "/xml";
