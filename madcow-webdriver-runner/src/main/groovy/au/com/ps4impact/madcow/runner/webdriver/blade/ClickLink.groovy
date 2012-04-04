@@ -15,7 +15,7 @@ class ClickLink extends WebDriverBladeRunner {
 
         findElement(stepRunner, step).click();
 
-        step.result = MadcowStepResult.PASS("URL now ${stepRunner.driver.currentUrl}");
+        step.result = MadcowStepResult.PASS("URL now: <a href=\"${stepRunner.driver.currentUrl}\">${stepRunner.driver.currentUrl}</a>");
     }
 
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {

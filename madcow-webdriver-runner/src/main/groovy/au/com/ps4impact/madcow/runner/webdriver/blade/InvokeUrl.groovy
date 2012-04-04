@@ -26,7 +26,7 @@ class InvokeUrl extends WebDriverBladeRunner {
 
         stepRunner.driver.navigate().to(urlToInvoke);
 
-        step.result = MadcowStepResult.PASS("URL now ${stepRunner.driver.currentUrl}");
+        step.result = MadcowStepResult.PASS("URL now: <a href=\"${stepRunner.driver.currentUrl}\">${stepRunner.driver.currentUrl}</a>");
     }
 
     protected boolean enforceNullSelectorType() {

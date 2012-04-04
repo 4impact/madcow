@@ -37,7 +37,7 @@ class JUnitMadcowReport implements IMadcowReport {
                         'failureCount'      : testCase.lastExecutedStep.result.failed() ? '1' : '0',
                         'hostname'          : InetAddress.localHost.hostName,
                         'testName'          : testCase.name,
-                        'time'              : TIME_SECONDS_FORMAT.format((testCase.endTime.time - testCase.startTime.time) / (1000 * 60)),
+                        'time'              : testCase.getTotalTimeInSeconds(),
                         'timestamp'         : testCase.endTime.format("yyyy-MM-dd'T'HH:mm:ss"),
                         'systemOut'         : testCaseResult.passed() ? "Passed" : '',
                         'systemErr'         : testCaseResult.failed() ? "Failed: " + testCaseResult.message : '',

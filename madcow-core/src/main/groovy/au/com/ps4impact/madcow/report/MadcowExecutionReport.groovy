@@ -6,6 +6,7 @@ import au.com.ps4impact.madcow.util.ResourceFinder
 import groovy.text.GStringTemplateEngine
 import org.apache.log4j.Logger
 import org.apache.commons.io.FileUtils
+import java.text.DecimalFormat
 
 /**
  * Madcow Execution Report.
@@ -13,6 +14,7 @@ import org.apache.commons.io.FileUtils
 class MadcowExecutionReport implements IMadcowReport {
 
     protected static final Logger LOG = Logger.getLogger(MadcowExecutionReport.class);
+    protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("#.###");
 
     public void prepareReportDirectory() {
 
@@ -27,8 +29,26 @@ class MadcowExecutionReport implements IMadcowReport {
      */
     public void createTestCaseReport(MadcowTestCase testCase) {
 
+        boolean isParseError = false;
+        boolean isFailure = false;
+        testCase.steps.each { step ->
+            if (step.result == null)
+                return;
+
+            if (step.result.parseError())
+                isParseError = true;
+            else if (step.result.failed())
+                isFailure = true;
+        }
+
         def binding = [ 'testName'          : testCase.name,
                         'steps'             : testCase.steps,
+                        'isParseError'      : isParseError,
+                        'isFailure'         : isFailure,
+                        'totalSteps'        : testCase.steps.size(),
+                        'totalTime'         : testCase.getTotalTimeInSeconds() + 's',
+                        'lastExecutedStep'  : testCase.lastExecutedStep,
+
                       ];
 
         try {
@@ -48,7 +68,24 @@ class MadcowExecutionReport implements IMadcowReport {
      */
     public void createTestSuiteReport(ArrayList<MadcowTestCase> testSuite) {
 
-        def binding = [ 'testSuite'          : testSuite,
+        int passedCount = 0;
+        int failedCount = 0;
+        Long totalTime = 0L;
+        testSuite.each { testCase ->
+            if (testCase.lastExecutedStep.result.failed()) {
+                failedCount++;
+            } else {
+                passedCount++;
+            }
+
+            if (!testCase.lastExecutedStep.result.parseError())
+                totalTime += (testCase.endTime.time - testCase.startTime.time) / (1000 * 60);
+        }
+
+        def binding = [ 'testSuite'         : testSuite,
+                        'passedCount'       : passedCount,
+                        'failedCount'       : failedCount,
+                        'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime),
                       ];
 
         try {

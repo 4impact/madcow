@@ -7,6 +7,7 @@ import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassParseException
 import au.com.ps4impact.madcow.grass.GrassParseExceptionStep
+import java.text.DecimalFormat
 
 /**
  * A Madcow Test Case.
@@ -24,6 +25,8 @@ class MadcowTestCase {
     public Date endTime;
 
     public MadcowConfig madcowConfig;
+
+    protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("#.###");
 
     /**
      * Create a new MadcowTestCase, parsing the given grassScript if specified.
@@ -63,6 +66,7 @@ class MadcowTestCase {
             grassParser.processScriptForTestCase(grassScript);
         } catch (GrassParseException gpe) {
             MadcowStep exceptionStep = new GrassParseExceptionStep(gpe, this);
+            this.steps.clear();
             this.steps.add(exceptionStep);
             this.lastExecutedStep = exceptionStep;
             this.startTime = new Date();
@@ -94,7 +98,7 @@ class MadcowTestCase {
         if (step.blade.executable())
             this.stepRunner.execute(step);
         else
-            step.result = MadcowStepResult.NO_OPERATION("${step.blade.type} has no operation to execute");
+            step.result = MadcowStepResult.NO_OPERATION();
 
         this.lastExecutedStep = step;
         if (step.result.failed())
@@ -113,5 +117,9 @@ class MadcowTestCase {
 
     public String toString() {
         return name;
+    }
+
+    public String getTotalTimeInSeconds() {
+        return TIME_SECONDS_FORMAT.format((endTime.time - startTime.time) / (1000 * 60));
     }
 }

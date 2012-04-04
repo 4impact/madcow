@@ -18,7 +18,7 @@ class InvokeUrlTest extends GroovyTestCase {
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertTrue(step.result.passed());
-        assertEquals("URL now http://test-site.projectmadcow.com:8080/madcow-test-site-2/test.html", step.result.message);
+        assertTrue(step.result.message.startsWith("URL now:"));
     }
 
     void testStatementNotSupported() {

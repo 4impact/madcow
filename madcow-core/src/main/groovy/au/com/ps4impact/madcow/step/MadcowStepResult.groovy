@@ -8,6 +8,7 @@ class MadcowStepResult {
     enum StatusType {
         PASS,
         FAIL,
+        PARSE_ERROR,
         NO_OPERATION
     }
 
@@ -28,12 +29,20 @@ class MadcowStepResult {
         return new MadcowStepResult(MadcowStepResult.StatusType.FAIL, message);
     }
 
+    public static MadcowStepResult PARSE_ERROR(String message = null) {
+        return new MadcowStepResult(MadcowStepResult.StatusType.PARSE_ERROR, message);
+    }
+
     public static MadcowStepResult NO_OPERATION(String message = null) {
         return new MadcowStepResult(MadcowStepResult.StatusType.NO_OPERATION, message);
     }
 
     public boolean failed() {
-        return status == StatusType.FAIL;
+        return status == StatusType.FAIL || status == StatusType.PARSE_ERROR;
+    }
+    
+    public boolean parseError() {
+        return status == StatusType.PARSE_ERROR;
     }
 
     public boolean passed() {

@@ -18,7 +18,7 @@ class GrassParseExceptionStep extends MadcowStep {
 
         this.blade = new GrassBlade();
         this.blade.line = grassParseException.failingGrass;
-        result = MadcowStepResult.FAIL("Failed to parse grass: ${grassParseException.failingGrass}");
+        result = MadcowStepResult.PARSE_ERROR("Failed to parse grass: ${grassParseException.failingGrass}");
         result.detailedMessage = grassParseException.message;
     }
 }

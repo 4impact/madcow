@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="Maven: au.com.ps4impact.madcow:madcow-core:test-jar:tests:2.0-alpha-1-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/au/com/ps4impact/madcow/madcow-core/2.0-alpha-1-SNAPSHOT/madcow-core-2.0-alpha-1-SNAPSHOT-tests.jar!/" />
+      <root url="jar://$PROJECT_DIR$/madcow-core/pom.xml!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/madcow-core/pom-javadoc.jar!/" />
