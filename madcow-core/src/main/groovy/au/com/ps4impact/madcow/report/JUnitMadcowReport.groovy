@@ -10,14 +10,14 @@ import java.text.DecimalFormat
 /**
  * JUnit specific Test Case Report
  */
-class JUnitTestCaseReport {
+class JUnitMadcowReport extends AbstractMadcowReport {
 
     public static final String JUNIT_RESULTS_DIRECTORY = MadcowProject.RESULTS_DIRECTORY + "/junit-results";
     public static final String JUNIT_RESULTS_XML_DIRECTORY = JUNIT_RESULTS_DIRECTORY + "/xml";
     public static final String JUNIT_RESULTS_HTML_DIRECTORY = JUNIT_RESULTS_DIRECTORY + "/html";
     protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("#.###");
 
-    public static void prepareResultsDirectory() {
+    public void prepareReportDirectory() {
 
         if (new File(JUNIT_RESULTS_DIRECTORY).exists())
             new File(JUNIT_RESULTS_DIRECTORY).delete();
@@ -29,7 +29,7 @@ class JUnitTestCaseReport {
     /**
      * Create the result files.
      */
-    public static void createTestCaseResult(MadcowTestCase testCase) {
+    public void createTestCaseReport(MadcowTestCase testCase) {
 
         def testCaseResult = testCase.lastExecutedStep.result;
 
@@ -56,12 +56,12 @@ class JUnitTestCaseReport {
     /**
      * Create a HTML JUnit Report for all the TEST-*.xml files.
      */
-    public static void createTestSuiteReport() {
+    public void createTestSuiteReport() {
 
         def antBuilder = new AntBuilder();
 
         antBuilder.junitreport(todir: JUNIT_RESULTS_HTML_DIRECTORY) {
-            fileset(dir: JUnitTestCaseReport.JUNIT_RESULTS_XML_DIRECTORY) {
+            fileset(dir: JUnitMadcowReport.JUNIT_RESULTS_XML_DIRECTORY) {
                 include(name: "TEST-*.xml")
             }
             report(todir: JUNIT_RESULTS_HTML_DIRECTORY);
