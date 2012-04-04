@@ -6,6 +6,14 @@ import org.apache.log4j.Logger
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.util.PathFormatter
 import au.com.ps4impact.madcow.report.JUnitTestCaseReport
+import fj.Effect
+import fj.data.Option
+import fj.Unit
+import fj.control.parallel.QueueActor
+import fj.control.parallel.Strategy
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import au.com.ps4impact.madcow.execution.ParallelTestCaseRunner
 
 /**
  * Madcow Test Coordinator class.
@@ -18,7 +26,7 @@ class MadcowTestRunner {
      * Prep the results directory, but removing it
      * and creating folders ready for results!
      */
-    static void prepareResultsDirectory() {
+    protected static void prepareResultsDirectory() {
         
         if (new File(MadcowProject.RESULTS_DIRECTORY).exists())
             new File(MadcowProject.RESULTS_DIRECTORY).delete();
@@ -34,6 +42,40 @@ class MadcowTestRunner {
     static void executeTests(ArrayList<String> testNames = [], MadcowConfig madcowConfig) {
 
         prepareResultsDirectory();
+
+        ArrayList<MadcowTestCase> testSuite = prepareTestSuite(testNames, madcowConfig);
+
+        LOG.info("Found ${testSuite.size()} test cases to run");
+
+        int numThreads = 10;
+        ExecutorService pool = Executors.newFixedThreadPool(numThreads);
+        Strategy<Unit> strategy = Strategy.executorStrategy(pool);
+        def numberOfTestsRan = 0
+        def exceptions = [];
+
+        def callback = QueueActor.queueActor(strategy, {Option<Exception> result ->
+            numberOfTestsRan++;
+            result.foreach({Exception e -> exceptions.add(e)} as Effect)
+            if (numberOfTestsRan >= testSuite.size()) {
+                pool.shutdown()
+            }
+        } as Effect).asActor()
+
+        testSuite.each { MadcowTestCase testCase ->
+            new ParallelTestCaseRunner(strategy, callback).act(testCase);
+        }
+
+        while (numberOfTestsRan < testSuite.size()) {
+            Thread.sleep(500);
+        }
+
+        JUnitTestCaseReport.createTestSuiteReport();
+    }
+
+    /**
+     * Create the test suite collection for the given tests.
+     */
+    protected static ArrayList<MadcowTestCase> prepareTestSuite(ArrayList<String> testNames = [], MadcowConfig madcowConfig) {
 
         ArrayList<File> testFilesToRun = new ArrayList<File>();
 
@@ -57,23 +99,6 @@ class MadcowTestRunner {
             testSuite.add(new MadcowTestCase(testName, madcowConfig, testFile.readLines() as ArrayList<String>));
         }
 
-        LOG.info("Found ${testSuite.size()} test cases to run")
-
-        // TODO - paraleleleleleleleise
-        testSuite.each { MadcowTestCase testCase ->
-
-            LOG.info("Running ${testCase.name}");
-
-            try {
-                testCase.execute();
-                LOG.info("Test ${testCase.name} Passed");
-            } catch (e) {
-                LOG.error("Test ${testCase.name} Failed!\n\nException: $e");
-            }
-
-            JUnitTestCaseReport.createTestCaseResult(testCase);
-        }
-
-        JUnitTestCaseReport.createTestSuiteReport();
+        return testSuite;
     }
 }

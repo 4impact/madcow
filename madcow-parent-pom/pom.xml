@@ -98,5 +98,10 @@ Parent Maven POM for Madcow
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.functionaljava</groupId>
+            <artifactId>fj</artifactId>
+            <version>2.19</version>
+        </dependency>
     </dependencies>
 </project>

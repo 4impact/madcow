@@ -31,6 +31,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: oro:oro:2.0.8" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: asm:asm:3.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: asm:asm-tree:3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.functionaljava:fj:2.19" level="project" />
   </component>
 </module>
 
