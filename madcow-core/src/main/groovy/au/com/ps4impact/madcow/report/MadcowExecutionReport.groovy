@@ -5,6 +5,7 @@ import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.util.ResourceFinder
 import groovy.text.GStringTemplateEngine
 import org.apache.log4j.Logger
+import org.apache.commons.io.FileUtils
 
 /**
  * Madcow Execution Report.
@@ -55,10 +56,17 @@ class MadcowExecutionReport implements IMadcowReport {
             def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-madcow-testsuite.gtemplate').URL);
             def template = templateEngine.make(binding);
             String templateContents = template.toString();
-            def result = new File(testSuite.first().getResultDirectory().absolutePath + "/../index.html");
+            def result = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/index.html");
             result.write(templateContents);
         } catch (e) {
             LOG.error("Error creating the Madcow Test Suite Execution Report: $e");
+        }
+
+        // copy the assets if they are available
+        File assetsDir = new File('./.madcow/assets');
+        if (assetsDir.exists()) {
+            LOG.info("Copying assets for Madcow Report...");
+            FileUtils.copyDirectory(assetsDir, new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/.assets"));
         }
     }
 }
