@@ -114,7 +114,7 @@ Ant build file for Madcow.
             <javac source="1.5" target="1.5" debug="on" />
         </groovyc>
 
-        <junit printsummary="yes" haltonerror="no" showoutput="yes" haltonfailure="no" fork="yes"  errorproperty="test.error" failureproperty="test.failure">
+        <junit printsummary="yes" haltonerror="no" showoutput="yes" haltonfailure="no" fork="yes" dir="${target.test.results.dir}" errorproperty="test.error" failureproperty="test.failure">
             <sysproperty key="net.sourceforge.cobertura.datafile"
                     file="${target.cobertura.instrumented.dir}/cobertura.ser" />
             <formatter type="xml" />

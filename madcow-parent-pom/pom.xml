@@ -37,11 +37,6 @@ Parent Maven POM for Madcow
             <name>Gavin Bunney</name>
             <email>gbunney@4impact.com.au</email>
         </developer>
-        <developer>
-            <id>tromano</id>
-            <name>Tom Romano</name>
-            <email>tromano@4impact.com.au</email>
-        </developer>
     </developers>
 
     <properties>

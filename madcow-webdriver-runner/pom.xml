@@ -121,12 +121,12 @@
         <dependency>
             <groupId>au.com.ps4impact.madcow</groupId>
             <artifactId>madcow-core</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>au.com.ps4impact.madcow</groupId>
             <artifactId>madcow-core</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

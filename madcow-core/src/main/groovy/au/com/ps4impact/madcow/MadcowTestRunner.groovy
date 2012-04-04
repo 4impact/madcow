@@ -73,6 +73,7 @@ class MadcowTestRunner {
 
             JUnitTestCaseReport.createTestCaseResult(testCase);
         }
-    }
 
+        JUnitTestCaseReport.createTestSuiteReport();
+    }
 }

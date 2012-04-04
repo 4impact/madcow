@@ -12,7 +12,9 @@ import java.text.DecimalFormat
  */
 class JUnitTestCaseReport extends MadcowTestCaseReport {
 
-    protected static final String JUNIT_RESULTS_DIRECTORY = MadcowProject.RESULTS_DIRECTORY + "/junit-results";
+    public static final String JUNIT_RESULTS_DIRECTORY = MadcowProject.RESULTS_DIRECTORY + "/junit-results";
+    public static final String JUNIT_RESULTS_XML_DIRECTORY = JUNIT_RESULTS_DIRECTORY + "/xml";
+    public static final String JUNIT_RESULTS_HTML_DIRECTORY = JUNIT_RESULTS_DIRECTORY + "/html";
     protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("#.###");
 
     public static void prepareResultsDirectory() {
@@ -20,7 +22,8 @@ class JUnitTestCaseReport extends MadcowTestCaseReport {
         if (new File(JUNIT_RESULTS_DIRECTORY).exists())
             new File(JUNIT_RESULTS_DIRECTORY).delete();
 
-        new File(JUNIT_RESULTS_DIRECTORY).mkdir();
+        new File(JUNIT_RESULTS_XML_DIRECTORY).mkdirs();
+        new File(JUNIT_RESULTS_HTML_DIRECTORY).mkdirs();
     }
 
     /**
@@ -44,7 +47,22 @@ class JUnitTestCaseReport extends MadcowTestCaseReport {
         def template = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(testCase.class.classLoader, 'result-junit.gtemplate').URL).make(binding);
 
         String templateContents = template.toString();
-        def result = new File(JUNIT_RESULTS_DIRECTORY + "/TEST-${StringUtils.replace(testCase.name, '/', '_')}.xml");
-        result << templateContents;
+        def result = new File(JUNIT_RESULTS_XML_DIRECTORY + "/TEST-${StringUtils.replace(testCase.name, '/', '_')}.xml");
+        result.write(templateContents);
+    }
+
+    /**
+     * Create a HTML JUnit Report for all the TEST-*.xml files.
+     */
+    public static void createTestSuiteReport() {
+
+        def antBuilder = new AntBuilder();
+
+        antBuilder.junitreport(todir: JUNIT_RESULTS_HTML_DIRECTORY) {
+            fileset(dir: JUnitTestCaseReport.JUNIT_RESULTS_XML_DIRECTORY) {
+                include(name: "TEST-*.xml")
+            }
+            report(todir: JUNIT_RESULTS_HTML_DIRECTORY);
+        }
     }
 }

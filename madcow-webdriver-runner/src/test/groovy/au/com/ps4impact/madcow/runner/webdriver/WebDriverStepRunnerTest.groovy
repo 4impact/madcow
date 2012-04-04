@@ -26,10 +26,6 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
         MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest-testRunIt', grassScript);
         testCase.execute();
     }
-
-    public void testExecuteTestFromFile() {
-        MadcowTestRunner.executeTests(['SearchAddressTest'], new MadcowConfig())
-    }
     
     public void testDefaultSelector() {
         WebDriverStepRunner stepRunner = new WebDriverStepRunner([:]);
