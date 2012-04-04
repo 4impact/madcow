@@ -52,10 +52,10 @@
                             <% steps.each { step -> %>
                             <tr>
                                 <td>${step.blade.line}</td>
-                                <% if (step.result.passed()) { %>
-                                <td><a class="btn btn-success"><i class="icon-ok icon-white"></i></a></td>
-                                <% } else { %>
+                                <% if (step.result != null && step.result.failed()) { %>
                                 <td><a class="btn btn-danger"><i class="icon-remove icon-white"></i></a></td>
+                                <% } else { %>
+                                <td><a class="btn btn-success"><i class="icon-ok icon-white"></i></a></td>
                                 <% } %>
                                 <td>${step.result}</td>
                             </tr>
