@@ -46,7 +46,7 @@
                 <div class="bar" style="width: ${passedCount / (passedCount + failedCount) * 100}%">${passedCount} passed</div>
             </div>
             <div align="right" class="progress progress-danger" style="margin-bottom: 9px;">
-                <div class="bar" style="width: ${failedCount / (passedCount + failedCount) * 100}}%">${failedCount} failed</div>
+                <div class="bar" style="width: ${failedCount / (passedCount + failedCount) * 100}%">${failedCount} failed</div>
             </div>
         </div>
 
