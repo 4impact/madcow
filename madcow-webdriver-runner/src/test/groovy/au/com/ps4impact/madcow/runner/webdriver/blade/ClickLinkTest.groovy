@@ -26,46 +26,46 @@ class ClickLinkTest extends GroovyTestCase {
 
     void testLinkByHtmlId() {
         // defaults to html id
-        GrassBlade blade = new GrassBlade('aLinkId.clickLink', testCase.parseScript());
+        GrassBlade blade = new GrassBlade('aLinkId.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
 
         // explicit htmlid
         MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.clickLink', testCase.parseScript());
+        blade = new GrassBlade('aLinkId.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
     void testLinkByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
-        GrassBlade blade = new GrassBlade('aLinkName.clickLink', testCase.parseScript());
+        GrassBlade blade = new GrassBlade('aLinkName.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
     void testLinkByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
-        GrassBlade blade = new GrassBlade('aLinkXPath.clickLink', testCase.parseScript());
+        GrassBlade blade = new GrassBlade('aLinkXPath.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
     void testLinkByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
-        GrassBlade blade = new GrassBlade('aLinkText.clickLink', testCase.parseScript());
+        GrassBlade blade = new GrassBlade('aLinkText.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
     void testLinkDoesNotExist() {
-        GrassBlade blade = new GrassBlade('aLinkThatDoesntExist.clickLink', testCase.parseScript());
+        GrassBlade blade = new GrassBlade('aLinkThatDoesntExist.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, false);
     }
 
     void testDefaultMappingSelector() {
-        GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.parseScript());
+        GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.grassParser);
         assertTrue(clickLink.isValidBladeToExecute(blade));
     }
 
     void testMappingSelectorInvalidRequired() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.parseScript());
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.grassParser);
             blade.mappingSelectorType = 'invalidOne';
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
@@ -76,7 +76,7 @@ class ClickLinkTest extends GroovyTestCase {
 
     void testMappingSelectorRequired() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.parseScript());
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.grassParser);
             blade.mappingSelectorType = null;
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
@@ -87,7 +87,7 @@ class ClickLinkTest extends GroovyTestCase {
 
     void testEquationNotSupported() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink = yeah yeah', testCase.parseScript());
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink = yeah yeah', testCase.grassParser);
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {

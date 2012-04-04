@@ -5,6 +5,8 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.step.MadcowStepResult
+import au.com.ps4impact.madcow.grass.GrassParseException
+import au.com.ps4impact.madcow.grass.GrassParseExceptionStep
 
 /**
  * A Madcow Test Case.
@@ -30,6 +32,7 @@ class MadcowTestCase {
         this.name = name;
         this.madcowConfig = madcowConfig;
         this.grassScript = grassScript;
+        this.grassParser = new GrassParser(this);
 
         try {
             this.stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
@@ -50,11 +53,22 @@ class MadcowTestCase {
     }
 
     /**
-     * Parse the given grass script through a new GrassParser instance.
+     * Parse the given grass script.
      */
-    public GrassParser parseScript() {
-        grassParser = new GrassParser(this, grassScript);
-        return grassParser;
+    public void parseScript() {
+
+        this.steps = new ArrayList<MadcowStep>();
+
+        try {
+            grassParser.processScriptForTestCase(grassScript);
+        } catch (GrassParseException gpe) {
+            MadcowStep exceptionStep = new GrassParseExceptionStep(gpe, this);
+            this.steps.add(exceptionStep);
+            this.lastExecutedStep = exceptionStep;
+            this.startTime = new Date();
+            this.endTime = new Date();
+            throw new RuntimeException("Grass Parse Error: ${gpe.message}");
+        }
     }
 
     /**
@@ -62,9 +76,7 @@ class MadcowTestCase {
      * MadcowStepRunner specified by configuration for handling the step execution.
      */
     public void execute() {
-
-        if (grassParser == null)
-            parseScript();
+        parseScript();
 
         startTime = new Date();
         steps.each { step ->

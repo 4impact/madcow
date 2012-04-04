@@ -13,6 +13,7 @@ class MadcowStepResult {
 
     StatusType status;
     String message;
+    String detailedMessage;
 
     MadcowStepResult(StatusType status, String message = null) {
         this.status = status;

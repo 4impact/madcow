@@ -14,7 +14,7 @@ class InvokeUrlTest extends GroovyTestCase {
     def invokeUrl = new InvokeUrl();
 
     void testInvokeUrl() {
-        GrassBlade blade = new GrassBlade('invokeUrl = ADDRESSBOOK/test.html', testCase.parseScript());
+        GrassBlade blade = new GrassBlade('invokeUrl = ADDRESSBOOK/test.html', testCase.grassParser);
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertTrue(step.result.passed());
@@ -23,7 +23,7 @@ class InvokeUrlTest extends GroovyTestCase {
 
     void testStatementNotSupported() {
         try {
-            GrassBlade blade = new GrassBlade('someElement.invokeUrl', testCase.parseScript());
+            GrassBlade blade = new GrassBlade('someElement.invokeUrl', testCase.grassParser);
             assertFalse(invokeUrl.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
@@ -33,7 +33,7 @@ class InvokeUrlTest extends GroovyTestCase {
 
     void testParameterMustBeSupplied() {
         try {
-            GrassBlade blade = new GrassBlade('invokeUrl =   ', testCase.parseScript());
+            GrassBlade blade = new GrassBlade('invokeUrl =   ', testCase.grassParser);
             assertFalse(invokeUrl.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {

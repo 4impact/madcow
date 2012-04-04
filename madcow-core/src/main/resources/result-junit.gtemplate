@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite errors="$errorCount" failures="$failureCount" hostname="$hostname" name="$testName" tests="1" time="$time" timestamp="$timestamp">
-    <testcase classname="$testName" name="$testName" time="$time" />
+    <testcase classname="$testName" name="$testName" time="$time">
+        <% if ((failure ?: '') != '') { %>
+        <failure message="$failure">$failureDetails</failure>
+        <% } %>
+    </testcase>
     <system-out><![CDATA[$systemOut]]></system-out>
     <system-err><![CDATA[$systemErr]]></system-err>
 </testsuite>

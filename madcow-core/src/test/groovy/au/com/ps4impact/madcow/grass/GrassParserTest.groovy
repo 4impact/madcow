@@ -10,7 +10,7 @@ class GrassParserTest extends GroovyTestCase {
 
     public void testClearDataParameters() {
         
-        GrassParser parser = new GrassParser(null, null);
+        GrassParser parser = new GrassParser(null);
         parser.setDataParameter("some", "param");
         assertEquals(parser.getDataParameter("some"), "param");
         
@@ -20,7 +20,7 @@ class GrassParserTest extends GroovyTestCase {
 
     public void testSetAndGetDataParameter() {
 
-        GrassParser parser = new GrassParser(null, null);
+        GrassParser parser = new GrassParser(null);
         parser.setDataParameter("some", "param");
         assertEquals(parser.getDataParameter("some"), "param");
 
@@ -29,7 +29,7 @@ class GrassParserTest extends GroovyTestCase {
     }
 
     public void testSetDataParameterNoName() {
-        GrassParser parser = new GrassParser(null, null);
+        GrassParser parser = new GrassParser(null);
         try {
             parser.setDataParameter("", "paramAgain")
             fail("Should always exception");
@@ -50,7 +50,7 @@ class GrassParserTest extends GroovyTestCase {
     }
     
     public void testHasDataParameter() {
-        GrassParser parser = new GrassParser(null, null);
+        GrassParser parser = new GrassParser(null);
 
         assertFalse(parser.hasDataParameter("some"));
 
@@ -63,7 +63,7 @@ class GrassParserTest extends GroovyTestCase {
 
     public void testSetAndGetDefaultDataParameter() {
 
-        GrassParser parser = new GrassParser(null, null);
+        GrassParser parser = new GrassParser(null);
         parser.setDataParameter("some.default", "param");
         assertEquals("param", parser.getDataParameter("some"));
         assertEquals("param", parser.getDataParameter("some.default"));
@@ -86,7 +86,8 @@ class GrassParserTest extends GroovyTestCase {
         """;
         grassScriptString.eachLine { line -> grassScript.add(line) }
 
-        GrassParser parser = new GrassParser(testCase, grassScript);
+        GrassParser parser = new GrassParser(testCase);
+        parser.processScriptForTestCase(grassScript);
         assertNotNull(parser);
         assertEquals("Verify number of steps, ignoring comments and blank lines", 5, testCase.steps.size());
     }
@@ -105,7 +106,8 @@ class GrassParserTest extends GroovyTestCase {
         grassScriptString.eachLine { line -> grassScript.add(line) }
 
         try {
-            GrassParser parser = new GrassParser(testCase, grassScript);
+            GrassParser parser = new GrassParser(testCase);
+            parser.processScriptForTestCase(grassScript);
             fail('should always expection');
         } catch (GrassParseException gpe) {
             assertEquals("Unsupported operation 'notAValidOperation'", gpe.message);
@@ -116,7 +118,7 @@ class GrassParserTest extends GroovyTestCase {
         MadcowTestCase testCase = new MadcowTestCase('testGlobalDataParameters', MockMadcowConfig.getMadcowConfig());
 
         // check retrieval of global params
-        GrassParser parser = new GrassParser(testCase, null);
+        GrassParser parser = new GrassParser(testCase);
         assertEquals("madcow.eval({ new Date().format('dd/MM/yyyy')})", parser.getDataParameter("@global.currentDate"));
 
         // check global are parsed in script

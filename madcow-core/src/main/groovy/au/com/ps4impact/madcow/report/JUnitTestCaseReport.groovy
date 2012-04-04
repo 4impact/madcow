@@ -33,14 +33,16 @@ class JUnitTestCaseReport extends MadcowTestCaseReport {
 
         def testCaseResult = testCase.lastExecutedStep.result;
 
-        def binding = [ 'errorCount'   : '0',
-                        'failureCount' : testCase.lastExecutedStep.result.failed() ? '1' : '0',
-                        'hostname'     : InetAddress.localHost.hostName,
-                        'testName'     : testCase.name,
-                        'time'         : TIME_SECONDS_FORMAT.format((testCase.endTime.time - testCase.startTime.time) / (1000 * 60)),
-                        'timestamp'    : testCase.endTime.format("yyyy-MM-dd'T'HH:mm:ss"),
-                        'systemOut'    : testCaseResult.passed() ? "Passed" : '',
-                        'systemErr'    : testCaseResult.failed() ? "Failed: " + testCaseResult.message : '',
+        def binding = [ 'errorCount'        : '0',
+                        'failureCount'      : testCase.lastExecutedStep.result.failed() ? '1' : '0',
+                        'hostname'          : InetAddress.localHost.hostName,
+                        'testName'          : testCase.name,
+                        'time'              : TIME_SECONDS_FORMAT.format((testCase.endTime.time - testCase.startTime.time) / (1000 * 60)),
+                        'timestamp'         : testCase.endTime.format("yyyy-MM-dd'T'HH:mm:ss"),
+                        'systemOut'         : testCaseResult.passed() ? "Passed" : '',
+                        'systemErr'         : testCaseResult.failed() ? "Failed: " + testCaseResult.message : '',
+                        'failure'           : testCaseResult.failed() ? testCaseResult.message : '',
+                        'failureDetails'    : testCaseResult.failed() ? (testCaseResult.detailedMessage ?: '') : '',
         ];
 
         def engine = new GStringTemplateEngine();

@@ -15,7 +15,7 @@ class GrassParseException extends Exception {
     GrassParseException(String line, String message)
     {
         super(message);
-        failingGrass = line;
+        this.failingGrass = line;
     }
 
     // extensive class!

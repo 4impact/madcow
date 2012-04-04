@@ -21,12 +21,19 @@ class GrassParser {
     public MadcowTestCase testCase;
 
     static {
-        globalDataParameters = new GlobalDataParametersFileHelper().initProcessProperties()
+        globalDataParameters = new GlobalDataParametersFileHelper().initProcessProperties(null)
         LOG.debug("Global data parameters: $globalDataParameters");
     }
 
-    public GrassParser(MadcowTestCase testCase, List<String> grassScript) {
+    public GrassParser(MadcowTestCase testCase) {
         this.testCase = testCase;
+        clearDataParameters();
+    }
+
+    /**
+     * Processing entry point.
+     */
+    public processScriptForTestCase(List<String> grassScript) {
         clearDataParameters();
         processScript(grassScript);
     }
@@ -53,7 +60,7 @@ class GrassParser {
             // verify the executable blade can actually be executed by the configured blade runner
             if (step.blade.executable() && !testCase.stepRunner.hasBladeRunner(step.blade)) {
                 String error = "Unsupported operation '${step.blade.operation}'";
-                LOG.error(error); throw new GrassParseException(error);
+                LOG.error(error); throw new GrassParseException(step.blade.line, error);
             }
 
             testCase.steps.add(step);

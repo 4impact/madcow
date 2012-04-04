@@ -48,6 +48,13 @@ class GrassBlade {
     protected static final String EVAL_MACRO_INLINE_REGEX = 'madcow.eval\\(\\{([^}]+)\\}\\)';
 
     /**
+     * Constructor that doesn't parse a grass line.
+     */
+    GrassBlade() {
+        //
+    }
+
+    /**
      * Create a new Blade of grass for the given line.<br/>
      * The line is split into the operation, parameters and mapping properties.
      */
@@ -116,7 +123,7 @@ class GrassBlade {
                 try {
                     parametersString = StringUtils.replace(parametersString, macroMatch, (new GroovyShell().evaluate(macroContents)) as String);
                 } catch (e) {
-                    throw new GrassParseException("Unable to evaluate $macroMatch - is it a valid groovy command?\n\n$e");
+                    throw new GrassParseException(line, "Unable to evaluate $macroMatch - is it a valid groovy command?\n\n$e");
                 }
             }
         }
