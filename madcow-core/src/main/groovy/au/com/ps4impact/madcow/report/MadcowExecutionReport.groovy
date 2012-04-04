@@ -79,13 +79,13 @@ class MadcowExecutionReport implements IMadcowReport {
             }
 
             if (!testCase.lastExecutedStep.result.parseError())
-                totalTime += (testCase.endTime.time - testCase.startTime.time) / (1000 * 60);
+                totalTime += (testCase.endTime.time - testCase.startTime.time);
         }
 
         def binding = [ 'testSuite'         : testSuite,
                         'passedCount'       : passedCount,
                         'failedCount'       : failedCount,
-                        'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime),
+                        'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime / (1000 * 60)) + 's',
                       ];
 
         try {
