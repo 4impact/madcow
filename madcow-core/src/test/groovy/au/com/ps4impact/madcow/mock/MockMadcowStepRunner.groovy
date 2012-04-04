@@ -32,4 +32,8 @@ public class MockMadcowStepRunner extends MadcowStepRunner {
     public String getDefaultSelector() {
         return 'htmlid';
     }
+
+    public void finishTestCase() {
+        //
+    }
 }

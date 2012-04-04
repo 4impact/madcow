@@ -40,6 +40,7 @@ public class ParallelTestCaseRunner {
                     LOG.error("Test ${testCase.name} Failed!\n\nException: $e");
                 }
 
+                testCase.stepRunner.finishTestCase();
                 parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) };
                 callback.act none();
             } catch (e) {

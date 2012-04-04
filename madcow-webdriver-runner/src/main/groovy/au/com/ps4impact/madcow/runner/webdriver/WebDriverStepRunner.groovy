@@ -86,4 +86,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public String getDefaultSelector() {
         return 'htmlid';
     }
+
+    public void finishTestCase() {
+        driver.close();
+    }
 }

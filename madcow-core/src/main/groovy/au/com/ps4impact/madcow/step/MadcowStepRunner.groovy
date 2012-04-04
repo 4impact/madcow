@@ -32,4 +32,9 @@ abstract class MadcowStepRunner {
      * This is used as the 'type' of selector when no type is given.
      */
     public abstract String getDefaultSelector();
+
+    /**
+     * Called to clean up after finishing a test case.
+     */
+    public abstract void finishTestCase();
 }
