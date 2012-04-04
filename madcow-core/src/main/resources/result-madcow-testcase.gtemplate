@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>$testName</title>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <td>Grass</td>
+                    <td>Result</td>
+                </tr>
+            </thead>
+            <tbody>
+                <% steps.each { step -> %>
+                <tr>
+                    <td>${step.blade.line}</td>
+                    <td>${step.result}</td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </body>
+</html>

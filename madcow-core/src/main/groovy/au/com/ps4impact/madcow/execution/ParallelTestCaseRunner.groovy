@@ -4,11 +4,12 @@ import fj.Effect
 import fj.control.parallel.Actor
 import fj.control.parallel.Strategy
 import fj.data.Option
+import fj.P2
 import org.apache.log4j.Logger
 import static fj.data.Option.none
 import static fj.data.Option.some
 import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.report.JUnitTestCaseReport
+import au.com.ps4impact.madcow.report.IMadcowReport
 
 /**
  * Parallel Test Runner is used to run multiple tests in parallel.
@@ -20,12 +21,14 @@ public class ParallelTestCaseRunner {
     protected static final Logger LOG = Logger.getLogger(ParallelTestCaseRunner.class);
 
     private final Actor<Option<Exception>> callback;
-    private final Actor<MadcowTestCase> parallelActor;
+    private final Actor<P2<MadcowTestCase, List<IMadcowReport>>> parallelActor;
 
     def ParallelTestCaseRunner(final Strategy strategy, final def callback) {
         this.callback = callback;
 
-        this.parallelActor = Actor.actor(strategy, { MadcowTestCase testCase ->
+        this.parallelActor = Actor.actor(strategy, { P2<MadcowTestCase, List<IMadcowReport>> parameters ->
+
+            MadcowTestCase testCase = parameters._1();
 
             LOG.info("Running ${testCase.name}");
 
@@ -37,7 +40,7 @@ public class ParallelTestCaseRunner {
                     LOG.error("Test ${testCase.name} Failed!\n\nException: $e");
                 }
 
-                JUnitTestCaseReport.createTestCaseResult(testCase);
+                parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) };
                 callback.act none();
             } catch (e) {
                 callback.act some(e);
@@ -45,7 +48,7 @@ public class ParallelTestCaseRunner {
         } as Effect);
     }
 
-    def act(MadcowTestCase testCase) {
-        parallelActor.act(testCase)
+    def act(P2<MadcowTestCase, List<IMadcowReport>> parameters) {
+        parallelActor.act(parameters)
     }
 }

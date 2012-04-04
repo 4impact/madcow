@@ -5,7 +5,6 @@ import au.com.ps4impact.madcow.util.ResourceFinder
 import org.apache.log4j.Logger
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.util.PathFormatter
-import au.com.ps4impact.madcow.report.JUnitTestCaseReport
 import fj.Effect
 import fj.data.Option
 import fj.Unit
@@ -15,12 +14,18 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import au.com.ps4impact.madcow.execution.ParallelTestCaseRunner
 
+import au.com.ps4impact.madcow.report.JUnitMadcowReport
+import au.com.ps4impact.madcow.report.MadcowExecutionReport
+import au.com.ps4impact.madcow.report.IMadcowReport
+
 /**
  * Madcow Test Coordinator class.
  */
 class MadcowTestRunner {
 
     protected static final Logger LOG = Logger.getLogger(MadcowTestRunner.class);
+
+    protected static List<IMadcowReport> reporters = [new MadcowExecutionReport(), new JUnitMadcowReport()];
 
     /**
      * Prep the results directory, but removing it
@@ -33,7 +38,7 @@ class MadcowTestRunner {
 
         new File(MadcowProject.RESULTS_DIRECTORY).mkdir();
 
-        JUnitTestCaseReport.prepareResultsDirectory();
+        reporters.each() { reporter -> reporter.prepareReportDirectory() };
     }
 
     /**
@@ -62,14 +67,14 @@ class MadcowTestRunner {
         } as Effect).asActor()
 
         testSuite.each { MadcowTestCase testCase ->
-            new ParallelTestCaseRunner(strategy, callback).act(testCase);
+            new ParallelTestCaseRunner(strategy, callback).act(fj.P.p(testCase, reporters));
         }
 
         while (numberOfTestsRan < testSuite.size()) {
             Thread.sleep(500);
         }
 
-        JUnitTestCaseReport.createTestSuiteReport();
+        reporters.each() { reporter -> reporter.createTestSuiteReport(testSuite) };
     }
 
     /**

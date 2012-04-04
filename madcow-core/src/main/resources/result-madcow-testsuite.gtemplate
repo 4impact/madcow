@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>Test Suite Report</title>
+    </head>
+    <body>
+        <ol>
+            <% testSuite.each { testCase -> %>
+            <li><a href="${testCase.getResultDirectory().absolutePath + "/index.html"}">${testCase.name}</a></li>
+            <% } %>
+        </ol>
+    </body>
+</html>
