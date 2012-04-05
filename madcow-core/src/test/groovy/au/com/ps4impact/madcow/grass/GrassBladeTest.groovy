@@ -101,13 +101,17 @@ public class GrassBladeTest extends GroovyTestCase {
     }
 
     public void testToString() {
-        assertToString(new GrassBlade('verifyText = Australia', madcowTestCase.grassParser), "operation: {verifyText} | selector: {null:null} | params: {Australia} | line: {verifyText = Australia} | mapping: {null}");
-        assertToString(new GrassBlade('addressbook_search_country.verifyText = Australia', madcowTestCase.grassParser), "operation: {verifyText} | selector: {htmlid:addressbook_search_country} | params: {Australia} | line: {addressbook_search_country.verifyText = Australia} | mapping: {addressbook_search_country}");
-        assertToString(new GrassBlade('addressbook_search_button.clickLink', madcowTestCase.grassParser), "operation: {clickLink} | selector: {htmlid:addressbook_search_button} | line: {addressbook_search_button.clickLink} | mapping: {addressbook_search_button}");
+        assertToString(new GrassBlade('verifyText = Australia', madcowTestCase.grassParser), "verifyText = Australia");
+        assertToString(new GrassBlade('addressbook_search_country.verifyText = Australia', madcowTestCase.grassParser), "addressbook_search_country.verifyText = Australia");
+        assertToString(new GrassBlade('addressbook_search_button.clickLink', madcowTestCase.grassParser), "addressbook_search_button.clickLink");
+
+        madcowTestCase.grassParser.setDataParameter('@countryName', 'Australia');
+        assertToString(new GrassBlade('verifyText = @countryName', madcowTestCase.grassParser), "verifyText = Australia");
+        assertToString(new GrassBlade('verifyText = Winner is @{countryName}', madcowTestCase.grassParser), "verifyText = Winner is Australia");
     }
 
     public void testTrimLine() {
-        assertToString(new GrassBlade('verifyText =          Australia            ', madcowTestCase.grassParser), "operation: {verifyText} | selector: {null:null} | params: {Australia} | line: {verifyText =          Australia            } | mapping: {null}");
+        assertToString(new GrassBlade('verifyText =          Australia            ', madcowTestCase.grassParser), "verifyText = Australia");
     }
 
     public void testEmptyLineBlade() {

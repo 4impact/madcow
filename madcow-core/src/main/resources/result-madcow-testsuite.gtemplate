@@ -65,7 +65,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% testSuite.each{ testCase -> %>
+                    <%
+                    def lastSuite = null;
+                    testSuite.getTestCasesRecusively().each{ testCase ->
+
+                        if (lastSuite != testCase.testSuite) {
+                            lastSuite = testCase.testSuite;
+                            %>
+                    <tr>
+                        <td class="btn-info">&nbsp;</td>
+                        <td colspan="3" class="btn-info"><strong>${lastSuite.toString()}</strong></td>
+                    </tr>
+                            <%
+                        }
+                    %>
                     <tr>
                         <% if (testCase.lastExecutedStep.result.failed()) { %>
                         <td><a class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a></td>

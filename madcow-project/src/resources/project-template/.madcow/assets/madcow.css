@@ -12,3 +12,7 @@
     pointer-events: none;
     cursor: default;
 }
+
+h6 {
+    text-transform: none;
+}

@@ -1,6 +1,7 @@
 package au.com.ps4impact.madcow.report
 
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.MadcowTestSuite
 
 /**
  * Abstract base class for reporting.
@@ -20,5 +21,5 @@ interface IMadcowReport {
     /**
      * Create a suite level report.
      */
-    public void createTestSuiteReport(ArrayList<MadcowTestCase> testSuite);
+    public void createTestSuiteReport(MadcowTestSuite testSuite);
 }

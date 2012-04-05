@@ -54,14 +54,23 @@
                 <blockquote>
                     <table>
                         <tbody>
-                        <tr>
-                            <td><p>Total Steps:</p></td>
-                            <td><p>$totalSteps</p></td>
-                        </tr>
-                        <tr>
-                            <td><p>Time:</p></td>
-                            <td><p>$totalTime</p></td>
-                        </tr>
+                            <tr>
+                                <td><p>Steps:</p></td>
+                                <td><p>&nbsp;</p></td>
+                                <td><p>$totalSteps</p></td>
+                            </tr>
+                            <tr>
+                                <td><p>Time:</p></td>
+                                <td><p>&nbsp;</p></td>
+                                <td><p>$totalTime</p></td>
+                            </tr>
+                            <% if (testCase.testSuite.toString() != '') { %>
+                            <tr>
+                                <td><p>Suite:</p></td>
+                                <td><p>&nbsp;</p></td>
+                                <td><p>${testCase.testSuite.toString()}</p></td>
+                            </tr>
+                            <% } %>
                         </tbody>
                     </table>
                 </blockquote>
@@ -91,7 +100,14 @@
                                 <td><a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a></td>
                                 <% } %>
                                 <td>${step.blade.line}</td>
-                                <td>${step.result.message ?: ''}</td>
+                                <td><% if (step.blade.line != step.blade.toString()) { %>
+                                    <h6>${step.blade.toString()}</h6>
+                                    <% }
+                                    if ((step.result.message ?: '') != '') {
+                                        %>${step.result.message} <%
+                                    }
+                                    %>
+                                </td>
                             </tr>
                             <% } %>
                         </tbody>

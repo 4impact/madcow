@@ -7,6 +7,7 @@ import groovy.text.GStringTemplateEngine
 import org.apache.log4j.Logger
 import org.apache.commons.io.FileUtils
 import java.text.DecimalFormat
+import au.com.ps4impact.madcow.MadcowTestSuite
 
 /**
  * Madcow Execution Report.
@@ -41,7 +42,8 @@ class MadcowExecutionReport implements IMadcowReport {
                 isFailure = true;
         }
 
-        def binding = [ 'testName'          : testCase.name,
+        def binding = [ 'testCase'          : testCase,
+                        'testName'          : testCase.name,
                         'steps'             : testCase.steps,
                         'isParseError'      : isParseError,
                         'isFailure'         : isFailure,
@@ -66,12 +68,14 @@ class MadcowExecutionReport implements IMadcowReport {
     /**
      * Create Test Suite level report.
      */
-    public void createTestSuiteReport(ArrayList<MadcowTestCase> testSuite) {
+    public void createTestSuiteReport(MadcowTestSuite testSuite) {
+
+        def allTestCases = testSuite.getTestCasesRecusively();
 
         int passedCount = 0;
         int failedCount = 0;
         Long totalTime = 0L;
-        testSuite.each { testCase ->
+        allTestCases.each { testCase ->
             if (testCase.lastExecutedStep.result.failed()) {
                 failedCount++;
             } else {

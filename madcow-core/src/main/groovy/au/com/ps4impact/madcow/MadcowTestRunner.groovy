@@ -48,7 +48,7 @@ class MadcowTestRunner {
 
         prepareResultsDirectory();
 
-        ArrayList<MadcowTestCase> testSuite = prepareTestSuite(testNames, madcowConfig);
+        MadcowTestSuite testSuite = prepareTestSuite(testNames, madcowConfig);
 
         LOG.info("Found ${testSuite.size()} test cases to run");
 
@@ -66,7 +66,9 @@ class MadcowTestRunner {
             }
         } as Effect).asActor()
 
-        testSuite.each { MadcowTestCase testCase ->
+        def allTestCases = testSuite.getTestCasesRecusively();
+
+        allTestCases.each { MadcowTestCase testCase ->
             new ParallelTestCaseRunner(strategy, callback).act(fj.P.p(testCase, reporters));
         }
 
@@ -80,7 +82,7 @@ class MadcowTestRunner {
     /**
      * Create the test suite collection for the given tests.
      */
-    protected static ArrayList<MadcowTestCase> prepareTestSuite(ArrayList<String> testNames = [], MadcowConfig madcowConfig) {
+    protected static MadcowTestSuite prepareTestSuite(ArrayList<String> testNames = [], MadcowConfig madcowConfig) {
 
         ArrayList<File> testFilesToRun = new ArrayList<File>();
 
@@ -98,12 +100,31 @@ class MadcowTestRunner {
             throw new RuntimeException('No tests found to execute');
         }
 
-        ArrayList<MadcowTestCase> testSuite = new ArrayList<MadcowTestCase>();
+        MadcowTestSuite rootSuite = new MadcowTestSuite('');
+        walkDirectoryTree(new File(MadcowProject.TESTS_DIRECTORY), rootSuite);
+
         testFilesToRun.each { File testFile ->
+
             String testName = StringUtils.removeEnd(PathFormatter.formatPathToPackage(testFile.canonicalPath, new File(MadcowProject.TESTS_DIRECTORY).canonicalPath), '.grass');
-            testSuite.add(new MadcowTestCase(testName, madcowConfig, testFile.readLines() as ArrayList<String>));
+            MadcowTestCase testCase = new MadcowTestCase(testName, madcowConfig, testFile.readLines() as ArrayList<String>);
+            MadcowTestSuite suite = rootSuite.locateSuite(testName) ?: rootSuite;
+            testCase.testSuite = suite;
+            suite.testCases.add(testCase);
         }
 
-        return testSuite;
+        return rootSuite;
+    }
+
+
+    protected static void walkDirectoryTree(File directory, MadcowTestSuite parentSuite) {
+
+        if (!directory.exists())
+            return;
+
+        directory.eachDir { subdir ->
+            MadcowTestSuite subdirSuite = new MadcowTestSuite(subdir.name, parentSuite);
+            parentSuite.children.add(subdirSuite);
+            walkDirectoryTree(subdir, subdirSuite);
+        }
     }
 }

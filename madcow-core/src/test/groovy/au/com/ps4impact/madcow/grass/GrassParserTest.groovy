@@ -123,6 +123,6 @@ class GrassParserTest extends GroovyTestCase {
 
         // check global are parsed in script
         parser.processScript(['addressbook_currentDate.verifyText = @global.currentDate']);
-        assertEquals("[testCase: testGlobalDataParameters, blade: operation: {verifyText} | selector: {htmlid:addressbook_currentDate} | params: {${new Date().format('dd/MM/yyyy')}} | line: {addressbook_currentDate.verifyText = @global.currentDate} | mapping: {addressbook_currentDate}, parent: null, children: []]", testCase.steps.first().toString());
+        assertEquals("[testCase: testGlobalDataParameters, blade: addressbook_currentDate.verifyText = ${new Date().format('dd/MM/yyyy')}, parent: null, children: []]", testCase.steps.first().toString());
     }
 }

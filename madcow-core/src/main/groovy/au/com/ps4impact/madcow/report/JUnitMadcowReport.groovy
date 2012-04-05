@@ -5,6 +5,7 @@ import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.MadcowProject
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.MadcowTestSuite
 
 /**
  * JUnit specific Test Case Report
@@ -54,7 +55,7 @@ class JUnitMadcowReport implements IMadcowReport {
     /**
      * Create a HTML JUnit Report for all the TEST-*.xml files.
      */
-    public void createTestSuiteReport(ArrayList<MadcowTestCase> testSuite) {
+    public void createTestSuiteReport(MadcowTestSuite testSuite) {
 
         def antBuilder = new AntBuilder();
 

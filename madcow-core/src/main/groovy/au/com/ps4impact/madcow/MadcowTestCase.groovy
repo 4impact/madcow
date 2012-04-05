@@ -16,6 +16,7 @@ import org.apache.commons.lang3.time.StopWatch
 class MadcowTestCase {
 
     public String name;
+    public MadcowTestSuite testSuite;
     public ArrayList<String> grassScript;
     public GrassParser grassParser;
     public MadcowStepRunner stepRunner;

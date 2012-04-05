@@ -2,7 +2,6 @@ package au.com.ps4impact.madcow.grass
 
 import java.util.regex.Matcher
 import org.apache.commons.lang3.StringUtils
-import org.apache.log4j.Logger
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 
 /**
@@ -38,8 +37,6 @@ class GrassBlade {
     String  mapping;
     String  mappingSelectorType;
     String  mappingSelectorValue;
-
-    protected static final Logger LOG = Logger.getLogger(GrassBlade.class);
 
     protected static final String DATA_PARAMETER_KEY = '@';
 
@@ -146,8 +143,21 @@ class GrassBlade {
     }
 
     String toString() {
-        return "operation: {${this.operation}} | selector: {${this.mappingSelectorType}:${this.mappingSelectorValue}} | " +
-               (this.type != GrassBladeType.STATEMENT ? "params: {${this.parameters}} | " : '') +
-               "line: {${this.line}} | " + "mapping: {${this.mapping}}";
+
+        switch (this.type) {
+            case GrassBladeType.IMPORT:
+            case GrassBladeType.DATA_PARAMETER:
+            case GrassBladeType.EQUATION:
+                return String.format('%s%s = %s', StringUtils.isNotBlank(mappingSelectorValue) ? "${mappingSelectorValue}." : '',
+                        operation ?: '',
+                        parameters ?: '');
+
+            case GrassBladeType.STATEMENT:
+                return String.format('%s%s', StringUtils.isNotBlank(mappingSelectorValue) ? "${mappingSelectorValue}." : '',
+                                             operation ?: '');
+
+            default:
+                return '';
+        }
     }
 }
