@@ -2,7 +2,7 @@
 <testsuite errors="$errorCount" failures="$failureCount" hostname="$hostname" name="$testName" tests="1" time="$time" timestamp="$timestamp">
     <testcase classname="$testName" name="$testName" time="$time">
         <% if ((failure ?: '') != '') { %>
-        <failure message="$failure">$failureDetails</failure>
+        <failure message="$failure"><![CDATA[$failureDetails]]></failure>
         <% } %>
     </testcase>
     <system-out><![CDATA[$systemOut]]></system-out>
