@@ -14,7 +14,7 @@ import java.text.DecimalFormat
 class MadcowExecutionReport implements IMadcowReport {
 
     protected static final Logger LOG = Logger.getLogger(MadcowExecutionReport.class);
-    protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("#.###");
+    protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("########.###");
 
     public void prepareReportDirectory() {
 
@@ -79,13 +79,13 @@ class MadcowExecutionReport implements IMadcowReport {
             }
 
             if (!testCase.lastExecutedStep.result.parseError())
-                totalTime += (testCase.endTime.time - testCase.startTime.time);
+                totalTime += testCase.stopWatch.time;
         }
 
         def binding = [ 'testSuite'         : testSuite,
                         'passedCount'       : passedCount,
                         'failedCount'       : failedCount,
-                        'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime / (1000 * 60)) + 's',
+                        'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime / 1000) + 's',
                       ];
 
         try {

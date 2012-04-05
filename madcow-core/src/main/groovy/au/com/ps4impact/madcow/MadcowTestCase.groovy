@@ -8,6 +8,7 @@ import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassParseException
 import au.com.ps4impact.madcow.grass.GrassParseExceptionStep
 import java.text.DecimalFormat
+import org.apache.commons.lang3.time.StopWatch
 
 /**
  * A Madcow Test Case.
@@ -21,12 +22,12 @@ class MadcowTestCase {
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
     public MadcowStep lastExecutedStep;
-    public Date startTime;
-    public Date endTime;
+
+    public StopWatch stopWatch;
 
     public MadcowConfig madcowConfig;
 
-    protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("#.###");
+    protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("########.###");
 
     /**
      * Create a new MadcowTestCase, parsing the given grassScript if specified.
@@ -69,8 +70,7 @@ class MadcowTestCase {
             this.steps.clear();
             this.steps.add(exceptionStep);
             this.lastExecutedStep = exceptionStep;
-            this.startTime = new Date();
-            this.endTime = new Date();
+            stopWatch = new StopWatch();
             throw new RuntimeException("Grass Parse Error: ${gpe.message}");
         }
     }
@@ -82,11 +82,14 @@ class MadcowTestCase {
     public void execute() {
         parseScript();
 
-        startTime = new Date();
+        stopWatch = new StopWatch();
+        stopWatch.start();
+
         steps.each { step ->
             executeStep(step);
         }
-        endTime = new Date();
+
+        stopWatch.stop();
     }
 
     /**
@@ -120,6 +123,6 @@ class MadcowTestCase {
     }
 
     public String getTotalTimeInSeconds() {
-        return TIME_SECONDS_FORMAT.format((endTime.time - startTime.time) / (1000 * 60));
+        return TIME_SECONDS_FORMAT.format(stopWatch.time / 1000);
     }
 }

@@ -14,7 +14,7 @@
     <meta name="layout" content="main"/>
 
     <link href="./.assets/bootstrap/css/bootstrap.css" rel="stylesheet"/>
-    <link href="../.assets/madcow.css" rel="stylesheet"/>
+    <link href="./.assets/madcow.css" rel="stylesheet"/>
     <link href="./.assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>
 
 </head>
@@ -42,12 +42,16 @@
                     </tbody>
                 </table>
             </blockquote>
+            <% if (passedCount > 0) { %>
             <div class="progress progress-success" style="margin-bottom: 9px;">
                 <div class="bar" style="width: ${passedCount / (passedCount + failedCount) * 100}%">${passedCount} passed</div>
             </div>
+            <% } %>
+            <% if (failedCount > 0) { %>
             <div align="right" class="progress progress-danger" style="margin-bottom: 9px;">
                 <div class="bar" style="width: ${failedCount / (passedCount + failedCount) * 100}%">${failedCount} failed</div>
             </div>
+            <% } %>
         </div>
 
         <div class="row">

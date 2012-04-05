@@ -4,6 +4,7 @@
         <runner>
             <type>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</type>
             <parameters>
+                <!--<browser>org.openqa.selenium.firefox.FirefoxDriver</browser>-->
                 <browser>org.openqa.selenium.htmlunit.HtmlUnitDriver</browser>
             </parameters>
         </runner>

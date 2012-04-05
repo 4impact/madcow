@@ -1,0 +1,13 @@
+invokeUrl = ADDRESSBOOK
+
+waitSeconds = 2
+
+# verify the text exists on the page
+@expectedValue = Search Address
+verifyText = @expectedValue
+
+waitSeconds = 2
+
+testsite_search_searchButton.clickLink
+
+verifyText = Address Search Results
