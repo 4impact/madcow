@@ -93,6 +93,14 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="row">
+            <hr/>
+            <footer class="footer">
+                <p class="pull-right"><a href="#">Back to top</a></p>
+                <p>Created using <a href="http://madcow.4impact.net.au">4impact Madcow</a> on ${new Date().format('dd-MM-yyyy HH:mm')}</p>
+            </footer>
+        </div>
     </div>
     <script src="./.assets/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>
     <script src="./.assets/jquery-1.7.2.min.js" type="text/javascript" ></script>
