@@ -15,10 +15,12 @@ class MadcowStepResult {
     StatusType status;
     String message;
     String detailedMessage;
+    boolean hasResultFile;
 
     MadcowStepResult(StatusType status, String message = null) {
         this.status = status;
         this.message = message;
+        this.hasResultFile = false;
     }
     
     public static MadcowStepResult PASS(String message = null) {

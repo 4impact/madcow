@@ -50,6 +50,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
             if (!driver.pageSource.equals(lastPageSource)) {
                 new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << driver.pageSource;
                 lastPageSource = driver.pageSource;
+                step.result.hasResultFile = true;
             }
         } catch (NoSuchElementException nsee) {
             step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");

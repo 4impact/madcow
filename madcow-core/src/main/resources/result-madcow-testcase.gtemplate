@@ -94,10 +94,19 @@
                             %>
                             <tr>
                                 <td>${idx + 1}</td>
-                                <% if (step.result.failed()) { %>
-                                <td><a class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a></td>
+                                <%
+                                String resultFileLink = '';
+                                if (step.result.hasResultFile) {
+
+                                    resultFileLink = "&nbsp; <a class=\"btn btn-info\" href=\"${step.getSequenceNumberString() + '.html'}\"><i class=\"icon-camera icon-white\"></i></a>"
+                                }
+                                %>
+
+                                <% if (step.result.failed()) {
+                                %>
+                                <td><a class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a>${resultFileLink}</td>
                                 <% } else { %>
-                                <td><a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a></td>
+                                <td><a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a>${resultFileLink}</td>
                                 <% } %>
                                 <td>${step.blade.line}</td>
                                 <td><% if (step.blade.line != step.blade.toString()) { %>
