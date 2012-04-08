@@ -82,7 +82,7 @@ class MadcowTestRunner {
     /**
      * Create the test suite collection for the given tests.
      */
-    protected static MadcowTestSuite prepareTestSuite(ArrayList<String> testNames = [], MadcowConfig madcowConfig) {
+    public static MadcowTestSuite prepareTestSuite(ArrayList<String> testNames = [], MadcowConfig madcowConfig) {
 
         ArrayList<File> testFilesToRun = new ArrayList<File>();
 
