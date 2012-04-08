@@ -106,6 +106,19 @@ Maven, like POM
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <!-- clean IntelliJ generated results directory -->
+                            <!-- created when running reporting junit tests -->
+                            <directory>../results</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

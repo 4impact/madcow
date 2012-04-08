@@ -108,6 +108,8 @@ class MadcowExecutionReport implements IMadcowReport {
         if (assetsDir.exists()) {
             LOG.info("Copying assets for Madcow Report...");
             FileUtils.copyDirectory(assetsDir, new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/.assets"));
+        } else {
+            LOG.warn("No assets found for Madcow Report...");
         }
     }
 }
