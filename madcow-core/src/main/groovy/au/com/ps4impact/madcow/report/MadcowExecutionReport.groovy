@@ -20,7 +20,7 @@ class MadcowExecutionReport implements IMadcowReport {
     public void prepareReportDirectory() {
 
         if (new File(MadcowProject.MADCOW_REPORT_DIRECTORY).exists())
-            new File(MadcowProject.MADCOW_REPORT_DIRECTORY).delete();
+            new File(MadcowProject.MADCOW_REPORT_DIRECTORY).deleteDir();
 
         new File(MadcowProject.MADCOW_REPORT_DIRECTORY).mkdirs();
     }

@@ -86,6 +86,9 @@ Maven, like POM
                         <goals>
                             <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <skipAssembly>${quick.build}</skipAssembly>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

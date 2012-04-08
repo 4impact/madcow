@@ -34,7 +34,7 @@ class MadcowTestRunner {
     protected static void prepareResultsDirectory() {
         
         if (new File(MadcowProject.RESULTS_DIRECTORY).exists())
-            new File(MadcowProject.RESULTS_DIRECTORY).delete();
+            new File(MadcowProject.RESULTS_DIRECTORY).deleteDir();
 
         new File(MadcowProject.RESULTS_DIRECTORY).mkdir();
 

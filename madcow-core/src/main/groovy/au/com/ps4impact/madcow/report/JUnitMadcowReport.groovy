@@ -6,6 +6,7 @@ import au.com.ps4impact.madcow.MadcowProject
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.MadcowTestSuite
+import org.apache.commons.lang3.StringEscapeUtils
 
 /**
  * JUnit specific Test Case Report
@@ -19,7 +20,7 @@ class JUnitMadcowReport implements IMadcowReport {
     public void prepareReportDirectory() {
 
         if (new File(JUNIT_RESULTS_DIRECTORY).exists())
-            new File(JUNIT_RESULTS_DIRECTORY).delete();
+            new File(JUNIT_RESULTS_DIRECTORY).deleteDir();
 
         new File(JUNIT_RESULTS_XML_DIRECTORY).mkdirs();
         new File(JUNIT_RESULTS_HTML_DIRECTORY).mkdirs();
@@ -32,16 +33,18 @@ class JUnitMadcowReport implements IMadcowReport {
 
         def testCaseResult = testCase.lastExecutedStep.result;
 
+        String escapedMessage = StringEscapeUtils.escapeXml(testCaseResult.message);
+
         def binding = [ 'errorCount'        : '0',
                         'failureCount'      : testCase.lastExecutedStep.result.failed() ? '1' : '0',
-                        'hostname'          : InetAddress.localHost.hostName,
-                        'testName'          : testCase.name,
+                        'hostname'          : StringEscapeUtils.escapeXml(InetAddress.localHost.hostName),
+                        'testName'          : StringEscapeUtils.escapeXml(testCase.name),
                         'time'              : testCase.getTotalTimeInSeconds(),
                         'timestamp'         : new Date(testCase.stopWatch.startTime).format("yyyy-MM-dd'T'HH:mm:ss"),
                         'systemOut'         : testCaseResult.passed() ? "Passed" : '',
-                        'systemErr'         : testCaseResult.failed() ? "Failed: " + testCaseResult.message : '',
-                        'failure'           : testCaseResult.failed() ? testCaseResult.message : '',
-                        'failureDetails'    : testCaseResult.failed() ? (testCaseResult.detailedMessage ?: '') : '',
+                        'systemErr'         : testCaseResult.failed() ? "Failed: " + escapedMessage : '',
+                        'failure'           : testCaseResult.failed() ? escapedMessage : '',
+                        'failureDetails'    : testCaseResult.failed() ? StringEscapeUtils.escapeXml((testCaseResult.detailedMessage ?: '')) : '',
         ];
 
         def engine = new GStringTemplateEngine();
