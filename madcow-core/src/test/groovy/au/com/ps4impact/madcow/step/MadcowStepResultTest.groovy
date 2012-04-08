@@ -39,6 +39,17 @@ class MadcowStepResultTest extends GroovyTestCase {
         assertToString(result, 'Status: FAIL | Message: Done!')
     }
 
+    void testHelperParseError() {
+        def result = MadcowStepResult.PARSE_ERROR('Operation not supported');
+        assertEquals(MadcowStepResult.StatusType.PARSE_ERROR, result.status);
+        assertTrue(result.failed());
+        assertTrue(result.parseError());
+        assertFalse(result.passed());
+        assertFalse(result.noOperation());
+        assertEquals('Operation not supported', result.message);
+        assertToString(result, 'Status: PARSE_ERROR | Message: Operation not supported')
+    }
+
     void testHelperNoOperation() {
         def result = MadcowStepResult.NO_OPERATION('Done!');
         assertEquals(MadcowStepResult.StatusType.NO_OPERATION, result.status);
