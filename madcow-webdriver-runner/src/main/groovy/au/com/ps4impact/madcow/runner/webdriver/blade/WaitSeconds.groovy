@@ -13,7 +13,6 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 class WaitSeconds extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
-
         sleep(Integer.parseInt(step.blade.parameters as String) * 1000);
         step.result = MadcowStepResult.PASS();
     }

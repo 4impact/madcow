@@ -62,4 +62,14 @@ class VerifyTextTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.verifyText = ', testCase.grassParser);
         verifyTextContents(blade, true);
     }
+
+    void testVerifyTextOnPage() {
+        GrassBlade blade = new GrassBlade('verifyText = Madcow WebDriver Runner Test HTML', testCase.grassParser);
+        verifyTextContents(blade, true);
+    }
+
+    void testVerifyTextNotOnPage() {
+        GrassBlade blade = new GrassBlade('verifyText = This won\'t be on the page', testCase.grassParser);
+        verifyTextContents(blade, false);
+    }
 }
