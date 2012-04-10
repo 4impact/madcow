@@ -11,7 +11,8 @@ class MadcowStepResult {
         PASS,
         FAIL,
         PARSE_ERROR,
-        NO_OPERATION
+        NO_OPERATION,
+        NOT_YET_EXECUTED,
     }
 
     StatusType status;
@@ -41,6 +42,10 @@ class MadcowStepResult {
         return new MadcowStepResult(MadcowStepResult.StatusType.NO_OPERATION, message);
     }
 
+    public static MadcowStepResult NOT_YET_EXECUTED() {
+        return new MadcowStepResult(MadcowStepResult.StatusType.NOT_YET_EXECUTED, null);
+    }
+
     public boolean failed() {
         return status == StatusType.FAIL || status == StatusType.PARSE_ERROR;
     }
@@ -55,6 +60,10 @@ class MadcowStepResult {
 
     public boolean noOperation() {
         return status == StatusType.NO_OPERATION;
+    }
+
+    public boolean notYetExecuted() {
+        return status == StatusType.NOT_YET_EXECUTED;
     }
 
     String toString() {

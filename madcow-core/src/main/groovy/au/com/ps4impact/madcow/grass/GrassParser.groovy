@@ -65,7 +65,11 @@ class GrassParser {
                 LOG.error(error); throw new GrassParseException(step.blade.line, error);
             }
 
-            testCase.steps.add(step);
+            if (parentStep != null)
+                parentStep.children.add(step);
+            else
+                testCase.steps.add(step);
+
             if (step.blade.type == GrassBlade.GrassBladeType.IMPORT)
             {
                 // recursive callback to self for the template file

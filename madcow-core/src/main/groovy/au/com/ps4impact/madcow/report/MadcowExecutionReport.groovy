@@ -3,11 +3,11 @@ package au.com.ps4impact.madcow.report
 import au.com.ps4impact.madcow.MadcowProject
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.util.ResourceFinder
-import groovy.text.GStringTemplateEngine
 import org.apache.log4j.Logger
 import org.apache.commons.io.FileUtils
 import java.text.DecimalFormat
 import au.com.ps4impact.madcow.MadcowTestSuite
+import groovy.text.GStringTemplateEngine
 
 /**
  * Madcow Execution Report.

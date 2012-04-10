@@ -95,32 +95,16 @@
                                 %><a name="failure"/><%
                             }
                         %>
-                        <tr>
-                            <td>${idx + 1}</td>
                             <%
-                            String resultFileLink = '';
-                            if (step.result.hasResultFile) {
-
-                                resultFileLink = "&nbsp; <a class=\"btn btn-info\" href=\"${step.getSequenceNumberString() + '.html'}\"><i class=\"icon-camera icon-white\"></i></a>"
-                            }
+                            def binding = [ 'step'      : step,
+                                            'idx'       : idx,
+                                            'idxString' : ''];
+                            def engine = new groovy.text.GStringTemplateEngine();
+                            def stepTemplateEngine = engine.createTemplate(au.com.ps4impact.madcow.util.ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-madcow-testcase-step-row.gtemplate').URL);
+                            def stepTemplate = stepTemplateEngine.make(binding);
+                            String stepContents = stepTemplate.toString();
                             %>
-
-                            <% if (step.result.failed()) {
-                            %>
-                            <td><a class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a>${resultFileLink}</td>
-                            <% } else { %>
-                            <td><a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a>${resultFileLink}</td>
-                            <% } %>
-                            <td>${step.blade.line}</td>
-                            <td><% if (step.blade.line != step.blade.toString()) { %>
-                                <h6>${step.blade.toString()}</h6>
-                                <% }
-                                if ((step.result.message ?: '') != '') {
-                                    %>${step.result.message} <%
-                                }
-                                %>
-                            </td>
-                        </tr>
+                            $stepContents
                         <% } %>
                     </tbody>
             </table>
@@ -135,7 +119,8 @@
             </footer>
         </div>
     </div>
-    <script src="../.assets/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>
+
     <script src="../.assets/jquery-1.7.2.min.js" type="text/javascript" ></script>
+    <script src="../.assets/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>
 </body>
 </html>

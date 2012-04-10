@@ -5,4 +5,12 @@ invokeUrl = ADDRESSBOOK
 verifyText = @expectedValue
 
 testsite_search_searchButton.clickLink
-verifyText = Address Search Results
+
+@textToVerify = Address Search Results
+importTemplate = AddressSearchResultsFailingTemplate
+
+invokeUrl = ADDRESSBOOK
+@expectedValue = Search Address
+verifyText = @expectedValue
+
+testsite_search_searchButton.clickLink

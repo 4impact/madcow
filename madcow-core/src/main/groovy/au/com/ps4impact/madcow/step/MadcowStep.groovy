@@ -30,10 +30,23 @@ class MadcowStep {
         this.parent     = parent;
         this.children   = new ArrayList<MadcowStep>();
         this.sequenceNumber = testCase.steps.size() + 1;
+
+        this.result = MadcowStepResult.NOT_YET_EXECUTED();
     }
 
     String getSequenceNumberString() {
         return SEQUENCE_NUMBER_FORMAT.format(sequenceNumber);
+    }
+
+    /**
+     * Overridden default groovy setResult method to allow us
+     * to throw upto the parent steps that the child has failed
+     */
+    public void setResult(MadcowStepResult madcowStepResult) {
+        if (this.parent != null)
+            this.parent.setResult(madcowStepResult);
+
+        this.result = madcowStepResult;
     }
 
     String toString() {

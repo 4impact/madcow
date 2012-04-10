@@ -1,0 +1,6 @@
+verifyText = Address Search Results
+
+# now verify text that doesnt exist
+verifyText = Baratheon
+
+verifyText = Address Search Results

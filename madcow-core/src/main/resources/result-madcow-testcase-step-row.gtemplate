@@ -1,0 +1,78 @@
+<tr>
+    <td>${idx + 1}</td>
+
+    <%
+
+    idxString = (idxString ?: '') != '' ? idxString + ".${idx + 1}" : "${idx + 1}";
+
+    String statusIcon = '';
+    if (step.result.failed()) {
+        statusIcon = """<a class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a>""";
+    } else if (step.result.passed()) {
+        statusIcon = """<a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a>""";
+    } else if (step.result.noOperation()) {
+        statusIcon = """<a class="btn btn-success linkless"><i class="icon-cog icon-white"></i></a>""";
+    } else if (step.result.notYetExecuted()) {
+        statusIcon = """<a class="btn linkless"><i class="icon-minus "></i></a>""";
+    }
+
+    String resultFileLink = '';
+    if (step.result.hasResultFile) {
+        resultFileLink = """&nbsp; <a class="btn btn-info" href="${step.getSequenceNumberString() + '.html'}"><i class="icon-camera icon-white"></i></a>"""
+    }
+
+    String importTemplateExpand = '';
+    if (step.blade.type == au.com.ps4impact.madcow.grass.GrassBlade.GrassBladeType.IMPORT) {
+        importTemplateExpand = """&nbsp; <a href="#importTemplate${idxString}" class="btn btn-warning accordion-toggle" data-target="#importTemplate${idxString}" data-toggle="collapse"><i class="icon-resize-full icon-white"></i></a>""";
+    }
+
+    %>
+
+    <td>${statusIcon}${resultFileLink}${importTemplateExpand}</td>
+
+    <td>${step.blade.line}</td>
+
+    <td><% if (step.blade.line != step.blade.toString()) { %>
+    <h6>${step.blade.toString()}</h6>
+    <% }
+    if ((step.result.message ?: '') != '') {
+    %>${step.result.message} <%
+    }
+    %>
+
+    <%
+    String importTemplateContents = '';
+    if (step.blade.type == au.com.ps4impact.madcow.grass.GrassBlade.GrassBladeType.IMPORT) {
+
+
+        importTemplateContents = """<div id="importTemplate${idxString}" class="collapse">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Status</th>
+                    <th>Grass</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>""";
+
+        def engine = new groovy.text.GStringTemplateEngine();
+        def stepTemplateEngine = engine.createTemplate(au.com.ps4impact.madcow.util.ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-madcow-testcase-step-row.gtemplate').URL);
+
+        step.children.eachWithIndex { childStep, childIdx ->
+            def binding = [ 'step'      : childStep,
+                            'idx'       : childIdx,
+                            'idxString' : idxString];
+            def stepTemplate = stepTemplateEngine.make(binding);
+            importTemplateContents += stepTemplate.toString();
+        }
+        importTemplateContents += """</tbody>
+                </table>
+            </div>""";
+    }
+    %>
+    $importTemplateContents
+
+    </td>
+</tr>

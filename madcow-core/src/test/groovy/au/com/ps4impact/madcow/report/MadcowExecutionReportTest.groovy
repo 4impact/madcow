@@ -27,6 +27,9 @@ class MadcowExecutionReportTest extends GroovyTestCase {
         MadcowTestCase testCase = new MadcowTestCase('testTestCaseReportForPass', MockMadcowConfig.getMadcowConfig(true))
         testCase.steps.add(new MadcowStep(testCase, blade, null));
         testCase.steps.first().result = passed ? MadcowStepResult.PASS() : failed ? MadcowStepResult.FAIL('Some error') : MadcowStepResult.PARSE_ERROR('Unsupported operation');
+        testCase.steps.first().blade.type = GrassBlade.GrassBladeType.IMPORT;
+        testCase.steps.first().children.add(new MadcowStep(testCase, blade, testCase.steps.first()));
+        testCase.steps.first().children.first().result = passed ? MadcowStepResult.PASS() : failed ? MadcowStepResult.FAIL('Some error') : MadcowStepResult.PARSE_ERROR('Unsupported operation');
         testCase.stopWatch = new StopWatch();
         testCase.stopWatch.start();
         testCase.stopWatch.stop();
