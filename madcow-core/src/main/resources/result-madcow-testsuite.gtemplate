@@ -9,13 +9,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Madcow Test Suite Report</title>
 
+    <link rel="shortcut icon" type="image/x-icon" href="./.assets/img/4impact.ico"/>
+    <link rel="icon" type="image/x-icon" href="./.assets/img/4impact.ico"/>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main"/>
 
-    <link href="./.assets/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+    <link href="./.assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="./.assets/madcow.css" rel="stylesheet"/>
-    <link href="./.assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>
+    <link href="./.assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
 
 </head>
 <body>
@@ -28,20 +31,6 @@
         </div>
 
         <div class="row">
-            <blockquote>
-                <table>
-                    <tbody>
-                    <tr>
-                        <td><p>Total Tests:</p></td>
-                        <td><p><strong>${passedCount + failedCount}</strong></p></td>
-                    </tr>
-                    <tr>
-                        <td><p>Total Time:</p></td>
-                        <td><p><strong>${totalTime}</strong></p></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </blockquote>
             <% if (passedCount > 0) { %>
             <div class="progress progress-success" style="margin-bottom: 9px;">
                 <div class="bar" style="width: ${passedCount / (passedCount + failedCount) * 100}%">${passedCount} passed</div>
@@ -54,14 +43,30 @@
             <% } %>
         </div>
 
+        <div class="row well">
+            <div class="span3 centralise">
+                <h3>Tests<br/>${passedCount + failedCount}</h3>
+            </div>
+
+            <div class="span5 centralise">
+                <h3>Passed<br/>${(passedCount / (passedCount + failedCount) * 100).round(new java.math.MathContext(2)).intValue()}%</h3>
+            </div>
+
+            <div class="span3 centralise">
+                <h3>Time<br/>${totalTime}</h3>
+            </div>
+
+        </div>
+
         <div class="row">
+            <hr/>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Status</th>
                         <th>Test Case</th>
-                        <th>Steps</th>
-                        <th>Time</th>
+                        <th class="centralise">Steps</th>
+                        <th class="centralise">Time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,8 +91,8 @@
                         <td><a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a></td>
                         <% } %>
                         <td><a href="${testCase.name}/index.html">${testCase.name}</a></td>
-                        <td>${testCase.lastExecutedStep.result.parseError() ? '-' : testCase.steps.size()}</td>
-                        <td>${testCase.lastExecutedStep.result.parseError() ? '-' : testCase.getTotalTimeInSeconds() + 's'}</td>
+                        <td class="centralise">${testCase.lastExecutedStep.result.parseError() ? '-' : testCase.steps.size()}</td>
+                        <td class="centralise">${testCase.lastExecutedStep.result.parseError() ? '-' : testCase.getTotalTimeInSeconds() + 's'}</td>
                     </tr>
                     <% } %>
                 </tbody>
