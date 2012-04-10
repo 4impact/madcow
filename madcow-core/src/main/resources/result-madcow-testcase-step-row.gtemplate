@@ -28,7 +28,7 @@
 
     %>
 
-    <td>${statusIcon}${resultFileLink}${importTemplateExpand}</td>
+    <td nowrap="nowrap">${statusIcon}${resultFileLink}${importTemplateExpand}</td>
 
     <td>${step.blade.line}</td>
 
