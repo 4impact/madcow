@@ -1,8 +1,6 @@
-invokeUrl = ADDRESSBOOK
+invokeUrl = ADDRESSBOOK/address/create
 
-# verify the text exists on the page
-@expectedValue = Search Address
-verifyText = @expectedValue
+verifyText = Create Address
+postCodeEntry.value = 4152
 
-testsite_search_searchButton.clickLink
-verifyText = Address Search Results
+testsite_create_carina.verifyText = CARINA

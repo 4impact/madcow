@@ -7,6 +7,9 @@ import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.grass.GrassParseException
+import java.util.concurrent.TimeUnit
+import org.apache.log4j.Logger
+import org.openqa.selenium.firefox.FirefoxProfile
 
 /**
  * Implementation of the WebDriver step runner.
@@ -15,16 +18,42 @@ import au.com.ps4impact.madcow.grass.GrassParseException
  */
 class WebDriverStepRunner extends MadcowStepRunner {
 
+    protected static final Logger LOG = Logger.getLogger(WebDriverStepRunner.class);
+
+    protected static final String SELENIUM_HTMLUNIT_DRIVER = org.openqa.selenium.htmlunit.HtmlUnitDriver.canonicalName;
+    protected static final String MADCOW_HTMLUNIT_DRIVER = au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver.canonicalName;
+    protected static final String FIREFOX_DRIVER = org.openqa.selenium.firefox.FirefoxDriver.canonicalName;
+
     public WebDriver driver;
     public String lastPageSource;
 
     WebDriverStepRunner(HashMap<String, String> parameters) {
 
         // default the browser if not specified
-        parameters.browser = parameters.browser ?: 'org.openqa.selenium.htmlunit.HtmlUnitDriver';
+        parameters.browser = parameters.browser ?: MADCOW_HTMLUNIT_DRIVER;
 
         try {
-            driver = Class.forName(parameters.browser).newInstance() as WebDriver;
+            def driverParameters = null;
+            switch (parameters.browser) {
+                case FIREFOX_DRIVER:
+                    driverParameters = new FirefoxProfile();
+                    driverParameters.setEnableNativeEvents(true);
+                    break;
+
+                case SELENIUM_HTMLUNIT_DRIVER: // replace the selenium one with the madcow html unit driver
+                    parameters.browser = MADCOW_HTMLUNIT_DRIVER;
+                    break;
+
+                default:
+                    break;
+            }
+
+            LOG.info("Starting WebDriver browser '${parameters.browser}'")
+
+            if (driverParameters != null)
+                driver = Class.forName(parameters.browser).newInstance(driverParameters) as WebDriver;
+            else
+                driver = Class.forName(parameters.browser).newInstance() as WebDriver;
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
@@ -33,6 +62,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
             throw new Exception("Unexpected error creating the Browser '${parameters.browser}'\n\n$e");
         }
 
+        // implicitly wait for things to appear if they don't
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     /**

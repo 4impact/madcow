@@ -3,6 +3,7 @@ package au.com.ps4impact.madcow.runner.webdriver
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.MadcowTestRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
+import au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver
 
 /**
  * Test for running WebDriver grass
@@ -36,7 +37,7 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
     public void testDefaultBrowser() {
         WebDriverStepRunner stepRunner = new WebDriverStepRunner([:]);
-        assertEquals(org.openqa.selenium.htmlunit.HtmlUnitDriver.class, stepRunner.driver.class);
+        assertEquals(MadcowHtmlUnitDriver.class, stepRunner.driver.class);
     }
 
     public void testBrowserNotFound() {
