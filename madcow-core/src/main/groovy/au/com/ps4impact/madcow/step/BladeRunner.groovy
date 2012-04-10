@@ -2,6 +2,8 @@ package au.com.ps4impact.madcow.step;
 
 /**
  * Base class for a Blade Runner.
+ *
+ * @author Gavin Bunney
  */
 abstract class BladeRunner {
 

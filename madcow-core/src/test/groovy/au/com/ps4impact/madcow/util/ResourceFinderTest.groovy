@@ -4,6 +4,8 @@ import au.com.ps4impact.madcow.MadcowProject
 
 /**
  * Test class for Resource Finder.
+ *
+ * @author Gavin Bunney
  */
 class ResourceFinderTest extends GroovyTestCase {
 

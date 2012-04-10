@@ -4,6 +4,8 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 
 /**
  * A Step Runner is the invocation hook for executing an individual MadcowStep.
+ *
+ * @author Gavin Bunney
  */
 abstract class MadcowStepRunner {
 

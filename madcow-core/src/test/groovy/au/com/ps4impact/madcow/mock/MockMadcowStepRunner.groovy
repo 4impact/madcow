@@ -7,8 +7,10 @@ import au.com.ps4impact.madcow.step.MadcowStepResult
 
 /**
  * Stubbed Madcow Step Runner.
+ *
+ * @author Gavin Bunney
  */
-public class MockMadcowStepRunner extends MadcowStepRunner {
+class MockMadcowStepRunner extends MadcowStepRunner {
 
     boolean alwaysPass = true;
 

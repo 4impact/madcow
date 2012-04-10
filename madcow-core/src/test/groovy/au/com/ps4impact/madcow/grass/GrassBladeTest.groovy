@@ -5,8 +5,10 @@ import au.com.ps4impact.madcow.mock.MockMadcowConfig;
 
 /**
  * Test class for GrassBlade.
+ *
+ * @author Gavin Bunney
  */
-public class GrassBladeTest extends GroovyTestCase {
+class GrassBladeTest extends GroovyTestCase {
 
     protected MadcowTestCase madcowTestCase = new MadcowTestCase('GrassBladeTest', MockMadcowConfig.getMadcowConfig(), []);
 

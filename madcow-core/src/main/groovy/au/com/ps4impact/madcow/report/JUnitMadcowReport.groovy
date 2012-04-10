@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringEscapeUtils
 
 /**
  * JUnit specific Test Case Report
+ *
+ * @author Gavin Bunney
  */
 class JUnitMadcowReport implements IMadcowReport {
 

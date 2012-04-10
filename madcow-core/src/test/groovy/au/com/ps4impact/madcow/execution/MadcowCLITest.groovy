@@ -2,6 +2,8 @@ package au.com.ps4impact.madcow.execution
 
 /**
  * Test for Command Line invocation of Madcow.
+ *
+ * @author Gavin Bunney
  */
 class MadcowCLITest extends GroovyTestCase {
 

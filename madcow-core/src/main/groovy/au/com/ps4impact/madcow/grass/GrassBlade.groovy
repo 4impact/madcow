@@ -18,6 +18,8 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
  * addressbook_search_country.verifyText = Australia
  *  ^ mapping                  ^ operation  ^ parameters
  * </pre>
+ *
+ * @author Gavin Bunney
  */
 class GrassBlade {
 

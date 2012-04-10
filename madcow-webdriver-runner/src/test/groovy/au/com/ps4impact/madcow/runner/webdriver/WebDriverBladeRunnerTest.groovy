@@ -4,6 +4,8 @@ import au.com.ps4impact.madcow.step.MadcowStep
 
 /**
  * Test for the WebDriver Blade Runner.
+ *
+ * @author Gavin Bunney
  */
 class WebDriverBladeRunnerTest extends GroovyTestCase {
 

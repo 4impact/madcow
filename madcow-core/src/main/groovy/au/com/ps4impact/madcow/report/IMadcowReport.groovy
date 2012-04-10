@@ -5,6 +5,8 @@ import au.com.ps4impact.madcow.MadcowTestSuite
 
 /**
  * Abstract base class for reporting.
+ *
+ * @author Gavin Bunney
  */
 interface IMadcowReport {
 

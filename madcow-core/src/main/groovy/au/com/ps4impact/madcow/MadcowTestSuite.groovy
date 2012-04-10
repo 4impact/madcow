@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * A collection of madcow test cases.
+ *
+ * @author Gavin Bunney
  */
 class MadcowTestSuite {
 

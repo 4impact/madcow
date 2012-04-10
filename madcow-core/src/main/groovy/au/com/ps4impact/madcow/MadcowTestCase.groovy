@@ -12,6 +12,8 @@ import org.apache.commons.lang3.time.StopWatch
 
 /**
  * A Madcow Test Case.
+ *
+ * @author Gavin Bunney
  */
 class MadcowTestCase {
 

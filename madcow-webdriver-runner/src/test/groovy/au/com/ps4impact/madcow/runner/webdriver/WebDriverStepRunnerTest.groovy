@@ -6,6 +6,8 @@ import au.com.ps4impact.madcow.config.MadcowConfig
 
 /**
  * Test for running WebDriver grass
+ *
+ * @author Gavin Bunney
  */
 class WebDriverStepRunnerTest extends GroovyTestCase {
 

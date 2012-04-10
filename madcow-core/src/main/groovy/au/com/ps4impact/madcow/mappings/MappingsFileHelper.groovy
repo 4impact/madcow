@@ -10,6 +10,8 @@ import au.com.ps4impact.madcow.MadcowTestCase
  * Helper class for Mappings file reading/mapping;
  *
  * Locates the Mappings files and applies the relevant namespace prefix.
+ *
+ * @author Gavin Bunney
  */
 class MappingsFileHelper extends AbstractGrassFileHelper {
 

@@ -4,6 +4,11 @@ import org.apache.log4j.Logger
 import au.com.ps4impact.madcow.MadcowProject
 import au.com.ps4impact.madcow.MadcowTestCase
 
+/**
+ * Helper for the Global Data Parameters file handling
+ *
+ * @author Gavin Bunney
+ */
 class GlobalDataParametersFileHelper extends AbstractGrassFileHelper {
 
 	protected static final Logger LOG = Logger.getLogger(GlobalDataParametersFileHelper.class);

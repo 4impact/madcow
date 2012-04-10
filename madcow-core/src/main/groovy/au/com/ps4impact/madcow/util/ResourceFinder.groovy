@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Resource Finder utility to locate resources on the classpath.
+ *
+ * @author Gavin Bunney
  */
 class ResourceFinder {
 

@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils
 
 /**
  * VerifyText.
+ *
+ * @author Gavin Bunney
  */
 class VerifyText extends WebDriverBladeRunner {
 

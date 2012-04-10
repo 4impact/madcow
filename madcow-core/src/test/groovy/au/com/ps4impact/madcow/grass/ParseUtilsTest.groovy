@@ -2,8 +2,10 @@ package au.com.ps4impact.madcow.grass;
 
 /**
  * Test class for ParseUtils.
+ *
+ * @author Gavin Bunney
  */
-public class ParseUtilsTest extends GroovyTestCase {
+class ParseUtilsTest extends GroovyTestCase {
 
     public void testUnquote() {
         assertEquals('Queensland', ParseUtils.unquote("""'Queensland'"""));

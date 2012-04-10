@@ -14,6 +14,8 @@ import au.com.ps4impact.madcow.MadcowTestSuite
 
 /**
  * Test for the JUnitMadcowReport class.
+ *
+ * @author Gavin Bunney
  */
 class JUnitMadcowReportTest extends GroovyTestCase {
 

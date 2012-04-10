@@ -10,6 +10,8 @@ import au.com.ps4impact.madcow.grass.GrassParseException
 
 /**
  * Implementation of the WebDriver step runner.
+ *
+ * @author Gavin Bunney
  */
 class WebDriverStepRunner extends MadcowStepRunner {
 

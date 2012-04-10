@@ -5,6 +5,8 @@ import au.com.ps4impact.madcow.mock.MockMadcowConfig
 
 /**
  * Test for the MadcowMappings.
+ *
+ * @author Gavin Bunney
  */
 class MadcowMappingsTest extends GroovyTestCase {
 

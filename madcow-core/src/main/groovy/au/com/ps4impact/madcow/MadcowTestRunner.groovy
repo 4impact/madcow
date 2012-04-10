@@ -20,6 +20,8 @@ import au.com.ps4impact.madcow.report.IMadcowReport
 
 /**
  * Madcow Test Coordinator class.
+ *
+ * @author Gavin Bunney
  */
 class MadcowTestRunner {
 

@@ -2,6 +2,8 @@ package au.com.ps4impact.madcow.step;
 
 /**
  * Test class for Madcow Step Result.
+ *
+ * @author Gavin Bunney
  */
 class MadcowStepResultTest extends GroovyTestCase {
 

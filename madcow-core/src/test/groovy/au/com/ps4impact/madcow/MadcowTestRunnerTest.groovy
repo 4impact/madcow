@@ -4,6 +4,8 @@ import au.com.ps4impact.madcow.mock.MockMadcowConfig
 
 /**
  * Test for the Madcow Test Runner class.
+ *
+ * @author Gavin Bunney
  */
 class MadcowTestRunnerTest extends GroovyTestCase {
 

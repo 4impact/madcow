@@ -4,6 +4,8 @@ package au.com.ps4impact.madcow
  * Project structure for a Madcow project.
  * This class holds the directory names and other happening
  * things for how a Madcow project is layed out.
+ *
+ * @author Gavin Bunney
  */
 class MadcowProject {
 

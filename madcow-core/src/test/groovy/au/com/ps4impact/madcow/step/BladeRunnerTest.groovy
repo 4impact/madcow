@@ -2,6 +2,8 @@ package au.com.ps4impact.madcow.step;
 
 /**
  * Test class for Blade Runner.
+ *
+ * @author Gavin Bunney
  */
 class BladeRunnerTest extends GroovyTestCase {
 

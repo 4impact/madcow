@@ -11,6 +11,8 @@ import au.com.ps4impact.madcow.MadcowTestSuite
 
 /**
  * Madcow Execution Report.
+ *
+ * @author Gavin Bunney
  */
 class MadcowExecutionReport implements IMadcowReport {
 

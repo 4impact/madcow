@@ -9,6 +9,8 @@ import au.com.ps4impact.madcow.MadcowProject
 
 /**
  * The Grass Parser.
+ *
+ * @author Gavin Bunney
  */
 class GrassParser {
 

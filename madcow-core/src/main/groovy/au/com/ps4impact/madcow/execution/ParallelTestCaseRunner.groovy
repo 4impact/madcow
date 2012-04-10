@@ -15,8 +15,10 @@ import au.com.ps4impact.madcow.report.IMadcowReport
  * Parallel Test Runner is used to run multiple tests in parallel.
  *
  * Constructor generates a list of Actors which are invoked through the act function.
+ *
+ * @author Gavin Bunney
  */
-public class ParallelTestCaseRunner {
+class ParallelTestCaseRunner {
 
     protected static final Logger LOG = Logger.getLogger(ParallelTestCaseRunner.class);
 

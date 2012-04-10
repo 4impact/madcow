@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 
 /**
  * A step of an individual madcow test case.
+ *
+ * @author Gavin Bunney
  */
 class MadcowStep {
 

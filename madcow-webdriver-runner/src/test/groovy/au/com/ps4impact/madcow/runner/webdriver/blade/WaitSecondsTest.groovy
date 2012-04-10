@@ -8,6 +8,8 @@ import org.apache.commons.lang3.time.StopWatch
 
 /**
  * Test for InvokeUrl Blade Runner
+ *
+ * @author Gavin Bunney
  */
 class WaitSecondsTest extends GroovyTestCase {
 

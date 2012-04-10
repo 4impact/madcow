@@ -2,6 +2,8 @@ package au.com.ps4impact.madcow.grass
 
 /**
  * A grass parser exception.
+ *
+ * @author Gavin Bunney
  */
 class GrassParseException extends Exception {
     

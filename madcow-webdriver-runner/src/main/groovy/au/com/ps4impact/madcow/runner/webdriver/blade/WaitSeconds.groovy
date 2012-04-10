@@ -9,6 +9,8 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 
 /**
  * WaitSeconds.
+ *
+ * @author Gavin Bunney
  */
 class WaitSeconds extends WebDriverBladeRunner {
 

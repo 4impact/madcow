@@ -5,6 +5,8 @@ import au.com.ps4impact.madcow.mock.MockMadcowConfig
 
 /**
  * Test for the GrassParser.
+ *
+ * @author Gavin Bunney
  */
 class GrassParserTest extends GroovyTestCase {
 

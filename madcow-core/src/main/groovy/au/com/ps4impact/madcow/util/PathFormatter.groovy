@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils
 
 /**
  * Collection of utilities to help format paths in a variety of ways.
+ *
+ * @author Gavin Bunney
  */
 class PathFormatter {
 

@@ -7,6 +7,8 @@ import au.com.ps4impact.madcow.MadcowTestCase
 
 /**
  * Abstract class for properties file parsing, for global data parameters and mappings files.
+ *
+ * @author Gavin Bunney
  */
 abstract class AbstractGrassFileHelper {
 

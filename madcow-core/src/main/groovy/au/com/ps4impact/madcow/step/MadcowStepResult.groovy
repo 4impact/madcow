@@ -2,6 +2,8 @@ package au.com.ps4impact.madcow.step;
 
 /**
  * A result of a step.
+ *
+ * @author Gavin Bunney
  */
 class MadcowStepResult {
 

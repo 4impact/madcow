@@ -6,6 +6,8 @@ import au.com.ps4impact.madcow.MadcowTestCase;
  * Representation of Mappings files, providing static
  * loading of the mappings, and retrieval of a mapping for a particular
  * html element reference.
+ *
+ * @author Gavin Bunney
  */
 class MadcowMappings {
 

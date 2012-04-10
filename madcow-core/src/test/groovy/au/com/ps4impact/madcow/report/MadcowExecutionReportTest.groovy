@@ -11,6 +11,8 @@ import au.com.ps4impact.madcow.MadcowProject
 
 /**
  * Test for the MadcowExecutionReport class.
+ *
+ * @author Gavin Bunney
  */
 class MadcowExecutionReportTest extends GroovyTestCase {
 

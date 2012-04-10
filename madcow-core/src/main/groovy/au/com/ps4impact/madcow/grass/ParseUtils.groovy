@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Handy utilities for parsing things.
+ *
+ * @author Gavin Bunney
  */
 class ParseUtils {
 

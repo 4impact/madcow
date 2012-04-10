@@ -11,6 +11,8 @@ import org.openqa.selenium.By
 
 /**
  * Base WebDriver plugin class.
+ *
+ * @author Gavin Bunney
  */
 abstract class WebDriverBladeRunner extends BladeRunner {
 

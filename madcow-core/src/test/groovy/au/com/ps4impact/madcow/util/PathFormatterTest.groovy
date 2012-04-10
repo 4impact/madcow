@@ -2,6 +2,8 @@ package au.com.ps4impact.madcow.util
 
 /**
  * Test class for PathFormatter.
+ *
+ * @author Gavin Bunney
  */
 class PathFormatterTest extends GroovyTestCase {
 

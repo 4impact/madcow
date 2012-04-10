@@ -10,6 +10,8 @@ import au.com.ps4impact.madcow.MadcowProject
 
 /**
  *  The MadcowConfig class which holds all the initialisation information
+ *
+ * @author Gavin Bunney
  */
 class MadcowConfig {
 

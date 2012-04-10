@@ -10,6 +10,8 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
 
 /**
  * Test for the ClickLink BladeRunner.
+ *
+ * @author Gavin Bunney
  */
 class ClickLinkTest extends GroovyTestCase {
 

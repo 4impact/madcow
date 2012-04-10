@@ -6,6 +6,8 @@ import au.com.ps4impact.madcow.step.MadcowStepResult
 
 /**
  * GrassParse Exception Step wrapper for a GrassParseException.
+ *
+ * @author Gavin Bunney
  */
 class GrassParseExceptionStep extends MadcowStep {
 

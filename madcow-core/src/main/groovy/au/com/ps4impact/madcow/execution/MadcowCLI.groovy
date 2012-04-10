@@ -8,8 +8,10 @@ import au.com.ps4impact.madcow.MadcowProject
 
 /**
  * Run Madcow from the Command Line.
+ *
+ * @author Gavin Bunney
  */
-public class MadcowCLI {
+class MadcowCLI {
 
     public static def parseArgs(String[] incomingArgs) throws ParseException {
         def cli = new CliBuilder(usage:'runMadcow [options]', header:'Options:')

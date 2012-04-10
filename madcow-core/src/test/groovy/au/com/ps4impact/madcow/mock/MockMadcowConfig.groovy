@@ -4,6 +4,8 @@ import au.com.ps4impact.madcow.config.MadcowConfig
 
 /**
  * Mock config for setting the MockMadcowStepRunner.
+ *
+ * @author Gavin Bunney
  */
 class MockMadcowConfig {
 

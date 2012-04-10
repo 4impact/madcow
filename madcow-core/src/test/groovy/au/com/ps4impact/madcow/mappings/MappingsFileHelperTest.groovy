@@ -6,6 +6,8 @@ import au.com.ps4impact.madcow.util.ResourceFinder
 
 /**
  * Test for the MappingsFileHelper.
+ *
+ * @author Gavin Bunney
  */
 class MappingsFileHelperTest extends GroovyTestCase {
 

@@ -8,6 +8,8 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 
 /**
  * The ClickLink Blade is used to click on an elements link.
+ *
+ * @author Gavin Bunney
  */
 class ClickLink extends WebDriverBladeRunner {
 

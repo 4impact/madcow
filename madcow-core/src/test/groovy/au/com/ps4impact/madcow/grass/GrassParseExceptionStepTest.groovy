@@ -5,6 +5,8 @@ import au.com.ps4impact.madcow.MadcowTestCase
 
 /**
  * Test for the MadcowTestCase class.
+ *
+ * @author Gavin Bunney
  */
 class GrassParseExceptionStepTest extends GroovyTestCase {
 
