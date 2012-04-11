@@ -7,6 +7,7 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.util.ResourceFinder
+import java.util.concurrent.TimeUnit
 
 /**
  * Test for the ClickLink BladeRunner.
@@ -21,6 +22,7 @@ class ValueTest extends GroovyTestCase {
 
     protected verifyValueExecution(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
+        (testCase.stepRunner as WebDriverStepRunner).driver.manage().timeouts().implicitlyWait(1, TimeUnit.MICROSECONDS);
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());

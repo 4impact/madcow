@@ -54,6 +54,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 driver = Class.forName(parameters.browser).newInstance(driverParameters) as WebDriver;
             else
                 driver = Class.forName(parameters.browser).newInstance() as WebDriver;
+
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
@@ -63,7 +64,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
         }
 
         // implicitly wait for things to appear if they don't
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     /**
