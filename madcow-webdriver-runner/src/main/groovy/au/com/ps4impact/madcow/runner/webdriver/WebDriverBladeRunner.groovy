@@ -58,7 +58,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
                     || (blade.parameters.toString() == "")))
                 throw new GrassParseException("Unsupported grass format. Parameter must have a value supplied.");
 
-            if (this.getSupportedParameterTypes() != null && !this.getSupportedParameterTypes().contains(blade.parameters.class))
+            if (blade.parameters != null && this.getSupportedParameterTypes() != null && !this.getSupportedParameterTypes().contains(blade.parameters.class))
                 throw new GrassParseException("Unsupported grass format. Only parameters of type '${this.getSupportedParameterTypes()}' are supported.");
         }
 
@@ -161,5 +161,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
             default:
                 return stepRunner.driver.findElement(By.id(step.blade.mappingSelectorValue));
         }
+
+        return null;
     }
 }
