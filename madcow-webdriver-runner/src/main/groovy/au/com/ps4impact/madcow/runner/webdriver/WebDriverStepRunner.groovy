@@ -100,15 +100,17 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public boolean hasBladeRunner(GrassBlade blade) {
         try {
             WebDriverBladeRunner bladeRunner = getBladeRunner(blade);
-            if (bladeRunner == null)
+            if (bladeRunner == null) {
+                LOG.error("Blade Runner not found for ${blade.toString()}");
                 return false;
+            }
 
             return bladeRunner.isValidBladeToExecute(blade);
 
         } catch (GrassParseException gpe) {
             throw gpe;
-        } catch (ignored) {
-            // swallow the exception as blade runner wasn't found
+        } catch (e) {
+            LOG.error("Blade Runner not found for ${blade.toString()}\n\nException: $e");
             return false;
         }
     }

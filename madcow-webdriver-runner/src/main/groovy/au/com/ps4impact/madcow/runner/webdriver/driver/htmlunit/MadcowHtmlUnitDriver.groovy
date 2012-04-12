@@ -22,6 +22,7 @@ class MadcowHtmlUnitDriver extends HtmlUnitDriver {
     protected WebClient modifyWebClient(WebClient client) {
         super.modifyWebClient(client);
         client.setAjaxController(new NicelyResynchronizingAjaxController());
+        client.setThrowExceptionOnScriptError(false);
         return client;
     }
 

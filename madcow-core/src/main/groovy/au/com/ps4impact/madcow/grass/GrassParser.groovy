@@ -62,7 +62,8 @@ class GrassParser {
             // verify the executable blade can actually be executed by the configured blade runner
             if (step.blade.executable() && !testCase.stepRunner.hasBladeRunner(step.blade)) {
                 String error = "Unsupported operation '${step.blade.operation}'";
-                LOG.error(error); throw new GrassParseException(step.blade.line, error);
+                LOG.error("$error\n\nBlade: ${step.blade.toString()} | Type: ${step.blade.type}");
+                throw new GrassParseException(step.blade.line, error);
             }
 
             if (parentStep != null)

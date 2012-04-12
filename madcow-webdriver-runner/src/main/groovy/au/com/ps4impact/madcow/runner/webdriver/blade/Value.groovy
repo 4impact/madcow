@@ -11,6 +11,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage
 import au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitWebElement
 import com.gargoylesoftware.htmlunit.html.HtmlInput
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea
+import org.openqa.selenium.firefox.FirefoxWebElement
 
 /**
  * The Value blade sets a value on an element

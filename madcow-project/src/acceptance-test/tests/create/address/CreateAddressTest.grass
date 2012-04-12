@@ -3,4 +3,6 @@ invokeUrl = ADDRESSBOOK/address/create
 verifyText = Create Address
 postCodeEntry.value = 4152
 
+testsite_create_carina.waitFor
+waitFor = CARINA
 testsite_create_carina.verifyText = CARINA
