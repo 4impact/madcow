@@ -3,7 +3,7 @@
     <properties/>
     <testcase classname="$testName" name="$testName" time="$time">
         <% if ((failure ?: '') != '') { %>
-        <failure message="$failure" type="MadcowError"><![CDATA[$failureDetails]]></failure>
+        <failure message="$failure" type="failed"><![CDATA[$failureDetails]]></failure>
         <% } %>
     </testcase>
     <system-out><![CDATA[$systemOut]]></system-out>
