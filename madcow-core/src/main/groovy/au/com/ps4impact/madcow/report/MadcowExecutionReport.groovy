@@ -92,6 +92,7 @@ class MadcowExecutionReport implements IMadcowReport {
                         'passedCount'       : passedCount,
                         'failedCount'       : failedCount,
                         'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime / 1000) + 's',
+                        'totalTimeExec'     : TIME_SECONDS_FORMAT.format(totalTime > 0 ? testSuite.stopWatch.time / 1000 : 0) + 's',
                       ];
 
         try {

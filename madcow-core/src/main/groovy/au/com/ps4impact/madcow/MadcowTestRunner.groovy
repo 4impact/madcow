@@ -50,9 +50,9 @@ class MadcowTestRunner {
 
         prepareResultsDirectory();
 
-        MadcowTestSuite testSuite = prepareTestSuite(testNames, madcowConfig);
+        MadcowTestSuite rootTestSuite = prepareTestSuite(testNames, madcowConfig);
 
-        LOG.info("Found ${testSuite.size()} test cases to run");
+        LOG.info("Found ${rootTestSuite.size()} test cases to run");
 
         int numThreads = 10;
         ExecutorService pool = Executors.newFixedThreadPool(numThreads);
@@ -63,22 +63,24 @@ class MadcowTestRunner {
         def callback = QueueActor.queueActor(strategy, {Option<Exception> result ->
             numberOfTestsRan++;
             result.foreach({Exception e -> exceptions.add(e)} as Effect)
-            if (numberOfTestsRan >= testSuite.size()) {
+            if (numberOfTestsRan >= rootTestSuite.size()) {
                 pool.shutdown()
             }
         } as Effect).asActor()
 
-        def allTestCases = testSuite.getTestCasesRecusively();
+        def allTestCases = rootTestSuite.getTestCasesRecusively();
 
+        rootTestSuite.stopWatch.start();
         allTestCases.each { MadcowTestCase testCase ->
             new ParallelTestCaseRunner(strategy, callback).act(fj.P.p(testCase, reporters));
         }
 
-        while (numberOfTestsRan < testSuite.size()) {
+        while (numberOfTestsRan < rootTestSuite.size()) {
             Thread.sleep(500);
         }
 
-        reporters.each() { reporter -> reporter.createTestSuiteReport(testSuite) };
+        rootTestSuite.stopWatch.stop();
+        reporters.each() { reporter -> reporter.createTestSuiteReport(rootTestSuite) };
     }
 
     /**

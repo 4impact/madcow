@@ -44,16 +44,20 @@
         </div>
 
         <div class="row well">
-            <div class="span3 centralise">
+            <div class="span2 centralise">
                 <h3>Tests<br/>${passedCount + failedCount}</h3>
             </div>
 
-            <div class="span5 centralise">
+            <div class="span3 centralise">
                 <h3>Passed<br/>${(passedCount / (passedCount + failedCount) * 100).round(new java.math.MathContext(2)).intValue()}%</h3>
             </div>
 
             <div class="span3 centralise">
-                <h3>Time<br/>${totalTime}</h3>
+                <h3>Execution Time<br/>${totalTimeExec}</h3>
+            </div>
+
+            <div class="span3 centralise">
+                <h3>Total Time<br/>${totalTime}</h3>
             </div>
 
         </div>

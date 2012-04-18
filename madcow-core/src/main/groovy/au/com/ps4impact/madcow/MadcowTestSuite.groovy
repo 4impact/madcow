@@ -1,6 +1,7 @@
 package au.com.ps4impact.madcow
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang3.time.StopWatch;
 
 /**
  * A collection of madcow test cases.
@@ -13,12 +14,14 @@ class MadcowTestSuite {
     ArrayList<MadcowTestCase> testCases;
     MadcowTestSuite parent;
     ArrayList<MadcowTestSuite> children;
+    StopWatch stopWatch;
 
     MadcowTestSuite(String name, MadcowTestSuite parent = null, ArrayList<MadcowTestCase> testCases = new ArrayList<MadcowTestCase>()) {
         this.name       = name;
         this.testCases  = testCases;
         this.parent     = parent;
         this.children   = new ArrayList<MadcowTestSuite>();
+        this.stopWatch  = new StopWatch();
     }
 
     public int size() {
