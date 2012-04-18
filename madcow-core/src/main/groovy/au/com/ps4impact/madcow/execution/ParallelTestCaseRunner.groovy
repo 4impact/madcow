@@ -46,6 +46,7 @@ class ParallelTestCaseRunner {
                 parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) };
                 callback.act none();
             } catch (e) {
+                LOG.error("${testCase.name} throw an unexpected exception:\n$e");
                 callback.act some(e);
             }
         } as Effect);

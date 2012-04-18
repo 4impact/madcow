@@ -74,6 +74,7 @@ class MadcowTestCase {
             this.steps.add(exceptionStep);
             this.lastExecutedStep = exceptionStep;
             stopWatch = new StopWatch();
+            stopWatch.start(); stopWatch.stop();
             throw new RuntimeException("Grass Parse Error: ${gpe.message}");
         }
     }
@@ -126,6 +127,10 @@ class MadcowTestCase {
     }
 
     public String getTotalTimeInSeconds() {
-        return TIME_SECONDS_FORMAT.format(stopWatch.time / 1000);
+        try {
+            return TIME_SECONDS_FORMAT.format(stopWatch.time / 1000);
+        } catch (ignored) {
+            return TIME_SECONDS_FORMAT.format(0);
+        }
     }
 }
