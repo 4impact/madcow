@@ -45,7 +45,7 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
             WebDriverStepRunner stepRunner = new WebDriverStepRunner(['browser':'tent.tent.tennis.tent']);
             fail('should always exception with ClassNotFoundException');
         } catch (e) {
-            assertTrue( e.message.startsWith("The specified Browser 'tent.tent.tennis.tent' cannot be found"));
+            assertTrue( e.message.startsWith("The specified Browser 'TENT.TENT.TENNIS.TENT' cannot be found"));
         }
     }
 }

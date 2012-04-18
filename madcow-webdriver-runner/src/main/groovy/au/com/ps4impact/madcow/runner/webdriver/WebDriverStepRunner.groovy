@@ -30,7 +30,9 @@ class WebDriverStepRunner extends MadcowStepRunner {
         parameters.browser = StringUtils.upperCase(parameters.browser ?: "${WebDriverType.HTMLUNIT.toString()}");
 
         try {
-            driverType = WebDriverType.getDriverType( parameters.browser);
+            driverType = WebDriverType.getDriverType(parameters.browser);
+            if (driverType == null)
+                throw new ClassNotFoundException("Unknown browser '${parameters.browser}'")
 
             def driverParameters = null;
             switch (driverType) {
