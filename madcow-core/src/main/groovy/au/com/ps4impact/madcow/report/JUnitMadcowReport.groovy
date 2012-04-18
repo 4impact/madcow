@@ -46,7 +46,7 @@ class JUnitMadcowReport implements IMadcowReport {
                         'systemOut'         : testCaseResult.passed() ? "Passed" : '',
                         'systemErr'         : testCaseResult.failed() ? "Failed: " + escapedMessage : '',
                         'failure'           : testCaseResult.failed() ? escapedMessage : '',
-                        'failureDetails'    : testCaseResult.failed() ? StringEscapeUtils.escapeXml((testCaseResult.detailedMessage ?: '')) : '',
+                        'failureDetails'    : testCaseResult.failed() ? testCaseResult.detailedMessage ?: '' : '',
         ];
 
         def engine = new GStringTemplateEngine();
