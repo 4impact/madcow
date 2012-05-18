@@ -55,10 +55,17 @@ class ParseUtils {
                 default:
                     break
             }
-        } catch (mustBeAString) {
+        } catch (ignored) {
             // ignored, must just be a normal string
         }
         return stringToEval
+    }
+
+    /**
+     * Escape all the single quotes in the given string.
+     */
+    static String escapeSingleQuotes(String str) {
+        return (str.contains("'") ? '"' + str + '"' : "'" + str + "'")
     }
 
 }

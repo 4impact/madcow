@@ -68,7 +68,16 @@ class WebDriverStepRunner extends MadcowStepRunner {
      * Get a blade runner for the given GrassBlade.
      */
     protected WebDriverBladeRunner getBladeRunner(GrassBlade blade) {
-        return WebDriverBladeRunner.getBladeRunner(WebDriverBladeRunner.BLADE_PACKAGE, StringUtils.capitalize(blade.operation)) as WebDriverBladeRunner;
+        String operation = blade.operation;
+
+        if (StringUtils.contains(operation, '.')) {
+            operation = String.format("%s.%s", StringUtils.substringBeforeLast(operation, '.'),
+                                               StringUtils.capitalize(StringUtils.substringAfterLast(operation, '.')));
+        } else {
+            operation = StringUtils.capitalize(operation);
+        }
+
+        return WebDriverBladeRunner.getBladeRunner(WebDriverBladeRunner.BLADE_PACKAGE, operation) as WebDriverBladeRunner;
     }
 
     /**
@@ -79,9 +88,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
         try {
             bladeRunner.execute(this, step);
             if (!driver.pageSource.equals(lastPageSource)) {
-                new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << driver.pageSource;
-                lastPageSource = driver.pageSource;
-                step.result.hasResultFile = true;
+                captureResults(step);
             }
         } catch (NoSuchElementException ignored) {
             step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
@@ -110,6 +117,15 @@ class WebDriverStepRunner extends MadcowStepRunner {
             LOG.error("Blade Runner not found for ${blade.toString()}\n\nException: $e");
             return false;
         }
+    }
+
+    /**
+     * Capture the html result file.
+     */
+    public void captureResults(MadcowStep step) {
+        new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << driver.pageSource;
+        lastPageSource = driver.pageSource;
+        step.result.hasResultFile = true;
     }
 
     /**

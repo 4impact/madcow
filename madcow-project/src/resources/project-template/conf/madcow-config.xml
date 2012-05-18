@@ -15,6 +15,7 @@
         <environment name="DEV">
             <invokeUrl>
                 <ADDRESSBOOK>http://test-site.projectmadcow.com:8080/madcow-test-site-2</ADDRESSBOOK>
+                <CREATETABLE>http://test-site.projectmadcow.com:8080/madcow-test-site-2/address/createTableLayout</CREATETABLE>
             </invokeUrl>
         </environment>
         <environment name="TEST">

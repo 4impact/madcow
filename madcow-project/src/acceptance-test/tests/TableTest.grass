@@ -1,0 +1,4 @@
+invokeUrl = CREATETABLE
+
+# verify the text exists on the page
+createTable.table.selectRow = row1

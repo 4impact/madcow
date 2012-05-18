@@ -118,7 +118,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
     /**
      * Convert a string selector type to the enum BLADE_MAPPING_SELECTOR_TYPE value.
      */
-    protected BLADE_MAPPING_SELECTOR_TYPE getSelectorType(String mappingSelectorType) {
+    public static BLADE_MAPPING_SELECTOR_TYPE getSelectorType(String mappingSelectorType) {
         for (BLADE_MAPPING_SELECTOR_TYPE type in BLADE_MAPPING_SELECTOR_TYPE.values()) {
             if (type.toString().compareToIgnoreCase(mappingSelectorType) == 0)
                 return type;

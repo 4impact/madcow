@@ -30,6 +30,8 @@ class MadcowTestCase {
 
     public MadcowConfig madcowConfig;
 
+    public Map<String, Object> runtimeStorage = new HashMap<String, Object>();
+
     protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("########.###");
 
     /**
@@ -40,6 +42,7 @@ class MadcowTestCase {
         this.madcowConfig = madcowConfig;
         this.grassScript = grassScript;
         this.grassParser = new GrassParser(this);
+        this.runtimeStorage = new HashMap<String, Object>();
 
         try {
             this.stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
