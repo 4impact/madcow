@@ -29,12 +29,12 @@ class SelectRowTest extends GroovyTestCase {
 
     void testSelectByHtmlId() {
         // defaults to html id
-        GrassBlade blade = new GrassBlade('createTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         verifySelectRow(blade, true);
 
         // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'createTableMapping', ['id': 'createTable']);
-        blade = new GrassBlade('createTableMapping.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'theTableMapping', ['id': 'createTable']);
+        blade = new GrassBlade('theTableMapping.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         verifySelectRow(blade, true);
     }
 }
