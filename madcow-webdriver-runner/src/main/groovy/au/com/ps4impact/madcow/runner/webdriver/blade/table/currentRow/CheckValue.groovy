@@ -9,7 +9,7 @@ import au.com.ps4impact.madcow.runner.webdriver.blade.table.util.TableXPather
 import org.openqa.selenium.By
 
 /**
- *
+ * CheckValue.
  *
  * @author Gavin Bunney
  */
@@ -18,6 +18,11 @@ class CheckValue extends WebDriverBladeRunner {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
         TableXPather xPather = new TableXPather(step.blade);
+
+        if ((step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()] ?: '') == '') {
+            step.result = MadcowStepResult.FAIL("No row has been selected - call selectRow first");
+            return;
+        }
 
         step.blade.parameters.each { String column, String value ->
 
@@ -31,5 +36,12 @@ class CheckValue extends WebDriverBladeRunner {
             }
         }
 
+    }
+
+    /**
+     * Get the list of supported parameter types, which for table operations is a map
+     */
+    protected List getSupportedParameterTypes() {
+        return [Map.class];
     }
 }

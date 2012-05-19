@@ -77,6 +77,9 @@ public class TableXPather {
 
             case WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID:
                 return "//table[@id='${this.blade.mappingSelectorValue}']"
+
+            case WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME:
+                return "//table[@name='${this.blade.mappingSelectorValue}']"
         }
 
         return null;

@@ -6,7 +6,6 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.runner.webdriver.blade.table.util.TableXPather
-import org.openqa.selenium.By
 
 /**
  * The SelectRow table blade runner will save the specified table row.
@@ -31,16 +30,20 @@ class SelectRow extends WebDriverBladeRunner {
             rowPositionXPath = xPather.getRowPositionXPath(step.blade.parameters)
 
         step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()] = rowPositionXPath;
-
-        try {
-            stepRunner.driver.findElements(By.xpath(xPather.getRowXPath(rowPositionXPath)));
-            step.result = MadcowStepResult.PASS("Row selected: ${step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()]}");
-        } catch (Exception ignore) {
-            step.result = MadcowStepResult.FAIL('Unable to find a row in the table matching the criteria');
-        }
+        step.result = MadcowStepResult.PASS("Row selected: ${step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()]}");
     }
 
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
         return [GrassBlade.GrassBladeType.EQUATION];
+    }
+
+    /**
+     * Get the list of selector types supported by this blade runner.
+     * HtmlId, Name and XPath are supported.
+     */
+    protected Collection<WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE> getSupportedSelectorTypes() {
+        return [WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID,
+                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME,
+                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH];
     }
 }

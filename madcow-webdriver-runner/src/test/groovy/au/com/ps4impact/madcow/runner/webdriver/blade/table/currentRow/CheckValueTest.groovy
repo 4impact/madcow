@@ -8,7 +8,7 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.util.ResourceFinder
 
 /**
- * 
+ * Test for the table CheckValue blade runner.
  *
  * @author: Gavin Bunney
  */
@@ -43,5 +43,13 @@ class CheckValueTest extends GroovyTestCase {
 
         blade = new GrassBlade('theTable.table.currentRow.checkValue = [\'Column Number 2\' : \'This will fail\']', testCase.grassParser);
         verifyTableCheckValue(blade, false);
+    }
+
+    void testCheckValueMultiples() {
+        GrassBlade blade = new GrassBlade("theTable.table.selectRow = ['Column Number 2' : 'Country']", testCase.grassParser);
+        executeBlade(blade);
+
+        blade = new GrassBlade("theTable.table.currentRow.checkValue = ['Column Number 1' : 'Input Value', 'Column Number 2' : 'Country']", testCase.grassParser);
+        verifyTableCheckValue(blade, true);
     }
 }
