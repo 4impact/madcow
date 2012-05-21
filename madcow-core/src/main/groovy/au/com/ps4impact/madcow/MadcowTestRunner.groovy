@@ -8,7 +8,7 @@ import au.com.ps4impact.madcow.util.PathFormatter
 import fj.Effect
 import fj.data.Option
 import fj.Unit
-import fj.control.parallel.QueueActor
+import fj.control.parallel.Actor
 import fj.control.parallel.Strategy
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -60,13 +60,13 @@ class MadcowTestRunner {
         def numberOfTestsRan = 0
         def exceptions = [];
 
-        def callback = QueueActor.queueActor(strategy, {Option<Exception> result ->
+        def callback = Actor.queueActor(strategy, {Option<Exception> result ->
             numberOfTestsRan++;
             result.foreach({Exception e -> exceptions.add(e)} as Effect)
             if (numberOfTestsRan >= rootTestSuite.size()) {
                 pool.shutdown()
             }
-        } as Effect).asActor()
+        } as Effect);
 
         def allTestCases = rootTestSuite.getTestCasesRecusively();
 
