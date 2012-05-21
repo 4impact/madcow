@@ -1,6 +1,5 @@
 package au.com.ps4impact.madcow.runner.webdriver.blade.table.currentRow
 
-import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
