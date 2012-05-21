@@ -107,6 +107,9 @@ class GrassBladeTest extends GroovyTestCase {
         assertToString(new GrassBlade('addressbook_search_country.verifyText = Australia', madcowTestCase.grassParser), "addressbook_search_country.verifyText = Australia");
         assertToString(new GrassBlade('addressbook_search_button.clickLink', madcowTestCase.grassParser), "addressbook_search_button.clickLink");
 
+        assertToString(new GrassBlade('addressbook_search_button.verifyText = ["Country" : "Australia"]', madcowTestCase.grassParser), "addressbook_search_button.verifyText = ['Country' : 'Australia']");
+        assertToString(new GrassBlade('addressbook_search_button.verifyText = ["New Zealand", "Australia"]', madcowTestCase.grassParser), "addressbook_search_button.verifyText = ['New Zealand', 'Australia']");
+
         madcowTestCase.grassParser.setDataParameter('@countryName', 'Australia');
         assertToString(new GrassBlade('verifyText = @countryName', madcowTestCase.grassParser), "verifyText = Australia");
         assertToString(new GrassBlade('verifyText = Winner is @{countryName}', madcowTestCase.grassParser), "verifyText = Winner is Australia");

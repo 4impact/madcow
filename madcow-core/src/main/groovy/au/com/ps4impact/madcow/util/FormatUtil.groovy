@@ -40,7 +40,7 @@ class FormatUtil {
      */
     static String convertListToString(List listToConvert) {
         String quotedList = '';
-        listToConvert.each { String val -> quotedList += "${val}, " }
+        listToConvert.each { String val -> quotedList += "'${val}', " }
 
         if (quotedList != '') {
             quotedList = StringUtils.substringBeforeLast(quotedList, ', ');

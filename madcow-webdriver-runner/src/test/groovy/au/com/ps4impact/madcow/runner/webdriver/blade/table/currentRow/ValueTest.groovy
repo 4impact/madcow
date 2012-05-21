@@ -15,6 +15,7 @@ import au.com.ps4impact.madcow.util.ResourceFinder
 class ValueTest extends GroovyTestCase {
 
     MadcowTestCase testCase = new MadcowTestCase('ValueTest', new MadcowConfig(), []);
+    Value value = new Value();
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
@@ -40,5 +41,29 @@ class ValueTest extends GroovyTestCase {
 
         blade = new GrassBlade('theTable.table.currentRow.checkValue = [\'Column Number 1\' : \'Tennis\']', testCase.grassParser);
         verifyTableValue(blade, true, false);
+    }
+
+    void testSetValueNeedToSelectRowFirst() {
+        GrassBlade blade = new GrassBlade("theTable.table.currentRow.value = ['Column Number 1' : 'Tent']", testCase.grassParser);
+        MadcowStep step = verifyTableValue(blade, false);
+        assertEquals('No row has been selected - call selectRow first', step.result.message);
+    }
+
+    void testSetValueMapOnly() {
+        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'Country\']', testCase.grassParser);
+        executeBlade(blade);
+
+        blade = new GrassBlade('theTable.table.currentRow.value = Tennis', testCase.grassParser);
+        verifyTableValue(blade, false);
+    }
+
+    void testStatementNotSupported() {
+        try {
+            GrassBlade blade = new GrassBlade('theTable.table.currentRow.value', testCase.grassParser);
+            assertFalse(value.isValidBladeToExecute(blade));
+            fail('should always exception');
+        } catch (e) {
+            assertEquals('Unsupported grass format. Only grass blades of type \'[EQUATION]\' are supported.', e.message);
+        }
     }
 }
