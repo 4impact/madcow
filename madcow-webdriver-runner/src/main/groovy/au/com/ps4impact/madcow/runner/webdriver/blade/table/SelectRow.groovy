@@ -40,7 +40,7 @@ class SelectRow extends WebDriverBladeRunner {
     /**
      * Get the list of supported parameter types, which for table operations is a map or string.
      */
-    protected List getSupportedParameterTypes() {
+    protected List<Class> getSupportedParameterTypes() {
         return [String.class, Map.class];
     }
 

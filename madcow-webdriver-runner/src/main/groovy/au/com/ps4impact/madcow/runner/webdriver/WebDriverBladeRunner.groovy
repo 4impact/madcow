@@ -58,8 +58,18 @@ abstract class WebDriverBladeRunner extends BladeRunner {
                     || (blade.parameters.toString() == "")))
                 throw new GrassParseException("Unsupported grass format. Parameter must have a value supplied.");
 
-            if (blade.parameters != null && this.getSupportedParameterTypes() != null && !this.getSupportedParameterTypes().contains(blade.parameters.class))
-                throw new GrassParseException("Unsupported grass format. Only parameters of type '${this.getSupportedParameterTypes()}' are supported.");
+            if (blade.parameters != null && this.getSupportedParameterTypes() != null) {
+                boolean validParameterClassType = false;
+
+                for (Class paramType in this.getSupportedParameterTypes()) {
+                    if (paramType.isInstance(blade.parameters))
+                        validParameterClassType = true;
+                }
+
+                if (!validParameterClassType) {
+                    throw new GrassParseException("Unsupported grass format. Only parameters of type '${this.getSupportedParameterTypes()}' are supported.");
+                }
+            }
         }
 
         return true;
@@ -130,7 +140,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
      * Get the list of supported parameter types.
      * By default only String is supported.
      */
-    protected List getSupportedParameterTypes() {
+    protected List<Class> getSupportedParameterTypes() {
         return [String.class];
     }
 

@@ -54,7 +54,7 @@ class Value extends CurrentRowBladeRunner {
     /**
      * Get the list of supported parameter types, which for table operations is a map
      */
-    protected List getSupportedParameterTypes() {
+    protected List<Class> getSupportedParameterTypes() {
         return [Map.class];
     }
 }
