@@ -102,7 +102,7 @@ Parent Maven POM for Madcow
         <dependency>
             <groupId>org.functionaljava</groupId>
             <artifactId>functionaljava</artifactId>
-            <version>3.0</version>
+            <version>3.1</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
