@@ -3,6 +3,7 @@ package au.com.ps4impact.madcow.grass
 import java.util.regex.Matcher
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.mappings.MadcowMappings
+import groovy.transform.AutoClone
 
 /**
  * A blade of grass.
@@ -21,6 +22,7 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
  *
  * @author Gavin Bunney
  */
+@AutoClone
 class GrassBlade {
 
     /**
