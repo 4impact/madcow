@@ -4,6 +4,7 @@ import java.util.regex.Matcher
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import groovy.transform.AutoClone
+import au.com.ps4impact.madcow.util.FormatUtil
 
 /**
  * A blade of grass.
@@ -148,13 +149,23 @@ class GrassBlade {
 
     String toString() {
 
+        String parametersString = null;
+        if (parameters != null) {
+            if (parameters instanceof Map)
+                parametersString = FormatUtil.convertMapToString(parameters);
+            else if (parameters instanceof List)
+                parametersString = FormatUtil.convertListToString(parameters);
+            else
+                parametersString = parameters as String;
+        }
+
         switch (this.type) {
             case GrassBladeType.IMPORT:
             case GrassBladeType.DATA_PARAMETER:
             case GrassBladeType.EQUATION:
                 return String.format('%s%s = %s', StringUtils.isNotBlank(mappingSelectorValue) ? "${mappingSelectorValue}." : '',
                         operation ?: '',
-                        parameters ?: '');
+                        parametersString ?: '');
 
             case GrassBladeType.STATEMENT:
                 return String.format('%s%s', StringUtils.isNotBlank(mappingSelectorValue) ? "${mappingSelectorValue}." : '',
