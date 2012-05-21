@@ -38,6 +38,13 @@ class SelectRow extends WebDriverBladeRunner {
     }
 
     /**
+     * Get the list of supported parameter types, which for table operations is a map or string.
+     */
+    protected List getSupportedParameterTypes() {
+        return [String.class, Map.class];
+    }
+
+    /**
      * Get the list of selector types supported by this blade runner.
      * HtmlId, Name and XPath are supported.
      */

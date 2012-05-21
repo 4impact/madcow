@@ -12,7 +12,7 @@ import au.com.ps4impact.madcow.runner.webdriver.blade.table.util.TableXPather
 /**
  * Test for Table SelectRow blade runner.
  *
- * @author: Gavin Bunney
+ * @author Gavin Bunney
  */
 class SelectRowTest extends GroovyTestCase {
 
