@@ -143,11 +143,20 @@ class GrassBlade {
     /**
      * Determines if the Grass Blade is executable, that is, an Equation or Statement.
      */
-    boolean executable() {
+    public boolean executable() {
         return (this.type == GrassBlade.GrassBladeType.EQUATION || this.type == GrassBlade.GrassBladeType.STATEMENT)
     }
 
-    String toString() {
+    /**
+     * Determine if the line has been 'parsed' - that is, is the supplied grass line the same
+     * as what the Blade is when passed through the toString function.
+     */
+    public boolean isLineParsed() {
+        // compare but ignore spaces and quotes
+        return StringUtils.strip(this.line, "'\" ") != StringUtils.strip(this.toString(), "'\" ");
+    }
+
+    public String toString() {
 
         String parametersString = null;
         if (parameters != null) {

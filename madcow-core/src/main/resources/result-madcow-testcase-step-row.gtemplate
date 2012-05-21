@@ -32,7 +32,7 @@
 
     <td>${step.blade.line}</td>
 
-    <td><% if (step.blade.line != step.blade.toString()) { %>
+    <td><% if (step.blade.isLineParsed()) { %>
     <h6>${step.blade.toString()}</h6>
     <% }
     if ((step.result.message ?: '') != '') {
