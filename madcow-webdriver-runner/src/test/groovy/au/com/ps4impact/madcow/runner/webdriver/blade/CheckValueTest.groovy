@@ -60,6 +60,11 @@ class CheckValueTest extends GroovyTestCase {
         verifyCheckValueContents(blade, true);
     }
 
+    void testCheckValueForTextArea() {
+        GrassBlade blade = new GrassBlade('aTextAreaId.checkValue = Text area contents', testCase.grassParser);
+        verifyCheckValueContents(blade, true);
+    }
+
     void testCheckValueEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.checkValue = ', testCase.grassParser);
         verifyCheckValueContents(blade, true);

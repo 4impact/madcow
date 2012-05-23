@@ -51,6 +51,11 @@ class ValueTest extends GroovyTestCase {
         verifyValueExecution(blade, true);
     }
 
+    void testValueForTextArea() {
+        GrassBlade blade = new GrassBlade('aTextAreaId.value = Tennis', testCase.grassParser);
+        verifyValueExecution(blade, true);
+    }
+
     void testValueDoesNotExist() {
         GrassBlade blade = new GrassBlade('aInputThatDoesntExist.value = Tennis', testCase.grassParser);
         verifyValueExecution(blade, false);
