@@ -4,5 +4,6 @@ invokeUrl = ADDRESSBOOK
 @expectedValue = Search Address
 verifyText = @expectedValue
 
+testsite_search_searchButton.showOnReport = Search Button Text
 testsite_search_searchButton.clickLink
 verifyText = Address Search Results
