@@ -34,6 +34,7 @@ class MadcowExecutionReportTest extends GroovyTestCase {
         testCase.stopWatch.start();
         testCase.stopWatch.stop();
         testCase.lastExecutedStep = testCase.steps.first();
+        testCase.reportDetails.put('Madcow Website Link', '<a href="http://madcow.4impact.net.au">Click Here</a>');
 
         madcowReport.createTestCaseReport(testCase);
 

@@ -58,29 +58,58 @@
         <% } %>
 
         <div class="row">
-            <blockquote>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><p>Steps:</p></td>
-                            <td><p>&nbsp;</p></td>
-                            <td><p>$totalSteps</p></td>
-                        </tr>
-                        <tr>
-                            <td><p>Time:</p></td>
-                            <td><p>&nbsp;</p></td>
-                            <td><p>$totalTime</p></td>
-                        </tr>
-                        <% if (testCase.testSuite.toString() != '') { %>
-                        <tr>
-                            <td><p>Suite:</p></td>
-                            <td><p>&nbsp;</p></td>
-                            <td><p>${testCase.testSuite.toString()}</p></td>
-                        </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </blockquote>
+            <div class="span4">
+                <blockquote>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="3" align="left"><p><strong>Execution Details</strong></p></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><p>Steps:</p></td>
+                                <td><p>&nbsp;</p></td>
+                                <td><p>$totalSteps</p></td>
+                            </tr>
+                            <tr>
+                                <td><p>Time:</p></td>
+                                <td><p>&nbsp;</p></td>
+                                <td><p>$totalTime</p></td>
+                            </tr>
+                            <% if (testCase.testSuite.toString() != '') { %>
+                            <tr>
+                                <td><p>Suite:</p></td>
+                                <td><p>&nbsp;</p></td>
+                                <td><p>${testCase.testSuite.toString()}</p></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </blockquote>
+            </div>
+            <div class="span7">
+                <% if (testCase.reportDetails?.size() > 0) { %>
+                <blockquote>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="3" align="left"><p><strong>Report Details</strong></p></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% testCase.reportDetails.each { key, value ->  %>
+                            <tr>
+                                <td><p>${key}:</p></td>
+                                <td><p>&nbsp;</p></td>
+                                <td><p>${value}</p></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </blockquote>
+                <% } %>
+            </div>
         </div>
 
         <div class="row">

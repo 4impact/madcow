@@ -52,7 +52,6 @@ class MadcowExecutionReport implements IMadcowReport {
                         'totalSteps'        : testCase.steps.size(),
                         'totalTime'         : testCase.getTotalTimeInSeconds() + 's',
                         'lastExecutedStep'  : testCase.lastExecutedStep,
-
                       ];
 
         try {

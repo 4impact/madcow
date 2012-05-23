@@ -30,7 +30,11 @@ class MadcowTestCase {
 
     public MadcowConfig madcowConfig;
 
+    // storage container for runtime parameters, such as table xpath selections etc
     public Map<String, Object> runtimeStorage = new HashMap<String, Object>();
+
+    // report information are all shown on the report for that test case
+    public Map<String, String> reportDetails = new HashMap<String, String>();
 
     protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("########.###");
 
@@ -43,6 +47,7 @@ class MadcowTestCase {
         this.grassScript = grassScript;
         this.grassParser = new GrassParser(this);
         this.runtimeStorage = new HashMap<String, Object>();
+        this.reportDetails = new HashMap<String, String>();
 
         try {
             this.stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
