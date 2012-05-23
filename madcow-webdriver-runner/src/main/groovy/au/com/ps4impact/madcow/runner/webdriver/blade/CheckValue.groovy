@@ -5,7 +5,6 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import org.apache.commons.lang3.StringUtils
-import org.openqa.selenium.WebElement
 import au.com.ps4impact.madcow.grass.GrassBlade
 
 /**
@@ -17,17 +16,7 @@ class CheckValue extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        WebElement element = findElement(stepRunner, step);
-
-        String elementText;
-        switch (StringUtils.lowerCase(element.tagName)) {
-            case 'input':
-                elementText = StringUtils.trim(element.getAttribute('value'));
-                break;
-            default:
-                elementText = StringUtils.trim(element.text);
-                break;
-        }
+        String elementText = getElementText(findElement(stepRunner, step));
 
         String expectedValue = StringUtils.trim(step.blade.parameters as String);
         if (expectedValue == elementText) {

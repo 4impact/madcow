@@ -34,15 +34,7 @@ class CheckValue extends CurrentRowBladeRunner {
                 element = stepRunner.driver.findElements(By.xpath(cellXPath + '/self::node()')).first();
             }
 
-            String cellText;
-            switch (StringUtils.lowerCase(element.tagName)) {
-                case 'input':
-                    cellText = StringUtils.trim(element.getAttribute('value'));
-                    break;
-                default:
-                    cellText = StringUtils.trim(element.text);
-                    break;
-            }
+            String cellText = getElementText(element);
 
             String expectedValue = StringUtils.trim(value);
             if (expectedValue == cellText) {

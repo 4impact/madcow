@@ -8,6 +8,7 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.grass.GrassParseException
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.By
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Base WebDriver plugin class.
@@ -173,5 +174,17 @@ abstract class WebDriverBladeRunner extends BladeRunner {
         }
 
         return null;
+    }
+
+    /**
+     * Get the web element text depending on the tag type - e.g. value for input's etc
+     */
+    protected String getElementText(WebElement webElement) {
+        switch (StringUtils.lowerCase(webElement.tagName)) {
+            case 'input':
+                return StringUtils.trim(webElement.getAttribute('value'));
+            default:
+                return StringUtils.trim(webElement.text);
+        }
     }
 }
