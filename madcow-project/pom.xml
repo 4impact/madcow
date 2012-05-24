@@ -124,12 +124,7 @@
         </dependency>
         <dependency>
             <groupId>au.com.ps4impact.madcow</groupId>
-            <artifactId>madcow-webdriver-runner</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>au.com.ps4impact.madcow</groupId>
-            <artifactId>madcow-webdriver-bladerunner-plugin</artifactId>
+            <artifactId>madcow-webdriver-plugin</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

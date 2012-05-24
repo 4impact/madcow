@@ -12,8 +12,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>au.com.ps4impact.madcow</groupId>
-    <artifactId>madcow-webdriver-bladerunner-plugin</artifactId>
-    <name>Madcow WebDriver Blade Runner Plugin</name>
+    <artifactId>madcow-webdriver-plugin</artifactId>
+    <name>Madcow WebDriver Plugin</name>
     <packaging>jar</packaging>
 
     <build>
