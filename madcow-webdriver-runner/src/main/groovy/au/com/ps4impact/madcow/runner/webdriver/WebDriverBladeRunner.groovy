@@ -3,7 +3,6 @@ package au.com.ps4impact.madcow.runner.webdriver
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.BladeRunner
-import org.apache.commons.lang.StringUtils
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.grass.GrassParseException
 import org.openqa.selenium.WebElement
@@ -16,8 +15,6 @@ import org.apache.commons.lang3.StringUtils
  * @author Gavin Bunney
  */
 abstract class WebDriverBladeRunner extends BladeRunner {
-
-    public static final String BLADE_PACKAGE = 'au.com.ps4impact.madcow.runner.webdriver.blade';
 
     /**
      * All WebDriver blade mapping selector types.

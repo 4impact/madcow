@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Ant build file for Madcow.
+-->
+<project name="Madcow WebDriver BladeRunner Plugin" basedir=".">
+
+    <property name="parent.pom.dir" value="${basedir}/../madcow-parent-pom/"/>
+    <import file="${basedir}/../madcow-parent-pom/build.xml"/>
+
+</project>

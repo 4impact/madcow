@@ -1,8 +1,5 @@
 package au.com.ps4impact.madcow.runner.webdriver
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.MadcowTestRunner
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver
 
 /**
@@ -12,24 +9,6 @@ import au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDr
  */
 class WebDriverStepRunnerTest extends GroovyTestCase {
 
-    public void testRunInlineScript() {
-        String grassScriptString = """
-            invokeUrl = ADDRESSBOOK
-            @expectedValue = Search Address
-
-            # verify the text exists on the page
-            verifyText = @expectedValue
-
-            testsite_menu_createAddress.clickLink
-            verifyText = Check For Duplicates
-        """;
-        ArrayList<String> grassScript = new ArrayList<String>();
-        grassScriptString.eachLine { line -> grassScript.add(line) }
-
-        MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest-testRunIt', grassScript);
-        testCase.execute();
-    }
-    
     public void testDefaultSelector() {
         WebDriverStepRunner stepRunner = new WebDriverStepRunner([:]);
         assertEquals('htmlid', stepRunner.defaultSelector);

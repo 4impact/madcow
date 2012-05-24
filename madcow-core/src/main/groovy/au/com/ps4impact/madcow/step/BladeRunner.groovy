@@ -1,4 +1,7 @@
-package au.com.ps4impact.madcow.step;
+package au.com.ps4impact.madcow.step
+
+import org.apache.commons.io.IOUtils
+import org.apache.log4j.Logger;
 
 /**
  * Base class for a Blade Runner.
@@ -7,10 +10,30 @@ package au.com.ps4impact.madcow.step;
  */
 abstract class BladeRunner {
 
+    static final Logger LOG = Logger.getLogger(BladeRunner.class);
+
+    static ArrayList<String> pluginPackages;
+
+    static {
+        pluginPackages = initPluginPackages();
+    }
+
     /**
      * Called to execute a particular step operation.
      */
     public abstract void execute(MadcowStepRunner stepRunner, MadcowStep step);
+
+    /**
+     * Initialise the plugin packages.
+     */
+    static ArrayList<String> initPluginPackages() {
+        GroovyClassLoader loader = new GroovyClassLoader(BladeRunner.getClassLoader())
+        Enumeration pluginFiles = loader.getResources("madcow.bladerunner.plugins");
+        ArrayList<String> packages = new ArrayList<String>();
+        pluginFiles.each { URL url -> packages.addAll(IOUtils.readLines(url.openStream())) }
+        LOG.info("Plugin Packages: $packages");
+        return packages;
+    }
 
     /**
      * Retrieve an instance of the specified BladeRunner.
@@ -28,5 +51,22 @@ abstract class BladeRunner {
         } catch (e) {
             throw new Exception("Unexpected error creating the BladeRunner '$fqn'\n\n$e");
         }
+    }
+
+    /**
+     * Retrieve an instance of the specified BladeRunner.
+     */
+    public static BladeRunner getBladeRunner(String bladeClassName) {
+        BladeRunner bladeRunner;
+
+        for (String pluginPackage : pluginPackages) {
+            try {
+                bladeRunner = getBladeRunner(pluginPackage, bladeClassName);
+                if (bladeRunner != null)
+                    return bladeRunner;
+            } catch (ClassNotFoundException ignored) { }
+        }
+
+        throw new Exception("The specified BladeRunner '$bladeClassName' cannot be found");
     }
 }

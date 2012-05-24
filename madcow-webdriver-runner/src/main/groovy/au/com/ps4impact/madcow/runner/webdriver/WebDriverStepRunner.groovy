@@ -77,7 +77,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
             operation = StringUtils.capitalize(operation);
         }
 
-        return WebDriverBladeRunner.getBladeRunner(WebDriverBladeRunner.BLADE_PACKAGE, operation) as WebDriverBladeRunner;
+        return WebDriverBladeRunner.getBladeRunner(operation) as WebDriverBladeRunner;
     }
 
     /**
