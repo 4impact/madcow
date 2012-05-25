@@ -9,7 +9,7 @@ import au.com.ps4impact.madcow.grass.GrassParseException
 import au.com.ps4impact.madcow.grass.GrassParseExceptionStep
 import java.text.DecimalFormat
 import org.apache.commons.lang3.time.StopWatch
-import org.apache.log4j.Logger
+import au.com.ps4impact.madcow.logging.MadcowLog
 
 /**
  * A Madcow Test Case.
@@ -38,8 +38,6 @@ class MadcowTestCase {
     public Map<String, String> reportDetails = new HashMap<String, String>();
 
     protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("########.###");
-
-    protected static final Logger LOG = Logger.getLogger(MadcowTestCase.class);
 
     /**
      * Create a new MadcowTestCase, parsing the given grassScript if specified.
@@ -145,27 +143,23 @@ class MadcowTestCase {
         }
     }
 
-    private String formatLogMessage(String message) {
-        return "$name: $message";
-    }
-
     public void logError(String message) {
-        LOG.error(formatLogMessage(message));
+        MadcowLog.error(this, message);
     }
 
     public void logWarn(String message) {
-        LOG.warn(formatLogMessage(message));
+        MadcowLog.warn(this, message);
     }
 
     public void logInfo(String message) {
-        LOG.info(formatLogMessage(message));
+        MadcowLog.info(this, message);
     }
 
     public void logDebug(String message) {
-        LOG.debug(formatLogMessage(message));
+        MadcowLog.debug(this, message);
     }
 
     public void logTrace(String message) {
-        LOG.trace(formatLogMessage(message));
+        MadcowLog.trace(this, message);
     }
 }

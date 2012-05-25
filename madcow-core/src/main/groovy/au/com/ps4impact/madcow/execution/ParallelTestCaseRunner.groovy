@@ -10,6 +10,7 @@ import static fj.data.Option.none
 import static fj.data.Option.some
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.report.IMadcowReport
+import au.com.ps4impact.madcow.logging.MadcowLog
 
 /**
  * Parallel Test Runner is used to run multiple tests in parallel.
@@ -32,15 +33,19 @@ class ParallelTestCaseRunner {
 
             MadcowTestCase testCase = parameters._1();
 
-            LOG.info("Running ${testCase.name}");
+            MadcowLog.initialiseLogging(testCase);
+
+            testCase.logInfo("Running ${testCase.name}");
 
             try {
                 try {
                     testCase.execute();
-                    LOG.info("Test ${testCase.name} Passed");
+                    testCase.logInfo("Test ${testCase.name} Passed");
                 } catch (e) {
-                    LOG.error("Test ${testCase.name} Failed!\n\nException: $e");
+                    testCase.logError("Test ${testCase.name} Failed!\n\nException: $e");
                 }
+
+                MadcowLog.shutdownLogging(testCase);
 
                 testCase.stepRunner.finishTestCase();
                 parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) };
