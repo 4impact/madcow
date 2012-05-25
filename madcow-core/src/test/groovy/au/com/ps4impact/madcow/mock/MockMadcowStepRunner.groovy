@@ -4,6 +4,7 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
+import au.com.ps4impact.madcow.MadcowTestCase
 
 /**
  * Stubbed Madcow Step Runner.
@@ -14,7 +15,8 @@ class MockMadcowStepRunner extends MadcowStepRunner {
 
     boolean alwaysPass = true;
 
-    MockMadcowStepRunner(HashMap<String, String> parameters) {
+    MockMadcowStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
+        this.testCase = testCase;
         alwaysPass = (parameters.alwaysPass != 'false');
     }
 

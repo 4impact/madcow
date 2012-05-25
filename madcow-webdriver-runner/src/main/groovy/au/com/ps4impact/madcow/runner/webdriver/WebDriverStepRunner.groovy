@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.grass.GrassParseException
-import org.apache.log4j.Logger
 import org.openqa.selenium.firefox.FirefoxProfile
 import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
+import au.com.ps4impact.madcow.MadcowTestCase
 
 /**
  * Implementation of the WebDriver step runner.
@@ -18,13 +18,14 @@ import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
  */
 class WebDriverStepRunner extends MadcowStepRunner {
 
-    protected static final Logger LOG = Logger.getLogger(WebDriverStepRunner.class);
-
     public WebDriver driver;
     public WebDriverType driverType;
     public String lastPageSource;
+    public String lastPageTitle;
 
-    WebDriverStepRunner(HashMap<String, String> parameters) {
+    WebDriverStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
+
+        this.testCase = testCase;
 
         // default the browser if not specified
         parameters.browser = StringUtils.upperCase(parameters.browser ?: "${WebDriverType.HTMLUNIT.toString()}");
@@ -45,7 +46,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
             }
 
-            LOG.info("Starting WebDriver browser '${driverType.toString()}'")
+            testCase.logInfo("Starting WebDriver browser '${driverType.name}'")
 
             if (driverParameters != null)
                 driver = driverType.driverClass.newInstance(driverParameters) as WebDriver;
@@ -59,9 +60,6 @@ class WebDriverStepRunner extends MadcowStepRunner {
         } catch (e) {
             throw new Exception("Unexpected error creating the Browser '${parameters.browser}'\n\n$e");
         }
-
-        // implicitly wait for things to appear if they don't
-        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     /**
@@ -87,9 +85,18 @@ class WebDriverStepRunner extends MadcowStepRunner {
         WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
         try {
             bladeRunner.execute(this, step);
-            if (!driver.pageSource.equals(lastPageSource)) {
+
+            if (!driver.title?.equals(lastPageTitle)) {
+                lastPageTitle = driver.title;
+                if (lastPageTitle != '') {
+                    testCase.logInfo("Current Page: $lastPageTitle");
+                }
+            }
+
+            if (!driver.pageSource?.equals(lastPageSource)) {
                 captureResults(step);
             }
+
         } catch (NoSuchElementException ignored) {
             step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
         } catch (e) {
@@ -105,7 +112,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
         try {
             WebDriverBladeRunner bladeRunner = getBladeRunner(blade);
             if (bladeRunner == null) {
-                LOG.error("Blade Runner not found for ${blade.toString()}");
+                testCase.logError("Blade Runner not found for ${blade.toString()}");
                 return false;
             }
 
@@ -114,7 +121,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
         } catch (GrassParseException gpe) {
             throw gpe;
         } catch (e) {
-            LOG.error("Blade Runner not found for ${blade.toString()}\n\nException: $e");
+            testCase.logError("Blade Runner not found for ${blade.toString()}\n\nException: $e");
             return false;
         }
     }

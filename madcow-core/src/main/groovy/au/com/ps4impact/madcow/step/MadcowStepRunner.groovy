@@ -1,6 +1,7 @@
 package au.com.ps4impact.madcow.step
 
 import au.com.ps4impact.madcow.grass.GrassBlade
+import au.com.ps4impact.madcow.MadcowTestCase
 
 /**
  * A Step Runner is the invocation hook for executing an individual MadcowStep.
@@ -9,11 +10,18 @@ import au.com.ps4impact.madcow.grass.GrassBlade
  */
 abstract class MadcowStepRunner {
 
-    MadcowStepRunner() {
-        this(new HashMap<String, String>());
+    public MadcowTestCase testCase;
+
+    public MadcowStepRunner() {
+        this(null);
+    }
+
+    MadcowStepRunner(MadcowTestCase testCase) {
+        this(testCase, new HashMap<String, String>());
+        this.testCase = testCase;
     }
     
-    MadcowStepRunner(HashMap<String, String> parameters) {
+    MadcowStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
         // overridden in children
     }
 

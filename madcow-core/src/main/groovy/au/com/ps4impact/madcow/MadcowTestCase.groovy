@@ -9,6 +9,7 @@ import au.com.ps4impact.madcow.grass.GrassParseException
 import au.com.ps4impact.madcow.grass.GrassParseExceptionStep
 import java.text.DecimalFormat
 import org.apache.commons.lang3.time.StopWatch
+import org.apache.log4j.Logger
 
 /**
  * A Madcow Test Case.
@@ -38,6 +39,8 @@ class MadcowTestCase {
 
     protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("########.###");
 
+    protected static final Logger LOG = Logger.getLogger(MadcowTestCase.class);
+
     /**
      * Create a new MadcowTestCase, parsing the given grassScript if specified.
      */
@@ -50,7 +53,7 @@ class MadcowTestCase {
         this.reportDetails = new HashMap<String, String>();
 
         try {
-            this.stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
+            this.stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this, this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
@@ -140,5 +143,29 @@ class MadcowTestCase {
         } catch (ignored) {
             return TIME_SECONDS_FORMAT.format(0);
         }
+    }
+
+    private String formatLogMessage(String message) {
+        return "$name: $message";
+    }
+
+    public void logError(String message) {
+        LOG.error(formatLogMessage(message));
+    }
+
+    public void logWarn(String message) {
+        LOG.warn(formatLogMessage(message));
+    }
+
+    public void logInfo(String message) {
+        LOG.info(formatLogMessage(message));
+    }
+
+    public void logDebug(String message) {
+        LOG.debug(formatLogMessage(message));
+    }
+
+    public void logTrace(String message) {
+        LOG.trace(formatLogMessage(message));
     }
 }

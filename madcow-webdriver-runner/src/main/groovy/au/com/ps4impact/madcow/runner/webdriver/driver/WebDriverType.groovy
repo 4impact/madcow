@@ -7,12 +7,14 @@ package au.com.ps4impact.madcow.runner.webdriver.driver
  */
 public enum WebDriverType {
 
-    HTMLUNIT(au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver),
-    FIREFOX(org.openqa.selenium.firefox.FirefoxDriver),
+    HTMLUNIT('HtmlUnit', au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver),
+    FIREFOX('Firefox', org.openqa.selenium.firefox.FirefoxDriver),
 
+    public String name;
     public Class driverClass;
 
-    WebDriverType(Class driverClass) {
+    WebDriverType(String name, Class driverClass) {
+        this.name = name;
         this.driverClass = driverClass;
     }
 
