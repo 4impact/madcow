@@ -43,6 +43,7 @@ public class MadcowLog {
 
         Logger logger = Logger.getLogger(testCase.name);
         logger.setLevel(Level.INFO);
+        logger.setAdditivity(false);
 
         FileAppender fileAppender = new FileAppender(new PatternLayout("%d %p [%c] - <%m>%n"),
                                                  "${testCase.getResultDirectory().getAbsolutePath()}/${LOGFILE_NAME}",
