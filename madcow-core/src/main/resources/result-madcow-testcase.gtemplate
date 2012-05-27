@@ -41,10 +41,11 @@
                 <% if ((lastExecutedStep.result.detailedMessage ?: '') != '') {
                     %><br/><br/>${lastExecutedStep.result.detailedMessage}<%
                 }
-                %><br/><br/>
-                <a class="btn btn-small btn-info" href="madcow.log"><i class="icon-th-list icon-white"></i> Open log file</a>
-                <br/>
+                %>
             </div>
+            <br/><br/>
+            <a class="btn btn-small btn-info" href="madcow.log"><i class="icon-th-list icon-white"></i> Open log file</a>
+            <br/>
         </div>
 
         <% } else { %>
