@@ -6,6 +6,9 @@ import org.apache.log4j.Logger
 import org.apache.log4j.Level
 import au.com.ps4impact.madcow.MadcowTestCase
 import org.apache.log4j.ConsoleAppender
+import org.apache.log4j.PropertyConfigurator
+import au.com.ps4impact.madcow.util.ResourceFinder
+import org.springframework.core.io.Resource
 
 /**
  * Madcow Logging to create a test case log file.
@@ -15,6 +18,11 @@ import org.apache.log4j.ConsoleAppender
 public class MadcowLog {
 
     protected static final String LOGFILE_NAME = "madcow.log";
+
+    static {
+        Resource log4jProperties = ResourceFinder.locateResourcesOnClasspath(MadcowLog.getClassLoader(), 'log4j.properties').first();
+        PropertyConfigurator.configure(log4jProperties.getURL());
+    }
 
     public static void error(MadcowTestCase testCase, String message) {
         Logger.getLogger(testCase.name).error(message);
