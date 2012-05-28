@@ -4,7 +4,6 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
-import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.grass.GrassBlade
 
 /**
@@ -15,7 +14,17 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 class WaitSeconds extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
-        sleep(Integer.parseInt(step.blade.parameters as String) * 1000);
+
+        int secondsToSleep;
+        try {
+            secondsToSleep = Integer.parseInt(step.blade.parameters as String);
+        } catch (NumberFormatException ignored) {
+            step.result = MadcowStepResult.FAIL("Invalid number '${step.blade.parameters}'");
+            return;
+        }
+
+        step.testCase.logInfo("Waiting for $secondsToSleep seconds");
+        sleep(secondsToSleep * 1000);
         step.result = MadcowStepResult.PASS();
     }
 

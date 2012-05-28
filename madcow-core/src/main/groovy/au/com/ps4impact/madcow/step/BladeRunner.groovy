@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
  */
 abstract class BladeRunner {
 
-    static final Logger LOG = Logger.getLogger(BladeRunner.class);
+    private static final Logger LOG = Logger.getLogger(BladeRunner.class);
 
     static ArrayList<String> pluginPackages;
 
