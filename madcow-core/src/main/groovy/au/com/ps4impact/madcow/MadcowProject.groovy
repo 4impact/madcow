@@ -30,6 +30,11 @@ class MadcowProject {
     public static final String MAPPINGS_DIRECTORY = 'mappings';
 
     /**
+     * Location of mappings reference directory.
+     */
+    public static final String MAPPINGS_REFERENCE_DIRECTORY = 'mappings-reference';
+
+    /**
      * Location of the results directory.
      */
     public static final String RESULTS_DIRECTORY = 'results';

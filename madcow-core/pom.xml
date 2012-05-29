@@ -115,6 +115,7 @@ Maven, like POM
                             <!-- clean IntelliJ generated results directory -->
                             <!-- created when running reporting junit tests -->
                             <directory>../results</directory>
+                            <directory>../mappings-reference</directory>
                         </fileset>
                     </filesets>
                 </configuration>

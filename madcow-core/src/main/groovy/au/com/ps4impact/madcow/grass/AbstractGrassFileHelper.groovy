@@ -27,7 +27,7 @@ abstract class AbstractGrassFileHelper {
         Resource[] grassFiles;
         try {
             grassFiles = ResourceFinder.locateResourcesOnClasspath(ClassLoader.getSystemClassLoader(), getFileLocatorFilePattern(), getFileLocatorBasedir());
-        } catch (FileNotFoundException fnfe) {
+        } catch (FileNotFoundException ignored) {
             getLog().info('No files found to process');
             return [:];
         }
@@ -46,6 +46,16 @@ abstract class AbstractGrassFileHelper {
             localProperties.putAll(properties)
         }
         return processProperties(testCase, localProperties)
+    }
+
+    Resource[] getAllMappingsFromClasspath() {
+        Resource[] grassFiles;
+        try {
+            return ResourceFinder.locateResourcesOnClasspath(ClassLoader.getSystemClassLoader(), getFileLocatorFilePattern(), getFileLocatorBasedir());
+        } catch (FileNotFoundException ignored) {
+            getLog().info('No files found to process');
+            return new Resource[0];
+        }
     }
 
     List<String> duplicateProperties(Properties baseProperties, Properties propertiesToCompare) {
