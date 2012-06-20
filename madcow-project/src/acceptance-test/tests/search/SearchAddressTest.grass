@@ -4,6 +4,7 @@ invokeUrl = ADDRESSBOOK
 @expectedValue = Search Address
 verifyText = @expectedValue
 
+state.selectField = Queensland
 testsite_search_searchButton.clickLink
 
 @textToVerify = Address Search Results

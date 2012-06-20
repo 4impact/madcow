@@ -7,17 +7,18 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.util.ResourceFinder
+
 import java.util.concurrent.TimeUnit
 
 /**
- * Test for the Value BladeRunner.
+ * Test for the SelectField BladeRunner.
  *
  * @author Gavin Bunney
  */
-class ValueTest extends GroovyTestCase {
+class SelectFieldTest extends GroovyTestCase {
 
     MadcowTestCase testCase = new MadcowTestCase('ValueTest', new MadcowConfig(), []);
-    def value = new Value();
+    def selectField = new SelectField();
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
     protected verifyValueExecution(GrassBlade blade, boolean shouldPass) {
@@ -28,44 +29,39 @@ class ValueTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
-    void testValueByHtmlId() {
+    void testSelectFieldByHtmlId() {
         // defaults to html id
-        GrassBlade blade = new GrassBlade('aInputId.value = Tennis', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('aSelectId.selectField = New Zealand', testCase.grassParser);
         verifyValueExecution(blade, true);
 
         // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aInputId', ['id': 'aInputId']);
-        blade = new GrassBlade('aInputId.value = Tennis', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'aSelectId', ['id': 'aSelectId']);
+        blade = new GrassBlade('aSelectId.selectField = United States', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
-    void testValueByName() {
-        MadcowMappings.addMapping(testCase, 'aInputName', ['name': 'aInputName']);
-        GrassBlade blade = new GrassBlade('aInputName.value = Tennis', testCase.grassParser);
+    void testSelectFieldByName() {
+        MadcowMappings.addMapping(testCase, 'aSelectName', ['name': 'aSelectName']);
+        GrassBlade blade = new GrassBlade('aSelectName.selectField = New Zealand', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
-    void testValueByXPath() {
-        MadcowMappings.addMapping(testCase, 'aInputXPath', ['xpath': '//input[@id=\'aInputId\']']);
-        GrassBlade blade = new GrassBlade('aInputXPath.value = Tennis', testCase.grassParser);
+    void testSelectFieldByXPath() {
+        MadcowMappings.addMapping(testCase, 'aSelectXPath', ['xpath': '//select[@id=\'aSelectId\']']);
+        GrassBlade blade = new GrassBlade('aSelectXPath.selectField = New Zealand', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
-    void testValueForTextArea() {
-        GrassBlade blade = new GrassBlade('aTextAreaId.value = Tennis', testCase.grassParser);
-        verifyValueExecution(blade, true);
-    }
-
-    void testValueDoesNotExist() {
-        GrassBlade blade = new GrassBlade('aInputThatDoesntExist.value = Tennis', testCase.grassParser);
+    void testSelectFieldDoesNotExist() {
+        GrassBlade blade = new GrassBlade('aSelectThatDoesntExist.selectField = Tennis', testCase.grassParser);
         verifyValueExecution(blade, false);
     }
 
     void testMappingSelectorInvalidRequired() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.value = Tennis', testCase.grassParser);
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectField = Tennis', testCase.grassParser);
             blade.mappingSelectorType = 'invalidOne';
-            assertFalse(value.isValidBladeToExecute(blade));
+            assertFalse(selectField.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
             assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH] are supported.', e.message);
@@ -74,9 +70,9 @@ class ValueTest extends GroovyTestCase {
 
     void testMappingSelectorRequired() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.value = Tennis', testCase.grassParser);
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectField = Tennis', testCase.grassParser);
             blade.mappingSelectorType = null;
-            assertFalse(value.isValidBladeToExecute(blade));
+            assertFalse(selectField.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
             assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH] are supported.', e.message);
@@ -85,8 +81,8 @@ class ValueTest extends GroovyTestCase {
 
     void testStatementNotSupported() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.value', testCase.grassParser);
-            assertFalse(value.isValidBladeToExecute(blade));
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectField', testCase.grassParser);
+            assertFalse(selectField.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
             assertEquals('Unsupported grass format. Only grass blades of type \'[EQUATION]\' are supported.', e.message);
