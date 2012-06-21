@@ -15,7 +15,7 @@ import au.com.ps4impact.madcow.util.ResourceFinder
 class ClickLinkTest extends GroovyTestCase {
 
     MadcowTestCase testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
-    ClickLink clickLink = new Value();
+    ClickLink clickLink = new ClickLink();
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
@@ -32,29 +32,18 @@ class ClickLinkTest extends GroovyTestCase {
         return step;
     }
 
-    void testSetThenCheckValue() {
-        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
+    void testClickTableLink() {
+        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'A link\']', testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.clickLink = ['Column Number 1' : 'Tennis']", testCase.grassParser);
-        verifyTableValue(blade, true, false);
-
-        blade = new GrassBlade('theTable.table.currentRow.checkValue = [\'Column Number 1\' : \'Tennis\']', testCase.grassParser);
+        blade = new GrassBlade("theTable.table.currentRow.clickLink = A link", testCase.grassParser);
         verifyTableValue(blade, true, false);
     }
 
-    void testSetValueNeedToSelectRowFirst() {
+    void testClickTableLinkNeedToSelectRowFirst() {
         GrassBlade blade = new GrassBlade("theTable.table.currentRow.clickLink = ['Column Number 1' : 'Tent']", testCase.grassParser);
         MadcowStep step = verifyTableValue(blade, false);
         assertEquals('No row has been selected - call selectRow first', step.result.message);
-    }
-
-    void testSetValueMapOnly() {
-        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'Country\']', testCase.grassParser);
-        executeBlade(blade);
-
-        blade = new GrassBlade('theTable.table.currentRow.clickLink = Tennis', testCase.grassParser);
-        verifyTableValue(blade, false);
     }
 
     void testStatementNotSupported() {
