@@ -10,6 +10,7 @@ import au.com.ps4impact.madcow.grass.GrassParseException
 import org.openqa.selenium.firefox.FirefoxProfile
 import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * Implementation of the WebDriver step runner.
