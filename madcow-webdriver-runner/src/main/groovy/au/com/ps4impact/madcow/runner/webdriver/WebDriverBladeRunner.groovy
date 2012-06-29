@@ -180,6 +180,14 @@ abstract class WebDriverBladeRunner extends BladeRunner {
         switch (StringUtils.lowerCase(webElement.tagName)) {
             case 'input':
                 return StringUtils.trim(webElement.getAttribute('value'));
+            case 'select':
+                String selectedOptionText = '';
+                webElement.findElements(By.tagName('option')).each { option ->
+                    if (option.selected) {
+                        selectedOptionText = StringUtils.trim(option.text);
+                    }
+                }
+                return selectedOptionText;
             default:
                 return StringUtils.trim(webElement.text);
         }
