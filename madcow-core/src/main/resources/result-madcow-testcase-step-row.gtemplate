@@ -36,7 +36,11 @@
     <h6>${step.blade.toString()}</h6>
     <% }
     if ((step.result.message ?: '') != '') {
-    %>${step.result.message} <%
+    %>${step.result.message}
+
+        <% if ((step.result.detailedMessage ?: '') != '') {
+        %><br/><br/>${step.result.detailedMessage}<%
+        }
     }
     %>
 
