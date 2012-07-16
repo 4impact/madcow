@@ -30,10 +30,10 @@ class VerifySelectFieldOptions extends WebDriverBladeRunner {
         List<String> expectedList = step.blade.parameters as List<String>;
 
         List<String> missingInPage = presentList.clone() as List<String>;
-        expectedList.each { expected -> missingInPage.remove(expected)}
-
         List<String> missingInTest = expectedList.clone() as List<String>;
-        presentList.each { present -> missingInTest.remove(present)}
+
+        expectedList.each { expected -> missingInTest.remove(expected)}
+        presentList.each { present -> missingInPage.remove(present)}
 
         if ((missingInPage.size() == 0) && (missingInTest.size() == 0)) {
             step.result = MadcowStepResult.PASS();
