@@ -27,10 +27,11 @@ class Value extends CurrentRowBladeRunner {
 
         step.blade.parameters.each { String column, String value ->
 
+            String cellXPath = xPather.getCellXPath(step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()], column) + XPATH_POSTFIX;
             try {
                 GrassBlade valueBlade = step.blade.clone() as GrassBlade;
                 valueBlade.mappingSelectorType = WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH;
-                valueBlade.mappingSelectorValue = xPather.getCellXPath(step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()], column) + XPATH_POSTFIX;
+                valueBlade.mappingSelectorValue = cellXPath;
                 valueBlade.operation = 'value';
                 valueBlade.parameters = value;
                 step.blade = valueBlade;
@@ -38,6 +39,7 @@ class Value extends CurrentRowBladeRunner {
                 valueBladeRunner.execute(stepRunner, step);
             } catch (e) {
                 step.result = MadcowStepResult.FAIL("Unexpected exception: $e");
+                step.result.detailedMessage = "Cell XPath: ${cellXPath}";
             }
         }
 

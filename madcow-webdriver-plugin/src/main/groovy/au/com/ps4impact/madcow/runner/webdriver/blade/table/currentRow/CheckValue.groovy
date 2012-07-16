@@ -31,7 +31,14 @@ class CheckValue extends CurrentRowBladeRunner {
             try {
                 element = stepRunner.driver.findElements(By.xpath(cellXPath + '//*')).first();
             } catch (ignored) {
-                element = stepRunner.driver.findElements(By.xpath(cellXPath + '/self::node()')).first();
+
+                try {
+                    element = stepRunner.driver.findElements(By.xpath(cellXPath + '/self::node()')).first();
+                } catch (ignored2) {
+                    step.result = MadcowStepResult.FAIL("Unable to find a matching row and column.");
+                    step.result.detailedMessage = "Cell XPath: $cellXPath";
+                    return;
+                }
             }
 
             String cellText = getElementText(element);

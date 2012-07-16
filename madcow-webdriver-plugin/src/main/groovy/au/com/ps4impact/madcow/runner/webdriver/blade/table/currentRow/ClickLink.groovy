@@ -25,10 +25,11 @@ class ClickLink extends CurrentRowBladeRunner {
 
         GrassBlade originalBlade = step.blade;
 
+        String cellXPath = xPather.getCellXPath(step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()], step.blade.parameters as String) + XPATH_POSTFIX;
         try {
             GrassBlade clickLinkBlade = step.blade.clone() as GrassBlade;
             clickLinkBlade.mappingSelectorType = WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH;
-            clickLinkBlade.mappingSelectorValue = xPather.getCellXPath(step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()], step.blade.parameters as String) + XPATH_POSTFIX;
+            clickLinkBlade.mappingSelectorValue = cellXPath;
             clickLinkBlade.operation = 'clickLink';
             clickLinkBlade.parameters = null;
             step.blade = clickLinkBlade;
@@ -36,6 +37,7 @@ class ClickLink extends CurrentRowBladeRunner {
             clickLinkBladeRunner.execute(stepRunner, step);
         } catch (e) {
             step.result = MadcowStepResult.FAIL("Unexpected exception: $e");
+            step.result.detailedMessage = "Cell XPath: ${cellXPath}";
         }
 
         step.blade = originalBlade;
