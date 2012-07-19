@@ -70,18 +70,26 @@ public class TableXPather {
 
     protected String getPrefixXPath() {
 
+        String selectorXPath = '';
         switch (WebDriverBladeRunner.getSelectorType(this.blade.mappingSelectorType)) {
 
             case WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH:
-                return this.blade.mappingSelectorValue;
+                selectorXPath = this.blade.mappingSelectorValue;
+                break;
 
             case WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID:
-                return "//table[@id='${this.blade.mappingSelectorValue}']"
+                selectorXPath = "//table[@id='${this.blade.mappingSelectorValue}']"
+                break;
 
             case WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME:
-                return "//table[@name='${this.blade.mappingSelectorValue}']"
+                selectorXPath = "//table[@name='${this.blade.mappingSelectorValue}']"
+                break;
         }
 
-        return null;
+        if (selectorXPath == '')
+            return null;
+
+        // support for fieldset prior to tbody/thead tags
+        return "($selectorXPath|$selectorXPath/fieldset)";
     }
 }
