@@ -17,6 +17,7 @@ import au.com.ps4impact.madcow.execution.ParallelTestCaseRunner
 import au.com.ps4impact.madcow.report.JUnitMadcowReport
 import au.com.ps4impact.madcow.report.MadcowExecutionReport
 import au.com.ps4impact.madcow.report.IMadcowReport
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Madcow Test Coordinator class.
@@ -51,31 +52,32 @@ class MadcowTestRunner {
         prepareResultsDirectory();
 
         MadcowTestSuite rootTestSuite = prepareTestSuite(testNames, madcowConfig);
+        int numberTestsToRun = rootTestSuite.size();
 
-        LOG.info("Found ${rootTestSuite.size()} test cases to run");
+        LOG.info("Found ${numberTestsToRun} test cases to run");
 
-        int numThreads = 10;
+        int numThreads = 1;
         ExecutorService pool = Executors.newFixedThreadPool(numThreads);
         Strategy<Unit> strategy = Strategy.executorStrategy(pool);
-        def numberOfTestsRan = 0
+        AtomicInteger numberOfTestsRan = new AtomicInteger(0);
         def exceptions = [];
 
+        def allTestCases = rootTestSuite.getTestCasesRecusively();
+
         def callback = Actor.queueActor(strategy, {Option<Exception> result ->
-            numberOfTestsRan++;
+            numberOfTestsRan.andIncrement;
             result.foreach({Exception e -> exceptions.add(e)} as Effect)
-            if (numberOfTestsRan >= rootTestSuite.size()) {
+            if (numberOfTestsRan.get() >= numberTestsToRun) {
                 pool.shutdown()
             }
         } as Effect);
-
-        def allTestCases = rootTestSuite.getTestCasesRecusively();
 
         rootTestSuite.stopWatch.start();
         allTestCases.each { MadcowTestCase testCase ->
             new ParallelTestCaseRunner(strategy, callback).act(fj.P.p(testCase, reporters));
         }
 
-        while (numberOfTestsRan < rootTestSuite.size()) {
+        while (numberOfTestsRan.get() < numberTestsToRun) {
             Thread.sleep(500);
         }
 
