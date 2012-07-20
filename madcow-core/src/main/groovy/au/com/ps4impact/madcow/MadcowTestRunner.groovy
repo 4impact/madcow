@@ -56,7 +56,7 @@ class MadcowTestRunner {
 
         LOG.info("Found ${numberTestsToRun} test cases to run");
 
-        int numThreads = 1;
+        int numThreads = 10;
         ExecutorService pool = Executors.newFixedThreadPool(numThreads);
         Strategy<Unit> strategy = Strategy.executorStrategy(pool);
         AtomicInteger numberOfTestsRan = new AtomicInteger(0);
