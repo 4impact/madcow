@@ -13,12 +13,12 @@
     <environments>
         <environment name="DEV">
             <invokeUrl>
-                <ADDRESSBOOK>http://test-site.projectmadcow.com:8080/madcow-test-site-2</ADDRESSBOOK>
+                <ADDRESSBOOK>http://madcow-test.4impact.net.au:8080/madcow-test-site-2</ADDRESSBOOK>
             </invokeUrl>
         </environment>
         <environment name="TEST">
             <invokeUrl>
-                <ADDRESSBOOK>http://test-site.projectmadcow.com:8080/madcow-test-site-2</ADDRESSBOOK>
+                <ADDRESSBOOK>http://madcow-test.4impact.net.au:8080/madcow-test-site-2</ADDRESSBOOK>
             </invokeUrl>
         </environment>
     </environments>
