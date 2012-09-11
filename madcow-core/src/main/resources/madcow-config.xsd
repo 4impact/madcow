@@ -54,6 +54,8 @@
                                         <xs:any minOccurs="0" processContents="skip"/>
                                     </xs:sequence>
                                     <xs:attribute name="name" type="xs:string" />
+                                    <xs:attribute name="username" type="xs:string" />
+                                    <xs:attribute name="password" type="xs:string" />
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>

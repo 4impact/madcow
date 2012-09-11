@@ -27,6 +27,8 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import org.apache.commons.lang3.StringUtils
+import au.com.ps4impact.madcow.config.MadcowConfig
+import com.gargoylesoftware.htmlunit.DefaultCredentialsProvider
 
 /**
  * InvokeUrl.
@@ -38,13 +40,17 @@ class InvokeUrl extends WebDriverBladeRunner {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
         String urlToInvoke = step.blade.parameters as String;
-        
         NodeList replacementUrls = step.env.invokeUrl as NodeList;
         if (replacementUrls != null && !replacementUrls.empty) {
             replacementUrls.first().children()?.each { child ->
                 Node url = child as Node;
                 urlToInvoke = StringUtils.replace(urlToInvoke, url.name().toString(), url.text());
             }
+        }
+
+        if ((MadcowConfig.SHARED_CONFIG?.environment?.attribute("username") ?: '') != '') {
+            urlToInvoke = StringUtils.replaceOnce(urlToInvoke, '://',
+                    "://${MadcowConfig.SHARED_CONFIG.environment.attribute("username") as String}:${MadcowConfig.SHARED_CONFIG.environment.attribute("password") as String}@");
         }
 
         step.testCase.logInfo("Opening Page: $urlToInvoke")

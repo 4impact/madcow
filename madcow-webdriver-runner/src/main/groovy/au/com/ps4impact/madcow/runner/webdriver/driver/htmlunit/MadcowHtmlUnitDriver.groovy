@@ -27,6 +27,8 @@ import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.openqa.selenium.WebElement
 import com.gargoylesoftware.htmlunit.html.HtmlElement
+import com.gargoylesoftware.htmlunit.DefaultCredentialsProvider
+import au.com.ps4impact.madcow.config.MadcowConfig
 
 /**
  * Madcow specific HTML Unit Driver.
@@ -44,6 +46,14 @@ class MadcowHtmlUnitDriver extends HtmlUnitDriver {
         super.modifyWebClient(client);
         client.setAjaxController(new NicelyResynchronizingAjaxController());
         client.setThrowExceptionOnScriptError(false);
+
+        if ((MadcowConfig.SHARED_CONFIG?.environment?.attribute("username") ?: '') != '') {
+            DefaultCredentialsProvider provider = new DefaultCredentialsProvider();
+            provider.addCredentials(MadcowConfig.SHARED_CONFIG.environment.attribute("username") as String,
+                                    MadcowConfig.SHARED_CONFIG.environment.attribute("password") as String);
+            client.setCredentialsProvider(provider);
+        }
+
         return client;
     }
 

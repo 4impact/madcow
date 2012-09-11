@@ -62,12 +62,12 @@ class MadcowCLI {
         if (options.help || args.size() == 0)
             return;
 
-        MadcowConfig config = new MadcowConfig(options.env ?: null);
+        MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null);
 
         if (options.test)
-            MadcowTestRunner.executeTests(options.tests as ArrayList<String>, config);
+            MadcowTestRunner.executeTests(options.tests as ArrayList<String>, MadcowConfig.SHARED_CONFIG);
         else
-            MadcowTestRunner.executeTests(config);
+            MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
     }
 
 }

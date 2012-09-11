@@ -42,6 +42,8 @@ class MadcowConfig {
     public String stepRunner;
     public HashMap<String, String> stepRunnerParameters;
 
+    public static MadcowConfig SHARED_CONFIG;
+
     MadcowConfig(String envName = null) {
 
         String xmlFileContents = ResourceFinder.locateFilesOnClasspath(this.getClass().getClassLoader(), MadcowProject.CONFIGURATION_FILE).first().text;
