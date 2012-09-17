@@ -130,12 +130,15 @@ class MadcowTestCase {
      * Recursive callback to execute an individual step.
      */
     protected void executeStep(MadcowStep step) {
-        
+
         // only execute blades that need executing
-        if (step.blade.executable())
+        if (step.blade.executable()) {
+            step.stopWatch.start();
             this.stepRunner.execute(step);
-        else
+            step.stopWatch.stop();
+        } else {
             step.result = MadcowStepResult.NO_OPERATION();
+        }
 
         this.lastExecutedStep = step;
         if (step.result.failed())

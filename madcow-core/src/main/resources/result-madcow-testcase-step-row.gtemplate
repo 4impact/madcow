@@ -30,6 +30,8 @@
 
     <td nowrap="nowrap">${statusIcon}${resultFileLink}${importTemplateExpand}</td>
 
+    <td>${step.getStepTimeInSeconds()}s</td>
+
     <td>${step.blade.line}</td>
 
     <td><% if (step.blade.isLineParsed()) { %>
@@ -55,6 +57,7 @@
                 <tr>
                     <th>#</th>
                     <th>Status</th>
+                    <th>Time</th>
                     <th>Grass</th>
                     <th>Details</th>
                 </tr>

@@ -22,7 +22,8 @@
 package au.com.ps4impact.madcow.step;
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.MadcowTestCase
-import java.text.DecimalFormat;
+import java.text.DecimalFormat
+import org.apache.commons.lang3.time.StopWatch;
 
 /**
  * A step of an individual madcow test case.
@@ -39,7 +40,10 @@ class MadcowStep {
     Node env;
     int sequenceNumber;
 
+    public StopWatch stopWatch;
+
     protected static DecimalFormat SEQUENCE_NUMBER_FORMAT = new DecimalFormat('0000000');
+    protected static final DecimalFormat TIME_SECONDS_FORMAT = new DecimalFormat("########.###");
 
     /**
      * Create a new Madcow Step.
@@ -51,6 +55,7 @@ class MadcowStep {
         this.parent     = parent;
         this.children   = new ArrayList<MadcowStep>();
         this.sequenceNumber = testCase.steps.size() + 1;
+        this.stopWatch  = new StopWatch();
 
         this.result = MadcowStepResult.NOT_YET_EXECUTED();
     }
@@ -68,6 +73,14 @@ class MadcowStep {
             this.parent.setResult(madcowStepResult);
 
         this.result = madcowStepResult;
+    }
+
+    public String getStepTimeInSeconds() {
+        try {
+            return TIME_SECONDS_FORMAT.format(stopWatch.time / 1000);
+        } catch (ignored) {
+            return TIME_SECONDS_FORMAT.format(0);
+        }
     }
 
     String toString() {

@@ -122,6 +122,7 @@
                         <tr>
                             <th>#</th>
                             <th>Status</th>
+                            <th>Time</th>
                             <th>Grass</th>
                             <th>Details</th>
                         </tr>
