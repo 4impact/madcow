@@ -5,14 +5,19 @@
 
     idxString = (idxString ?: '') != '' ? idxString + ".${idx + 1}" : "${idx + 1}";
 
+    String stepTime = '';
     String statusIcon = '';
     if (step.result.failed()) {
+        stepTime = step.getStepTimeInSeconds() + 's';
         statusIcon = """<a class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a>""";
     } else if (step.result.passed()) {
+        stepTime = step.getStepTimeInSeconds() + 's';
         statusIcon = """<a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a>""";
     } else if (step.result.noOperation()) {
+        stepTime = '-';
         statusIcon = """<a class="btn btn-success linkless"><i class="icon-cog icon-white"></i></a>""";
     } else if (step.result.notYetExecuted()) {
+        stepTime = '';
         statusIcon = """<a class="btn linkless"><i class="icon-minus "></i></a>""";
     }
 
@@ -30,7 +35,7 @@
 
     <td nowrap="nowrap">${statusIcon}${resultFileLink}${importTemplateExpand}</td>
 
-    <td>${step.getStepTimeInSeconds()}s</td>
+    <td>${stepTime}</td>
 
     <td>${step.blade.line}</td>
 
