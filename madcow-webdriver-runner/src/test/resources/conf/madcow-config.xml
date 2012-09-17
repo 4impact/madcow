@@ -26,6 +26,7 @@
             <type>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</type>
             <parameters>
                 <browser>htmlunit</browser>
+                <emulate>Firefox</emulate>
             </parameters>
         </runner>
         <env.default>DEV</env.default>

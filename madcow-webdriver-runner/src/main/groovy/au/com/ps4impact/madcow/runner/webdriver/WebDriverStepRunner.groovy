@@ -31,7 +31,9 @@ import au.com.ps4impact.madcow.grass.GrassParseException
 import org.openqa.selenium.firefox.FirefoxProfile
 import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
-import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchElementException
+import com.gargoylesoftware.htmlunit.BrowserVersion
+import au.com.ps4impact.madcow.config.MadcowConfig;
 
 /**
  * Implementation of the WebDriver step runner.
@@ -63,6 +65,26 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     driverParameters = new FirefoxProfile();
                     driverParameters.setEnableNativeEvents(true);
                     break;
+
+                case WebDriverType.HTMLUNIT:
+                    driverParameters = BrowserVersion.FIREFOX_3_6;
+                    if ((parameters.emulate ?: '') != '') {
+                        switch (StringUtils.upperCase(parameters.emulate)) {
+                            case 'IE6':
+                                driverParameters = BrowserVersion.INTERNET_EXPLORER_6;
+                                break;
+                            case 'IE7':
+                                driverParameters = BrowserVersion.INTERNET_EXPLORER_7;
+                                break;
+                            case 'IE8':
+                                driverParameters = BrowserVersion.INTERNET_EXPLORER_8;
+                                break;
+                            case 'FIREFOX':
+                            default:
+                                driverParameters = BrowserVersion.FIREFOX_3_6;
+                                break;
+                        }
+                    }
 
                 default:
                     break;

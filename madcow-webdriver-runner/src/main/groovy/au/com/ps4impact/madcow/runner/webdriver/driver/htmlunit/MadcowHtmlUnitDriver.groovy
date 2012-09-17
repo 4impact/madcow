@@ -37,8 +37,9 @@ import au.com.ps4impact.madcow.config.MadcowConfig
  */
 class MadcowHtmlUnitDriver extends HtmlUnitDriver {
 
-    public MadcowHtmlUnitDriver() {
-        super(BrowserVersion.FIREFOX_3_6); // TODO: parameterise the browser in madcow-config.xml
+    public MadcowHtmlUnitDriver(BrowserVersion browserVersion) {
+        super(browserVersion);
+
         this.setJavascriptEnabled(true);
     }
 
