@@ -59,6 +59,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
             if (driverType == null)
                 throw new ClassNotFoundException("Unknown browser '${parameters.browser}'")
 
+            testCase.logInfo("Starting WebDriver browser '${driverType.name}'")
+
             def driverParameters = null;
             switch (driverType) {
                 case WebDriverType.FIREFOX:
@@ -80,17 +82,19 @@ class WebDriverStepRunner extends MadcowStepRunner {
                                 driverParameters = BrowserVersion.INTERNET_EXPLORER_8;
                                 break;
                             case 'FIREFOX':
+                            case 'FF3':
+                            case 'FF3.6':
                             default:
                                 driverParameters = BrowserVersion.FIREFOX_3_6;
                                 break;
                         }
                     }
+                    testCase.logInfo("Emulating HtmlUnit browser '${driverParameters.getNickname()}'")
+                    break;
 
                 default:
                     break;
             }
-
-            testCase.logInfo("Starting WebDriver browser '${driverType.name}'")
 
             if (driverParameters != null)
                 driver = driverType.driverClass.newInstance(driverParameters) as WebDriver;

@@ -54,8 +54,6 @@ class ParallelTestCaseRunner {
 
             MadcowTestCase testCase = parameters._1();
 
-            MadcowLog.initialiseLogging(testCase);
-
             testCase.logInfo("Running ${testCase.name}");
 
             try {

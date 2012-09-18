@@ -71,6 +71,22 @@ class MadcowTestCase {
         this.runtimeStorage = new HashMap<String, Object>();
         this.reportDetails = new HashMap<String, String>();
 
+        MadcowLog.initialiseLogging(this);
+
+        this.createStepRunner();
+    }
+
+    /**
+     * Overloaded constructor to allow only grass script to be specified.
+     */
+    public MadcowTestCase(String name, ArrayList<String> grassScript) {
+        this(name, new MadcowConfig(), grassScript);
+    }
+
+    /**
+     * Create the step runner specified by the madcow config.
+     */
+    protected void createStepRunner() {
         try {
             this.stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this, this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
         } catch (ClassNotFoundException cnfe) {
@@ -80,13 +96,6 @@ class MadcowTestCase {
         } catch (e) {
             throw new Exception("Unexpected error creating the MadcowStepRunner '${this.madcowConfig.stepRunner}'\n\n$e");
         }
-    }
-
-    /**
-     * Overloaded constructor to allow only grass script to be specified.
-     */
-    public MadcowTestCase(String name, ArrayList<String> grassScript) {
-        this(name, new MadcowConfig(), grassScript);
     }
 
     /**
