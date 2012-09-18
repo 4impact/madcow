@@ -59,7 +59,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
             if (driverType == null)
                 throw new ClassNotFoundException("Unknown browser '${parameters.browser}'")
 
-            testCase.logInfo("Starting WebDriver browser '${driverType.name}'")
+            testCase.logInfo("Configuring WebDriver browser '${driverType.name}'")
 
             def driverParameters = null;
             switch (driverType) {
