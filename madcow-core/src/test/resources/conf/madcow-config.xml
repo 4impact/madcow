@@ -29,6 +29,7 @@
             </parameters>
         </runner>
         <env.default>DEV</env.default>
+        <threads>10</threads>
     </execution>
 
     <environments>

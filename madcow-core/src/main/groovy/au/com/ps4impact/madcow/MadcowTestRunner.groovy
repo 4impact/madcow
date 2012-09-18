@@ -77,8 +77,7 @@ class MadcowTestRunner {
 
         LOG.info("Found ${numberTestsToRun} test cases to run");
 
-        int numThreads = 10;
-        ExecutorService pool = Executors.newFixedThreadPool(numThreads);
+        ExecutorService pool = Executors.newFixedThreadPool(madcowConfig.threads);
         Strategy<Unit> strategy = Strategy.executorStrategy(pool);
         AtomicInteger numberOfTestsRan = new AtomicInteger(0);
         def exceptions = [];

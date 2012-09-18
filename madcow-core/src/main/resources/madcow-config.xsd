@@ -26,7 +26,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="execution" minOccurs="1" maxOccurs="1">
                     <xs:complexType>
-                        <xs:sequence>
+                        <xs:all>
                             <xs:element name="runner" nillable="false" minOccurs="1" maxOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
@@ -42,7 +42,14 @@
                                 </xs:complexType>
                             </xs:element>
                             <xs:element name="env.default" type="xs:string" minOccurs="0" maxOccurs="1" />
-                        </xs:sequence>
+                            <xs:element name="threads" minOccurs="0" maxOccurs="1">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:nonNegativeInteger">
+                                        <xs:minInclusive value="1"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                        </xs:all>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="environments">

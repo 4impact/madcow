@@ -39,6 +39,8 @@ class MadcowConfig {
     public Node execution;
     public Node environment;
 
+    public int threads = 10;
+
     public String stepRunner;
     public HashMap<String, String> stepRunnerParameters;
 
@@ -97,6 +99,16 @@ class MadcowConfig {
         def defaultEnvironment = this.execution."env.default".text();
         if (defaultEnvironment != null && envName == null) {
             envName = defaultEnvironment;
+        }
+
+        // get the default environment and use it if none is set
+        def threadsText = this.execution."threads".text() ?: '';
+        if (threadsText != '') {
+            try {
+                threads = threadsText as int;
+            } catch (ignored) {
+                throw new Exception('Invalid "threads" specified - only positive integers are allowed');
+            }
         }
         
         // setup the environment to use
