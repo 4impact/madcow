@@ -90,6 +90,21 @@ class GrassParserTest extends GroovyTestCase {
         parser.setDataParameter("some.default", "param");
         assertEquals("param", parser.getDataParameter("some"));
         assertEquals("param", parser.getDataParameter("some.default"));
+
+        // now test setting the default value via the parser
+        MadcowTestCase testCase = new MadcowTestCase('testGrassParsingScript', MockMadcowConfig.getMadcowConfig());
+        ArrayList<String> grassScript = new ArrayList<String>();
+        String grassScriptString = """
+            @expectedValue.default = Australia
+
+            # verify the expected country
+            addressbook_search_country.verifyText = @expectedValue
+        """;
+        grassScriptString.eachLine { line -> grassScript.add(line) }
+        parser = new GrassParser(testCase);
+        parser.processScriptForTestCase(grassScript);
+        assertNotNull(parser);
+        assertEquals("Verify number of steps, ignoring comments and blank lines", 2, testCase.steps.size());
     }
 
     public void testGrassParsingScript() {
