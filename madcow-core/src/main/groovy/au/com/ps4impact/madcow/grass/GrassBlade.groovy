@@ -104,7 +104,7 @@ class GrassBlade {
      * This isn't just for Statement blades, as even equations have a statement!
      */
     protected void parseStatement(GrassParser parser, String statement) {
-        if (statement.contains('.')) {
+        if (statement.contains('.') && !statement.startsWith(DATA_PARAMETER_KEY)) {
             def operations = statement.split('\\.', 2);
             this.operation = operations[1].trim();
             this.mapping = operations[0].trim();
