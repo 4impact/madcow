@@ -64,7 +64,7 @@ class GrassBlade {
     String  mappingSelectorType;
     String  mappingSelectorValue;
 
-    protected static final String DATA_PARAMETER_KEY = '@';
+    public static final String DATA_PARAMETER_KEY = '@';
 
     protected static final String DATA_PARAMETER_INLINE_REGEX = '@\\{([^}]+)\\}';
 
@@ -155,6 +155,11 @@ class GrassBlade {
         if (this.operation.startsWith(DATA_PARAMETER_KEY)) {
             isSettingDataParameter = true;
             parser.setDataParameter(this.operation, parametersString);
+        }
+
+        // If the param is to be stored at runtime, then set a placeholder for runtime processing
+        if (this.operation.equals('store')){
+            parser.setDataParameter(DATA_PARAMETER_KEY + parametersString, "${DATA_PARAMETER_KEY}{${parametersString}}")
         }
 
         this.parameters = ParseUtils.evalMe(parametersString);

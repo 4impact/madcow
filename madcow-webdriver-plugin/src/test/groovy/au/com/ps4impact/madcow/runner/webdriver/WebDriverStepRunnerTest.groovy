@@ -47,4 +47,30 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
         MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest-testRunIt', grassScript);
         testCase.execute();
     }
+
+    public void testRunInlineScriptUsingStoredParams() {
+        String grassScriptString = """
+            invokeUrl = ADDRESSBOOK
+            @expectedValue = Search Address
+
+            addressLines.value = STORETHIS
+            addressLines.store = storedValue
+
+            addressLines.checkValue = @storedValue
+
+            addressLines.value = Why would you want to STORETHIS
+            verifyText = "Why would you want to @{storedValue}"
+
+            # verify the text exists on the page
+            verifyText = @expectedValue
+
+            testsite_menu_createAddress.clickLink
+            verifyText = Check For Duplicates
+        """;
+        ArrayList<String> grassScript = new ArrayList<String>();
+        grassScriptString.eachLine { line -> grassScript.add(line) }
+
+        MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest-testRunIt', grassScript);
+        testCase.execute();
+    }
 }

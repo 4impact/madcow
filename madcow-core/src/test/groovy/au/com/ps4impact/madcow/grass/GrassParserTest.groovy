@@ -92,7 +92,7 @@ class GrassParserTest extends GroovyTestCase {
         assertEquals("param", parser.getDataParameter("some.default"));
 
         // now test setting the default value via the parser
-        MadcowTestCase testCase = new MadcowTestCase('testGrassParsingScript', MockMadcowConfig.getMadcowConfig());
+        MadcowTestCase testCase = new MadcowTestCase('testSetAndGetDefaultDataParameter', MockMadcowConfig.getMadcowConfig());
         ArrayList<String> grassScript = new ArrayList<String>();
         String grassScriptString = """
             @expectedValue.default = Australia
@@ -102,6 +102,22 @@ class GrassParserTest extends GroovyTestCase {
         """;
         grassScriptString.eachLine { line -> grassScript.add(line) }
         parser = new GrassParser(testCase);
+        parser.processScriptForTestCase(grassScript);
+        assertNotNull(parser);
+        assertEquals("Verify number of steps, ignoring comments and blank lines", 2, testCase.steps.size());
+    }
+
+    public void testParseStoredParameter() {
+
+        MadcowTestCase testCase = new MadcowTestCase('testSetAndGetStoredParameter', MockMadcowConfig.getMadcowConfig());
+        ArrayList<String> grassScript = new ArrayList<String>();
+        String grassScriptString = """
+            # store expected country
+            addressbook_search_country.store = storedCountry
+            addressbook_search_country.verifyText = @storedCountry
+        """;
+        grassScriptString.eachLine { line -> grassScript.add(line) }
+        GrassParser parser = new GrassParser(testCase);
         parser.processScriptForTestCase(grassScript);
         assertNotNull(parser);
         assertEquals("Verify number of steps, ignoring comments and blank lines", 2, testCase.steps.size());
