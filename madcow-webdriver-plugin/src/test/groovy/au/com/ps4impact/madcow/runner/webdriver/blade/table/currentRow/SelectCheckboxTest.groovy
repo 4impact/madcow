@@ -23,20 +23,20 @@ package au.com.ps4impact.madcow.runner.webdriver.blade.table.currentRow
 
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.config.MadcowConfig
+import au.com.ps4impact.madcow.util.ResourceFinder
+import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
-import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
 
 /**
- * Test for the table ClickLink blade runner.
- *
- * @author Gavin Bunney
+ * User: andy.souyave
+ * Date: 24/09/12
+ * Time: 10:44 AM
  */
-class ClickLinkTest extends GroovyTestCase {
+class SelectCheckboxTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
-    ClickLink clickLink = new ClickLink();
+    MadcowTestCase testCase = new MadcowTestCase('SelectCheckboxTest', new MadcowConfig(), []);
+    SelectCheckbox selectCheckbox = new SelectCheckbox();
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
@@ -53,32 +53,40 @@ class ClickLinkTest extends GroovyTestCase {
         return step;
     }
 
-    void testClickTableLinkByName() {
-        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'A link\']', testCase.grassParser);
+    void testClickTableCheckboxById() {
+        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'A checkbox\']', testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.clickLink = A link", testCase.grassParser);
+        blade = new GrassBlade("theTable.table.currentRow.selectCheckbox = aCheckboxId", testCase.grassParser);
         verifyTableValue(blade, true, false);
     }
 
-    void testClickTableLinkByColumn() {
-        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'A link\']', testCase.grassParser);
+    void testClickTableCheckboxByName() {
+        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'A checkbox\']', testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.clickLink = column1", testCase.grassParser);
+        blade = new GrassBlade("theTable.table.currentRow.selectCheckbox = aCheckboxName", testCase.grassParser);
         verifyTableValue(blade, true, false);
     }
 
-    void testClickTableLinkNeedToSelectRowFirst() {
-        GrassBlade blade = new GrassBlade("theTable.table.currentRow.clickLink = ['Column Number 1' : 'Tent']", testCase.grassParser);
+    void testClickTableCheckboxByColumn() {
+        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'A checkbox\']', testCase.grassParser);
+        executeBlade(blade, true);
+
+        blade = new GrassBlade("theTable.table.currentRow.selectCheckbox = column2", testCase.grassParser);
+        verifyTableValue(blade, true, false);
+    }
+
+    void testClickTableCheckboxNeedToSelectRowFirst() {
+        GrassBlade blade = new GrassBlade("theTable.table.currentRow.selectCheckbox = ['Column Number 2' : 'Tent']", testCase.grassParser);
         MadcowStep step = verifyTableValue(blade, false);
         assertEquals('No row has been selected - call selectRow first', step.result.message);
     }
 
     void testStatementNotSupported() {
         try {
-            GrassBlade blade = new GrassBlade('theTable.table.currentRow.clickLink', testCase.grassParser);
-            assertFalse(clickLink.isValidBladeToExecute(blade));
+            GrassBlade blade = new GrassBlade('theTable.table.currentRow.selectCheckbox', testCase.grassParser);
+            assertFalse(selectCheckbox.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
             assertEquals('Unsupported grass format. Only grass blades of type \'[EQUATION]\' are supported.', e.message);

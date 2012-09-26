@@ -109,7 +109,7 @@ class GrassParserTest extends GroovyTestCase {
 
     public void testParseStoredParameter() {
 
-        MadcowTestCase testCase = new MadcowTestCase('testSetAndGetStoredParameter', MockMadcowConfig.getMadcowConfig());
+        MadcowTestCase testCase = new MadcowTestCase('testParseStoredParameter', MockMadcowConfig.getMadcowConfig());
         ArrayList<String> grassScript = new ArrayList<String>();
         String grassScriptString = """
             # store expected country

@@ -45,6 +45,9 @@ class Column {
         else if (columnHeader.toString().toLowerCase() ==~ /column\d*/)
             return columnHeader.toString().substring(6)
         else
-            return "count(${tableXPath}/thead/tr/th[normalize-space(.//text()) = '${columnHeader}' or normalize-space(.//@value) = '${columnHeader}']/preceding-sibling::*)+1"
+            return "count((" +
+                        "${tableXPath}/thead/tr/th[normalize-space(.//text()) = '${columnHeader}' or normalize-space(.//@value) = '${columnHeader}'] |" +
+                        "${tableXPath}/tbody/tr/td[normalize-space(.//text()) = '${columnHeader}' or normalize-space(.//@id) = '${columnHeader}' or normalize-space(.//@name) = '${columnHeader}']" +
+                        ")/preceding-sibling::*)+1"
     }
 }
