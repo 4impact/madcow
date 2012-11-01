@@ -1,6 +1,6 @@
 # This is the default format.
 # For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
-permalink: /:title
+permalink: /:categories/:title.html
 auto: true
 server: true
 
