@@ -1,0 +1,8 @@
+# This is the default format.
+# For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
+permalink: /:title
+auto: true
+server: true
+
+pygments: true
+exclude: ["README.md"]
