@@ -8,7 +8,7 @@ description: A quick start guide to getting up and running with Madcow
 
 ## Requirements
 
-* Java v1.5+ - [[http://java.com]]
+* Java v1.6+
 
 ## Installation
 
