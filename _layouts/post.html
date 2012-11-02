@@ -1,0 +1,19 @@
+---
+layout: default
+---
+<ul class="breadcrumb">
+    {% assign categoryUrl = '/' %}
+    {% for category in page.categories %}
+
+        {% if categoryUrl == '/' %}
+            {% capture categoryUrl %}{{ categoryUrl }}{{ category }}/{% endcapture %}
+            <li>{{ category | capitalize }} <span class="divider">/</span></li>
+        {% else %}
+            {% capture categoryUrl %}{{ categoryUrl }}{{ category }}/{% endcapture %}
+            <li><a href="{{ categoryUrl }}">{{ category | capitalize }}</a> <span class="divider">/</span></li>
+        {% endif %}
+    {% endfor %}
+    <li class="active">{{ page.title }}</li>
+</ul>
+
+{{ content }}

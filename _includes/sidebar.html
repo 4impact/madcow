@@ -1,0 +1,8 @@
+<div class="span3 bs-docs-sidebar">
+    <!--<ul class="nav nav-tabs nav-stacked">-->
+    <ul class="nav nav-list bs-docs-sidenav affix">
+        {% for post in site.categories[category] %}
+        <li {% if page.title == post.title %}class="active"{% endif %}><a href="{{ post.url }}">{{ post.title }} <i class="icon-chevron-right"></i></a></li>
+        {% endfor %}
+    </ul>
+</div>
