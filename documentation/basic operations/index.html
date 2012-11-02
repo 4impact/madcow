@@ -11,10 +11,57 @@ categories: documentation
     {% include sidebar.html %}
 
     <div class="span9">
+
         <h2>Madcow Operations</h2>
-        <p>
-            Operations are what a user must specify in order to make Madcow interact with the site under test.
-            A testcase is essentially made up of a sequential list of operations (with a scattering of comments and other things).
-        </p>
+
+        <p>Operations are what a user must specify in order to make Madcow interact with the site under test.
+            A testcase (or <code>.GRASS</code> file) is essentially made up of a sequential list of operations (with a scattering of comments and other things).
+            Each of these lines is referred to as a Blade.</p>
+
+        <h3>Standard Blade Operation Sytax</h3>
+
+        <p>Each blade (or line) in a <code>.GRASS</code> file is made up of at least two components. They are of the following format:</p>
+
+        <code>1. Optional HTML ID</code> <code>.</code> <code>2. MadCow Operation</code> <code>=</code> <code>3. Operation Parameters</code>
+        <br/><br/>
+        <ol>
+            <li>the <b>optional</b> HTML ID (or mappings file name) of the element to perform the operation on, followed by a fullstop</li>
+            <li>the Madcow 2.0 operation to perform on that element and. if necessary</li>
+            <li>an equals sign <code>=</code> with any parameters to provide to the Madcow operation.</li>
+        </ol>
+
+        <h3>Blade Operation with Parameter</h3>
+
+        <p>For example:</p>
+
+        <p>{% highlight bash %}commentTextBox.value = These values will be used by the madcow value operation{% endhighlight %}
+        would perform the [[Value]] operation, effectively setting the value attribute on the input field, with the HTML ID <code>commentTextBox</code>. It would use the parameter "These values will be used by the madcow value operation" as it's new value.</p>
+
+        <h3>Blade Operation with No parameters</h3>
+
+        <p>However for some Madcow operations, the equals sign <code>=</code> is not always needed as some operations do not require nor accept any parameters. For example:</p>
+
+        {% highlight bash %}submitCommentButton.clickLink{% endhighlight %}
+
+        <p>will simply perform the [[Click-Link]] operation and click on the button with HTML id <code>submitCommentButton</code>.</p>
+
+        <h3>Page Level Blade Operation</h3>
+
+        <p>Furthermore other Madcow 2.0 operations dont require a specific HTML element to operate on because they apply to the entire HTML page. For example:</p>
+
+        {% highlight bash %}verifyText = Save Comment{% endhighlight %}
+
+        <p>will simply perform the [[Verify-Text]] operation on the entire HTML page, effectively searching the current page for the text "Save Comment".</p>
+
+        <h3>More Complex Blade Operations</h3>
+
+        <p>Some operations will even support multiple parameters being provided to them. These are provided a map <br/>by using <code>[</code> square brackets <code>]</code> around the parameters. They would follow this type of format:</p>
+
+        {% highlight bash %}[Optional HTML Element Id].operation = [paramter1 : "value1", parameter2 : "value2"]{% endhighlight %}
+
+        <p>For example:</p>
+
+        {% highlight bash %}#Select the row where 'country' equals 'Australia' and 'state' equals 'Queensland'
+        searchResultsTable.table.selectRow = [country : 'Australia', state : 'Queensland']{% endhighlight %}
     </div>
 </div>
