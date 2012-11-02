@@ -96,11 +96,9 @@ You can define a default value for a parmeter like so: `{parameterName}.default=
 @addressLine.default = 55 Shemp Street
 @postCode.default = 4000
 @state.default = Queensland
-
 addressLineField.value = @addressLine
 postCodeField.value = @postCode
 stateField.selectField = @state
-
 searchButton.clickButton
 {% endhighlight %}
 
