@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Madcow Best Practices
+title: Best Practices
 description: The best way to do things to save yourself pain
 ---
 
