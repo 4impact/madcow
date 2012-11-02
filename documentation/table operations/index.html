@@ -1,0 +1,89 @@
+---
+layout: post
+title: Table Operations
+description: Commands for interacting with tables.
+categories: documentation
+---
+
+<div class="row" xmlns="http://www.w3.org/1999/html">
+
+    {% assign category = 'table operations'%}
+    {% include sidebar.html %}
+
+    <div class="span9">
+
+        <h2>Table Format</h2>
+
+        <p>Table Commands expect a standard HTML table structure. A table with a different structure will need
+        to be handled by a custom Madcow Operation plugin.</p>
+
+{% highlight html %}<table>
+    <thead>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+        </tr>
+    </tbody>
+</table>{% endhighlight %}
+
+        <h2>Before Using an Operation - Select a Row</h2>
+
+        <p>Before performing any <code>*.table.currentRow.*</code> operation on a table you must first use the <code>*.table.selectRow</code>
+        command to select the row, this then enables performing table commands on the selected row using the <code>*.table.currentRow.*</code> syntax.</p>
+
+        <h2>Table Select Row</h2>
+
+        <p>Operation to select a row for the HTML table, this allows subsequent table commands to reference this row using the currentRow syntax.</p>
+
+        <h3>Usage</h3>
+        {% highlight bash %}[MADCOW:htmlElementReference].table.selectRow = [columnName1 : 'columnValue1', columnName2 : 'columnValue2']{% endhighlight %}
+
+        <h3>Examples</h3>
+        {% highlight bash %}#Select the row where the 'country' column equals 'New Zealand'
+searchResultsTable.table.selectRow = [country : 'New Zealand']
+
+#Select the row where 'country' equals 'Australia' and 'state' equals 'Queensland'
+searchResultsTable.table.selectRow = [country : 'Australia', state : 'Queensland']{% endhighlight %}
+
+        <h2>Special Row Selection Syntax</h2>
+        <p>When selecting a row, there a some of special keywords that Madcow will recognise, and process differently. These can be used to select a particular row without having to know (or care about) the contents of any given cell.</p>
+
+        <h3>First</h3>
+        Select the first row in a table - <code>first</code>
+        {% highlight bash %}myTable.table.selectRow = first{% endhighlight %}
+
+        <h3>Last</h3>
+        Select the last row in a table - <code>last</code>
+{% highlight bash %}myTable.table.selectRow = last{% endhighlight %}
+
+        <h3>Row(number)</h3>
+        Select a row by its row number - <code>row{n}</code> - where {n} is the number of the row (1 being the first row from the top, 2 being the next, etc).
+{% highlight bash %}myTable.table.selectRow = row3{% endhighlight %}
+
+        <h2>Special Column Selection Syntax</h2>
+
+        <p>When operating on a column within a given table row, there are some special keywords that Madcow will recognise and process differently. These can be used to operate on a column without having to know (or care) about the title.</p>
+
+        <h3>First Column</h3>
+        <p>Select the first column for the current row in a table - <code>firstColumn</code></p>
+{% highlight bash %}myTable.table.currentRow.clickLink = 'firstColumn'
+myTable.table.currentRow.checkValue = ['firstColumn' : 'some value']
+myTable.table.currentRow.value = ['firstColumn' : 'some value']{% endhighlight %}
+
+        <h3>Last Column</h3>
+        <p>Selects the last column for the current row in a table - <code>lastColumn</code></p>
+{% highlight bash %}myTable.table.currentRow.clickLink = 'lastColumn'
+myTable.table.currentRow.checkValue = ['lastColumn' : 'some value']
+myTable.table.currentRow.value = ['lastColumn' : 'some value']{% endhighlight %}
+
+        <h3>Column(number)</h3>
+        <p>Selects a given column by its column number - <code>column{n}</code> where {n} is the number of the column (1 being the first column from the left, 2 being the next, etc).</p>
+        {% highlight bash %}myTable.table.currentRow.clickLink = 'column1'
+myTable.table.currentRow.checkValue = ['column3' : 'some value']
+myTable.table.currentRow.value = ['column5' : 'some value']{% endhighlight %}
+
+
+    </div>
+</div>
