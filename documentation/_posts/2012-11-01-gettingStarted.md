@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Quick Start
+title: Getting Started
 description: A quick start guide to getting up and running with Madcow
 ---
 
