@@ -107,5 +107,17 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="/assets/js/jquery.js"></script>
 <script src="/assets/js/bootstrap.min.js"></script>
+
+<script language="javascript">
+
+    function sortUL(selector) {
+        $(selector).children("li").sort(function(a, b) {
+            var upA = $(a).text().toUpperCase();
+            var upB = $(b).text().toUpperCase();
+            return (upA < upB) ? -1 : (upA > upB) ? 1 : 0;
+        }).appendTo(selector);
+    }
+    sortUL("#sidebar");
+</script>
 </body>
 </html>

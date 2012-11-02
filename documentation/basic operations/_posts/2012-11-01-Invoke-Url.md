@@ -10,8 +10,6 @@ category: basic operations
 invokeUrl = [URL_REFERENCE]
 {% endhighlight %}
 
-See the URL [Configuration](Configuration#urlConfiguration) Section for more details on configuring the URL Reference.
-
 
 ## Examples
 {% highlight bash %}
