@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2008-2011 4impact Technology Services, Brisbane, Australia
+  ~ Copyright 2012 4impact, Brisbane, Australia
   ~
   ~ Licensed to the Apache Software Foundation (ASF) under one
   ~ or more contributor license agreements.  See the NOTICE file
@@ -19,31 +19,111 @@
   ~ under the License.
   -->
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
 <head>
-<title>$title</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<link rel="stylesheet" href="resources/css/madcow.css" type="text/css" media="screen" charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>$title</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="../.assets/img/4impact.ico"/>
+    <link rel="icon" type="image/x-icon" href="../.assets/img/4impact.ico"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="layout" content="main"/>
+
+    <script type="text/javascript" src="../.assets/mappings-reference/lib/jxlib.js"></script>
+    <link rel="stylesheet" href="../.assets/mappings-reference/lib/themes/crispin/jxtheme.css" type="text/css" media="screen" charset="utf-8">
+    <script type="text/javascript" charset="utf-8">
+
+        window.addEvent('load', function() {
+            var tree = new Jx.Tree({parent: 'mappingsIndex'});
+
+            var items = {
+                'Mappings': [
+                    {'About':'index.html'},
+                    $menuItems
+                ]
+            };
+
+            var makeTreeItem = function(o, tree) {
+                for (var i in o) {
+                    var v = o[i];
+                    if (v instanceof Array) {
+                        var folder = new Jx.TreeFolder({label: i, open: true});
+                        for (var j=0; j<v.length; j++) {
+                            makeTreeItem(v[j], folder);
+                        }
+                        tree.append(folder);
+                    } else {
+                        var item = new Jx.TreeItem({
+                            label: i,
+                            onClick: function() {
+                                parent.location.href='../'+v;
+                                Cookie.write('MadcowMappings.CurrentPage', '../'+v);
+                            }
+                        });
+                        tree.append(item);
+                    }
+                }
+            };
+            makeTreeItem(items, tree);
+
+            var defaultPage = Cookie.read('MadcowMappings.CurrentPage');
+            if (defaultPage) {
+                parent.location.href=defaultPage;
+            }
+            if (Browser.Engine.trident4) {
+                new Asset.css('../.assets/mappings-reference/lib/themes/crispin/ie6.css', { rel: 'stylesheet' });
+            }
+            if (Browser.Engine.trident5) {
+                new Asset.css('../.assets/mappings-reference/lib/themes/crispin/ie7.css', { rel: 'stylesheet' });
+            }
+
+        });
+    </script>
+    <link rel="stylesheet" href="../.assets/mappings-reference/css/menu.css" type="text/css" media="screen" title="" charset="utf-8">
+
+    <link href="../.assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../.assets/madcow.css" rel="stylesheet"/>
+    <link href="../.assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+    <link href="../.assets/mappings-reference/css/mappings-reference.css" rel="stylesheet"/>
+
 </head>
 <body>
-<h1>$title</h1>
 
-<ul>
-    $tableOfContents
-</ul>
+    <div id="wrap">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3">
+                    <div id="mappingsIndex"></div>
+                </div>
+                <div class="span9">
 
-$body
+                    <div class="page-header">
+                        <h1>$title</h1>
+                    </div>
 
-<div id="footer">
-    <div id="reportDetails">
-        Generated on ${new Date()}
+                    <ul class="nav nav-tabs nav-stacked">
+                        $tableOfContents
+                    </ul>
+
+                    $body
+
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="ts4impactlogo" align="right">
-        <a href="http://www.4impact.com.au" target="_blank">
-            <img src="resources/images/4impact.jpg" alt="4impact" title="4impact" border="0"/>
-        </a>
+
+    <div id="footer">
+        <div class="container">
+            <p class="muted credit">&middot; Created using <a href="http://madcow.4impact.net.au" target="_blank">4impact Madcow</a> &middot; Generated on ${new Date()} &middot;</p>
+        </div>
     </div>
-</div>
 </body>
 </html>

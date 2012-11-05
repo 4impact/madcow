@@ -56,6 +56,11 @@ class MadcowCLITest extends GroovyTestCase {
         assertEquals('DEV', options.env);
     }
 
+    void testMappingsReference() {
+        def options = MadcowCLI.parseArgs(['-m'].toArray() as String[]);
+        assertNotNull(options.mappings);
+    }
+
     protected void checkHelpOutput(Closure functionCall) {
 
         // capture the system output stream so we can look at the help printed stuff
@@ -71,6 +76,7 @@ Options:
  -a,--all               Run all tests
  -e,--env <env-name>    Environment to load from the madcow-config.xml
  -h,--help              Show usage information
+ -m,--mappings          Generate the Mappings Reference files
  -t,--test <testname>   Comma seperated list of test names
 """;
 

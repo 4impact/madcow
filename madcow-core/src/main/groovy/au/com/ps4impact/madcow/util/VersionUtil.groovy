@@ -54,6 +54,6 @@ public class VersionUtil {
     }
 
     static String getVersionString() {
-        return "v${version} (b${buildNumber})";
+        return "v${version} (${buildNumber})";
     }
 }

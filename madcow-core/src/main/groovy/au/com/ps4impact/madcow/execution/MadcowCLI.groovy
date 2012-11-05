@@ -25,6 +25,7 @@ import groovyjarjarcommonscli.ParseException;
 import groovyjarjarcommonscli.Option
 import au.com.ps4impact.madcow.MadcowTestRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
+import au.com.ps4impact.madcow.mappings.MappingsReference
 
 /**
  * Run Madcow from the Command Line.
@@ -41,6 +42,7 @@ class MadcowCLI {
             e(longOpt : 'env',  args: 1, argName: 'env-name', 'Environment to load from the madcow-config.xml')
             t(longOpt : 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName : 'testname', 'Comma seperated list of test names')
             a(longOpt : 'all',  'Run all tests')
+            m(longOpt : 'mappings', 'Generate the Mappings Reference files')
         }
 
         def options = cli.parse(incomingArgs);
@@ -61,6 +63,11 @@ class MadcowCLI {
         def options = parseArgs(args);
         if (options.help || args.size() == 0)
             return;
+
+        if (options.mappings) {
+            new MappingsReference().generate();
+            return;
+        }
 
         MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null);
 

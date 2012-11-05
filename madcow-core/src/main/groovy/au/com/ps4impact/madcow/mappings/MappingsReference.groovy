@@ -21,7 +21,6 @@
 
 package au.com.ps4impact.madcow.mappings
 
-import au.com.ps4impact.madcow.MadcowTestCase
 import groovy.text.GStringTemplateEngine
 import org.springframework.core.io.Resource
 import org.apache.commons.lang3.StringUtils
@@ -44,7 +43,7 @@ class MappingsReference {
     protected File rootOutputDirectory = new File(MadcowProject.MAPPINGS_REFERENCE_DIRECTORY);
     protected File mappingsOutputDirectory = new File("${MadcowProject.MAPPINGS_REFERENCE_DIRECTORY}/mappings");
 
-    public void generate(MadcowTestCase stubTestCase) {
+    public void generate() {
 
         def resources = mappingsFileHelper.getAllMappingsFromClasspath();
         def mappingsMap = [:]
@@ -65,22 +64,18 @@ class MappingsReference {
         // generate the menu tree structure using the menu template
         def menuTemplateParams = [menuItems : generateMenuItems(menuMap) ]
         def templateEngine = new GStringTemplateEngine()
-        def menuHtml = templateEngine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference/menu.gtemplate').URL).make(menuTemplateParams);
-        new File("${rootOutputDirectory.canonicalPath}/menu.html").text = menuHtml.toString();
 
-        walkTheMappingsTableStyle(mappingsMap)
-
-        // process the index and about page templates
-        def indexHtml = templateEngine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference/index.gtemplate').URL).make();
+        // process the index page
+        def indexHtml = templateEngine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference/index.gtemplate').URL).make(menuTemplateParams);
         new File("${rootOutputDirectory.canonicalPath}/index.html").text = indexHtml.toString();
-        def aboutHtml = templateEngine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference/about.gtemplate').URL).make();
-        new File("${rootOutputDirectory.canonicalPath}/about.html").text = aboutHtml.toString();
+
+        walkTheMappingsTableStyle(menuTemplateParams, mappingsMap)
 
         // copy the assets if they are available
-        File assetsDir = new File('./.madcow/assets/mappings-reference');
+        File assetsDir = new File('./.madcow/assets');
         if (assetsDir.exists()) {
             LOG.info("Copying assets for Madcow Report...");
-            FileUtils.copyDirectory(assetsDir, new File("${rootOutputDirectory.canonicalPath}/resources"));
+            FileUtils.copyDirectory(assetsDir, new File("${rootOutputDirectory.canonicalPath}/.assets"));
         } else {
             LOG.warn("No assets found for Madcow Report...");
         }
@@ -177,7 +172,7 @@ class MappingsReference {
         }
     }
 
-    def walkTheMappingsTableStyle(def mappings, String filename = '', String tableOfContents = '', String body = '', def i = 1){
+    def walkTheMappingsTableStyle(def menuTemplateParams, def mappings, String filename = '', String tableOfContents = '', String body = '', def i = 1){
         boolean creatingNewFile = false
 
         mappings = mappings.sort()
@@ -192,12 +187,13 @@ class MappingsReference {
                 }
 
                 tableOfContents += "<li><a href=\"#${key}\">$readableKey</a></li>\n"
-                body += "<h2 id=\"${key}\">$readableKey</h2>\n"
-                body += "<p>$value</p>"
+
+                body += "<div class=\"row-fluid\"><h2 id=\"${key}\">$readableKey</h2>\n"
+                body += "<p class=\"lead\">$value</p></div>"
             } else {
                 i++
                 filename += filename != '' ? "_$key" : key
-                filename = walkTheMappingsTableStyle(value, filename, '', body, i)
+                filename = walkTheMappingsTableStyle(menuTemplateParams, value, filename, '', body, i)
             }
             i--
         }
@@ -208,8 +204,9 @@ class MappingsReference {
             def pageTitle = WordUtils.capitalize(filename.replaceAll('_', ' &#187; '))
 
             def templateParams = [title : pageTitle,
-                    tableOfContents : tableOfContents,
-                    body : body]
+                                  tableOfContents : tableOfContents,
+                                  body : body,
+                                  menuItems : menuTemplateParams.menuItems ]
             def templateEngine = new GStringTemplateEngine()
             def templateHtml = templateEngine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference/mapping.gtemplate').URL).make(templateParams);
             new File("${mappingsOutputDirectory.canonicalPath}/${filename}.html").text = templateHtml

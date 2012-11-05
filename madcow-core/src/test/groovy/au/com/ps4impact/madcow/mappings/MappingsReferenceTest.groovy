@@ -33,9 +33,7 @@ class MappingsReferenceTest extends GroovyTestCase {
 
     void testTestIt() {
         MadcowTestCase stubTestCase = new MadcowTestCase('MappingsReference', MockMadcowConfig.getMadcowConfig(), []);
-
         println(new MappingsFileHelper().initProcessProperties(stubTestCase));
-
-        new MappingsReference().generate(stubTestCase);
+        new MappingsReference().generate();
     }
 }
