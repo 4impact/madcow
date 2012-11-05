@@ -153,7 +153,7 @@
             <hr/>
             <footer class="footer">
                 <p class="pull-right"><a href="#">Back to top</a></p>
-                <p>Created using <a href="http://madcow.4impact.net.au">4impact Madcow</a> on ${new Date().format('dd-MM-yyyy HH:mm')}</p>
+                <p>Created using <a href="http://madcow.4impact.net.au">4impact Madcow</a> ${au.com.ps4impact.madcow.util.VersionUtil.getVersionString()} on ${new Date().format('dd-MM-yyyy HH:mm')}</p>
             </footer>
         </div>
     </div>

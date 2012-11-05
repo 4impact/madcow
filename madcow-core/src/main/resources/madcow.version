@@ -1,0 +1,3 @@
+madcow.version = ${project.version}
+madcow.build = ${bamboo.buildNumber}
+madcow.buildTimestamp = ${bamboo.buildTimeStamp}

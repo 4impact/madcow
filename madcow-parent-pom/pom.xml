@@ -65,6 +65,8 @@ Parent Maven POM for Madcow
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <ant.runtime.version>1.8.2</ant.runtime.version>
         <quick.build>false</quick.build>
+        <bamboo.buildNumber>999999</bamboo.buildNumber>
+        <bamboo.buildTimeStamp>2012-11-05T01:15:30.999+10:00</bamboo.buildTimeStamp>
     </properties>
 
     <build>
@@ -90,7 +92,7 @@ Parent Maven POM for Madcow
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>1.8.6</version>
+            <version>2.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -100,7 +102,7 @@ Parent Maven POM for Madcow
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
