@@ -91,5 +91,6 @@ Options:
     void testHelp() {
         checkHelpOutput({MadcowCLI.parseArgs(['-h'].toArray() as String[])});
         checkHelpOutput({MadcowCLI.main(['-h'] as String[])});
+        checkHelpOutput({MadcowCLI.main([] as String[])});
     }
 }

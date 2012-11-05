@@ -47,7 +47,7 @@ class MadcowCLI {
 
         def options = cli.parse(incomingArgs);
 
-        if (options.help || incomingArgs.size() == 0) {
+        if (options.help || incomingArgs.size() == 0 || (incomingArgs.first() == '')) {
             cli.usage();
         }
 
@@ -61,7 +61,7 @@ class MadcowCLI {
     {
         args = args ?: new String()[];
         def options = parseArgs(args);
-        if (options.help || args.size() == 0)
+        if (options.help || args.size() == 0 || (args.first() == ''))
             return;
 
         if (options.mappings) {
