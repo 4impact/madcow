@@ -38,12 +38,27 @@ class ShowOnReport extends WebDriverBladeRunner {
 
         String elementText = getElementText(findElement(stepRunner, step));
 
-        // TODO - allow formatting for things like links etc - parameter as Map?
-        step.testCase.reportDetails.put(step.blade.parameters as String, elementText);
+        if (Map.class.isInstance(step.blade.parameters)) {
+
+            Map paramMap = step.blade.parameters as Map;
+            if (((paramMap.name ?: '') == '') || ((paramMap.format ?: '') == '')) {
+                step.result = MadcowStepResult.FAIL("Both 'name' and 'format' are required parameters when specifying an advanced showOnReport operation");
+                return;
+            }
+
+            step.testCase.reportDetails.put(paramMap.name, paramMap.format.replaceAll('%s', elementText));
+        } else {
+            step.testCase.reportDetails.put(step.blade.parameters as String, elementText);
+        }
+
         step.result = MadcowStepResult.PASS();
     }
 
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
         return [GrassBlade.GrassBladeType.EQUATION];
+    }
+
+    protected List<Class> getSupportedParameterTypes() {
+        return [Map.class, String.class];
     }
 }

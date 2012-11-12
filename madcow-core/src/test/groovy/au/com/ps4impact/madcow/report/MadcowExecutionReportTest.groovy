@@ -58,7 +58,7 @@ class MadcowExecutionReportTest extends GroovyTestCase {
         testCase.reportDetails.put('Madcow Website Link', '<a href="http://madcow.4impact.net.au">Click Here</a>');
 
         madcowReport.createTestCaseReport(testCase);
-
+        println('output to: ' + testCase.getResultDirectory().path)
         def result = new File(testCase.getResultDirectory().path + "/index.html");
         String resultHtml = result.text;
 

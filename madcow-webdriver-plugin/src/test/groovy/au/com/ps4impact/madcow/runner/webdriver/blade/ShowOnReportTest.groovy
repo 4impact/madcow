@@ -82,6 +82,13 @@ class ShowOnReportTest extends GroovyTestCase {
         assertEquals('A link', testCase.reportDetails['The link name']);
     }
 
+
+    void testShowOnReportFormatted() {
+        GrassBlade blade = new GrassBlade('aLinkId.showOnReport = [ name: \'The link name\', format: \'<b>%s</b>\']', testCase.grassParser);
+        verifyShowOnReport(blade, true);
+        assertEquals('<b>A link</b>', testCase.reportDetails['The link name']);
+    }
+
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.showOnReport = Tennis', testCase.grassParser);
