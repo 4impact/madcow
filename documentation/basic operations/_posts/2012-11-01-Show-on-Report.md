@@ -12,19 +12,17 @@ category: basic operations
 
 ## Examples
 {% highlight bash %}
-country.showOnReport = "SelectedCountry"
+country.showOnReport = "Selected Country"
 {% endhighlight %}
 
 ## Advanced
 
 Show on Report also supports a format string to use when displaying the value on the report.
 
-When displayed, it will replace all occurances of the 'value' name with the text from the element on the page.
+When displayed, it will replace all occurances of the '%s' with the name parameter.
 
 {% highlight bash %}
-showOnReport = [xpath: "//*[@id='addressId']",
-                value: 'CreatedAddressNumber',
-                valueFormatString: '&lt;a href="http://test-site/address/show/CreatedAddressNumber"&gt;View CreatedAddressNumber</a>']
+country.showOnReport = [name: 'Selected Country', format: '<b>%s is a nice country</b>']
 {% endhighlight %}
 
 
