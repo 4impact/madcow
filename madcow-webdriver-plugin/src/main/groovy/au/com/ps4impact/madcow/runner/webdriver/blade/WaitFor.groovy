@@ -36,7 +36,6 @@ class WaitFor extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        // TODO - configurable timeout?
         final boolean found = (1..30).any {
 
             try {
