@@ -1,0 +1,18 @@
+---
+layout: postBasicOperation
+title: Verify Title
+description: This operation verifies whether the text enclosed by the HTML title tag matches the given text.
+category: basic operations
+---
+
+## Usage
+{% highlight bash %}
+verifyTitle = <text to verify>
+{% endhighlight %}
+
+## Examples
+{% highlight bash %}
+verifyText = My Page Title
+{% endhighlight %}
+
+
