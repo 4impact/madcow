@@ -10,9 +10,9 @@ category: basic operations
 verifyTitle = <text to verify>
 {% endhighlight %}
 
-## Examples
+## Example
 {% highlight bash %}
-verifyText = My Page Title
+verifyTitle = My Page Title
 {% endhighlight %}
 
 
