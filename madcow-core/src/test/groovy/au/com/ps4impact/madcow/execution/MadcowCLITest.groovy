@@ -78,6 +78,7 @@ Options:
  -h,--help              Show usage information
  -m,--mappings          Generate the Mappings Reference files
  -t,--test <testname>   Comma seperated list of test names
+ -v,--version           Show the current version of Madcow
 """;
 
         assertEquals(expectedHelpMessage, systemOutput);
