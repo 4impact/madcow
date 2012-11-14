@@ -13,7 +13,7 @@ verifyRegexText = "Regular expression to match on page"
 
 ## Examples
 {% highlight bash %}
-verifyRegexText = Consultant id [\\d]* Created.
+verifyRegexText = Consultant id [\d]* Created.
 someTextInput.verifyRegexText = .*Test (Street|Avenue).*
 {% endhighlight %}
 
