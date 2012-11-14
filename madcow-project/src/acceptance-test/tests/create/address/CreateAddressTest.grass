@@ -6,3 +6,6 @@ postCodeEntry.value = 4152
 testsite_create_carina.waitFor
 waitFor = CARINA
 testsite_create_carina.verifyText = CARINA
+
+testsite_create_checkForDuplicatesButton.hasClass = btn btn-info
+testsite_create_checkForDuplicatesButton.doesNotHaveClass = btn-danger btn-error

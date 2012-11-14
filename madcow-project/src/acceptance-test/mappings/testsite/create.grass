@@ -1,1 +1,2 @@
 carina.xpath=//label[@for='8381']
+checkForDuplicatesButton.name=checkForDuplicates

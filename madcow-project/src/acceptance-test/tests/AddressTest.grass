@@ -6,5 +6,6 @@ verifyText = @expectedValue
 
 testsite_search_searchButton.showOnReport = Search Button Text
 testsite_search_searchButton.showOnReport = ['name' : 'Search Formatting', format: 'This is bold - <b>%s</b>']
+testsite_search_searchButton.hasClass = btn-primary
 testsite_search_searchButton.clickLink
 verifyText = Address Search Results
