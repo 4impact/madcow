@@ -5,9 +5,11 @@ waitSeconds = 2
 # verify the text exists on the page
 @expectedValue = Search Address
 verifyText = @expectedValue
+verifyRegexText = S[\w]*[\s]Addre(ss|sx)
 
 waitSeconds = 2
 
+testsite_search_searchButton.verifyEnabled
 testsite_search_searchButton.clickLink
 
 verifyText = Address Search Results
