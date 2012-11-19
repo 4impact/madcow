@@ -153,7 +153,11 @@ class MadcowTestCase {
         if (step.result.failed())
             throw new RuntimeException("Step failed - ${step.result}");
 
-        step.children.each { child -> executeStep (child) }
+        if ((step.children != null) && (!step.children.empty)) {
+            step.stopWatch.start();
+            step.children.each { child -> executeStep (child) }
+            step.stopWatch.stop();
+        }
     }
 
     public File getResultDirectory() {
