@@ -35,7 +35,7 @@ categories: documentation
         <p>For example:</p>
 
         <p>{% highlight bash %}commentTextBox.value = These values will be used by the madcow value operation{% endhighlight %}
-        would perform the [[Value]] operation, effectively setting the value attribute on the input field, with the HTML ID <code>commentTextBox</code>. It would use the parameter "These values will be used by the madcow value operation" as it's new value.</p>
+        would perform the [Value]({% post_url 2012-11-01-Value %}) operation, effectively setting the value attribute on the input field, with the HTML ID <code>commentTextBox</code>. It would use the parameter "These values will be used by the madcow value operation" as it's new value.</p>
 
         <h3>Blade Operation with No parameters</h3>
 
@@ -43,15 +43,15 @@ categories: documentation
 
         {% highlight bash %}submitCommentButton.clickLink{% endhighlight %}
 
-        <p>will simply perform the [[Click-Link]] operation and click on the button with HTML id <code>submitCommentButton</code>.</p>
+        <p>will simply perform the [Click-Link]({% post_url 2012-11-01-Click-Link %}) operation and click on the button with HTML id <code>submitCommentButton</code>.</p>
 
         <h3>Page Level Blade Operation</h3>
 
-        <p>Furthermore other Madcow 2.0 operations dont require a specific HTML element to operate on because they apply to the entire HTML page. For example:</p>
+        <p>Furthermore other Madcow 2.0 operations don't require a specific HTML element to operate on because they apply to the entire HTML page. For example:</p>
 
         {% highlight bash %}verifyText = Save Comment{% endhighlight %}
 
-        <p>will simply perform the [[Verify-Text]] operation on the entire HTML page, effectively searching the current page for the text "Save Comment".</p>
+        <p>will simply perform the [Verify-Text]({% post_url 2012-11-01-Verify-Text %}) operation on the entire HTML page, effectively searching the current page for the text "Save Comment".</p>
 
         <h3>More Complex Blade Operations</h3>
 
@@ -61,7 +61,9 @@ categories: documentation
 
         <p>For example:</p>
 
-        {% highlight bash %}#Select the row where 'country' equals 'Australia' and 'state' equals 'Queensland'
-        searchResultsTable.table.selectRow = [country : 'Australia', state : 'Queensland']{% endhighlight %}
+        {% highlight bash %}
+        #Select the row where 'country' equals 'Australia' and 'state' equals 'Queensland'
+        searchResultsTable.table.selectRow = [country : 'Australia', state : 'Queensland']
+        {% endhighlight %}
     </div>
 </div>
