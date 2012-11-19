@@ -1,10 +1,12 @@
 invokeUrl = ADDRESSBOOK/address/create
 
 verifyText = Create Address
+testsite_create_carina.verifyDoesNotExist
 postCodeEntry.value = 4152
 
 testsite_create_carina.waitFor
 waitFor = CARINA
+testsite_create_carina.verifyExists
 testsite_create_carina.verifyText = CARINA
 
 testsite_create_checkForDuplicatesButton.hasClass = btn btn-info
