@@ -31,13 +31,16 @@
         </div>
 
         <div class="row">
-            <% if ((passedCount > 0) || (failedCount > 0)) { %>
+            <% if ((passedCount > 0) || (failedCount > 0) || (skippedCount > 0)) { %>
             <div class="progress" style="margin-bottom: 9px;">
                 <% if (passedCount > 0) { %>
-                <div class="bar bar-success" style="width: ${passedCount / (passedCount + failedCount) * 100}%">${passedCount} passed</div>
+                <div class="bar bar-success" style="width: ${passedCount / (passedCount + failedCount + skippedCount) * 100}%">${passedCount} passed</div>
+                <% } %>
+                <% if (skippedCount > 0) { %>
+                <div class="bar bar-warning" style="width: ${skippedCount / (passedCount + failedCount + skippedCount) * 100}%">${skippedCount} skipped</div>
                 <% } %>
                 <% if (failedCount > 0) { %>
-                <div class="bar bar-danger" style="width: ${failedCount / (passedCount + failedCount) * 100}%">${failedCount} failed</div>
+                <div class="bar bar-danger" style="width: ${failedCount / (passedCount + failedCount + skippedCount) * 100}%">${failedCount} failed</div>
                 <% } %>
             </div>
             <% } %>
@@ -45,7 +48,7 @@
 
         <div class="row well">
             <div class="span2 centralise">
-                <h3>Tests<br/>${passedCount + failedCount}</h3>
+                <h3>Tests<br/>${passedCount + failedCount + skippedCount}</h3>
             </div>
 
             <div class="span3 centralise">
@@ -89,10 +92,12 @@
                         }
                     %>
                     <tr>
-                        <% if (testCase.lastExecutedStep.result.failed()) { %>
-                        <td><a class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a></td>
+                        <% if (testCase.ignoreTestCase) { %>
+                        <td><a class="btn btn-warning linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Skipped Test"><i class="icon-minus icon-white"></i></a></td>
+                        <% }else if (testCase.lastExecutedStep.result.failed()) { %>
+                        <td><a class="btn btn-danger linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Failed Test"><i class="icon-remove icon-white"></i></a></td>
                         <% } else { %>
-                        <td><a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a></td>
+                        <td><a class="btn btn-success linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Successful Test"><i class="icon-ok icon-white"></i></a></td>
                         <% } %>
                         <td><a href="${testCase.name}/index.html">${testCase.name}</a></td>
                         <td class="centralise">${testCase.lastExecutedStep.result.parseError() ? '-' : testCase.steps.size()}</td>
@@ -114,5 +119,8 @@
 
     <script src="./.assets/jquery-1.8.2.min.js" type="text/javascript" ></script>
     <script src="./.assets/bootstrap/js/bootstrap.min.js" type="text/javascript" ></script>
+    <script type="text/javascript">
+        \$(".linkless").tooltip();
+    </script>
 </body>
 </html>

@@ -131,24 +131,28 @@ class WebDriverStepRunner extends MadcowStepRunner {
      */
     public void execute(MadcowStep step) {
         WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
-        try {
-            bladeRunner.execute(this, step);
+        if (!step.testCase.ignoreTestCase){
+            try {
+                bladeRunner.execute(this, step);
 
-            if (!driver.title?.equals(lastPageTitle)) {
-                lastPageTitle = driver.title;
-                if (lastPageTitle != '') {
-                    testCase.logInfo("Current Page: $lastPageTitle");
+                if (!driver.title?.equals(lastPageTitle)) {
+                    lastPageTitle = driver.title;
+                    if (lastPageTitle != '') {
+                        testCase.logInfo("Current Page: $lastPageTitle");
+                    }
                 }
-            }
 
-            if (!driver.pageSource?.equals(lastPageSource)) {
-                captureResults(step);
-            }
+                if (!driver.pageSource?.equals(lastPageSource)) {
+                    captureResults(step);
+                }
 
-        } catch (NoSuchElementException ignored) {
-            step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
-        } catch (e) {
-            step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
+            } catch (NoSuchElementException ignored) {
+                step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
+            } catch (e) {
+                step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
+            }
+        }else{
+            step.result = MadcowStepResult.NOT_YET_EXECUTED();
         }
     }
 

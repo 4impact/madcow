@@ -1,0 +1,13 @@
+# we want this test to not run anything!
+madcow.ignore
+
+invokeUrl = CREATETABLE
+
+# select row and set some values
+createTable.table.selectRow = row1
+createTable.table.currentRow.value = ['Address Line 1' : '320 Adelaide St']
+createTable.table.currentRow.value = ['Post Code' : '4000']
+
+# verify values are set correctly
+createTable.table.selectRow = ['Address Line 1' : '320 Adelaide St']
+createTable.table.currentRow.checkValue = ['Post Code' : '4000']

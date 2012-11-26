@@ -78,6 +78,12 @@ class GrassParser {
             if (line.startsWith('#') || StringUtils.isEmpty(line))
                 return;
 
+            // ignore test case
+            if (line.equalsIgnoreCase('madcow.ignore')){
+                testCase.ignoreTestCase = true;
+                return;
+            }
+
             MadcowStep step = new MadcowStep(testCase, new GrassBlade(line, this), parentStep);
 
             // verify the executable blade can actually be executed by the configured blade runner

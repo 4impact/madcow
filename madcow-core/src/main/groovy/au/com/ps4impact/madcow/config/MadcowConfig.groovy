@@ -46,9 +46,9 @@ class MadcowConfig {
 
     public static MadcowConfig SHARED_CONFIG;
 
-    MadcowConfig(String envName = null) {
+    MadcowConfig(String envName = null, String madcowConfigFile = MadcowProject.CONFIGURATION_FILE) {
 
-        String xmlFileContents = ResourceFinder.locateFilesOnClasspath(this.getClass().getClassLoader(), MadcowProject.CONFIGURATION_FILE).first().text;
+        String xmlFileContents = ResourceFinder.locateFilesOnClasspath(this.getClass().getClassLoader(), madcowConfigFile).first().text;
 
         validateConfigFormat(xmlFileContents);
         parseConfig(xmlFileContents, envName);

@@ -42,7 +42,7 @@ class MockMadcowStepRunner extends MadcowStepRunner {
     }
 
     void execute(MadcowStep step) {
-        step.result = alwaysPass ? MadcowStepResult.PASS('Mocked Pass') : MadcowStepResult.FAIL('Mocked Fail');
+        step.result = (step.testCase.ignoreTestCase)?MadcowStepResult.NOT_YET_EXECUTED():(alwaysPass ? MadcowStepResult.PASS('Mocked Pass') : MadcowStepResult.FAIL('Mocked Fail'));
     }
 
     boolean hasBladeRunner(GrassBlade blade) {

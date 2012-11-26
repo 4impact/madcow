@@ -55,6 +55,12 @@ class MadcowExecutionReport implements IMadcowReport {
 
         boolean isParseError = false;
         boolean isFailure = false;
+        boolean isSkipped = false;
+
+        if (testCase.ignoreTestCase){
+            isSkipped = true;
+        }
+
         testCase.steps.each { step ->
             if (step.result == null)
                 return;
@@ -70,6 +76,7 @@ class MadcowExecutionReport implements IMadcowReport {
                         'steps'             : testCase.steps,
                         'isParseError'      : isParseError,
                         'isFailure'         : isFailure,
+                        'isSkipped'         : isSkipped,
                         'totalSteps'        : testCase.steps.size(),
                         'totalTime'         : testCase.getTotalTimeInSeconds() + 's',
                         'lastExecutedStep'  : testCase.lastExecutedStep,
@@ -96,9 +103,13 @@ class MadcowExecutionReport implements IMadcowReport {
 
         int passedCount = 0;
         int failedCount = 0;
+        int skippedCount = 0;
         Long totalTime = 0L;
         allTestCases.each { testCase ->
-            if (testCase.lastExecutedStep.result.failed()) {
+
+            if (testCase.ignoreTestCase){
+                skippedCount++;
+            } else if (testCase.lastExecutedStep.result.failed()) {
                 failedCount++;
             } else {
                 passedCount++;
@@ -111,6 +122,7 @@ class MadcowExecutionReport implements IMadcowReport {
         def binding = [ 'testSuite'         : testSuite,
                         'passedCount'       : passedCount,
                         'failedCount'       : failedCount,
+                        'skippedCount'      : skippedCount,
                         'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime / 1000) + 's',
                         'totalTimeExec'     : TIME_SECONDS_FORMAT.format(totalTime > 0 ? testSuite.stopWatch.time / 1000 : 0) + 's',
                       ];
