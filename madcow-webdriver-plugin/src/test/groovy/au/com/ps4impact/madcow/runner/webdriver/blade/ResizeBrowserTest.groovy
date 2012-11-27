@@ -35,7 +35,7 @@ import org.junit.Ignore
  *
  * @author Tom Romano
  */
-//@Ignore("Ignored because this will require firefox installed on building machine...")
+@Ignore("Ignored because this will require firefox installed on building machine...")
 class ResizeBrowserTest extends GroovyTestCase {
 
     MadcowConfig config = new MadcowConfig('DEV','conf/madcow-config-firefox.xml')
