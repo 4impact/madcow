@@ -33,7 +33,9 @@ import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
 import org.openqa.selenium.NoSuchElementException
 import com.gargoylesoftware.htmlunit.BrowserVersion
-import au.com.ps4impact.madcow.config.MadcowConfig;
+import au.com.ps4impact.madcow.config.MadcowConfig
+import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.HttpCommandExecutor;
 
 /**
  * Implementation of the WebDriver step runner.
@@ -63,6 +65,49 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
             def driverParameters = null;
             switch (driverType) {
+                case WebDriverType.REMOTE:
+
+                    driverParameters = [:];
+                    if ((parameters.remoteServerUrl ?: '') != '') {
+                        //driverParameters.commandExecutor = new HttpCommandExecutor(new URL(parameters.remoteServerUrl));
+                        //driverParameters.executor = new HttpCommandExecutor(new URL(parameters.remoteServerUrl));
+                        driverParameters.url = parameters.remoteServerUrl;
+
+                        if ((parameters.emulate ?: '') != '') {
+                            switch (StringUtils.upperCase(parameters.emulate)) {
+                                case 'IE7':
+                                case 'IE8':
+                                case 'IE9':
+                                case 'IE':
+                                    driverParameters.desiredCapabilities = DesiredCapabilities.internetExplorer();
+                                    break;
+                                case 'OPERA':
+                                    driverParameters.desiredCapabilities = DesiredCapabilities.opera();
+                                    break;
+                                case 'CHROME':
+                                    driverParameters.desiredCapabilities = DesiredCapabilities.chrome();
+                                    break;
+                                case 'SAFARI':
+                                    driverParameters.desiredCapabilities = DesiredCapabilities.safari();
+                                    break;
+                                case 'FIREFOX':
+                                case 'FF3':
+                                case 'FF3.6':
+                                default:
+                                    driverParameters.desiredCapabilities = DesiredCapabilities.firefox();
+                                    break;
+                            }
+                        }
+                        //set javascript on
+                        driverParameters.desiredCapabilities.setJavascriptEnabled(true);
+                        driverParameters.requiredCapabilities = null;
+
+                        testCase.logInfo("Attempting to start '${driverType.name}' WebDriver with remoteServerUrl '${parameters.remoteServerUrl}'")
+                    }else{
+                        throw new Exception("Cannot start '${driverType.name}' WebDriver without remoteServerUrl config parameter");
+                    }
+                    break;
+
                 case WebDriverType.FIREFOX:
                     driverParameters = new FirefoxProfile();
                     driverParameters.setEnableNativeEvents(true);
@@ -96,11 +141,11 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
             }
 
-            if (driverParameters != null)
+            if (driverParameters != null){
                 driver = driverType.driverClass.newInstance(driverParameters) as WebDriver;
-            else
+            }else{
                 driver = driverType.driverClass.newInstance() as WebDriver;
-
+            }
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {

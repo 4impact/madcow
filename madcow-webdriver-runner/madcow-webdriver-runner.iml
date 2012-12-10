@@ -59,7 +59,7 @@
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: org.functionaljava:functionaljava:3.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.1" level="project" />
-    <orderEntry type="module" module-name="madcow-core" scope="TEST" />
+    <orderEntry type="module" module-name="madcow-core" scope="TEST" production-on-test="" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.cobertura:cobertura:1.9.4.1" level="project" />

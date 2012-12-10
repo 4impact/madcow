@@ -35,17 +35,16 @@ import org.junit.Ignore
  *
  * @author Tom Romano
  */
-@Ignore("Ignored because this will require firefox installed on building machine...")
 class ResizeBrowserTest extends GroovyTestCase {
 
-    MadcowConfig config = new MadcowConfig('DEV','conf/madcow-config-firefox.xml')
+    MadcowConfig config = new MadcowConfig('DEV','conf/madcow-config-remote-firefox.xml')
 
     MadcowTestCase testCase = new MadcowTestCase('ResizeBrowserTest', config, [])
     def resizeBrowser = new ResizeBrowser();
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
     protected verifyResizeBrowserExecution(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
+        (testCase.stepRunner as WebDriverStepRunner).driver.get("http://madcow-test.4impact.net.au:8080/madcow-test-site-2");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
@@ -54,12 +53,14 @@ class ResizeBrowserTest extends GroovyTestCase {
 
     void testResizeBrowserByHtmlId() {
         // defaults to html id
-        GrassBlade blade = new GrassBlade('aLinkId.resizeBrowser', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('addressLines.resizeBrowser', testCase.grassParser);
         verifyResizeBrowserExecution(blade, false);
+    }
 
+    void testResizeBrowserByHtmlIdMapping() {
         // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.resizeBrowser', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'addressLines']);
+        GrassBlade blade = new GrassBlade('aLinkId.resizeBrowser', testCase.grassParser);
         verifyResizeBrowserExecution(blade, false);
     }
 
@@ -138,7 +139,7 @@ class ResizeBrowserTest extends GroovyTestCase {
 
     void testMappingSelectorNotSupported() {
         GrassBlade blade = new GrassBlade('testsite_menu_createAddress.resizeBrowser = yeah yeah', testCase.grassParser);
-        (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
+        (testCase.stepRunner as WebDriverStepRunner).driver.get("http://madcow-test.4impact.net.au:8080/madcow-test-site-2");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertFalse(step.result.passed());
@@ -148,7 +149,7 @@ class ResizeBrowserTest extends GroovyTestCase {
 
     void testParametersNotSupported() {
         GrassBlade blade = new GrassBlade('resizeBrowser = yeah yeah', testCase.grassParser);
-        (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
+        (testCase.stepRunner as WebDriverStepRunner).driver.get("http://madcow-test.4impact.net.au:8080/madcow-test-site-2");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertFalse(step.result.passed());

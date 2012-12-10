@@ -30,6 +30,7 @@ public enum WebDriverType {
 
     HTMLUNIT('HtmlUnit', au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver),
     FIREFOX('Firefox', org.openqa.selenium.firefox.FirefoxDriver),
+    REMOTE('Remote', au.com.ps4impact.madcow.runner.webdriver.driver.remote.MadcowRemoteWebDriver)
 
     public String name;
     public Class driverClass;

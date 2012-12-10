@@ -25,10 +25,13 @@
         <runner>
             <type>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</type>
             <parameters>
-                <browser>firefox</browser>
+                <browser>remote</browser>
+                <emulate>firefox</emulate>
+                <remoteServerUrl>http://hearis-remote-webdriver.4impact.net.au:4444/wd/hub</remoteServerUrl>
             </parameters>
         </runner>
         <env.default>DEV</env.default>
+        <threads>3</threads>
     </execution>
 
     <environments>
