@@ -93,6 +93,10 @@ class ResizeBrowser extends WebDriverBladeRunner {
         }
     }
 
+    protected List<Class> getSupportedParameterTypes() {
+        return [Map.class, String.class, List.class];
+    }
+
     /**
      * Allow null selectors.
      */
