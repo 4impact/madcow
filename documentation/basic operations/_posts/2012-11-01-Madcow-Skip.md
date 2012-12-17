@@ -1,20 +1,24 @@
 ---
 layout: postBasicOperation
 title: Madcow Skip
-description: Tells Madcow to skip this step. Only valid in spreadsheet or csv files.
+description: Tells Madcow to skip this step.
 category: basic operations
 ---
 
-Used in subsequent tests in the same workbook to skip a step specified in the first test.
+If this is found as the first line of a madcow test, it will skip the execution of this test altogether.
+This is useful for when you want to check into version control part way through a writing a test that is not yet working.
 
 ## Usage
 {% highlight bash %}
-madcowSkip
+madcow.ignore
 {% endhighlight %}
 
 ## Examples
 {% highlight bash %}
-madcowSkip
+# this test is disabled because i'm still working on it
+madcow.ignore
+
+invokeUrl = http://www.google.com
 {% endhighlight %}
 
 
