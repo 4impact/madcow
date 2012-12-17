@@ -51,8 +51,26 @@ Parameters in the XML are passed to the defined runner `type`. You can have as m
 Specifies the internet browser that Madcow 2.0 will emulate by default. Currently Madcow 2.0 only supports these values:
 * Firefox
 * HtmlUnit
+* Remote
 
 > More coming soon
+
+###### Remote Browser.
+
+When the remote browser is selected using
+{% highlight xml %}
+<browser>Remote</browser>
+{% endhighlight %}
+
+Madcow will attempt to look for a remote webdriver grid server.
+You can need to define this server URL with the parameter
+{% highlight xml %}
+<remoteServerUrl>http://localhost:4444/wd/hub</remoteServerUrl>
+{% endhighlight %}
+
+You can then use the emulate parameter to set the browser that you require from the remote webdriver server.
+You can spin up a remote webdriver server instance using the instructions and jar file found <a href="http://code.google.com/p/selenium/wiki/RemoteWebDriverServer" target="_blank">here</a>
+
 
 ##### Emulate
 When using the parameter `<browser>HtmlUnit</browser>` you can also specify an `<emulate>` tag. This will determine the browser emulation mode that HtmlUnit will use to run under. The following are valid values for this configurable:
