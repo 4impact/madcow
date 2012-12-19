@@ -59,9 +59,9 @@ class HasStyleTest extends GroovyTestCase {
     }
 
     void testHasStyleByHtmlIdInherited() {
-        // defaults to html id
+        //test doesnt report font size as this is a css inherited style value
         GrassBlade blade = new GrassBlade('aLinkId.hasStyle = font-size: 20px;', testCase.grassParser);
-        verifyHasStyleContents(blade, true);
+        verifyHasStyleContents(blade, false);
     }
 
     void testHasStylePartiallyIncorrect() {
