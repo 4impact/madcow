@@ -46,7 +46,6 @@ class HasStyleTest extends GroovyTestCase {
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
     }
-//style="display: block;border-bottom-width: 2px;"
 
     void testHasStyleByHtmlId() {
         // defaults to html id
@@ -56,6 +55,12 @@ class HasStyleTest extends GroovyTestCase {
         // explicit htmlid
         MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
         blade = new GrassBlade('aLinkId.hasStyle = border-bottom-width: 2px', testCase.grassParser);
+        verifyHasStyleContents(blade, true);
+    }
+
+    void testHasStyleByHtmlIdInherited() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aLinkId.hasStyle = font-size: 20px;', testCase.grassParser);
         verifyHasStyleContents(blade, true);
     }
 
