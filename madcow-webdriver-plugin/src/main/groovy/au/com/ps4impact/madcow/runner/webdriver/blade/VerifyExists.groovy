@@ -42,7 +42,13 @@ class VerifyExists extends WebDriverBladeRunner {
             WebElement element = findElement(stepRunner, step)
 
             if (element!=null){
-                step.result = MadcowStepResult.PASS()
+
+                if (element.isDisplayed()){
+                    step.result = MadcowStepResult.PASS();
+                }else{
+                    step.result = MadcowStepResult.FAIL("The element exits on the page but it is not currently displayed.");
+                }
+
             }else{
                 step.result = MadcowStepResult.FAIL("No match could be found for the expected element")
             }

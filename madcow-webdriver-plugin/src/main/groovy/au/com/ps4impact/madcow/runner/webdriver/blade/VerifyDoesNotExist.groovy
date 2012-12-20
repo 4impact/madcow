@@ -44,11 +44,16 @@ class VerifyDoesNotExist extends WebDriverBladeRunner {
             WebElement element = findElement(stepRunner, step)
 
             if (element!=null){
-                step.result = MadcowStepResult.FAIL("A match was found for the unexpected element at the cordinates [${element.location.x},${element.location.y}]")
+
+                if (element.isDisplayed()){
+                    step.result = MadcowStepResult.FAIL("The element was displayed on the page at the coordinates [${element.location.x},${element.location.y}]")
+                }else{
+                    step.result = MadcowStepResult.PASS();
+                }
             }else{
                 step.result = MadcowStepResult.PASS()
             }
-        }catch (Exception except){
+        }catch (Exception aException){
             //pass because wasnt found
             step.result = MadcowStepResult.PASS()
         }

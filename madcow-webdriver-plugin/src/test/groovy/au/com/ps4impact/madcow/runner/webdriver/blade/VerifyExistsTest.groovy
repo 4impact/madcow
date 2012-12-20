@@ -58,6 +58,12 @@ class VerifyExistsTest extends GroovyTestCase {
         verifyExistsExecution(blade, true);
     }
 
+    void testLinkByHtmlIdHidden() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('hiddenTextInput.verifyExists', testCase.grassParser);
+        verifyExistsExecution(blade, false);
+    }
+
     void testLinkByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.verifyExists', testCase.grassParser);

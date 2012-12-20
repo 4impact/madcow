@@ -1,2 +1,4 @@
 carina.xpath=//label[@for='8381']
+brisbane.xpath=//label[@for='8154']
+formActions.xpath=//div[@class='form-actions']
 checkForDuplicatesButton.name=checkForDuplicates

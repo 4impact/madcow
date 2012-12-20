@@ -8,6 +8,10 @@ testsite_create_carina.waitFor
 waitFor = CARINA
 testsite_create_carina.verifyExists
 testsite_create_carina.verifyText = CARINA
+testsite_create_brisbane.verifyDoesNotExist
 
 testsite_create_checkForDuplicatesButton.hasClass = btn btn-info
 testsite_create_checkForDuplicatesButton.doesNotHaveClass = btn-danger btn-error
+
+testsite_create_formActions.verifyCssValue = "padding-left: 160px;border-top-width: 1px;"
+footer.hasStyle = border: 0px; margin-top: 10px;
