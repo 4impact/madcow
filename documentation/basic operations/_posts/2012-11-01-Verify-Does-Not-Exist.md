@@ -5,7 +5,8 @@ description: Checks that the element is currently NOT found on the page for the 
 category: basic operations
 ---
 
-Checks that the element is currently NOT found on the page for the user to interact with. *Experimental*
+Checks that the element is currently NOT found on the page for the user to interact with.
+Note that if the element is actually on the page but hidden (e.g. style="display:none;") this operation will pass.
 
 ## Usage
 
