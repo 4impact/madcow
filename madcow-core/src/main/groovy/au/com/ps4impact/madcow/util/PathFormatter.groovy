@@ -38,7 +38,13 @@ class PathFormatter {
         
         String packageName = '';
         
-        def relativeUrlSplit = StringUtils.removeStart(path, baseDirectory).split('/');
+        path = StringUtils.removeStart(path, baseDirectory);
+        def relativeUrlSplit;
+        if (path.contains('\\')) 
+            relativeUrlSplit = path.split('\\\\');
+        else
+            relativeUrlSplit = path.split('/');
+            
         relativeUrlSplit.each { String element ->
             packageName += StringUtils.isBlank(packageName) ? element : "$delimeter$element";
         }
