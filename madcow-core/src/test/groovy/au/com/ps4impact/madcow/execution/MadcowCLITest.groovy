@@ -81,10 +81,10 @@ Options:
  -v,--version           Show the current version of Madcow
 """;
 
-        assertEquals(expectedHelpMessage, systemOutput);
+        assertEquals(expectedHelpMessage.trim(), systemOutput.trim().replace("\r\n", "\n"));
 
         MadcowCLI.main(['-h'] as String[])
-        assertEquals(expectedHelpMessage, systemOutput);
+        assertEquals(expectedHelpMessage.trim(), systemOutput.trim().replace("\r\n", "\n"));
 
         System.setOut(null);
     }
