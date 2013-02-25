@@ -49,6 +49,6 @@ class PathFormatter {
             packageName += StringUtils.isBlank(packageName) ? element : "$delimeter$element";
         }
 
-        return packageName;
+        return StringUtils.remove(packageName, ":");
     }
 }
