@@ -29,3 +29,14 @@
     line-height: 28px;
     cursor: wait;
 }
+
+.ContentBox {
+    margin: 0px auto 5px auto;
+    padding: 10px;
+    background: #FFFFFF;
+    font-size: 14px;
+    line-height: 1.6em;
+    text-align: justify;
+    -webkit-box-shadow: 0px 0px 3px #444444;
+    -moz-box-shadow: 0px 0px 3px #444444;
+}

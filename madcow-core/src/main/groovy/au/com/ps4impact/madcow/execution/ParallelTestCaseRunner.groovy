@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.execution
 
+import au.com.ps4impact.madcow.MadcowTestCaseException
 import fj.Effect
 import fj.control.parallel.Actor
 import fj.control.parallel.Strategy
@@ -54,25 +55,30 @@ class ParallelTestCaseRunner {
 
             MadcowTestCase testCase = parameters._1();
 
-            testCase.logInfo("Running ${testCase.name}");
-
-            try {
                 try {
-                    testCase.execute();
-                    testCase.logInfo("Test ${testCase.name} Passed");
+
+                    if (testCase instanceof MadcowTestCaseException){
+                        testCase.logInfo("Failed attempting to run ${testCase.name}");
+                    }else{
+                        testCase.logInfo("Running ${testCase.name}");
+                        try {
+                            testCase.execute();
+                            testCase.logInfo("Test ${testCase.name} Passed");
+                        } catch (e) {
+                            testCase.logError("Test ${testCase.name} Failed!\n\nException: $e");
+                        }
+
+                        testCase.stepRunner.finishTestCase();
+                    }
+                    callback.act none();
                 } catch (e) {
-                    testCase.logError("Test ${testCase.name} Failed!\n\nException: $e");
+                    LOG.error("${testCase.name} throw an unexpected exception:\n$e");
+                    callback.act some(e);
+                }finally{
+                    MadcowLog.shutdownLogging(testCase);
+                    parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) };
                 }
 
-                MadcowLog.shutdownLogging(testCase);
-
-                testCase.stepRunner.finishTestCase();
-                parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) };
-                callback.act none();
-            } catch (e) {
-                LOG.error("${testCase.name} throw an unexpected exception:\n$e");
-                callback.act some(e);
-            }
         } as Effect);
     }
 

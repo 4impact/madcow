@@ -132,12 +132,16 @@ class MadcowTestRunner {
         testFilesToRun.each { File testFile ->
 
             String testName = StringUtils.removeEnd(PathFormatter.formatPathToPackage(testFile.canonicalPath, new File(MadcowProject.TESTS_DIRECTORY).canonicalPath), '.grass');
-            MadcowTestCase testCase = new MadcowTestCase(testName, madcowConfig, testFile.readLines() as ArrayList<String>);
+            MadcowTestCase testCase;
+            try {
+                testCase = new MadcowTestCase(testName, madcowConfig, testFile.readLines() as ArrayList<String>);
+            }catch (Exception error){
+                testCase = new MadcowTestCaseException(testName, madcowConfig, testFile.readLines() as ArrayList<String>, error);
+            }
             MadcowTestSuite suite = rootSuite.locateSuite(testName) ?: rootSuite;
             testCase.testSuite = suite;
             suite.testCases.add(testCase);
         }
-
         return rootSuite;
     }
 

@@ -27,6 +27,9 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import org.openqa.selenium.By
+import org.openqa.selenium.Point
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.internal.Locatable
 
 /**
  * The ClickLink Blade is used to click on an elements link.
@@ -38,9 +41,15 @@ class ClickLink extends WebDriverBladeRunner {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
         try {
-            findElement(stepRunner, step).findElement(By.tagName('a')).click();
+            WebElement webElement = findElement(stepRunner, step);
+            //done to scroll the element into view
+            Point point = ((Locatable)webElement).getCoordinates().inViewPort()
+            webElement.findElement(By.tagName('a')).click();
         } catch (ignored) {
-            findElement(stepRunner, step).click();
+            WebElement webElement = findElement(stepRunner, step);
+            //done to scroll the element into view
+            Point point = ((Locatable)webElement).getCoordinates().inViewPort()
+            webElement.click();
         }
 
         step.result = MadcowStepResult.PASS("URL now: <a href=\"${stepRunner.driver.currentUrl}\">${stepRunner.driver.currentUrl}</a>");

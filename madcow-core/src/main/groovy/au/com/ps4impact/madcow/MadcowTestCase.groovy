@@ -44,7 +44,7 @@ class MadcowTestCase {
     public ArrayList<String> grassScript;
     public GrassParser grassParser;
     public MadcowStepRunner stepRunner;
-    public boolean ignoreTestCase;
+    public boolean ignoreTestCase = false;
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
     public MadcowStep lastExecutedStep;

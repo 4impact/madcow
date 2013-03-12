@@ -41,6 +41,7 @@ class MadcowCLI {
         cli.with {
             h(longOpt : 'help', 'Show usage information')
             e(longOpt : 'env',  args: 1, argName: 'env-name', 'Environment to load from the madcow-config.xml')
+            c(longOpt : 'conf', args: 1, argName: 'conf-file', 'Name of the configuration file to use, defaults to madcow-config.xml')
             t(longOpt : 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName : 'testname', 'Comma seperated list of test names')
             a(longOpt : 'all',  'Run all tests')
             m(longOpt : 'mappings', 'Generate the Mappings Reference files')
@@ -78,7 +79,11 @@ class MadcowCLI {
             return;
         }
 
-        MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null);
+        if (options.conf) {
+            MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null, 'conf/'+options.conf)
+        }else{
+            MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null);
+        }
 
         if (options.test)
             MadcowTestRunner.executeTests(options.tests as ArrayList<String>, MadcowConfig.SHARED_CONFIG);

@@ -31,16 +31,19 @@
         </div>
 
         <div class="row">
-            <% if ((passedCount > 0) || (failedCount > 0) || (skippedCount > 0)) { %>
+            <% if ((passedCount > 0) || (failedCount > 0) || (skippedCount > 0) || (errorCount > 0)) { %>
             <div class="progress" style="margin-bottom: 9px;">
                 <% if (passedCount > 0) { %>
-                <div class="bar bar-success" style="width: ${passedCount / (passedCount + failedCount + skippedCount) * 100}%">${passedCount} passed</div>
+                <div class="bar bar-success" style="width: ${passedCount / (passedCount + failedCount + skippedCount + errorCount) * 100}%">${passedCount} passed</div>
                 <% } %>
                 <% if (skippedCount > 0) { %>
-                <div class="bar bar-warning" style="width: ${skippedCount / (passedCount + failedCount + skippedCount) * 100}%">${skippedCount} skipped</div>
+                <div class="bar bar-warning" style="width: ${skippedCount / (passedCount + failedCount + skippedCount + errorCount) * 100}%">${skippedCount} skipped</div>
                 <% } %>
                 <% if (failedCount > 0) { %>
-                <div class="bar bar-danger" style="width: ${failedCount / (passedCount + failedCount + skippedCount) * 100}%">${failedCount} failed</div>
+                <div class="bar bar-danger" style="width: ${failedCount / (passedCount + failedCount + skippedCount + errorCount) * 100}%">${failedCount} failed</div>
+                <% } %>
+                <% if (errorCount > 0) { %>
+                <div class="bar bar-danger" style="width: ${errorCount / (passedCount + failedCount + skippedCount + errorCount) * 100}%">${errorCount} errors</div>
                 <% } %>
             </div>
             <% } %>
@@ -52,7 +55,7 @@
             </div>
 
             <div class="span3 centralise">
-                <h3>Passed<br/>${(passedCount / (passedCount + failedCount) * 100).round(new java.math.MathContext(2)).intValue()}%</h3>
+                <h3>Passed<br/>${passedCount>0?((passedCount / (passedCount + failedCount) * 100).round(new java.math.MathContext(2)).intValue()):0}%</h3>
             </div>
 
             <div class="span3 centralise">
@@ -92,7 +95,9 @@
                         }
                     %>
                     <tr>
-                        <% if (testCase.ignoreTestCase) { %>
+                        <% if (testCase instanceof au.com.ps4impact.madcow.MadcowTestCaseException) { %>
+                        <td><a class="btn btn-danger linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Error Test"><i class="icon-exclamation-sign icon-white"></i></a></td>
+                        <%} else if (testCase.ignoreTestCase) { %>
                         <td><a class="btn btn-warning linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Skipped Test"><i class="icon-minus icon-white"></i></a></td>
                         <% }else if (testCase.lastExecutedStep.result.failed()) { %>
                         <td><a class="btn btn-danger linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Failed Test"><i class="icon-remove icon-white"></i></a></td>

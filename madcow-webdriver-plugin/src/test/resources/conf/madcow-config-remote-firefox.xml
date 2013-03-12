@@ -31,7 +31,7 @@
             </parameters>
         </runner>
         <env.default>DEV</env.default>
-        <threads>3</threads>
+        <threads>1</threads>
     </execution>
 
     <environments>

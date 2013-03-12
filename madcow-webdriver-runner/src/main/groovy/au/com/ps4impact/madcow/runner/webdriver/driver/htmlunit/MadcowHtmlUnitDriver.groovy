@@ -61,4 +61,7 @@ class MadcowHtmlUnitDriver extends HtmlUnitDriver {
     protected WebElement newHtmlUnitWebElement(HtmlElement element) {
         return new MadcowHtmlUnitWebElement(this, element);
     }
+
+    //LOOK AT ADDING TAKESCREENSHOT ABILITY IN FUTURE TO ALLOW FOR FULL HTML SOURCE DOWNLOAD
+    //https://selenium-developers.googlegroups.com/attach/ba6b454dab956c93/ScreenCaptureHtmlUnitDriver.java?view=1&part=4
 }

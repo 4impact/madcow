@@ -23,7 +23,10 @@
 
     String resultFileLink = '';
     if (step.result.hasResultFile) {
-        resultFileLink = """&nbsp; <a class="btn btn-info" href="${step.getSequenceNumberString() + '.html'}"><i class="icon-camera icon-white"></i></a>"""
+        resultFileLink = """&nbsp; <a class="btn btn-info" href="${step.getSequenceNumberString() + '.html'}"><i class="icon-download-alt icon-white"></i></a>"""
+        if (step.result.hasScreenshot) {
+            resultFileLink += """&nbsp; <a class="btn btn-info" href="${step.getSequenceNumberString() + '.png'}"><i class="icon-camera icon-white"></i></a>"""
+        }
     }
 
     String importTemplateExpand = '';

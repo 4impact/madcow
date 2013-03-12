@@ -22,6 +22,7 @@
 package au.com.ps4impact.madcow.report
 
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.MadcowTestCaseException
 import au.com.ps4impact.madcow.mock.MockMadcowConfig
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
@@ -36,7 +37,7 @@ import au.com.ps4impact.madcow.MadcowTestSuite
 /**
  * Test for the JUnitMadcowReport class.
  *
- * @author Gavin Bunney
+ * @author Gavin Bunney, Tom Romano made it better
  */
 class JUnitMadcowReportTest extends GroovyTestCase {
 
@@ -84,6 +85,23 @@ class JUnitMadcowReportTest extends GroovyTestCase {
         validateJUnitXML(testCase);
     }
 
+    public void testTestCaseReportForSkipped() {
+        junitReport.prepareReportDirectory();
+
+        MadcowTestCase testCase = new MadcowTestCase('testTestCaseReportForSkipped', MockMadcowConfig.getMadcowConfig(true))
+        testCase.steps.add(new MadcowStep(testCase, null, null));
+        testCase.ignoreTestCase = true;
+        testCase.steps.first().result = MadcowStepResult.NOT_YET_EXECUTED();
+        testCase.steps.first().result.detailedMessage = 'This could be a reason for skipping or something.... \n\nCould be...'
+        testCase.stopWatch = new StopWatch();
+        testCase.stopWatch.start();
+        testCase.stopWatch.stop();
+        testCase.lastExecutedStep = testCase.steps.first();
+
+        validateJUnitXML(testCase);
+    }
+
+
     public void testTestSuiteReport() {
         junitReport.prepareReportDirectory();
 
@@ -103,15 +121,34 @@ class JUnitMadcowReportTest extends GroovyTestCase {
         testCase2.stopWatch.stop();
         testCase2.lastExecutedStep = testCase2.steps.first();
 
-        MadcowTestSuite suite = new MadcowTestSuite('', null, [testCase, testCase2]);
+        MadcowTestCase testCase3 = new MadcowTestCaseException('testTestSuiteReport03', MockMadcowConfig.getMadcowConfig(true), new Exception("Things are broken mates"))
+        testCase3.madcowConfig.stepRunner = "au.com.madcow.error.ThisClassDontExist";
+        testCase3.steps.add(new MadcowStep(testCase3, null, null));
+        testCase3.steps.first().result = MadcowStepResult.FAIL("Runtime Error has occurred");
+        testCase3.stopWatch = new StopWatch();
+        testCase3.stopWatch.start();
+        testCase3.stopWatch.stop();
+        testCase3.lastExecutedStep = testCase3.steps.first();
+
+        MadcowTestSuite suite = new MadcowTestSuite('', null, [testCase, testCase2, testCase3]);
 
         junitReport.createTestCaseReport(testCase);
         junitReport.createTestCaseReport(testCase2);
+        junitReport.createTestCaseReport(testCase3);
         junitReport.createTestSuiteReport(suite);
 
         def packageFile = new File(JUnitMadcowReport.JUNIT_RESULTS_HTML_DIRECTORY + '/package-summary.html');
         assertTrue(packageFile.exists())
         assertTrue(packageFile.text.contains(testCase.name))
         assertTrue(packageFile.text.contains(testCase2.name))
+        assertTrue(packageFile.text.contains(testCase3.name))
+        //check that it contains the test result pass html link for testcase 1
+        assertTrue(packageFile.text.contains("0_testTestSuiteReport01.html"))
+
+        //check that it contains the test result failure html link for testcase 2
+        assertTrue(packageFile.text.contains("1_testTestSuiteReport02-fails.html"))
+
+        //check that it contains the test result error html link for testcase 3
+        assertTrue(packageFile.text.contains("2_testTestSuiteReport03-errors.html"))
     }
 }

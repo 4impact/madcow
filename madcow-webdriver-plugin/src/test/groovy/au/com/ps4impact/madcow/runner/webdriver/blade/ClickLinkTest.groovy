@@ -86,6 +86,17 @@ class ClickLinkTest extends GroovyTestCase {
         assertTrue(clickLink.isValidBladeToExecute(blade));
     }
 
+    void testLinkByHtmlIdOffScreen() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aLinkOffScreenId.clickLink', testCase.grassParser);
+        verifyLinkExecution(blade, true);
+
+        // explicit htmlid
+        MadcowMappings.addMapping(testCase, 'aLinkOffScreenId', ['id': 'aLinkOffScreenId']);
+        blade = new GrassBlade('aLinkOffScreenId.clickLink', testCase.grassParser);
+        verifyLinkExecution(blade, true);
+    }
+
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.grassParser);

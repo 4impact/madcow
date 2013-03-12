@@ -22,6 +22,7 @@
 package au.com.ps4impact.madcow.report
 
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.MadcowTestCaseException
 import au.com.ps4impact.madcow.mock.MockMadcowConfig
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
@@ -116,5 +117,60 @@ class MadcowExecutionReportTest extends GroovyTestCase {
         assertTrue(suiteReportFileText.contains('1 failed'))
         assertTrue(suiteReportFileText.contains(testCase.name))
         assertTrue(suiteReportFileText.contains(testCase2.name))
+    }
+
+    public void testTestSuiteZeroDivisionReport() {
+        madcowReport.prepareReportDirectory();
+
+        def blade = new GrassBlade();
+        blade.line = 'tent';
+
+        MadcowTestCase testCase = new MadcowTestCase('testTestSuiteReport01', MockMadcowConfig.getMadcowConfig(true))
+        testCase.steps.add(new MadcowStep(testCase, blade, null));
+        testCase.steps.first().result = MadcowStepResult.FAIL("This one will break....");
+        testCase.stopWatch = new StopWatch();
+        testCase.stopWatch.start();
+        testCase.stopWatch.stop();
+        testCase.lastExecutedStep = testCase.steps.first();
+
+        MadcowTestSuite suite = new MadcowTestSuite('', null, [testCase]);
+
+        madcowReport.createTestCaseReport(testCase);
+        madcowReport.createTestSuiteReport(suite);
+
+        def suiteReportFile = new File(MadcowProject.MADCOW_REPORT_DIRECTORY + '/index.html');
+        String suiteReportFileText = suiteReportFile.text;
+
+        assertTrue(suiteReportFile.exists())
+        assertTrue(suiteReportFileText.contains('1 failed'))
+        assertTrue(suiteReportFileText.contains(testCase.name))
+    }
+
+    public void testTestSuiteWithRuntimeErrorTest() {
+        madcowReport.prepareReportDirectory();
+
+        def blade = new GrassBlade();
+        blade.line = 'tent';
+
+        MadcowTestCase testCase3 = new MadcowTestCaseException('testTestSuiteReport03', MockMadcowConfig.getMadcowConfig(true), new Exception("Things are broken mates"))
+        testCase3.madcowConfig.stepRunner = "au.com.madcow.error.ThisClassDontExist";
+        testCase3.steps.add(new MadcowStep(testCase3, null, null));
+        testCase3.steps.first().result = MadcowStepResult.FAIL("Runtime Error has occurred");
+        testCase3.stopWatch = new StopWatch();
+        testCase3.stopWatch.start();
+        testCase3.stopWatch.stop();
+        testCase3.lastExecutedStep = testCase3.steps.first();
+
+        MadcowTestSuite suite = new MadcowTestSuite('', null, [testCase3]);
+
+        madcowReport.createTestCaseReport(testCase3);
+        madcowReport.createTestSuiteReport(suite);
+
+        def suiteReportFile = new File(MadcowProject.MADCOW_REPORT_DIRECTORY + '/index.html');
+        String suiteReportFileText = suiteReportFile.text;
+
+        assertTrue(suiteReportFile.exists())
+        assertTrue(suiteReportFileText.contains('1 errors'))
+        assertTrue(suiteReportFileText.contains(testCase3.name))
     }
 }

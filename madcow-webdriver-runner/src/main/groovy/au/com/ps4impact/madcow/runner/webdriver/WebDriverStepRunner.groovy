@@ -23,6 +23,9 @@ package au.com.ps4impact.madcow.runner.webdriver
 
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
+import org.apache.commons.io.FileUtils
+import org.openqa.selenium.OutputType
+import org.openqa.selenium.TakesScreenshot
 import org.openqa.selenium.WebDriver
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.step.MadcowStepResult
@@ -33,9 +36,9 @@ import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
 import org.openqa.selenium.NoSuchElementException
 import com.gargoylesoftware.htmlunit.BrowserVersion
-import au.com.ps4impact.madcow.config.MadcowConfig
+import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
-import org.openqa.selenium.remote.HttpCommandExecutor;
+import org.openqa.selenium.remote.RemoteWebDriver
 
 /**
  * Implementation of the WebDriver step runner.
@@ -98,6 +101,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                                     break;
                             }
                         }
+                        driverParameters.desiredCapabilities.setCapability("selenium-version", "2.30.0");
                         //set javascript on
                         driverParameters.desiredCapabilities.setJavascriptEnabled(true);
                         driverParameters.requiredCapabilities = null;
@@ -175,8 +179,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
      * Execute the madcow step for a given test case.
      */
     public void execute(MadcowStep step) {
-        WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
         if (!step.testCase.ignoreTestCase){
+            WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
             try {
                 bladeRunner.execute(this, step);
 
@@ -188,7 +192,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 }
 
                 if (!driver.pageSource?.equals(lastPageSource)) {
-                    captureResults(step);
+                    captureHtmlResults(step);
                 }
 
             } catch (NoSuchElementException ignored) {
@@ -226,10 +230,27 @@ class WebDriverStepRunner extends MadcowStepRunner {
     /**
      * Capture the html result file.
      */
-    public void captureResults(MadcowStep step) {
+    public void captureHtmlResults(MadcowStep step) {
         new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << driver.pageSource;
+        capturePNGScreenShot(step);
         lastPageSource = driver.pageSource;
         step.result.hasResultFile = true;
+    }
+
+    private void capturePNGScreenShot(MadcowStep step){
+        //HTML UNIT DOESN'T SUPPORT TAKING SCREENSHOTS AS NEVER RENDERS
+        if (driver instanceof org.openqa.selenium.remote.RemoteWebDriver){
+            File screenShot
+            if (!(driver instanceof TakesScreenshot)) {
+                WebDriver augmentedDriver = new Augmenter().augment(driver as RemoteWebDriver)
+                screenShot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE)
+            } else {
+                screenShot = ((TakesScreenshot) driver as RemoteWebDriver).getScreenshotAs(OutputType.FILE)
+            }
+            File saveTo = new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.png")
+            FileUtils.copyFile(screenShot, saveTo)
+            step.result.hasScreenshot = true;
+        }
     }
 
     /**

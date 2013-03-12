@@ -23,6 +23,9 @@ package au.com.ps4impact.madcow.report
 
 import au.com.ps4impact.madcow.MadcowProject
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.MadcowTestCaseException
+import au.com.ps4impact.madcow.step.MadcowStep
+import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.util.ResourceFinder
 import org.apache.log4j.Logger
 import org.apache.commons.io.FileUtils
@@ -56,6 +59,12 @@ class MadcowExecutionReport implements IMadcowReport {
         boolean isParseError = false;
         boolean isFailure = false;
         boolean isSkipped = false;
+
+        //if this is a exception test case then skip out and report it
+        if (testCase instanceof MadcowTestCaseException){
+            createErrorTestCaseReport(testCase.name, testCase.error)
+            return
+        }
 
         if (testCase.ignoreTestCase){
             isSkipped = true;
@@ -94,6 +103,24 @@ class MadcowExecutionReport implements IMadcowReport {
         }
     }
 
+    private void createErrorTestCaseReport(String testName, Exception parsedException){
+
+        def binding = [ 'testName'          : testName,
+                        'exception'         : parsedException,
+                      ];
+
+        try {
+            def engine = new GStringTemplateEngine();
+            def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'failed-runtime-madcow-testcase.gtemplate').URL);
+            def template = templateEngine.make(binding);
+            String templateContents = template.toString();
+            def result = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/${testName}/index.html");
+            result.write(templateContents);
+        } catch (e) {
+            LOG.error("Error creating the Failed Madcow Test Case Execution Report: $e");
+        }
+    }
+
     /**
      * Create Test Suite level report.
      */
@@ -103,11 +130,14 @@ class MadcowExecutionReport implements IMadcowReport {
 
         int passedCount = 0;
         int failedCount = 0;
+        int errorCount  = 0;
         int skippedCount = 0;
         Long totalTime = 0L;
         allTestCases.each { testCase ->
 
-            if (testCase.ignoreTestCase){
+            if (testCase instanceof MadcowTestCaseException){
+                errorCount++;
+            } else if (testCase.ignoreTestCase){
                 skippedCount++;
             } else if (testCase.lastExecutedStep.result.failed()) {
                 failedCount++;
@@ -121,10 +151,11 @@ class MadcowExecutionReport implements IMadcowReport {
 
         def binding = [ 'testSuite'         : testSuite,
                         'passedCount'       : passedCount,
+                        'errorCount'        : errorCount,
                         'failedCount'       : failedCount,
                         'skippedCount'      : skippedCount,
-                        'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime / 1000) + 's',
-                        'totalTimeExec'     : TIME_SECONDS_FORMAT.format(totalTime > 0 ? testSuite.stopWatch.time / 1000 : 0) + 's',
+                        'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime > 0 ? (totalTime / 1000) : 0) + 's',
+                        'totalTimeExec'     : TIME_SECONDS_FORMAT.format(totalTime > 0 ? (testSuite.stopWatch.time / 1000) : 0) + 's',
                       ];
 
         try {

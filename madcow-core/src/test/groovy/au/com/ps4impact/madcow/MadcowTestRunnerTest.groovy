@@ -55,4 +55,13 @@ class MadcowTestRunnerTest extends GroovyTestCase {
         assertEquals(0, suite.children.size())
         assertTrue(suite.testCases.first().name.endsWith('DataParameterTest'))
     }
+
+    void testStepRunnerNotFound() {
+        def suite = MadcowTestRunner.prepareTestSuite(['DataParameterTest'], MockMadcowConfig.getMadcowConfig(true, 'au.com.this.doesnt.exist.StepRunner'));
+        assertEquals('', suite.name)
+        assertEquals(1, suite.testCases.size())
+        assertEquals(1, suite.size())
+        assertEquals(0, suite.children.size())
+        assertTrue(suite.testCases.first().name.endsWith('DataParameterTest'))
+    }
 }

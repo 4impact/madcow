@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.report
 
+import au.com.ps4impact.madcow.MadcowTestCaseException
 import groovy.text.GStringTemplateEngine
 import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.MadcowProject
@@ -58,8 +59,9 @@ class JUnitMadcowReport implements IMadcowReport {
 
         String escapedMessage = StringEscapeUtils.escapeXml(testCaseResult.message);
 
-        def binding = [ 'errorCount'        : '0',
+        def binding = [ 'errorCount'        : testCase instanceof MadcowTestCaseException ? '1' : '0',
                         'failureCount'      : testCase.lastExecutedStep.result.failed() ? '1' : '0',
+                        'skipCount'         : testCase.ignoreTestCase ? '1' : '0', //not used as ant-junit not supported
                         'hostname'          : StringEscapeUtils.escapeXml(InetAddress.localHost.hostName),
                         'testName'          : StringEscapeUtils.escapeXml(testCase.name),
                         'time'              : testCase.getTotalTimeInSeconds(),

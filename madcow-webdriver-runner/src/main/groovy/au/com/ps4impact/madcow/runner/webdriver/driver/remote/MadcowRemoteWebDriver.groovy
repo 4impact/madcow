@@ -22,6 +22,12 @@
 package au.com.ps4impact.madcow.runner.webdriver.driver.remote
 
 import org.openqa.selenium.Capabilities
+import org.openqa.selenium.OutputType
+import org.openqa.selenium.TakesScreenshot
+import org.openqa.selenium.WebDriverException
+import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.DriverCommand
+import org.openqa.selenium.remote.HttpCommandExecutor
 import org.openqa.selenium.remote.RemoteWebDriver
 
 /**
@@ -29,12 +35,21 @@ import org.openqa.selenium.remote.RemoteWebDriver
  *
  * @author Tom Romano
  */
-class MadcowRemoteWebDriver extends RemoteWebDriver {
+public class MadcowRemoteWebDriver extends RemoteWebDriver implements TakesScreenshot {
 
-    public MadcowRemoteWebDriver(HashMap driverParameters){
-        super(new URL(driverParameters.url as String),
-              driverParameters.desiredCapabilities as Capabilities);
+    public MadcowRemoteWebDriver(){
+        super();
     }
 
+    public MadcowRemoteWebDriver(HashMap driverParameters) {
+            super(new URL(driverParameters.url as String),
+                  driverParameters.desiredCapabilities as Capabilities);
+    }
 
+    public <X> X getScreenshotAs(OutputType<X> target) {
+        // Get the screenshot as base64.
+        String base64 = execute(DriverCommand.SCREENSHOT).getValue().toString();
+        // ... and convert it.
+        return target.convertFromBase64Png(base64);
+    }
 }

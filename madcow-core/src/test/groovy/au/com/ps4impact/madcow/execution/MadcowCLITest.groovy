@@ -45,7 +45,17 @@ class MadcowCLITest extends GroovyTestCase {
         assertArrayEquals(['AddressTest.grass', 'AddressTest2.grass'].toArray(), options.ts.toArray());
         assertArrayEquals(['AddressTest.grass', 'AddressTest2.grass'].toArray(), options.tests.toArray());
     }
-    
+
+    void testConfigFile() {
+        def options = MadcowCLI.parseArgs(['-c', 'madcow-config-remote-firefox.xml'].toArray() as String[]);
+        assertEquals('madcow-config-remote-firefox.xml', options.c);
+        assertEquals('madcow-config-remote-firefox.xml', options.conf);
+
+        options = MadcowCLI.parseArgs(['--conf', 'madcow-config-remote-firefox.xml'].toArray() as String[]);
+        assertEquals('madcow-config-remote-firefox.xml', options.c);
+        assertEquals('madcow-config-remote-firefox.xml', options.conf);
+    }
+
     void testEnvironment() {
         def options = MadcowCLI.parseArgs(['-e', 'DEV'].toArray() as String[]);
         assertEquals('DEV', options.e);
@@ -73,12 +83,14 @@ class MadcowCLITest extends GroovyTestCase {
 
         def expectedHelpMessage = """usage: runMadcow [options]
 Options:
- -a,--all               Run all tests
- -e,--env <env-name>    Environment to load from the madcow-config.xml
- -h,--help              Show usage information
- -m,--mappings          Generate the Mappings Reference files
- -t,--test <testname>   Comma seperated list of test names
- -v,--version           Show the current version of Madcow
+ -a,--all                Run all tests
+ -c,--conf <conf-file>   Name of the configuration file to use, defaults
+                         to madcow-config.xml
+ -e,--env <env-name>     Environment to load from the madcow-config.xml
+ -h,--help               Show usage information
+ -m,--mappings           Generate the Mappings Reference files
+ -t,--test <testname>    Comma seperated list of test names
+ -v,--version            Show the current version of Madcow
 """;
 
         assertEquals(expectedHelpMessage, systemOutput);

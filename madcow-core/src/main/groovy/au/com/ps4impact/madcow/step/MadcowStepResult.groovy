@@ -40,11 +40,13 @@ class MadcowStepResult {
     String message;
     String detailedMessage;
     boolean hasResultFile;
+    boolean hasScreenshot;
 
     MadcowStepResult(StatusType status, String message = null) {
         this.status = status;
         this.message = message;
         this.hasResultFile = false;
+        this.hasScreenshot = false;
     }
     
     public static MadcowStepResult PASS(String message = null) {
