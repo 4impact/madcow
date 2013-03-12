@@ -1,7 +1,7 @@
 target/
 results/
 junitvmwatcher*.properties
-.idea/workspace.xml
+.idea/
 
 # OS generated files #
 ######################
@@ -13,3 +13,5 @@ Thumbs.db
 .idea/dictionaries/gavin.xml
 
 .DS_Store
+madcow-project/src/resources/project-template/conf/madcow-config-saucelab-remote.xml
+madcow-project/src/resources/project-template/conf/madcow-config-local-remote.xml

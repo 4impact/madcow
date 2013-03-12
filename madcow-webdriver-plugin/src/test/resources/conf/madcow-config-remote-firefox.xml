@@ -27,7 +27,7 @@
             <parameters>
                 <browser>remote</browser>
                 <emulate>firefox</emulate>
-                <remoteServerUrl>http://hearis-remote-webdriver.4impact.net.au:4444/wd/hub</remoteServerUrl>
+                <remoteServerUrl>http://4impactmadcow:ba4dc6eb-1101-45c5-a1b1-4bfd3e793497@ondemand.saucelabs.com:80/wd/hub</remoteServerUrl>
             </parameters>
         </runner>
         <env.default>DEV</env.default>
