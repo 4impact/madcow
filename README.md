@@ -7,3 +7,4 @@ Check out the awesome documentation at http://madcow.4impact.net.au now and get 
 As this is currently in development, it is prone to breaking and changing alot :)
 
 For the existing (rock-solid) Madcow, see https://github.com/4impact/madcow-classic
+
