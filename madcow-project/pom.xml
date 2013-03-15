@@ -36,11 +36,181 @@
     <artifactId>madcow-project</artifactId>
     <name>Madcow Project</name>
 
+    <properties>
+       <update.wiki.only>false</update.wiki.only>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>update-wiki</id>
+            <properties>
+               <update.wiki.only>true</update.wiki.only>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- tell maven to skip the default jar/install plugin for this profile -->
+                    <plugin>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                          <execution>
+                            <id>default-jar</id>
+                            <phase>never</phase>
+                            <configuration>
+                              <finalName>unwanted</finalName>
+                              <classifier>unwanted</classifier>
+                            </configuration>
+                          </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-install</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- tell maven to skip the default package assembly plugin for this profile -->
+                    <!-- checkout the gh-pages branch in package phase--> 
+                    <!-- add and commit the new files to the branch in install phase--> 
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <version>1.8.1</version>
+                        <executions>
+                            <execution>
+                                <id>checkout</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>checkout</goal>
+                                </goals>
+                                <configuration>
+                                    <scmVersion>gh-pages</scmVersion>
+                                    <scmVersionType>branch</scmVersionType>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-updated-download-page</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>add</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>download.html</includes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-release-zips</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>add</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>assets/releases/**/*</includes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>checkin</goal>
+                                </goals>
+                                <configuration>
+                                    <message>Committing latest madcow 2.0 version build ${bamboo.buildNumber}</message>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <basedir>${basedir}/gh-pages</basedir>
+                            <checkoutDirectory>${basedir}/gh-pages</checkoutDirectory>
+                            <connectionUrl>scm:git:https://github.com/4impact/madcow.git</connectionUrl>
+                            <developerConnectionUrl>scm:git:https://github.com/4impact/madcow.git</developerConnectionUrl>
+                            <password>${madcow.build.user.username}</password>
+                            <password>${madcow.build.user.password}</password>
+                            <!-- <includes>. download.html</includes> -->
+                            <scmVersion>gh-pages</scmVersion>
+                            <scmVersionType>branch</scmVersionType>
+                        </configuration>
+                    </plugin>
+                    <!-- copy the files over to the checked out branch/alter download.html --> 
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant</artifactId>
+                                <version>${ant.runtime.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-junit</artifactId>
+                                <version>${ant.runtime.version}</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>junit</groupId>
+                                        <artifactId>junit</artifactId>
+                                    </exclusion>
+                                    <exclusion>
+                                        <groupId>org.apache.ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>                    
+                        <executions>
+                            <execution>
+                                <id>move-and-update-files</id>
+                                <phase>verify</phase>
+                                <configuration>
+                                    <tasks>
+                                        <property environment="myEnv" />
+
+                                        <mkdir dir="${basedir}/gh-pages/assets/releases/build${bamboo.buildNumber}"/>
+
+                                        <copy todir="${basedir}/gh-pages/assets/releases/build${bamboo.buildNumber}">
+                                            <fileset dir="${basedir}/target/">
+                                                <include name="*.zip"/>
+                                            </fileset>
+                                        </copy>
+
+                                        <replaceregexp file="${basedir}/gh-pages/download.html"
+                                                       match="build.*\/madcow"
+                                                       replace="build${bamboo.buildNumber}/madcow"
+                                                       byline="true"/>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
+                    <skipAssembly>${update.wiki.only}</skipAssembly>
                     <descriptors>
                         <descriptor>src/resources/assembly/assembly-install.xml</descriptor>
                         <descriptor>src/resources/assembly/assembly-upgrade.xml</descriptor>
@@ -98,6 +268,7 @@
                         <id>acceptance-test</id>
                         <phase>verify</phase>
                         <configuration>
+                            <skip>${update.wiki.only}</skip>
                             <tasks>
                                 <property environment="myEnv" />
 
