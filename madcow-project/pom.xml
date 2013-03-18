@@ -108,7 +108,7 @@
                                     <goal>add</goal>
                                 </goals>
                                 <configuration>
-                                    <includes>assets/releases/**/*</includes>
+                                    <includes>assets/releases/build${bamboo.buildNumber}/*</includes>
                                 </configuration>
                             </execution>
                             <execution>
