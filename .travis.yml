@@ -1,4 +1,5 @@
 language: java
 jdk:
   - openjdk6
-script: mvn clean install
+install: mvn clean install
+after_install: mvn clean
