@@ -24,9 +24,9 @@ package au.com.ps4impact.madcow
 import au.com.ps4impact.madcow.mock.MockMadcowConfig
 
 /**
- * Test for the MadcowTestCase class.
+ * Test for the MadcowTestCaseExceptionTest class.
  *
- * @author Gavin Bunney
+ * @author Tom Romano
  */
 class MadcowTestCaseExceptionTest extends GroovyTestCase {
 
