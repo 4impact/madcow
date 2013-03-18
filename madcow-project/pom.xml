@@ -127,7 +127,7 @@
                             <checkoutDirectory>${basedir}/gh-pages</checkoutDirectory>
                             <connectionUrl>scm:git:https://github.com/4impact/madcow.git</connectionUrl>
                             <developerConnectionUrl>scm:git:https://github.com/4impact/madcow.git</developerConnectionUrl>
-                            <password>${madcow.build.user.username}</password>
+                            <username>${madcow.build.user.username}</username>
                             <password>${madcow.build.user.password}</password>
                             <!-- <includes>. download.html</includes> -->
                             <scmVersion>gh-pages</scmVersion>
