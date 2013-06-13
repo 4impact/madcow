@@ -40,10 +40,12 @@ class WaitFor extends WebDriverBladeRunner {
 
             try {
                 if (StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
-                    if (step.blade.parameters ?: '' == '' || stepRunner.driver.pageSource.contains(step.blade.parameters as String))
+                    if (step.blade.parameters ?: '' == '' || stepRunner.driver.pageSource.contains(step.blade.parameters as String)){
+                        step.testCase.logInfo("Waiting for: $step.blade.parameters");
                         return true;
-                    else
+                    } else {
                         throw new NoSuchElementException();
+                    }
                 } else {
                     def element = findElement(stepRunner, step);
                     if (StringUtils.isNotEmpty((step.blade.parameters ?: '')))

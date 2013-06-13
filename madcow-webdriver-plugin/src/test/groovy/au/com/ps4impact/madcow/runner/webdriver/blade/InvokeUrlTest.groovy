@@ -44,6 +44,19 @@ class InvokeUrlTest extends GroovyTestCase {
         assertTrue(step.result.message.startsWith("URL now:"));
     }
 
+    void testInvokeUrlRefresh() {
+        GrassBlade blade = new GrassBlade('invokeUrl = ADDRESSBOOK/test.html', testCase.grassParser);
+        MadcowStep step = new MadcowStep(testCase, blade, null);
+        testCase.stepRunner.execute(step);
+        assertTrue(step.result.passed());
+        assertTrue(step.result.message.startsWith("URL now:"));
+        GrassBlade blade2 = new GrassBlade('invokeUrl = REFRESH', testCase.grassParser);
+        MadcowStep step2 = new MadcowStep(testCase, blade2, step);
+        testCase.stepRunner.execute(step2);
+        assertTrue(step2.result.passed());
+        assertTrue(step2.result.message.startsWith("Page Refreshed. URL now:"));
+    }
+
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('someElement.invokeUrl', testCase.grassParser);
@@ -62,5 +75,13 @@ class InvokeUrlTest extends GroovyTestCase {
         } catch (e) {
             assertEquals('Unsupported grass format. Parameter must have a value supplied.', e.message);
         }
+    }
+
+    void testRefreshWithoutInitialPageSetup() {
+        GrassBlade blade2 = new GrassBlade('invokeUrl = REFRESH', testCase.grassParser);
+        MadcowStep step2 = new MadcowStep(testCase, blade2, null);
+        testCase.stepRunner.execute(step2);
+        assertTrue(step2.result.passed());
+        assertTrue(step2.result.message.startsWith("Page Refreshed. URL now:"));
     }
 }
