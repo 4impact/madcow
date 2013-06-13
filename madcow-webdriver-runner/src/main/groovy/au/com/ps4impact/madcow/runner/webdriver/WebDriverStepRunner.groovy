@@ -40,6 +40,8 @@ import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 
+import java.util.concurrent.TimeUnit
+
 /**
  * Implementation of the WebDriver step runner.
  *
@@ -150,6 +152,14 @@ class WebDriverStepRunner extends MadcowStepRunner {
             }else{
                 driver = driverType.driverClass.newInstance() as WebDriver;
             }
+
+            if (driver!=null){
+                if ((parameters.implicitTimeout ?: '') != ''){
+                    //attempt to set the provided timeout value
+                    driver.manage().timeouts().implicitlyWait(parameters.implicitTimeout, TimeUnit.SECONDS);
+                }
+            }
+
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
@@ -231,10 +241,23 @@ class WebDriverStepRunner extends MadcowStepRunner {
      * Capture the html result file.
      */
     public void captureHtmlResults(MadcowStep step) {
-        new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << driver.pageSource;
+        String originalPageSource = driver.pageSource
+        String alteredPageSource = alterPageSourceURLs(step, originalPageSource)
+
+        new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << alteredPageSource;
         capturePNGScreenShot(step);
         lastPageSource = driver.pageSource;
         step.result.hasResultFile = true;
+    }
+
+    private String alterPageSourceURLs(MadcowStep step, String pageSource) {
+        Node urlNode = step.env.invokeUrl
+        String baseURL = urlNode.text()
+        String baseApp = baseURL.substring(baseURL.lastIndexOf("/"), baseURL.length())
+//        source.replaceAll("(href|src)=\"\/baseApp\/","")
+        return pageSource.replaceAll('="/' + baseApp) {
+            return '="/' + baseURL
+        }
     }
 
     private void capturePNGScreenShot(MadcowStep step){

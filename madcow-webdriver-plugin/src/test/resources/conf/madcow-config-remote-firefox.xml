@@ -28,6 +28,7 @@
                 <browser>remote</browser>
                 <emulate>firefox</emulate>
                 <remoteServerUrl>http://4impactmadcow:ba4dc6eb-1101-45c5-a1b1-4bfd3e793497@ondemand.saucelabs.com:80/wd/hub</remoteServerUrl>
+                <implicitTimeout>10</implicitTimeout>
             </parameters>
         </runner>
         <env.default>DEV</env.default>
