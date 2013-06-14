@@ -294,7 +294,9 @@ class WebDriverStepRunner extends MadcowStepRunner {
             } else {
                 screenShot = ((TakesScreenshot) driver as RemoteWebDriver).getScreenshotAs(OutputType.FILE)
             }
-            File saveTo = new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.png")
+            def random = new Random().nextDouble();
+            String postFix = "_"+random*164
+            File saveTo = new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}${postFix}.png")
             FileUtils.copyFile(screenShot, saveTo)
             step.result.hasScreenshot = true;
         }
