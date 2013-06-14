@@ -261,11 +261,11 @@ class WebDriverStepRunner extends MadcowStepRunner {
             //not already a base element
             if (!pageSource.contains("<base")){
                 def baseURL = new URL(driver.currentUrl); //may need to use different url here
-                def webApp = baseURL.path?.indexOf("/",1)
-                def hostAndWebAppPath = baseURL.host + (baseURL.port!=80)?baseURL.port:""
-                if (webApp!=null && webApp!=-1){
-                    hostAndWebAppPath += baseURL.path.substring(0,webApp)
-                }
+//                def webApp = baseURL.path?.indexOf("/",1)
+//                def hostAndWebAppPath = baseURL.host + (baseURL.port!=80)?baseURL.port:""
+//                if (webApp!=null && webApp!=-1){
+//                    hostAndWebAppPath += baseURL.path.substring(0,webApp)
+//                }
                 def page = new XmlSlurper().parseText(pageSource)
 
                 //find all links and srcs that start with the URL path not the FQDN host
@@ -275,7 +275,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 //found some results so try to update add the base href
                 if (links.size()>0 || srcs.size()>0){
                     //find the HTML/HEAD tag and pump in <base> tag
-                    return pageSource.replace("<head>",'<head><base href="'+hostAndWebAppPath+'"/>')
+                    return pageSource.replace("<head>",'<head><base href="'+baseURL+'"/>')
                 }
             }
         }catch(Exception e){
