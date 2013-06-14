@@ -62,6 +62,12 @@ class MadcowCLI {
      */
     static main(def args)
     {
+        //requires JDK 1.6 for now...
+        if (Integer.parseInt(System.getProperty("java.version").split("\\.")[1]) != 6){
+            println("Madcow currently requires Java JDK 1.6, please update your JAVA_HOME accordingly and retry");
+            return;
+        }
+
         args = args ?: new String()[];
         def options = parseArgs(args);
         if (options.help || args.size() == 0 || (args.first() == ''))
