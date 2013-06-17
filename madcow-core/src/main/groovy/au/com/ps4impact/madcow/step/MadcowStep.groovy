@@ -61,7 +61,10 @@ class MadcowStep {
     }
 
     String getSequenceNumberString() {
-        return SEQUENCE_NUMBER_FORMAT.format(sequenceNumber);
+        if (parent)
+            return parent.getSequenceNumberString()+"_"+SEQUENCE_NUMBER_FORMAT.format(sequenceNumber);
+        else
+            return SEQUENCE_NUMBER_FORMAT.format(sequenceNumber);
     }
 
     /**
