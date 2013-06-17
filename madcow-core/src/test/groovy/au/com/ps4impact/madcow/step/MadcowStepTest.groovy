@@ -38,19 +38,21 @@ class MadcowStepTest extends GroovyTestCase {
     }
 
     void testSequenceNumberFormatWithParent() {
-        def parentStep = new MadcowStep(new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig()), null, null);
+        def testCase = new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig())
+        def parentStep = new MadcowStep(testCase, null, null);
         parentStep.sequenceNumber = 101;
-        def step = new MadcowStep(new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig()), null, parentStep);
+        def step = new MadcowStep(testCase, null, parentStep);
         step.sequenceNumber = 377;
         assertEquals('0000101_0000377', step.getSequenceNumberString());
     }
 
     void testSequenceNumberFormatWithTwoParents() {
-        def parentsParentStep = new MadcowStep(new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig()), null, null);
+        def testCase = new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig())
+        def parentsParentStep = new MadcowStep(testCase, null, null);
         parentsParentStep.sequenceNumber = 10;
-        def parentStep = new MadcowStep(new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig()), null, parentsParentStep);
+        def parentStep = new MadcowStep(testCase, null, parentsParentStep);
         parentStep.sequenceNumber = 101;
-        def step = new MadcowStep(new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig()), null, parentStep);
+        def step = new MadcowStep(testCase, null, parentStep);
         step.sequenceNumber = 377;
         assertEquals('0000010_0000101_0000377', step.getSequenceNumberString());
     }

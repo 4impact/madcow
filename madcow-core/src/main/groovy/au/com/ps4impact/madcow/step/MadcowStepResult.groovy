@@ -65,8 +65,8 @@ class MadcowStepResult {
         return new MadcowStepResult(MadcowStepResult.StatusType.NO_OPERATION, message);
     }
 
-    public static MadcowStepResult NOT_YET_EXECUTED() {
-        return new MadcowStepResult(MadcowStepResult.StatusType.NOT_YET_EXECUTED, null);
+    public static MadcowStepResult NOT_YET_EXECUTED(String message = null) {
+        return new MadcowStepResult(MadcowStepResult.StatusType.NOT_YET_EXECUTED, message);
     }
 
     public boolean failed() {

@@ -211,7 +211,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
             }
         }else{
-            step.result = MadcowStepResult.NOT_YET_EXECUTED();
+            step.result = MadcowStepResult.NOT_YET_EXECUTED('Skipped!');
         }
     }
 

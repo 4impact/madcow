@@ -168,6 +168,28 @@ class GrassParserTest extends GroovyTestCase {
         }
     }
 
+    public void testGrassParsingSkippedTest() {
+
+        MadcowTestCase testCase = new MadcowTestCase('testGrassParsingSkippedTest', MockMadcowConfig.getMadcowConfig());
+        ArrayList<String> grassScript = new ArrayList<String>();
+        String grassScriptString = """
+            madcow.ignore
+            @expectedValues = Australia
+
+            # verify the expected country
+            addressbook_search_country.verifyText = @expectedValues
+            #TODO: below will still cause a parse failure even though test ignored, not sure if it should
+            #addressbook_search_country.notAValidOperation = this will fail!
+        """;
+        grassScriptString.eachLine { line -> grassScript.add(line) }
+
+        GrassParser parser = new GrassParser(testCase);
+        parser.processScriptForTestCase(grassScript);
+        assertNotNull(parser);
+        assertEquals("Verify number of steps, ignoring comments and blank lines", 2, testCase.steps.size());
+        assertTrue("Verify test case is actually going to be completely ignored", testCase.ignoreTestCase);
+    }
+
     public void testGlobalDataParameters() {
         MadcowTestCase testCase = new MadcowTestCase('testGlobalDataParameters', MockMadcowConfig.getMadcowConfig());
 
