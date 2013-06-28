@@ -168,11 +168,23 @@ class WebDriverStepRunner extends MadcowStepRunner {
     private initialiseDriver() {
         //if driver is null create it
         if (this.driver==null){
-            testCase.logInfo("Instantiating Driver instance")
-            if (this.driverParameters != null) {
-                this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver;
-            } else {
-                this.driver = this.driverType.driverClass.newInstance() as WebDriver;
+            try{
+                testCase.logInfo("Instantiating Driver instance")
+                if (this.driverParameters != null) {
+                    this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver;
+                } else {
+                    this.driver = this.driverType.driverClass.newInstance() as WebDriver;
+                }
+
+            }catch (WebDriverException wdException){
+                //retry during execute method then
+                throw new Exception("The webdriver setup thew an error \n\n$wdException");
+            } catch (ClassNotFoundException cnfe) {
+                throw new Exception("The specified Browser '${driverParameters.browser}' cannot be found\n\n$cnfe");
+            } catch (ClassCastException cce) {
+                throw new Exception("The specified Browser '${driverParameters.browser}' isn't a WebDriver!\n\n$cce");
+            } catch (e) {
+                throw new Exception("Unexpected error creating the Browser '${driverParameters.browser}'\n\n$e");
             }
         }
     }
@@ -324,6 +336,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     public void finishTestCase() {
-        driver.close();
+        if (driver!=null)
+            driver.close();
     }
 }
