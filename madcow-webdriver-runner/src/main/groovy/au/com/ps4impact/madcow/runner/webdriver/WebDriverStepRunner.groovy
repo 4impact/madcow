@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.grass.GrassParseException
+import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.firefox.FirefoxProfile
 import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
@@ -39,6 +40,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
+import org.openqa.selenium.TimeoutException
 
 import java.util.concurrent.TimeUnit
 
@@ -53,6 +55,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public WebDriverType driverType;
     public String lastPageSource;
     public String lastPageTitle;
+    public boolean initRemoteTimedOut = false;
+    def driverParameters = null;
 
     WebDriverStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
 
@@ -68,7 +72,6 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
             testCase.logInfo("Configuring WebDriver browser '${driverType.name}'")
 
-            def driverParameters = null;
             switch (driverType) {
                 case WebDriverType.REMOTE:
 
@@ -103,20 +106,21 @@ class WebDriverStepRunner extends MadcowStepRunner {
                                     break;
                             }
                         }
-                        driverParameters.desiredCapabilities.setCapability("selenium-version", "2.30.0");
+                        driverParameters.desiredCapabilities.setCapability("selenium-version", "2.33.0");
                         //set javascript on
                         driverParameters.desiredCapabilities.setJavascriptEnabled(true);
                         driverParameters.requiredCapabilities = null;
 
-                        testCase.logInfo("Attempting to start '${driverType.name}' WebDriver with remoteServerUrl '${parameters.remoteServerUrl}'")
+                        testCase.logInfo("Test case will attempt to start using remoteServerUrl '${parameters.remoteServerUrl}'")
                     }else{
                         throw new Exception("Cannot start '${driverType.name}' WebDriver without remoteServerUrl config parameter");
                     }
                     break;
 
                 case WebDriverType.FIREFOX:
-                    driverParameters = new FirefoxProfile();
-                    driverParameters.setEnableNativeEvents(true);
+                    driverParameters = new FirefoxProfile()
+                    driverParameters.setEnableNativeEvents(true)
+                    initialiseDriver()
                     break;
 
                 case WebDriverType.HTMLUNIT:
@@ -141,31 +145,35 @@ class WebDriverStepRunner extends MadcowStepRunner {
                         }
                     }
                     testCase.logInfo("Emulating HtmlUnit browser '${driverParameters.getNickname()}'")
+                    initialiseDriver()
                     break;
 
                 default:
                     break;
             }
 
-            if (driverParameters != null){
-                driver = driverType.driverClass.newInstance(driverParameters) as WebDriver;
-            }else{
-                driver = driverType.driverClass.newInstance() as WebDriver;
-            }
-
-            if (driver!=null){
-                if ((parameters.implicitTimeout ?: '') != ''){
-                    //attempt to set the provided timeout value
-                    driver.manage().timeouts().implicitlyWait(parameters.implicitTimeout.toLong(), TimeUnit.SECONDS);
-                }
-            }
-
+        }catch (WebDriverException webdriverException){
+            //retry during execute method then
+            testCase.logInfo("A time out exception occured, catching it until retry")
+            initRemoteTimedOut = true
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
             throw new Exception("The specified Browser '${parameters.browser}' isn't a WebDriver!\n\n$cce");
         } catch (e) {
             throw new Exception("Unexpected error creating the Browser '${parameters.browser}'\n\n$e");
+        }
+    }
+
+    private initialiseDriver() {
+        //if driver is null create it
+        if (this.driver==null){
+            testCase.logInfo("Instantiating Driver instance")
+            if (this.driverParameters != null) {
+                this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver;
+            } else {
+                this.driver = this.driverType.driverClass.newInstance() as WebDriver;
+            }
         }
     }
 
@@ -189,7 +197,17 @@ class WebDriverStepRunner extends MadcowStepRunner {
      * Execute the madcow step for a given test case.
      */
     public void execute(MadcowStep step) {
+
+        //only execute if this is not a skipped test
         if (!step.testCase.ignoreTestCase){
+
+            //do initialise of driver inside the first execution of the testCase
+            if (step.testCase.lastExecutedStep == null
+                && driverType == WebDriverType.REMOTE
+                && driver == null) {
+                initialiseDriver()
+            }
+
             WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
             try {
                 bladeRunner.execute(this, step);
@@ -213,6 +231,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
         }else{
             step.result = MadcowStepResult.NOT_YET_EXECUTED('Skipped!');
         }
+
     }
 
     /**
@@ -261,11 +280,6 @@ class WebDriverStepRunner extends MadcowStepRunner {
             //not already a base element
             if (!pageSource.contains("<base")){
                 def baseURL = new URL(driver.currentUrl); //may need to use different url here
-//                def webApp = baseURL.path?.indexOf("/",1)
-//                def hostAndWebAppPath = baseURL.host + (baseURL.port!=80)?baseURL.port:""
-//                if (webApp!=null && webApp!=-1){
-//                    hostAndWebAppPath += baseURL.path.substring(0,webApp)
-//                }
                 def page = new XmlSlurper().parseText(pageSource)
 
                 //find all links and srcs that start with the URL path not the FQDN host
