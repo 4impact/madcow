@@ -54,10 +54,6 @@ class ShowOnReport extends WebDriverBladeRunner {
         step.result = MadcowStepResult.PASS();
     }
 
-    protected boolean allowNullSelectorType() {
-        return true;
-    }
-
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
         return [GrassBlade.GrassBladeType.EQUATION];
     }
