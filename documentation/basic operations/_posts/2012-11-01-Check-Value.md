@@ -5,11 +5,11 @@ description: Checks a given HTML element contains a given text value.
 category: basic operations
 ---
 
-_Please note, this operation differs from Check Value Contains in that the specified value has to match the **entire** field value, not just a portion of it._
+_Please note, this operation differs from Check Value Contains (under development) in that the specified value has to match the **entire** field value, not just a portion of it._
 
 ## Usage
 {% highlight bash %}
-[MADCOW:htmlElementReference].checkValue = [MADCOW:some text value]
+[MADCOW:htmlElementReference].checkValue = "<<some text value>>"
 {% endhighlight %}
 
 ## Examples

@@ -8,7 +8,7 @@ category: basic operations
 ## Usage
 
 {% highlight bash %}
-[MADCOW:htmlSelectReference].verifySelectFieldOptions = [List of options]
+[MADCOW:htmlElementReference].verifySelectFieldOptions = <<[List of options]>>
 {% endhighlight %}
 
 ## Examples

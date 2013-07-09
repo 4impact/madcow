@@ -7,7 +7,7 @@ category: basic operations
 
 ## Usage
 {% highlight bash %}
-invokeUrl = [URL_REFERENCE]
+invokeUrl = <<URL_REFERENCE>>
 {% endhighlight %}
 
 

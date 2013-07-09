@@ -7,12 +7,13 @@ category: basic operations
 
 ## Usage
 {% highlight bash %}
-verifyNotText = "text to verify not on this page"
+verifyNotText = "<<text to verify not on this page>>"
 {% endhighlight %}
 
 ## Examples
 {% highlight bash %}
 verifyNotText = "123456789"
+verifyNotText = "Only shown on page sometimes"
 {% endhighlight %}
 
 

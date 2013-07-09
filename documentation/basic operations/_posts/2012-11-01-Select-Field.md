@@ -7,7 +7,7 @@ category: basic operations
 
 ## Usage
 {% highlight bash %}
-[MADCOW:htmlSelectReference].selectField = [MADCOW:field value]
+[MADCOW:htmlSelectReference].selectField = <<field value>>
 {% endhighlight %}
 
 ## Examples

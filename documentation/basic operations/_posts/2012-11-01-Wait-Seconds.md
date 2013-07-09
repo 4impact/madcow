@@ -7,7 +7,7 @@ category: basic operations
 
 ## Usage
 {% highlight bash %}
-waitSeconds = [MADCOW:number of seconds to wait]
+waitSeconds = <<number of seconds to wait>>
 {% endhighlight %}
 
 ## Examples

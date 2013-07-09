@@ -8,7 +8,7 @@ category: basic operations
 ## Usage
 
 {% highlight bash %}
-[MADCOW:htmlElementReference].doesNotHaveClass = [MADCOW:field CSS values space separated]
+[MADCOW:htmlElementReference].doesNotHaveClass = "<<field CSS values space separated>>"
 {% endhighlight %}
 
 ## Examples

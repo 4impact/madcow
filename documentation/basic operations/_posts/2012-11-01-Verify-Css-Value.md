@@ -9,7 +9,7 @@ Checks that the element has all of the CSS styling provided.
 
 ## Usage
 {% highlight bash %}
-[MADCOW:htmlElement].verifyCssValue = [MADCOW:the css values expected]
+[MADCOW:htmlElement].verifyCssValue = <<[The css values expected]>>
 {% endhighlight %}
 
 ## Examples

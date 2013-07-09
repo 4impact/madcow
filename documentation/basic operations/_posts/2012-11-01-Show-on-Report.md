@@ -7,7 +7,7 @@ category: basic operations
 
 ## Usage
 {% highlight bash %}
-[MADCOW:htmlElement].showOnReport = [MADCOW:name of reported]
+[MADCOW:htmlElement].showOnReport = <<Name for reported item on report>>
 {% endhighlight %}
 
 ## Examples

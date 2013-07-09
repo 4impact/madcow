@@ -7,7 +7,7 @@ category: basic operations
 
 ## Usage
 {% highlight bash %}
-verifyText = "text to verify"
+verifyText = "<<text to verify>>"
 {% endhighlight %}
 
 ## Examples

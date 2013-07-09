@@ -7,8 +7,8 @@ category: basic operations
 
 ## Usage
 {% highlight bash %}
-verifyRegexText = "Regular expression to match on page"
-[MADCOW:htmlElementReference].verifyRegexText = "Regular expression to match text in element"
+verifyRegexText = "<<Regular expression to match on page>>"
+[MADCOW:htmlElementReference].verifyRegexText = "<<Regular expression to match text in element>>"
 {% endhighlight %}
 
 ## Examples

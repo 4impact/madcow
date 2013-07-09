@@ -7,8 +7,8 @@ category: basic operations
 
 ## Usage
 {% highlight bash %}
-import = "[MADCOW:The name of the template file]"
-importTemplate = "[MADCOW:The name of the template file]"
+import = "<<The name of the template file to run>>"
+importTemplate = "<<The name of the template file to run>>"
 {% endhighlight %}
 
 ## Examples

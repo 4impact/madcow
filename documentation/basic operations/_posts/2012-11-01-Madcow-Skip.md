@@ -6,11 +6,12 @@ category: basic operations
 ---
 
 If this is found as the first line of a madcow test, it will skip the execution of this test altogether.
-This is useful for when you want to check into version control part way through a writing a test that is not yet working.
+This is useful for when you want to check into version control part way through a writing a test that is not yet complete.
 
 ## Usage
 {% highlight bash %}
 madcow.ignore
+madcow.skip
 {% endhighlight %}
 
 ## Examples
