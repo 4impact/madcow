@@ -198,6 +198,7 @@
                                                        match="build.*\/readme"
                                                        replace="build${bamboo.buildNumber}/readme.txt"
                                                        byline="true"/>
+
                                     </tasks>
                                 </configuration>
                                 <goals>
