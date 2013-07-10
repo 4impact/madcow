@@ -196,7 +196,7 @@
 
                                         <replaceregexp file="${basedir}/gh-pages/download.html"
                                                        match="build.*\/readme"
-                                                       replace="build${bamboo.buildNumber}/readme.txt"
+                                                       replace="build${bamboo.buildNumber}/readme"
                                                        byline="true"/>
 
                                     </tasks>
