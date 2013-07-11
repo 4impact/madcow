@@ -214,8 +214,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
         if (!step.testCase.ignoreTestCase){
 
             //do initialise of driver inside the first execution of the testCase
-            if (step.testCase.lastExecutedStep == null
-                && driverType == WebDriverType.REMOTE
+            if (driverType == WebDriverType.REMOTE
                 && driver == null) {
                 initialiseDriver()
             }

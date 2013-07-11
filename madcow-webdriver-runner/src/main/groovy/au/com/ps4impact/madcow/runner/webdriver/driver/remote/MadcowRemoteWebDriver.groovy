@@ -68,6 +68,10 @@ public class MadcowRemoteWebDriver extends RemoteWebDriver implements TakesScree
                 //attempt to set the provided timeout value
                 this.manage().timeouts().implicitlyWait(madcowDriverParams.implicitTimeout.toLong(), TimeUnit.SECONDS);
             }
+            if ((madcowDriverParams.scriptTimeout ?: '') != '') {
+                //attempt to set the javascript timeout value
+                this.manage().timeouts().setScriptTimeout(madcowDriverParams.scriptTimeout.toLong(), TimeUnit.SECONDS);
+            }
         }
     }
 
