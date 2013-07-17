@@ -89,7 +89,7 @@ class ValueTest extends GroovyTestCase {
             assertFalse(value.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -100,7 +100,7 @@ class ValueTest extends GroovyTestCase {
             assertFalse(value.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

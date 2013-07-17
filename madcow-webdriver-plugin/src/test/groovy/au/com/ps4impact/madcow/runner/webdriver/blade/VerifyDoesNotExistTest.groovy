@@ -117,7 +117,7 @@ class VerifyDoesNotExistTest extends GroovyTestCase {
             assertFalse(verifyDoesNotExist.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -128,7 +128,7 @@ class VerifyDoesNotExistTest extends GroovyTestCase {
             assertFalse(verifyDoesNotExist.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

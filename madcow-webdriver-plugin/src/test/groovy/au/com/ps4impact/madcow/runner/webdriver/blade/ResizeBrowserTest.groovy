@@ -164,7 +164,7 @@ class ResizeBrowserTest {
             assertFalse(resizeBrowser.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
 
     }
