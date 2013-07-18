@@ -85,13 +85,14 @@ class MadcowTestRunner {
         rootTestSuite.stopWatch.start();
 
         if (!madcowConfig.parallel) {
-
+            LOG.info "Running in Single Execution mode..."
             allTestCases.each { MadcowTestCase testCase ->
                 new SingleTestCaseRunner(testCase, reporters)
                 numberOfTestsRan.andIncrement
             }
 
         }else {
+            LOG.info "Running in Parallel Execution mode..."
 
             ExecutorService pool = Executors.newFixedThreadPool(madcowConfig.threads);
             Strategy<Unit> strategy = Strategy.executorStrategy(pool);
