@@ -42,4 +42,16 @@ class MadcowHtmlUnitWebElement extends HtmlUnitWebElement {
     public HtmlElement getElement() {
         super.getElement();
     }
+
+    /**
+     * Override the toString method to not return anything so we dont have
+     *  crazy htmlUnit element spam in the console as groovy will attempt to
+     *  evaluate it
+     *
+     * @return
+     */
+    @Override
+    public String toString(){
+
+    }
 }

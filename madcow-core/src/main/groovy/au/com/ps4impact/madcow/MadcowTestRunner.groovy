@@ -22,6 +22,8 @@
 package au.com.ps4impact.madcow
 
 import au.com.ps4impact.madcow.config.MadcowConfig
+import au.com.ps4impact.madcow.execution.SingleTestCaseRunner
+import au.com.ps4impact.madcow.logging.MadcowLog
 import au.com.ps4impact.madcow.util.ResourceFinder
 import org.apache.log4j.Logger
 import org.apache.commons.lang3.StringUtils
@@ -76,25 +78,35 @@ class MadcowTestRunner {
         int numberTestsToRun = rootTestSuite.size();
 
         LOG.info("Found ${numberTestsToRun} test cases to run");
-
-        ExecutorService pool = Executors.newFixedThreadPool(madcowConfig.threads);
-        Strategy<Unit> strategy = Strategy.executorStrategy(pool);
-        AtomicInteger numberOfTestsRan = new AtomicInteger(0);
         def exceptions = [];
-
+        AtomicInteger numberOfTestsRan = new AtomicInteger(0);
         def allTestCases = rootTestSuite.getTestCasesRecusively();
 
-        def callback = Actor.queueActor(strategy, {Option<Exception> result ->
-            numberOfTestsRan.andIncrement;
-            result.foreach({Exception e -> exceptions.add(e)} as Effect)
-            if (numberOfTestsRan.get() >= numberTestsToRun) {
-                pool.shutdown()
-            }
-        } as Effect);
-
         rootTestSuite.stopWatch.start();
-        allTestCases.each { MadcowTestCase testCase ->
-            new ParallelTestCaseRunner(strategy, callback).act(fj.P.p(testCase, reporters));
+
+        if (!madcowConfig.parallel) {
+
+            allTestCases.each { MadcowTestCase testCase ->
+                new SingleTestCaseRunner(testCase, reporters)
+                numberOfTestsRan.andIncrement
+            }
+
+        }else {
+
+            ExecutorService pool = Executors.newFixedThreadPool(madcowConfig.threads);
+            Strategy<Unit> strategy = Strategy.executorStrategy(pool);
+
+            def callback = Actor.queueActor(strategy, {Option<Exception> result ->
+                numberOfTestsRan.andIncrement;
+                result.foreach({Exception e -> exceptions.add(e)} as Effect)
+                if (numberOfTestsRan.get() >= numberTestsToRun) {
+                    pool.shutdown()
+                }
+            } as Effect);
+
+            allTestCases.each { MadcowTestCase testCase ->
+                new ParallelTestCaseRunner(strategy, callback).act(fj.P.p(testCase, reporters));
+            }
         }
 
         while (numberOfTestsRan.get() < numberTestsToRun) {

@@ -58,6 +58,17 @@ class CheckValueTest extends GroovyTestCase {
         verifyCheckValueContents(blade, true);
     }
 
+    void testCheckValueByCss() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link', testCase.grassParser);
+        verifyCheckValueContents(blade, true);
+
+        // explicit htmlid
+        MadcowMappings.addMapping(testCase, 'cssLinkName', ['css': '#aLinkId']);
+        blade = new GrassBlade('cssLinkName.checkValue = A link', testCase.grassParser);
+        verifyCheckValueContents(blade, true);
+    }
+
     void testCheckValueIncorrect() {
         GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link that isn\'t a link is still a link', testCase.grassParser);
         verifyCheckValueContents(blade, false);

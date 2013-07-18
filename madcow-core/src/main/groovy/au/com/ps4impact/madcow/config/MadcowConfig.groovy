@@ -41,6 +41,8 @@ class MadcowConfig {
 
     public int threads = 10;
 
+    public boolean parallel = true;
+
     public String stepRunner;
     public HashMap<String, String> stepRunnerParameters;
 
@@ -99,6 +101,16 @@ class MadcowConfig {
         def defaultEnvironment = this.execution."env.default".text();
         if (defaultEnvironment != null && envName == null) {
             envName = defaultEnvironment;
+        }
+
+        //get the default parallel run setting if set
+        def parallelText = this.execution."parallel"?.text() ?: '';
+        if (parallelText != '') {
+            try {
+                parallel = !parallelText.equals("false") as boolean;
+            } catch (ignored) {
+                throw new Exception('Invalid "parallel" field specified - only true or false is allowed');
+            }
         }
 
         // get the default environment and use it if none is set

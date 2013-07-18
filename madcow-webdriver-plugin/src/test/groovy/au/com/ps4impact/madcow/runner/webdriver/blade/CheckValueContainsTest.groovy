@@ -47,7 +47,7 @@ class CheckValueContainsTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
-    void testCheckValueByHtmlId() {
+    void testCheckValueContainsByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = link', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
@@ -58,35 +58,46 @@ class CheckValueContainsTest extends GroovyTestCase {
         verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueIncorrect() {
+    void testCheckValueContainsByCss() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = link', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
+
+        // explicit htmlid
+        MadcowMappings.addMapping(testCase, 'cssLinkName', ['css': '#aLinkId']);
+        blade = new GrassBlade('cssLinkName.checkValueContains = ink', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
+    }    
+
+    void testCheckValueContainsIncorrect() {
         GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = is still a link', testCase.grassParser);
         verifyCheckValueContainsContents(blade, false);
     }
 
-    void testCheckValueByName() {
+    void testCheckValueContainsByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.checkValueContains = A li', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueByXPath() {
+    void testCheckValueContainsByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.checkValueContains = nk', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueByText() {
+    void testCheckValueContainsByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.checkValueContains = A l', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueForTextArea() {
+    void testCheckValueContainsForTextArea() {
         GrassBlade blade = new GrassBlade('aTextAreaId.checkValueContains = contents', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueEmpty() {
+    void testCheckValueContainsEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.checkValueContains = ', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }

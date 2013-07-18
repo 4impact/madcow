@@ -41,6 +41,7 @@ import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.TimeoutException
+import org.openqa.selenium.support.ThreadGuard
 
 import java.util.concurrent.TimeUnit
 
@@ -77,10 +78,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
                     driverParameters = [:];
                     if ((parameters.remoteServerUrl ?: '') != '') {
-                        //driverParameters.commandExecutor = new HttpCommandExecutor(new URL(parameters.remoteServerUrl));
-                        //driverParameters.executor = new HttpCommandExecutor(new URL(parameters.remoteServerUrl));
                         driverParameters.url = parameters.remoteServerUrl;
-
                         if ((parameters.emulate ?: '') != '') {
                             switch (StringUtils.upperCase(parameters.emulate)) {
                                 case 'IE7':
@@ -152,7 +150,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
             }
 
-        }catch (WebDriverException webdriverException){
+        } catch (WebDriverException webdriverException) {
             //retry during execute method then
             testCase.logInfo("A time out exception occured, catching it until retry")
             initRemoteTimedOut = true
@@ -167,16 +165,16 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
     private initialiseDriver() {
         //if driver is null create it
-        if (this.driver==null){
-            try{
+        if (this.driver == null) {
+            try {
                 testCase.logInfo("Instantiating Driver instance")
                 if (this.driverParameters != null) {
-                    this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver;
+                    this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver
                 } else {
-                    this.driver = this.driverType.driverClass.newInstance() as WebDriver;
+                    this.driver = this.driverType.driverClass.newInstance() as WebDriver
                 }
 
-            }catch (WebDriverException wdException){
+            } catch (WebDriverException wdException) {
                 //retry during execute method then
                 throw new Exception("The webdriver setup thew an error \n\n$wdException");
             } catch (ClassNotFoundException cnfe) {
@@ -236,6 +234,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
             } catch (NoSuchElementException ignored) {
                 step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
+            } catch (org.openqa.selenium.WebDriverException driverException) {
+
             } catch (e) {
                 step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
             }

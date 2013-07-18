@@ -46,7 +46,7 @@ class MadcowHtmlUnitDriver extends HtmlUnitDriver {
     protected WebClient modifyWebClient(WebClient client) {
         super.modifyWebClient(client);
         client.setAjaxController(new NicelyResynchronizingAjaxController());
-        client.setThrowExceptionOnScriptError(false);
+        client.getOptions().setThrowExceptionOnScriptError(false);
 
         if ((MadcowConfig.SHARED_CONFIG?.environment?.attribute("username") ?: '') != '') {
             DefaultCredentialsProvider provider = new DefaultCredentialsProvider();
