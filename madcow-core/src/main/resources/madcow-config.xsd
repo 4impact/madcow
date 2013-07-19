@@ -43,6 +43,13 @@
                             </xs:element>
                             <xs:element name="env.default" type="xs:string" minOccurs="0" maxOccurs="1" />
                             <xs:element name="parallel" minOccurs="0" maxOccurs="1" type="xs:boolean"/>
+                            <xs:element name="retries" minOccurs="0" maxOccurs="1">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:nonNegativeInteger">
+                                        <xs:minInclusive value="0"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
                             <xs:element name="threads" minOccurs="0" maxOccurs="1">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:nonNegativeInteger">

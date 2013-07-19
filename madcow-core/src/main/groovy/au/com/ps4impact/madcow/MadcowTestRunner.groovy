@@ -114,6 +114,23 @@ class MadcowTestRunner {
             Thread.sleep(500);
         }
 
+        while (madcowConfig.retryCount > 0) {
+            def failed = allTestCases.count { MadcowTestCase testCase ->
+                testCase.lastExecutedStep.result.failed()
+            }
+            def exception = allTestCases.findAll { MadcowTestCase testCase ->
+                testCase instanceof MadcowTestCaseException
+            }
+            LOG.info "Attempting retry number ${madcowConfig.retryCount} of ${exception?.size()} errored tests..."
+
+            exception.each { MadcowTestCase testCase ->
+                MadcowTestCase matchingTest = allTestCases.find{ it.name.equals(testCase.name) }
+                new SingleTestCaseRunner(matchingTest, reporters)
+            }
+
+            madcowConfig.retryCount--
+        }
+
         rootTestSuite.stopWatch.stop();
         reporters.each() { reporter -> reporter.createTestSuiteReport(rootTestSuite) };
     }

@@ -152,7 +152,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
         } catch (WebDriverException webdriverException) {
             //retry during execute method then
-            testCase.logInfo("A time out exception occured, catching it until retry")
+            testCase.logInfo("A possible browser time out exception occured, catching it at least until retry...")
             initRemoteTimedOut = true
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found\n\n$cnfe");
@@ -234,8 +234,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
             } catch (NoSuchElementException ignored) {
                 step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
-            } catch (org.openqa.selenium.WebDriverException driverException) {
-
+            } catch (WebDriverException driverException) {
+                step.result = MadcowStepResult.FAIL("WebDriverException: $driverException");
             } catch (e) {
                 step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
             }
