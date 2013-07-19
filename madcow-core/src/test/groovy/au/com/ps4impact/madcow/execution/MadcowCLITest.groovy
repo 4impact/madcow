@@ -28,7 +28,7 @@ package au.com.ps4impact.madcow.execution
  */
 class MadcowCLITest extends GroovyTestCase {
 
-    public static String DEFAULT_JDK_ERROR = "Madcow currently requires Java JDK 1.6, please update your JAVA_HOME accordingly and retry"
+    public static String DEFAULT_JDK_ERROR = "Madcow currently requires Java JDK 1.6 or 1.7, please update your JAVA_HOME accordingly and retry"
 
 
     public static String DEFAULT_HELP = """usage: runMadcow [options]
