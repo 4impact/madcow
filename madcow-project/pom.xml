@@ -185,6 +185,7 @@
                                         <copy todir="${basedir}/gh-pages/assets/releases/build${bamboo.buildNumber}">
                                             <fileset dir="${basedir}/target/">
                                                 <include name="*.zip"/>
+                                                <include name="*.txt"/>
                                             </fileset>
                                         </copy>
 
@@ -192,6 +193,12 @@
                                                        match="build.*\/madcow"
                                                        replace="build${bamboo.buildNumber}/madcow"
                                                        byline="true"/>
+
+                                        <replaceregexp file="${basedir}/gh-pages/download.html"
+                                                       match="build.*\/readme"
+                                                       replace="build${bamboo.buildNumber}/readme"
+                                                       byline="true"/>
+
                                     </tasks>
                                 </configuration>
                                 <goals>

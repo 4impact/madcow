@@ -58,6 +58,17 @@ class ClickLinkTest extends GroovyTestCase {
         verifyLinkExecution(blade, true);
     }
 
+    void testLinkByCss() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aLinkId.clickLink = A link', testCase.grassParser);
+        verifyLinkExecution(blade, true);
+
+        // explicit htmlid
+        MadcowMappings.addMapping(testCase, 'cssLinkName', ['css': '#aLinkId']);
+        blade = new GrassBlade('cssLinkName.clickLink', testCase.grassParser);
+        verifyLinkExecution(blade, true);
+    }
+
     void testLinkByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.clickLink', testCase.grassParser);
@@ -104,7 +115,7 @@ class ClickLinkTest extends GroovyTestCase {
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -115,7 +126,7 @@ class ClickLinkTest extends GroovyTestCase {
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

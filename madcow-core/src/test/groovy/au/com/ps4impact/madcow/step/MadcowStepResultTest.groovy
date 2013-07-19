@@ -82,4 +82,14 @@ class MadcowStepResultTest extends GroovyTestCase {
         assertEquals('Done!', result.message);
         assertToString(result, 'Status: NO_OPERATION | Message: Done!')
     }
+
+    void testHelperSkipped() {
+        def result = MadcowStepResult.NOT_YET_EXECUTED('Skipped!');
+        assertEquals(MadcowStepResult.StatusType.NOT_YET_EXECUTED, result.status);
+        assertTrue(result.notYetExecuted());
+        assertFalse(result.passed());
+        assertFalse(result.failed());
+        assertEquals('Skipped!',result.message);
+        assertToString(result, 'Status: NOT_YET_EXECUTED | Message: Skipped!')
+    }
 }

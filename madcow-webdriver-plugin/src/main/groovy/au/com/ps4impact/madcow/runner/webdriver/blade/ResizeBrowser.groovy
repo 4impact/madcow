@@ -41,7 +41,7 @@ class ResizeBrowser extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        //skip under htmlUnit emulaiton
+        //skip under htmlUnit emulation
         String browser = step.testCase.madcowConfig.stepRunnerParameters.get("browser")
         if (browser!=null && browser.equalsIgnoreCase('HTMLUNIT')){
             step.result = MadcowStepResult.FAIL("You cannot use the ResizeBrowser madcow operation under HTMLUnit as resizing has not been implemented");

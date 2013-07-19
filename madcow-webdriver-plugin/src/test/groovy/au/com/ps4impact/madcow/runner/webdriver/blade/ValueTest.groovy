@@ -28,6 +28,8 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.util.ResourceFinder
+import org.openqa.selenium.By
+
 import java.util.concurrent.TimeUnit
 
 /**
@@ -41,45 +43,77 @@ class ValueTest extends GroovyTestCase {
     def value = new Value();
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
-    protected verifyValueExecution(GrassBlade blade, boolean shouldPass) {
+    protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String newValue, String elementId = "aInputId") {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         (testCase.stepRunner as WebDriverStepRunner).driver.manage().timeouts().implicitlyWait(1, TimeUnit.MICROSECONDS);
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
+        if (shouldPass) {
+            def inputElement = (testCase.stepRunner as WebDriverStepRunner).driver.findElement(By.id(elementId))
+            assertTrue inputElement.element.getText().equals(newValue)
+        }
     }
 
     void testValueByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aInputId.value = Tennis', testCase.grassParser);
-        verifyValueExecution(blade, true);
+        verifyValueExecution(blade, true, "Tennis");
 
         // explicit htmlid
         MadcowMappings.addMapping(testCase, 'aInputId', ['id': 'aInputId']);
-        blade = new GrassBlade('aInputId.value = Tennis', testCase.grassParser);
-        verifyValueExecution(blade, true);
+        blade = new GrassBlade('aInputId.value = NoTennis', testCase.grassParser);
+        verifyValueExecution(blade, true, "NoTennis");
+    }
+
+    void testValueByCSS() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aInputId.value = Tennis!', testCase.grassParser);
+        verifyValueExecution(blade, true, "Tennis!");
+
+        // explicit htmlid
+        MadcowMappings.addMapping(testCase, 'cssInputId', ['css': '#aInputId']);
+        blade = new GrassBlade('cssInputId.value = TennisTwo', testCase.grassParser);
+        verifyValueExecution(blade, true, "TennisTwo");
+    }
+
+    void testValueByCSSClass() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aInputId.value = TennisT', testCase.grassParser);
+        verifyValueExecution(blade, true, "TennisT");
+
+        // explicit css
+        MadcowMappings.addMapping(testCase, 'cssInputId', ['css': '.aInputClass']);
+        blade = new GrassBlade('cssInputId.value = TennisThree', testCase.grassParser);
+        verifyValueExecution(blade, true, "TennisThree");
+
     }
 
     void testValueByName() {
         MadcowMappings.addMapping(testCase, 'aInputName', ['name': 'aInputName']);
-        GrassBlade blade = new GrassBlade('aInputName.value = Tennis', testCase.grassParser);
-        verifyValueExecution(blade, true);
+        GrassBlade blade = new GrassBlade('aInputName.value = TennisByName', testCase.grassParser);
+        verifyValueExecution(blade, true, "TennisByName");
     }
 
     void testValueByXPath() {
         MadcowMappings.addMapping(testCase, 'aInputXPath', ['xpath': '//input[@id=\'aInputId\']']);
-        GrassBlade blade = new GrassBlade('aInputXPath.value = Tennis', testCase.grassParser);
-        verifyValueExecution(blade, true);
+        GrassBlade blade = new GrassBlade('aInputXPath.value = TennisByXpath', testCase.grassParser);
+        verifyValueExecution(blade, true, "TennisByXpath");
     }
 
     void testValueForTextArea() {
-        GrassBlade blade = new GrassBlade('aTextAreaId.value = Tennis', testCase.grassParser);
-        verifyValueExecution(blade, true);
+        GrassBlade blade = new GrassBlade('aTextAreaId.value = TennisForTextArea', testCase.grassParser);
+        verifyValueExecution(blade, true, "TennisForTextArea", "aTextAreaId");
+
+        // explicit css
+        MadcowMappings.addMapping(testCase, 'cssaTextAreaId', ['css': '#aTextAreaId']);
+        blade = new GrassBlade('cssaTextAreaId.value = TennisFour', testCase.grassParser);
+        verifyValueExecution(blade, true, "TennisFour", "aTextAreaId");
     }
 
     void testValueDoesNotExist() {
         GrassBlade blade = new GrassBlade('aInputThatDoesntExist.value = Tennis', testCase.grassParser);
-        verifyValueExecution(blade, false);
+        verifyValueExecution(blade, false, null);
     }
 
     void testMappingSelectorInvalidRequired() {
@@ -89,7 +123,7 @@ class ValueTest extends GroovyTestCase {
             assertFalse(value.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -100,7 +134,7 @@ class ValueTest extends GroovyTestCase {
             assertFalse(value.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

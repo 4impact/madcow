@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 4impact, Brisbane, Australia
+ * Copyright 2013 4impact, Brisbane, Australia
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,8 +19,6 @@
  * under the License.
  */
 
-
-
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
 import au.com.ps4impact.madcow.grass.GrassBlade
@@ -28,36 +26,25 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
-import org.openqa.selenium.WebElement
+import org.apache.commons.lang3.StringUtils
 
 /**
- * This class is the VerifyDoesNotExist operation which checks that an element exists on the page
+ * Checks that an element contains the text
  *
  * @author Tom Romano
  */
-class VerifyDoesNotExist extends WebDriverBladeRunner {
+class CheckValueContains extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        try{
+        String elementText = getElementText(findElement(stepRunner, step));
 
-            WebElement element = findElement(stepRunner, step)
-
-            if (element!=null){
-
-                if (element.isDisplayed()){
-                    step.result = MadcowStepResult.FAIL("The element was displayed on the page at the coordinates [${element.location.x},${element.location.y}]")
-                }else{
-                    step.result = MadcowStepResult.PASS();
-                }
-            }else{
-                step.result = MadcowStepResult.PASS()
-            }
-        }catch (Exception aException){
-            //pass because wasnt found
-            step.result = MadcowStepResult.PASS()
+        String expectedValue = StringUtils.trim(step.blade.parameters as String);
+        if (elementText.contains(expectedValue)) {
+            step.result = MadcowStepResult.PASS();
+        } else {
+            step.result = MadcowStepResult.FAIL("Expected: '$expectedValue', Present: '$elementText'");
         }
-
     }
 
     /**
@@ -71,7 +58,7 @@ class VerifyDoesNotExist extends WebDriverBladeRunner {
      * Supported types of blades.
      */
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
-        return [GrassBlade.GrassBladeType.STATEMENT];
+        return [GrassBlade.GrassBladeType.EQUATION];
     }
 
     /**
@@ -79,7 +66,6 @@ class VerifyDoesNotExist extends WebDriverBladeRunner {
      */
     protected Collection<WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE> getSupportedSelectorTypes() {
         return [WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID,
-                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.TEXT,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.CSS];

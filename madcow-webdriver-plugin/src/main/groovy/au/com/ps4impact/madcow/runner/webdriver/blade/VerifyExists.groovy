@@ -79,6 +79,7 @@ class VerifyExists extends WebDriverBladeRunner {
         return [WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.TEXT,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME,
-                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH];
+                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH,
+                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.CSS];
     }
 }

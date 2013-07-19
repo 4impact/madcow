@@ -1,9 +1,9 @@
 <tr>
-    <td>${idx + 1}</td>
+    <td>${step.sequenceNumberString}</td>
 
     <%
 
-    idxString = (idxString ?: '') != '' ? idxString + ".${idx + 1}" : "${idx + 1}";
+    idxString = (idxString ?: '') != '' ? idxString + ".${step.sequenceNumberString}" : "${step.sequenceNumberString}";
 
     String stepTime = '';
     String statusIcon = '';

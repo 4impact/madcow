@@ -25,10 +25,13 @@ import org.openqa.selenium.Capabilities
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.TakesScreenshot
 import org.openqa.selenium.WebDriverException
+import org.openqa.selenium.logging.NeedsLocalLogs
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.DriverCommand
 import org.openqa.selenium.remote.HttpCommandExecutor
 import org.openqa.selenium.remote.RemoteWebDriver
+
+import java.util.concurrent.TimeUnit
 
 /**
  * Madcow Remote WebDriver
@@ -37,13 +40,39 @@ import org.openqa.selenium.remote.RemoteWebDriver
  */
 public class MadcowRemoteWebDriver extends RemoteWebDriver implements TakesScreenshot {
 
+    HashMap madcowDriverParams
+
     public MadcowRemoteWebDriver(){
         super();
     }
 
     public MadcowRemoteWebDriver(HashMap driverParameters) {
-            super(new URL(driverParameters.url as String),
-                  driverParameters.desiredCapabilities as Capabilities);
+        super(new URL(driverParameters.url as String),
+                driverParameters.desiredCapabilities as Capabilities);
+        madcowDriverParams = driverParameters
+    }
+
+    protected void startClient() {
+//        if (madcowDriverParams!=null){
+//            this.setCommandExecutor(new HttpCommandExecutor(new URL(madcowDriverParams.url as String)))
+            super.startClient()
+//        }
+    }
+
+    protected void startSession(Capabilities desiredCapabilities,
+                                Capabilities requiredCapabilities) {
+        super.startSession(desiredCapabilities, requiredCapabilities)
+        if (madcowDriverParams!=null){
+            //if they specified a timeout then set it
+            if ((madcowDriverParams.implicitTimeout ?: '') != '') {
+                //attempt to set the provided timeout value
+                this.manage().timeouts().implicitlyWait(madcowDriverParams.implicitTimeout.toLong(), TimeUnit.SECONDS);
+            }
+            if ((madcowDriverParams.scriptTimeout ?: '') != '') {
+                //attempt to set the javascript timeout value
+                this.manage().timeouts().setScriptTimeout(madcowDriverParams.scriptTimeout.toLong(), TimeUnit.SECONDS);
+            }
+        }
     }
 
     public <X> X getScreenshotAs(OutputType<X> target) {

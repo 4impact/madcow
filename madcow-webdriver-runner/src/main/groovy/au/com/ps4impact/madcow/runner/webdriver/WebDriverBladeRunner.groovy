@@ -40,7 +40,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
     /**
      * All WebDriver blade mapping selector types.
      */
-    public static enum BLADE_MAPPING_SELECTOR_TYPE { HTMLID, TEXT, NAME, XPATH }
+    public static enum BLADE_MAPPING_SELECTOR_TYPE { HTMLID, TEXT, NAME, XPATH, CSS }
 
     /**
      * Called to execute a particular step operation.
@@ -182,6 +182,9 @@ abstract class WebDriverBladeRunner extends BladeRunner {
 
             case BLADE_MAPPING_SELECTOR_TYPE.NAME:
                 return stepRunner.driver.findElement(By.name(step.blade.mappingSelectorValue));
+
+            case BLADE_MAPPING_SELECTOR_TYPE.CSS:
+                return stepRunner.driver.findElement(By.cssSelector(step.blade.mappingSelectorValue));
 
             case BLADE_MAPPING_SELECTOR_TYPE.XPATH:
                 return stepRunner.driver.findElement(By.xpath(step.blade.mappingSelectorValue));

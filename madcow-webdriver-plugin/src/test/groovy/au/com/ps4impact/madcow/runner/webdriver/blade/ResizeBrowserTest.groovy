@@ -30,6 +30,7 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.Assert.*
 
@@ -46,6 +47,7 @@ class ResizeBrowserTest {
     MadcowConfig config
     MadcowTestCase testCase
     def resizeBrowser
+    def invokeUrl
     String testHtmlFilePath
 
     @Before
@@ -53,15 +55,34 @@ class ResizeBrowserTest {
         config = new MadcowConfig('DEV','conf/madcow-config-remote-firefox.xml')
         testCase = new MadcowTestCase('ResizeBrowserTest', config, [])
         resizeBrowser = new ResizeBrowser();
+        invokeUrl = new InvokeUrl()
         testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
     }
 
     protected verifyResizeBrowserExecution(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).driver.get("http://madcow-test.4impact.net.au:8080/madcow-test-site-2");
-        MadcowStep step = new MadcowStep(testCase, blade, null);
-        testCase.stepRunner.execute(step);
-        assertEquals(shouldPass, step.result.passed());
+        GrassBlade startBlade = new GrassBlade("invokeUrl = http://madcow-test.4impact.net.au:8080/madcow-test-site-2", testCase.grassParser)
+        MadcowStep step1 = new MadcowStep(testCase, startBlade, null);
+        testCase.stepRunner.execute(step1);
+        if (!step1.result.failed()){
+            MadcowStep step2 = new MadcowStep(testCase, blade, step1);
+            testCase.stepRunner.execute(step2);
+            assertEquals(shouldPass, step2.result.passed());
+        }
     }
+
+    protected verifyResizeBrowserExecution(GrassBlade blade, boolean shouldPass, String resultingMessage) {
+        GrassBlade startBlade = new GrassBlade("invokeUrl = http://madcow-test.4impact.net.au:8080/madcow-test-site-2", testCase.grassParser)
+        MadcowStep step1 = new MadcowStep(testCase, startBlade, null);
+        testCase.stepRunner.execute(step1);
+        if (!step1.result.failed()){
+            MadcowStep step2 = new MadcowStep(testCase, blade, step1);
+            testCase.stepRunner.execute(step2);
+            assertEquals(shouldPass, step2.result.passed());
+            assertEquals(resultingMessage, step2.result.message)
+        }
+    }
+
+
 
     @Test
     void testResizeBrowserByHtmlId() {
@@ -143,7 +164,7 @@ class ResizeBrowserTest {
             assertFalse(resizeBrowser.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
 
     }
@@ -164,22 +185,16 @@ class ResizeBrowserTest {
     @Test
     void testMappingSelectorNotSupported() {
         GrassBlade blade = new GrassBlade('testsite_menu_createAddress.resizeBrowser = yeah yeah', testCase.grassParser);
-        (testCase.stepRunner as WebDriverStepRunner).driver.get("http://madcow-test.4impact.net.au:8080/madcow-test-site-2");
-        MadcowStep step = new MadcowStep(testCase, blade, null);
-        testCase.stepRunner.execute(step);
-        assertFalse(step.result.passed());
-        assertEquals("You cannot specify a selector for the ResizeBrowser madcow operation",step.result.message)
+        String message = "You cannot specify a selector for the ResizeBrowser madcow operation"
+        verifyResizeBrowserExecution(blade, false, message);
 
     }
 
     @Test
     void testParametersNotSupported() {
         GrassBlade blade = new GrassBlade('resizeBrowser = yeah yeah', testCase.grassParser);
-        (testCase.stepRunner as WebDriverStepRunner).driver.get("http://madcow-test.4impact.net.au:8080/madcow-test-site-2");
-        MadcowStep step = new MadcowStep(testCase, blade, null);
-        testCase.stepRunner.execute(step);
-        assertFalse(step.result.passed());
-        assertEquals("ResizeBrowser operation requires two numeric parameters of [width,height] not yeah yeah", step.result.message)
+        String message = "ResizeBrowser operation requires two numeric parameters of [width,height] not yeah yeah"
+        verifyResizeBrowserExecution(blade, false, message);
 
     }
 

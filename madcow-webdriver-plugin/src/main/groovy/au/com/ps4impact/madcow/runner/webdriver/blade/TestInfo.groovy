@@ -21,48 +21,46 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
-import org.openqa.selenium.By
-import org.openqa.selenium.WebElement
+import au.com.ps4impact.madcow.grass.GrassBlade
 
 /**
- * The SelectField blade sets a value on a combo box element.
+ * TestInfo Blade Runner.
+ * Dummy Item really, sole use is to display test
+ * description information on to output report
  *
- * @author Gavin Bunney
+ * @author Tom Romano
  */
-class SelectField extends WebDriverBladeRunner {
+class TestInfo extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
-        def element = findElement(stepRunner, step);
 
-        def options = element.findElements(By.tagName('option'));
-        WebElement foundOption = null;
-        options.each { option ->
-            if (option.text == step.blade.parameters as String) {
-                foundOption = option;
-            }
+        def existing = step.testCase.reportDetails.get("Test Summary")
+        if (existing){
+            step.testCase.reportDetails.put("Test Summary", existing+"\n"+step.sequenceNumberString+": "+step.blade.parameters as String);
+        }else{
+            step.testCase.reportDetails.put("Test Summary", step.sequenceNumberString+": "+step.blade.parameters as String);
         }
 
-        if (foundOption != null) {
-            foundOption.click();
-            step.result = MadcowStepResult.PASS();
-        } else {
-            step.result = MadcowStepResult.FAIL('Unable to find the specified option');
-        }
+        step.result = MadcowStepResult.NO_OPERATION(step.blade.parameters);
+    }
+
+    protected boolean allowNullSelectorType() {
+        return true;
+    }
+
+    protected boolean enforceNullSelectorType() {
+        return true;
     }
 
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
         return [GrassBlade.GrassBladeType.EQUATION];
     }
 
-    protected Collection<WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE> getSupportedSelectorTypes() {
-        return [WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID,
-                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME,
-                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH,
-                WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.CSS ];
+    protected List<Class> getSupportedParameterTypes() {
+        return [Map.class, String.class];
     }
 }

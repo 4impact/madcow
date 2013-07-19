@@ -79,7 +79,7 @@ class GrassParser {
                 return;
 
             // ignore test case
-            if (line.equalsIgnoreCase('madcow.ignore')){
+            if (line.equalsIgnoreCase('madcow.ignore') || line.equalsIgnoreCase('madcow.skip')){
                 testCase.ignoreTestCase = true;
                 return;
             }

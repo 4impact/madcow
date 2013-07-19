@@ -28,6 +28,21 @@ package au.com.ps4impact.madcow.execution
  */
 class MadcowCLITest extends GroovyTestCase {
 
+    public static String DEFAULT_JDK_ERROR = "Madcow currently requires Java JDK 1.6, please update your JAVA_HOME accordingly and retry"
+
+
+    public static String DEFAULT_HELP = """usage: runMadcow [options]
+Options:
+ -a,--all                Run all tests
+ -c,--conf <conf-file>   Name of the configuration file to use, defaults
+                         to madcow-config.xml
+ -e,--env <env-name>     Environment to load from the madcow-config.xml
+ -h,--help               Show usage information
+ -m,--mappings           Generate the Mappings Reference files
+ -t,--test <testname>    Comma seperated list of test names
+ -v,--version            Show the current version of Madcow
+""";
+
     void testTestToRunOption() {
         def options = MadcowCLI.parseArgs(['-t', 'AddressTest.grass'].toArray() as String[]);
         assertEquals('AddressTest.grass', options.ts.first());
@@ -71,7 +86,7 @@ class MadcowCLITest extends GroovyTestCase {
         assertNotNull(options.mappings);
     }
 
-    protected void checkHelpOutput(Closure functionCall) {
+    protected void checkHelpOutput(Closure functionCall, String expectedHelpMessage) {
 
         // capture the system output stream so we can look at the help printed stuff
         ByteArrayOutputStream systemOutOutputStream = new ByteArrayOutputStream();
@@ -80,18 +95,6 @@ class MadcowCLITest extends GroovyTestCase {
         functionCall.call();
 
         String systemOutput = systemOutOutputStream.toString();
-
-        def expectedHelpMessage = """usage: runMadcow [options]
-Options:
- -a,--all                Run all tests
- -c,--conf <conf-file>   Name of the configuration file to use, defaults
-                         to madcow-config.xml
- -e,--env <env-name>     Environment to load from the madcow-config.xml
- -h,--help               Show usage information
- -m,--mappings           Generate the Mappings Reference files
- -t,--test <testname>    Comma seperated list of test names
- -v,--version            Show the current version of Madcow
-""";
 
         assertEquals(expectedHelpMessage.trim(), systemOutput.trim().replace("\r\n", "\n"));
 
@@ -102,8 +105,17 @@ Options:
     }
 
     void testHelp() {
-        checkHelpOutput({MadcowCLI.parseArgs(['-h'].toArray() as String[])});
-        checkHelpOutput({MadcowCLI.main(['-h'] as String[])});
-        checkHelpOutput({MadcowCLI.main([] as String[])});
+        checkHelpOutput({ MadcowCLI.parseArgs(['-h'].toArray() as String[]) }, DEFAULT_HELP);
+        checkHelpOutput({ MadcowCLI.main(['-h'] as String[]) }, DEFAULT_HELP);
+        checkHelpOutput({ MadcowCLI.main([] as String[]) }, DEFAULT_HELP);
+    }
+
+    void testJDK() {
+        assertTrue(System.getProperty("java.version").contains("1.6"))
+        checkHelpOutput({ MadcowCLI.main(['-h'] as String[]) }, DEFAULT_HELP);
+        System.setProperty("java.version","1.5.1_22")
+        checkHelpOutput({ MadcowCLI.main(['-h'] as String[]) }, DEFAULT_JDK_ERROR);
+        System.setProperty("java.version","1.7.0_21")
+        checkHelpOutput({ MadcowCLI.main(['-h'] as String[]) }, DEFAULT_JDK_ERROR);
     }
 }

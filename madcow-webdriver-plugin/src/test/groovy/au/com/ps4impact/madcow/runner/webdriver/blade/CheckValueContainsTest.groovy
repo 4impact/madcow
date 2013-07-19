@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 4impact, Brisbane, Australia
+ * Copyright 2013 4impact, Brisbane, Australia
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -30,83 +30,83 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.util.ResourceFinder
 
 /**
- * Test for the CheckValue BladeRunner.
+ * This class is the testcase for check value contains
  *
- * @author Gavin Bunney
+ * @author Tom Romano
  */
-class CheckValueTest extends GroovyTestCase {
+class CheckValueContainsTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('CheckValueTest', new MadcowConfig(), []);
-    def checkValue = new CheckValue();
+    MadcowTestCase testCase = new MadcowTestCase('CheckValueContainsTest', new MadcowConfig(), []);
+    def checkValueContains = new CheckValueContains();
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
-    protected verifyCheckValueContents(GrassBlade blade, boolean shouldPass) {
+    protected verifyCheckValueContainsContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
     }
 
-    void testCheckValueByHtmlId() {
+    void testCheckValueContainsByHtmlId() {
         // defaults to html id
-        GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+        GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = link', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
 
         // explicit htmlid
         MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.checkValue = A link', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+        blade = new GrassBlade('aLinkId.checkValueContains = lin', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueByCss() {
+    void testCheckValueContainsByCss() {
         // defaults to html id
-        GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+        GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = link', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
 
         // explicit htmlid
         MadcowMappings.addMapping(testCase, 'cssLinkName', ['css': '#aLinkId']);
-        blade = new GrassBlade('cssLinkName.checkValue = A link', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+        blade = new GrassBlade('cssLinkName.checkValueContains = ink', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
+    }    
+
+    void testCheckValueContainsIncorrect() {
+        GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = is still a link', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, false);
     }
 
-    void testCheckValueIncorrect() {
-        GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link that isn\'t a link is still a link', testCase.grassParser);
-        verifyCheckValueContents(blade, false);
-    }
-
-    void testCheckValueByName() {
+    void testCheckValueContainsByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
-        GrassBlade blade = new GrassBlade('aLinkName.checkValue = A link', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+        GrassBlade blade = new GrassBlade('aLinkName.checkValueContains = A li', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueByXPath() {
+    void testCheckValueContainsByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
-        GrassBlade blade = new GrassBlade('aLinkXPath.checkValue = A link', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+        GrassBlade blade = new GrassBlade('aLinkXPath.checkValueContains = nk', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueByText() {
+    void testCheckValueContainsByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
-        GrassBlade blade = new GrassBlade('aLinkText.checkValue = A link', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+        GrassBlade blade = new GrassBlade('aLinkText.checkValueContains = A l', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueForTextArea() {
-        GrassBlade blade = new GrassBlade('aTextAreaId.checkValue = Text area contents', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+    void testCheckValueContainsForTextArea() {
+        GrassBlade blade = new GrassBlade('aTextAreaId.checkValueContains = contents', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
     }
 
-    void testCheckValueEmpty() {
-        GrassBlade blade = new GrassBlade('anEmptyParagraphId.checkValue = ', testCase.grassParser);
-        verifyCheckValueContents(blade, true);
+    void testCheckValueContainsEmpty() {
+        GrassBlade blade = new GrassBlade('anEmptyParagraphId.checkValueContains = ', testCase.grassParser);
+        verifyCheckValueContainsContents(blade, true);
     }
 
     void testMappingSelectorInvalidRequired() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValue = Tennis', testCase.grassParser);
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValueContains = Tennis', testCase.grassParser);
             blade.mappingSelectorType = 'invalidOne';
-            assertFalse(checkValue.isValidBladeToExecute(blade));
+            assertFalse(checkValueContains.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
             assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
@@ -115,9 +115,9 @@ class CheckValueTest extends GroovyTestCase {
 
     void testMappingSelectorRequired() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValue = Tennis', testCase.grassParser);
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValueContains = Tennis', testCase.grassParser);
             blade.mappingSelectorType = null;
-            assertFalse(checkValue.isValidBladeToExecute(blade));
+            assertFalse(checkValueContains.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
             assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
@@ -126,8 +126,8 @@ class CheckValueTest extends GroovyTestCase {
 
     void testStatementNotSupported() {
         try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValue', testCase.grassParser);
-            assertFalse(checkValue.isValidBladeToExecute(blade));
+            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValueContains', testCase.grassParser);
+            assertFalse(checkValueContains.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
             assertEquals('Unsupported grass format. Only grass blades of type \'[EQUATION]\' are supported.', e.message);

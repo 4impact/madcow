@@ -21,9 +21,14 @@
 
 package au.com.ps4impact.madcow.runner.webdriver
 
+import au.com.ps4impact.madcow.grass.GrassBlade
+import au.com.ps4impact.madcow.grass.GrassParser
 import au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.mock.MockMadcowConfig
+import au.com.ps4impact.madcow.runner.webdriver.driver.remote.MadcowRemoteWebDriver
+import au.com.ps4impact.madcow.step.MadcowStep
+import groovy.mock.interceptor.MockFor
 
 /**
  * Test for running WebDriver grass
@@ -33,6 +38,7 @@ import au.com.ps4impact.madcow.mock.MockMadcowConfig
 class WebDriverStepRunnerTest extends GroovyTestCase {
 
     MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest', MockMadcowConfig.getMadcowConfig());
+    WebDriverBladeRunner fakeBladeRunner = new MockWebDriverBladeRunner();
 
     public void testDefaultSelector() {
         WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase, [:]);
@@ -44,12 +50,48 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
         assertEquals(MadcowHtmlUnitDriver.class, stepRunner.driver.class);
     }
 
+    public void testRemoteNotInitialised() {
+        WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase,
+                ['browser':'REMOTE',
+                 'remoteServerUrl': 'http://webdriver.4impact.net.au:4444/wd/hub',
+                 'emulate': 'firefox']);
+        assertNull(stepRunner.driver)
+        assertNull(stepRunner?.driver?.class)
+    }
+
+    public void testRemoteExecuteCausesInitialised() {
+        WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase,
+                ['browser':'REMOTE',
+                'remoteServerUrl': 'http://4impactmadcow:ba4dc6eb-1101-45c5-a1b1-4bfd3e793497@ondemand.saucelabs.com:80/wd/hub',
+                'emulate': 'firefox']);
+        assertNull(stepRunner.driver)
+        assertNull(stepRunner?.driver?.class)
+        def step = new MadcowStep(testCase, new GrassBlade("invokeUrl = http://www.google.com", testCase.grassParser), null);
+        def mockWebDriverBladeRunner = new MockFor(WebDriverBladeRunner.class)
+        mockWebDriverBladeRunner.demand.getBladeRunner {
+            return fakeBladeRunner
+        }
+        mockWebDriverBladeRunner.use {
+            stepRunner.execute(step)
+        }
+        assertNotNull(stepRunner.driver)
+        assertNotNull(stepRunner?.driver?.class)
+        assertEquals(MadcowRemoteWebDriver.class, stepRunner.driver.class);
+    }
+
+
     public void testBrowserNotFound() {
         try {
             WebDriverStepRunner stepRunner = new WebDriverStepRunner(null, ['browser':'tent.tent.tennis.tent']);
             fail('should always exception with ClassNotFoundException');
         } catch (e) {
             assertTrue( e.message.startsWith("The specified Browser 'TENT.TENT.TENNIS.TENT' cannot be found"));
+        }
+    }
+
+    class MockWebDriverBladeRunner extends WebDriverBladeRunner {
+        void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
+            //
         }
     }
 }

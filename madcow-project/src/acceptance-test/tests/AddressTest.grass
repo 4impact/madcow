@@ -1,9 +1,14 @@
+testInfo = "This test will check the Address Book application search functionality"
 invokeUrl = ADDRESSBOOK
 
 # verify the text exists on the page
 @expectedValue = Search Address
 verifyText = @expectedValue
-
+addressLines.checkValue = ""
+addressLines.value = "Harvey Street"
+testInfo = "Adding some more test information!"
+addressLines.checkValue = "Harvey Street"
+addressLines.checkValueContains = "Harvey"
 testsite_search_searchButton.showOnReport = Search Button Text
 testsite_search_searchButton.showOnReport = ['name' : 'Search Formatting', format: 'This is bold - <b>%s</b>']
 testsite_search_searchButton.hasClass = btn-primary

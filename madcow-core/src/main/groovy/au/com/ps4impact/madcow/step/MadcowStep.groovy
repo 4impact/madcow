@@ -54,14 +54,17 @@ class MadcowStep {
         this.blade      = blade;
         this.parent     = parent;
         this.children   = new ArrayList<MadcowStep>();
-        this.sequenceNumber = testCase.steps.size() + 1;
+        this.sequenceNumber = parent?parent.children.size()+1:testCase.steps.size() + 1;
         this.stopWatch  = new StopWatch();
 
         this.result = MadcowStepResult.NOT_YET_EXECUTED();
     }
 
     String getSequenceNumberString() {
-        return SEQUENCE_NUMBER_FORMAT.format(sequenceNumber);
+        if (parent)
+            return parent.getSequenceNumberString()+"_"+SEQUENCE_NUMBER_FORMAT.format(sequenceNumber);
+        else
+            return SEQUENCE_NUMBER_FORMAT.format(sequenceNumber);
     }
 
     /**
