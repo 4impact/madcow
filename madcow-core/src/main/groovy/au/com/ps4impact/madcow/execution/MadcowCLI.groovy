@@ -64,7 +64,7 @@ class MadcowCLI {
     {
         //requires JDK 1.6/1.7 for now...
         def javaVersion = Integer.parseInt(System.getProperty("java.version").split("\\.")[1])
-        if (!javaVersion in 6..7) {
+        if (! (javaVersion in 6..7)) {
             println("Madcow currently requires Java JDK 1.6 or 1.7, please update your JAVA_HOME accordingly and retry");
             return;
         }

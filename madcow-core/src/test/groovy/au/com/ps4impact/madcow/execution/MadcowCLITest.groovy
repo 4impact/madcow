@@ -111,11 +111,12 @@ Options:
     }
 
     void testJDK() {
-        assertTrue(System.getProperty("java.version").contains("1.6"))
+        def current = System.getProperty("java.version")
+        assertTrue(current.contains("1.6") || current.contains("1.7"))
         checkHelpOutput({ MadcowCLI.main(['-h'] as String[]) }, DEFAULT_HELP);
         System.setProperty("java.version","1.5.1_22")
         checkHelpOutput({ MadcowCLI.main(['-h'] as String[]) }, DEFAULT_JDK_ERROR);
         System.setProperty("java.version","1.7.0_21")
-        checkHelpOutput({ MadcowCLI.main(['-h'] as String[]) }, DEFAULT_JDK_ERROR);
+        checkHelpOutput({ MadcowCLI.main(['-h'] as String[]) }, DEFAULT_HELP);
     }
 }
