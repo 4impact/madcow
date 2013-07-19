@@ -1,0 +1,3 @@
+RELEASE NOTES FOR VERSION 100
+-------------------------------------
+/tmp/MADCOW-BUILD-JOB1-100-ScriptBuildTask-4721824759622526042.sh
