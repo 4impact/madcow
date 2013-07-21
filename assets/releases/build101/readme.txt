@@ -1,0 +1,3 @@
+RELEASE NOTES FOR VERSION 101
+-------------------------------------
++ adding jdk7 to travis build  
