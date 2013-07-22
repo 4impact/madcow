@@ -9,7 +9,7 @@
     String statusIcon = '';
     if (step.result.failed()) {
         stepTime = step.getStepTimeInSeconds() + 's';
-        statusIcon = """<a class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a>""";
+        statusIcon = """<a name="failure" class="btn btn-danger linkless"><i class="icon-remove icon-white"></i></a>""";
     } else if (step.result.passed()) {
         stepTime = step.getStepTimeInSeconds() + 's';
         statusIcon = """<a class="btn btn-success linkless"><i class="icon-ok icon-white"></i></a>""";

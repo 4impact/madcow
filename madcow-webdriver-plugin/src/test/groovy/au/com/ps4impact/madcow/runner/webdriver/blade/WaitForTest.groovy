@@ -69,6 +69,12 @@ class WaitForTest extends GroovyTestCase {
         verifyWaitFor(blade, true);
     }
 
+    void testWaitForHTML() {
+        GrassBlade blade = new GrassBlade('waitFor = <button id="enabledButton" name="enabledButton">enabledButton</button>', testCase.grassParser);
+        verifyWaitFor(blade, true);
+        assertEquals(blade.parameters, "<button id=\"enabledButton\" name=\"enabledButton\">enabledButton</button>")
+    }
+
     void testWaitForByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.waitFor = A link', testCase.grassParser);

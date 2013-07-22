@@ -83,7 +83,6 @@ class ResizeBrowserTest {
     }
 
 
-
     @Test
     void testResizeBrowserByHtmlId() {
         // defaults to html id

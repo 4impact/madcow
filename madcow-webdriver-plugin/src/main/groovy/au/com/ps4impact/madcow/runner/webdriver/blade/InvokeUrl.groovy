@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
+import au.com.ps4impact.madcow.grass.GrassParseException
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
@@ -40,6 +41,22 @@ class InvokeUrl extends WebDriverBladeRunner {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
         String urlToInvoke = step.blade.parameters as String;
+
+        if (urlToInvoke.equals("REFRESH")){
+           //check if driver already has url
+           if (stepRunner.driver!=null
+               && stepRunner.driver.currentUrl!=null
+               && !stepRunner.driver.currentUrl.equals("")){
+               //attempt current driver page refresh
+
+               step.testCase.logInfo("Refreshing Current Page: $stepRunner.driver.currentUrl")
+               stepRunner.driver.navigate().refresh();
+
+               step.result = MadcowStepResult.PASS("Page Refreshed. URL now: <a href=\"${stepRunner.driver.currentUrl}\">${stepRunner.driver.currentUrl}</a>");
+               return
+           }
+        }
+
         NodeList replacementUrls = step.env.invokeUrl as NodeList;
         if (replacementUrls != null && !replacementUrls.empty) {
             replacementUrls.first().children()?.each { child ->
