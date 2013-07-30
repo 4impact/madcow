@@ -1,0 +1,3 @@
+RELEASE NOTES FOR VERSION 102
+-------------------------------------
++ adding error test case creation to madcow exception test runner moved positioning of the driver instantiation which was causing failures to not be recorded  + fixing MadcowTestRunner to make it uses sequential strategy for non parallel mode… fixing some more code formatting  + fix formatting of parallelTestCaseRunner  + adding exception error test case to IMadcowReport interface updating junit template to allow for above adding changes to MockStepRunner to allow throw webdriver exception and allow for testing updated pom to suit above  + Adding phantomJS support for RemoteWebDriver plugin Fixing some formatting issues Added some more madcow-config options to test exception handling  
