@@ -1,0 +1,3 @@
+RELEASE NOTES FOR VERSION 103
+-------------------------------------
++ adding oracle jdk 7  
