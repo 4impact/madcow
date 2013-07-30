@@ -45,7 +45,6 @@ class MadcowTestCaseException extends MadcowTestCase {
         this.stopWatch.start();
         //add a error message with a failed first step
         MadcowStep runtimeError = new MadcowStep(this, null, null);
-        //MadcowStep runtimeError = new MadcowStep(this, new GrassBlade(grassScript?.get(0), this.grassParser), null);
         runtimeError.result = MadcowStepResult.FAIL(error.message)
         this.steps.add(runtimeError);
         //set it as the last step run

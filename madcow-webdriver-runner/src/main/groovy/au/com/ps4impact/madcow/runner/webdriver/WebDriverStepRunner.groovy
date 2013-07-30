@@ -96,6 +96,15 @@ class WebDriverStepRunner extends MadcowStepRunner {
                                 case 'SAFARI':
                                     driverParameters.desiredCapabilities = DesiredCapabilities.safari();
                                     break;
+                                case 'PHANTOMJS':
+                                    driverParameters.desiredCapabilities = DesiredCapabilities.phantomjs();
+                                    break;
+                                case 'IPAD':
+                                    driverParameters.desiredCapabilities = DesiredCapabilities.ipad();
+                                    break;
+                                case 'IPHONE':
+                                    driverParameters.desiredCapabilities = DesiredCapabilities.iphone();
+                                    break;
                                 case 'FIREFOX':
                                 case 'FF3':
                                 case 'FF3.6':
@@ -150,10 +159,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
             }
 
-        } catch (WebDriverException webdriverException) {
-            //retry during execute method then
-            testCase.logInfo("A time out exception occured, catching it until retry")
-            initRemoteTimedOut = true
+//        } catch (WebDriverException webdriverException) {
+//            //retry during execute method then
+//            testCase.logInfo("A time out exception occured, catching it until retry")
+//            initRemoteTimedOut = true
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found\n\n$cnfe");
         } catch (ClassCastException cce) {
@@ -163,6 +172,11 @@ class WebDriverStepRunner extends MadcowStepRunner {
         }
     }
 
+    /**
+     * Initialises the webdriver instance or throws an exception
+     *
+     * @return an exception or an initialised driver
+     */
     private initialiseDriver() {
         //if driver is null create it
         if (this.driver == null) {
@@ -174,9 +188,9 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     this.driver = this.driverType.driverClass.newInstance() as WebDriver
                 }
 
-            } catch (WebDriverException wdException) {
-                //retry during execute method then
-                throw new Exception("The webdriver setup thew an error \n\n$wdException");
+//            } catch (WebDriverException wdException) {
+//                //retry during execute method then
+//                throw new Exception("The webdriver setup thew an error \n\n$wdException");
             } catch (ClassNotFoundException cnfe) {
                 throw new Exception("The specified Browser '${driverParameters.browser}' cannot be found\n\n$cnfe");
             } catch (ClassCastException cce) {
@@ -209,11 +223,11 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public void execute(MadcowStep step) {
 
         //only execute if this is not a skipped test
-        if (!step.testCase.ignoreTestCase){
+        if (!step.testCase.ignoreTestCase) {
 
             //do initialise of driver inside the first execution of the testCase
-            if (driverType == WebDriverType.REMOTE
-                && driver == null) {
+            if ((driverType == WebDriverType.REMOTE
+                && driver == null) || initRemoteTimedOut) {
                 initialiseDriver()
             }
 
@@ -234,12 +248,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
             } catch (NoSuchElementException ignored) {
                 step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
-            } catch (org.openqa.selenium.WebDriverException driverException) {
-
             } catch (e) {
                 step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
             }
-        }else{
+        } else {
             step.result = MadcowStepResult.NOT_YET_EXECUTED('Skipped!');
         }
 
@@ -335,7 +347,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     public void finishTestCase() {
-        if (driver!=null)
+        if (driver != null)
             driver.close();
     }
 }
