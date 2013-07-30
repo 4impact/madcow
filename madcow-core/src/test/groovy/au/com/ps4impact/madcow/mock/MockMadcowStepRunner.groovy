@@ -26,6 +26,7 @@ import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.MadcowTestCase
+import org.openqa.selenium.NoSuchWindowException
 
 /**
  * Stubbed Madcow Step Runner.
@@ -35,14 +36,28 @@ import au.com.ps4impact.madcow.MadcowTestCase
 class MockMadcowStepRunner extends MadcowStepRunner {
 
     boolean alwaysPass = true;
+    boolean throwsException = false;
 
     MockMadcowStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
         this.testCase = testCase;
         alwaysPass = (parameters.alwaysPass != 'false');
+        throwsException = (parameters.throwsException != 'false');
     }
 
     void execute(MadcowStep step) {
-        step.result = (step.testCase.ignoreTestCase)?MadcowStepResult.NOT_YET_EXECUTED():(alwaysPass ? MadcowStepResult.PASS('Mocked Pass') : MadcowStepResult.FAIL('Mocked Fail'));
+        if (throwsException) {
+            throw new NoSuchWindowException("its broken yo")
+        }
+
+        if (step.testCase.ignoreTestCase) {
+            step.result = MadcowStepResult.NOT_YET_EXECUTED()
+        } else {
+            if (alwaysPass) {
+                step.result = MadcowStepResult.PASS('Mocked Pass')
+            } else {
+                step.result = MadcowStepResult.FAIL('Mocked Fail')
+            }
+        }
     }
 
     boolean hasBladeRunner(GrassBlade blade) {

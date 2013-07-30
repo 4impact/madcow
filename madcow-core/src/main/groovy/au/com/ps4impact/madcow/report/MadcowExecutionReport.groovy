@@ -61,12 +61,12 @@ class MadcowExecutionReport implements IMadcowReport {
         boolean isSkipped = false;
 
         //if this is a exception test case then skip out and report it
-        if (testCase instanceof MadcowTestCaseException){
+        if (testCase instanceof MadcowTestCaseException) {
             createErrorTestCaseReport(testCase.name, testCase.error)
             return
         }
 
-        if (testCase.ignoreTestCase){
+        if (testCase.ignoreTestCase) {
             isSkipped = true;
         }
 
@@ -96,14 +96,20 @@ class MadcowExecutionReport implements IMadcowReport {
             def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-madcow-testcase.gtemplate').URL);
             def template = templateEngine.make(binding);
             String templateContents = template.toString();
-            def result = new File(testCase.getResultDirectory().path + "/index.html");
+            def result = new File(testCase.getResultDirectory().path + "/index.html")
             result.write(templateContents);
         } catch (e) {
-            LOG.error("Error creating the Madcow Test Case Execution Report: $e");
+            LOG.error("Error creating the Madcow Test Case Execution Report for $testCase.name: $e")
         }
     }
 
-    private void createErrorTestCaseReport(String testName, Exception parsedException){
+    /**
+     * Creates an error test case report
+     *
+     * @param testName the test name
+     * @param parsedException the exception that was thrown
+     */
+    public void createErrorTestCaseReport(String testName, Throwable parsedException) {
 
         def binding = [ 'testName'          : testName,
                         'exception'         : parsedException,
@@ -117,7 +123,7 @@ class MadcowExecutionReport implements IMadcowReport {
             def result = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/${testName}/index.html");
             result.write(templateContents);
         } catch (e) {
-            LOG.error("Error creating the Failed Madcow Test Case Execution Report: $e");
+            LOG.error("Error creating the Madcow Error Test Case Execution Report for $testName: $e");
         }
     }
 
@@ -135,9 +141,9 @@ class MadcowExecutionReport implements IMadcowReport {
         Long totalTime = 0L;
         allTestCases.each { testCase ->
 
-            if (testCase instanceof MadcowTestCaseException){
+            if (testCase instanceof MadcowTestCaseException) {
                 errorCount++;
-            } else if (testCase.ignoreTestCase){
+            } else if (testCase.ignoreTestCase) {
                 skippedCount++;
             } else if (testCase.lastExecutedStep.result.failed()) {
                 failedCount++;

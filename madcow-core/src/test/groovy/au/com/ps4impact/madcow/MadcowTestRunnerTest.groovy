@@ -35,6 +35,12 @@ class MadcowTestRunnerTest extends GroovyTestCase {
         MadcowTestRunner.executeTests(['DataParameterTest.grass'], MockMadcowConfig.getMadcowConfig());
     }
 
+    void testExecuteTestWithStack() {
+        def config = MockMadcowConfig.getMadcowConfig(false, true, 'au.com.ps4impact.madcow.mock.MockMadcowStepRunner')
+        MadcowTestRunner.executeTests(['ExceptionTest'], config);
+        MadcowTestRunner.executeTests(['ExceptionTest.grass'], config);
+    }
+
     void testExecuteNonFound() {
         try {
             MadcowTestRunner.prepareTestSuite(['InvalidTestName'], MockMadcowConfig.getMadcowConfig());

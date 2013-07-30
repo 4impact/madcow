@@ -55,6 +55,18 @@ class JUnitMadcowReportTest extends GroovyTestCase {
         def validator = schema.newValidator()
         validator.validate(new StreamSource(outputFile));
     }
+    protected void validateJUnitErrorXML(MadcowTestCase testCase) {
+        junitReport.createErrorTestCaseReport(testCase.name, new Exception("This is an error man!!!"));
+
+        def outputFile = new File(JUnitMadcowReport.JUNIT_RESULTS_XML_DIRECTORY + "/TEST-${StringUtils.replace(testCase.name, '/', '_')}.xml");
+
+        assertTrue(outputFile.text.contains('<error'));
+
+        def factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+        def schema = factory.newSchema(new StreamSource(ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'ant-junit.xsd')))
+        def validator = schema.newValidator()
+        validator.validate(new StreamSource(outputFile));
+    }
 
     public void testTestCaseReportForPass() {
         junitReport.prepareReportDirectory();
@@ -99,6 +111,22 @@ class JUnitMadcowReportTest extends GroovyTestCase {
         testCase.lastExecutedStep = testCase.steps.first();
 
         validateJUnitXML(testCase);
+    }
+
+    public void testTestCaseReportForException() {
+        junitReport.prepareReportDirectory();
+
+        MadcowTestCase testCase = new MadcowTestCase('testTestCaseReportForException', MockMadcowConfig.getMadcowConfig(true))
+        testCase.steps.add(new MadcowStep(testCase, null, null));
+        testCase.ignoreTestCase = false;
+        testCase.steps.first().result = MadcowStepResult.NOT_YET_EXECUTED();
+        testCase.steps.first().result.detailedMessage = 'This could be a reason for exception or something.... \n\nCould be...'
+        testCase.stopWatch = new StopWatch();
+        testCase.stopWatch.start();
+        testCase.stopWatch.stop();
+        testCase.lastExecutedStep = testCase.steps.first();
+
+        validateJUnitErrorXML(testCase);
     }
 
 

@@ -205,6 +205,12 @@ Maven, like POM
             <version>1.8.2</version>
         </dependency>
         <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>2.33.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant-junit</artifactId>
             <version>${ant.runtime.version}</version>
