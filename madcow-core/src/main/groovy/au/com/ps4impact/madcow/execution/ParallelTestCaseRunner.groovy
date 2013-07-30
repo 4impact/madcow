@@ -54,6 +54,7 @@ class ParallelTestCaseRunner {
         this.parallelActor = Actor.actor(strategy, { P2<MadcowTestCase, List<IMadcowReport>> parameters ->
 
             MadcowTestCase testCase = parameters._1();
+            Throwable exception = null;
 
                 try {
 
@@ -71,12 +72,18 @@ class ParallelTestCaseRunner {
                         }
                     }
                     callback.act none();
-                } catch (e) {
-                    LOG.error("${testCase.name} throw an unexpected exception:\n$e")
-                    callback.act some(e);
+                } catch (error) {
+                    LOG.error("${testCase.name} throw an unexpected exception:\n$error")
+                    //capture the error and create report on it
+                    exception = error
+                    parameters._2().each { reporter -> reporter.createErrorTestCaseReport(testCase.name, error) }
+                    callback.act some(error);
                 } finally {
                     MadcowLog.shutdownLogging(testCase);
-                    parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) }
+                    //if there was no unexpected errors then report on it
+                    if (!exception) {
+                        parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) }
+                    }
                 }
 
         } as Effect);

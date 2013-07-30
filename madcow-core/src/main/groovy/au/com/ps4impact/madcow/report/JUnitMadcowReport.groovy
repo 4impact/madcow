@@ -22,6 +22,7 @@
 package au.com.ps4impact.madcow.report
 
 import au.com.ps4impact.madcow.MadcowTestCaseException
+import au.com.ps4impact.madcow.step.MadcowStepResult
 import groovy.text.GStringTemplateEngine
 import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.MadcowProject
@@ -64,13 +65,9 @@ class JUnitMadcowReport implements IMadcowReport {
             return
         }
 
-        def testCaseResult = testCase?.lastExecutedStep?.result;
+        def testCaseResult = (testCase?.lastExecutedStep?.result)?:MadcowStepResult.PARSE_ERROR("An Error occurred executing this test")
 
-        if (testCaseResult == null) {
-            return
-        }
-
-        String escapedMessage = StringEscapeUtils.escapeXml(testCaseResult.message);
+        String escapedMessage = StringEscapeUtils.escapeXml(testCaseResult?.message);
 
         try {
             def binding = [ 'errorCount'        : testCase instanceof MadcowTestCaseException ? '1' : '0',

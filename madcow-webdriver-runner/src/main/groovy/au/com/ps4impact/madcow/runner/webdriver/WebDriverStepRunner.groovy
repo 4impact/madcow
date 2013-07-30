@@ -225,14 +225,14 @@ class WebDriverStepRunner extends MadcowStepRunner {
         //only execute if this is not a skipped test
         if (!step.testCase.ignoreTestCase) {
 
-            //do initialise of driver inside the first execution of the testCase
-            if ((driverType == WebDriverType.REMOTE
-                && driver == null) || initRemoteTimedOut) {
-                initialiseDriver()
-            }
-
             WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
             try {
+                //do initialise of driver inside the first execution of the testCase
+                if ((driverType == WebDriverType.REMOTE
+                     && driver == null) || initRemoteTimedOut) {
+                    initialiseDriver()
+                }
+
                 bladeRunner.execute(this, step);
 
                 if (!driver.title?.equals(lastPageTitle)) {

@@ -145,13 +145,15 @@ class MadcowExecutionReport implements IMadcowReport {
                 errorCount++;
             } else if (testCase.ignoreTestCase) {
                 skippedCount++;
-            } else if (testCase.lastExecutedStep.result.failed()) {
+            } else if (testCase.lastExecutedStep == null
+                       || testCase.lastExecutedStep.result.failed()) {
                 failedCount++;
             } else {
                 passedCount++;
             }
 
-            if (!testCase.lastExecutedStep.result.parseError())
+            if (testCase?.lastExecutedStep != null
+                && !testCase.lastExecutedStep.result.parseError())
                 totalTime += testCase.stopWatch.time;
         }
 

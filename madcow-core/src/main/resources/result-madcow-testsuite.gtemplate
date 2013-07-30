@@ -99,14 +99,14 @@
                         <td><a class="btn btn-danger linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Error Test"><i class="icon-exclamation-sign icon-white"></i></a></td>
                         <%} else if (testCase.ignoreTestCase) { %>
                         <td><a class="btn btn-warning linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Skipped Test"><i class="icon-minus icon-white"></i></a></td>
-                        <% }else if (testCase.lastExecutedStep.result.failed()) { %>
+                        <% }else if (testCase.lastExecutedStep == null || testCase.lastExecutedStep.result.failed()) { %>
                         <td><a class="btn btn-danger linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Failed Test"><i class="icon-remove icon-white"></i></a></td>
                         <% } else { %>
                         <td><a class="btn btn-success linkless" href="#" rel="tooltip" data-placement="top" data-trigger="hover" data-original-title="Successful Test"><i class="icon-ok icon-white"></i></a></td>
                         <% } %>
                         <td><a href="${testCase.name}/index.html">${testCase.name}</a></td>
-                        <td class="centralise">${testCase.lastExecutedStep.result.parseError() ? '-' : testCase.steps.size()}</td>
-                        <td class="centralise">${testCase.lastExecutedStep.result.parseError() ? '-' : testCase.getTotalTimeInSeconds() + 's'}</td>
+                        <td class="centralise">${(testCase.lastExecutedStep == null || testCase.lastExecutedStep.result.parseError()) ? '-' : testCase.steps.size()}</td>
+                        <td class="centralise">${(testCase.lastExecutedStep == null || testCase.lastExecutedStep.result.parseError()) ? '-' : testCase.getTotalTimeInSeconds() + 's'}</td>
                     </tr>
                     <% } %>
                 </tbody>
