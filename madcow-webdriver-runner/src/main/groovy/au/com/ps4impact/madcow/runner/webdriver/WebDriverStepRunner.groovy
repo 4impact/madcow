@@ -57,6 +57,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public String lastPageSource;
     public String lastPageTitle;
     public boolean initRemoteTimedOut = false;
+    public int retryCount = 0;
     def driverParameters = null;
 
     WebDriverStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
@@ -227,11 +228,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
             WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
             try {
-                //do initialise of driver inside the first execution of the testCase
-                if ((driverType == WebDriverType.REMOTE
-                     && driver == null) || initRemoteTimedOut) {
-                    initialiseDriver()
-                }
+                initialiseDriverWithRetriesIfRequired();
 
                 bladeRunner.execute(this, step);
 
@@ -242,7 +239,9 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     }
                 }
 
-                if (!driver.pageSource?.equals(lastPageSource)) {
+                //if pageSource not null and not equal to previous
+                if (driver?.pageSource != null
+                    && !driver?.pageSource?.equals(lastPageSource)) {
                     captureHtmlResults(step);
                 }
 
@@ -255,6 +254,29 @@ class WebDriverStepRunner extends MadcowStepRunner {
             step.result = MadcowStepResult.NOT_YET_EXECUTED('Skipped!');
         }
 
+    }
+
+    /**
+     * Attempts 3 retries of instantiating the driver and then fails if it still doesnt work.
+     */
+    private void initialiseDriverWithRetriesIfRequired() {
+        //do initialise of driver inside the first execution of the testCase
+        if (driverType == WebDriverType.REMOTE && driver == null) {
+            while (retryCount <= 3) {
+                retryCount++;
+                try {
+                    if (driver == null) {
+                        initialiseDriver()
+                    }
+                } catch (Exception ex) {
+                    testCase.logWarn("Failed to initialise driver! Retry number ${retryCount}... ")
+                    if (retryCount >= 3) {
+                        throw ex
+                    }
+                    testCase.logDebug("Exception was ${ex}")
+                }
+            }
+        }
     }
 
     /**
