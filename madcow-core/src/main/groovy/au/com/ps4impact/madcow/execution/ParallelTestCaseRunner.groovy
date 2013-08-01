@@ -54,29 +54,36 @@ class ParallelTestCaseRunner {
         this.parallelActor = Actor.actor(strategy, { P2<MadcowTestCase, List<IMadcowReport>> parameters ->
 
             MadcowTestCase testCase = parameters._1();
+            Throwable exception = null;
 
                 try {
 
-                    if (testCase instanceof MadcowTestCaseException){
+                    if (testCase instanceof MadcowTestCaseException) {
                         testCase.logInfo("Failed attempting to run ${testCase.name}");
-                    }else{
+                    } else {
                         testCase.logInfo("Running ${testCase.name}");
                         try {
                             testCase.execute();
                             testCase.logInfo("Test ${testCase.name} Passed");
                         } catch (e) {
-                            testCase.logError("Test ${testCase.name} Failed!\n\nException: $e");
+                            testCase.logError("Test ${testCase.name} Failed!\nException: $e");
+                        } finally {
+                            testCase.stepRunner.finishTestCase();
                         }
-
-                        testCase.stepRunner.finishTestCase();
                     }
                     callback.act none();
-                } catch (e) {
-                    LOG.error("${testCase.name} throw an unexpected exception:\n$e");
-                    callback.act some(e);
-                }finally{
+                } catch (error) {
+                    LOG.error("${testCase.name} threw an unexpected exception:\n$error")
+                    //capture the error and create report on it
+                    exception = error
+                    parameters._2().each { reporter -> reporter.createErrorTestCaseReport(testCase.name, error) }
+                    callback.act some(error);
+                } finally {
                     MadcowLog.shutdownLogging(testCase);
-                    parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) };
+                    //if there was no unexpected errors then report on it
+                    if (!exception) {
+                        parameters._2().each { reporter -> reporter.createTestCaseReport(testCase) }
+                    }
                 }
 
         } as Effect);

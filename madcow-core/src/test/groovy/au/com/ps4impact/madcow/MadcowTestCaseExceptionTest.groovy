@@ -50,7 +50,8 @@ class MadcowTestCaseExceptionTest extends GroovyTestCase {
 
     void testCreateAndNoStepRunnerMade() {
         Exception error = new Exception("This is an awesome error buddy")
-        MadcowTestCase testCase = new MadcowTestCaseException('testCreateAndParse', MockMadcowConfig.getMadcowConfig(), getGrassScript(), error);
+        MadcowTestCase testCase = new MadcowTestCaseException('testCreateAndParse', MockMadcowConfig.getMadcowConfig(),
+                getGrassScript(), error);
         assertEquals(testCase.error, error)
         assertEquals(testCase.ignoreTestCase, false)
         assertEquals(testCase.error.message, "This is an awesome error buddy")

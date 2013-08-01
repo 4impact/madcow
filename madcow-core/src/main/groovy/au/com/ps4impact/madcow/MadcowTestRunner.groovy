@@ -84,31 +84,36 @@ class MadcowTestRunner {
 
         rootTestSuite.stopWatch.start();
 
+
+        ExecutorService pool
+        Strategy<Unit> strategy
+
         if (!madcowConfig.parallel) {
             LOG.info "Running in Single Execution mode..."
-            allTestCases.each { MadcowTestCase testCase ->
-                new SingleTestCaseRunner(testCase, reporters)
-                numberOfTestsRan.andIncrement
-            }
+            pool = Executors.newSingleThreadExecutor();
+            //strategy = Strategy.executorStrategy(pool);
+            strategy = Strategy.seqStrategy()
 
-        }else {
+        } else {
             LOG.info "Running in Parallel Execution mode..."
-
-            ExecutorService pool = Executors.newFixedThreadPool(madcowConfig.threads);
-            Strategy<Unit> strategy = Strategy.executorStrategy(pool);
-
-            def callback = Actor.queueActor(strategy, {Option<Exception> result ->
-                numberOfTestsRan.andIncrement;
-                result.foreach({Exception e -> exceptions.add(e)} as Effect)
-                if (numberOfTestsRan.get() >= numberTestsToRun) {
-                    pool.shutdown()
-                }
-            } as Effect);
-
-            allTestCases.each { MadcowTestCase testCase ->
-                new ParallelTestCaseRunner(strategy, callback).act(fj.P.p(testCase, reporters));
-            }
+            pool = Executors.newFixedThreadPool(madcowConfig.threads);
+            strategy = Strategy.executorStrategy(pool);
         }
+
+        def callback = Actor.queueActor(strategy, {Option<Exception> result ->
+            numberOfTestsRan.andIncrement;
+            result.foreach({Exception e -> exceptions.add(e)} as Effect)
+            if (numberOfTestsRan.get() >= numberTestsToRun) {
+                pool.shutdown()
+            }
+        } as Effect);
+
+        def parallelTestCaseRunner = new ParallelTestCaseRunner(strategy, callback)
+
+        allTestCases.each { MadcowTestCase testCase ->
+            parallelTestCaseRunner.act(fj.P.p(testCase, reporters));
+        }
+
 
         while (numberOfTestsRan.get() < numberTestsToRun) {
             Thread.sleep(500);
@@ -165,7 +170,7 @@ class MadcowTestRunner {
             MadcowTestCase testCase;
             try {
                 testCase = new MadcowTestCase(testName, madcowConfig, testFile.readLines() as ArrayList<String>);
-            }catch (Exception error){
+            } catch (Exception error) {
                 testCase = new MadcowTestCaseException(testName, madcowConfig, testFile.readLines() as ArrayList<String>, error);
             }
             MadcowTestSuite suite = rootSuite.locateSuite(testName) ?: rootSuite;

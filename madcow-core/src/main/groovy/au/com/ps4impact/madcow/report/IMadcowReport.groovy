@@ -45,4 +45,12 @@ interface IMadcowReport {
      * Create a suite level report.
      */
     public void createTestSuiteReport(MadcowTestSuite testSuite);
+
+    /**
+     * Create a report for an test case with an exception
+     * @param testName the testcase
+     * @param parsedException the parsed exception
+     */
+    public void createErrorTestCaseReport(String testName, Throwable parsedException)
+
 }
