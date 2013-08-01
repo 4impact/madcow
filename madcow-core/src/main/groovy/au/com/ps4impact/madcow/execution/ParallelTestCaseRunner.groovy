@@ -66,14 +66,14 @@ class ParallelTestCaseRunner {
                             testCase.execute();
                             testCase.logInfo("Test ${testCase.name} Passed");
                         } catch (e) {
-                            testCase.logError("Test ${testCase.name} Failed!\n\nException: $e");
+                            testCase.logError("Test ${testCase.name} Failed!\nException: $e");
                         } finally {
                             testCase.stepRunner.finishTestCase();
                         }
                     }
                     callback.act none();
                 } catch (error) {
-                    LOG.error("${testCase.name} throw an unexpected exception:\n$error")
+                    LOG.error("${testCase.name} threw an unexpected exception:\n$error")
                     //capture the error and create report on it
                     exception = error
                     parameters._2().each { reporter -> reporter.createErrorTestCaseReport(testCase.name, error) }
