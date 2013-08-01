@@ -116,7 +116,7 @@ class MadcowConfig {
         }
 
         // get the default retry count and use it if none is set
-        def retriesText = this.execution."retries".text() ?: '';
+        def retriesText = this.execution."retries".text() ?: '1';
         if (retriesText != '') {
             try {
                 retryCount = retriesText as int;
