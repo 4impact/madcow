@@ -23,6 +23,7 @@ package au.com.ps4impact.madcow.execution
 
 import au.com.ps4impact.madcow.MadcowTestCaseException
 import fj.Effect
+import fj.P
 import fj.control.parallel.Actor
 import fj.control.parallel.Strategy
 import fj.data.Option
@@ -71,13 +72,13 @@ class ParallelTestCaseRunner {
                             testCase.stepRunner.finishTestCase();
                         }
                     }
-                    callback.act none();
+                    callback.act P.p(testCase, none());
                 } catch (error) {
                     LOG.error("${testCase.name} threw an unexpected exception:\n$error")
                     //capture the error and create report on it
                     exception = error
                     parameters._2().each { reporter -> reporter.createErrorTestCaseReport(testCase.name, error) }
-                    callback.act some(error);
+                    callback.act P.p(testCase, some(error));
                 } finally {
                     MadcowLog.shutdownLogging(testCase);
                     //if there was no unexpected errors then report on it
