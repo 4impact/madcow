@@ -1,0 +1,3 @@
+RELEASE NOTES FOR VERSION 105
+-------------------------------------
++ reverting to just jdk 6 for now  
