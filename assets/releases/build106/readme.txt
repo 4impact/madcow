@@ -1,0 +1,3 @@
+RELEASE NOTES FOR VERSION 106
+-------------------------------------
++ adding still maintained logos  
