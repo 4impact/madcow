@@ -1,4 +1,4 @@
-# Madcow 2.0  [![Build Status](https://travis-ci.org/4impact/madcow.png)](https://travis-ci.org/4impact/madcow) [![Project Status](https://stillmaintained.com/4impact/madcow.png)](https://stillmaintained.com/4impact/madcow)
+# Madcow 2.0  [![Build Status](https://travis-ci.org/4impact/madcow.png)](https://travis-ci.org/4impact/madcow) [![Project Status](http://stillmaintained.com/4impact/madcow.png)](https://stillmaintained.com/4impact/madcow)
 
 
 Madcow 2.0 is a complete rewrite to decouple Madcow from WebTest, and to be based on a more generic 'blade-runner-plugin' framework, currently targeted at WebDriver.
