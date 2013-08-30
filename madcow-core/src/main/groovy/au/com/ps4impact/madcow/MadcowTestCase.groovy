@@ -92,11 +92,14 @@ class MadcowTestCase {
         try {
             this.stepRunner = Class.forName(this.madcowConfig.stepRunner).newInstance([this, this.madcowConfig.stepRunnerParameters ?: new HashMap<String, String>()] as Object[]) as MadcowStepRunner;
         } catch (ClassNotFoundException cnfe) {
-            throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' cannot be found\n\n$cnfe");
+            //cnfe.printStackTrace()
+            throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' cannot be found\n\n$cnfe.message");
         } catch (ClassCastException cce) {
-            throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' isn't a MadcowStepRunner!\n\n$cce");
-        } catch (e) {
-            throw new Exception("Unexpected error creating the MadcowStepRunner '${this.madcowConfig.stepRunner}'\n\n$e");
+            //cce.printStackTrace()
+            throw new Exception("The specified MadcowStepRunner '${this.madcowConfig.stepRunner}' isn't a MadcowStepRunner!\n\n$cce.message");
+        } catch (Exception e) {
+            //e.printStackTrace()
+            throw new Exception("Unexpected error creating the MadcowStepRunner '${this.madcowConfig.stepRunner}'\n\n$e.message");
         }
     }
 

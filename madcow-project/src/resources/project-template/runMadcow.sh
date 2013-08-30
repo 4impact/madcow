@@ -11,4 +11,7 @@ export PROJECT_LIB_CLASSPATH=`find ./lib -name "*.jar" | tr "\n" ":"`
 
 export CLASSPATH=$MADCOW_LIB_CLASSPATH:$MADCOW_CONF_CLASSPATH:$PROJECT_LIB_CLASSPATH
 
-$JAVA_HOME/bin/java -classpath $CLASSPATH au.com.ps4impact.madcow.execution.MadcowCLI $@
+#echo "Running Madcow 2.0 using classpath"
+#echo $CLASSPATH
+
+$JAVA_HOME/bin/java $JAVA_OPTS -classpath $CLASSPATH au.com.ps4impact.madcow.execution.MadcowCLI $@

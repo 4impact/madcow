@@ -104,26 +104,29 @@ class MadcowTestRunner {
 
         def callback = Actor.queueActor(strategy, {P2<MadcowTestCase, Option<Exception>> result ->
             numberOfTestsRan.andIncrement;
-            result._2().foreach({Exception e -> exceptions.put(result._1(), e)} as Effect)
+            exceptions.put(result._1(), result._2())
+            //result._2().foreach({Exception e -> exceptions.put(result._1(), result._2())} as Effect)
             if (numberOfTestsRan.get() >= numberTestsToRun) {
                 pool.shutdown()
             }
         } as Effect);
 
-        def retries = madcowConfig.retryCount
+        def retries = 0
+        def maxRetries = madcowConfig.retryCount
 
         //while there is still retries remaining
-        while (retries > 0) {
+        while (retries < maxRetries) {
 
-            if (retries > 1 ) {
+            if (retries > 1
+                && exceptions?.entrySet()?.count { Option<Exception> option -> option.isSome() } > 0) {
                 LOG.info "Attempting retry number ${retries} of ${exceptions?.size()} errored tests..."
                 allTestCases = allTestCases.findAll { MadcowTestCase testCase ->
                     exceptions.get(testCase) != null
                 }
                 //decrement number of testRan by the number of failures as these will be retried...
                 def decrementTestCounter = -1*allTestCases.size()
-                LOG.trace "Decrementing numberOfTestsRan by ${decrementTestCounter}"
                 numberOfTestsRan.getAndAdd(decrementTestCounter)
+                LOG.trace "Decrementing numberOfTestsRan by ${decrementTestCounter} it is now -> ${numberOfTestsRan}"
             }
 
             def parallelTestCaseRunner = new ParallelTestCaseRunner(strategy, callback)
@@ -135,7 +138,7 @@ class MadcowTestRunner {
                 Thread.sleep(500);
             }
 
-            retries--
+            retries++
         }
 
         rootTestSuite.stopWatch.stop();

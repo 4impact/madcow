@@ -27,8 +27,8 @@
             <parameters>
                 <browser>remote</browser>
                 <emulate>firefox</emulate>
+                <!--<emulate>phantomjs</emulate>-->
                 <remoteServerUrl>http://localhost:4444/wd/hub</remoteServerUrl>
-                <!--<remoteServerUrl>http://localhost:4444/wd/hub</remoteServerUrl>-->
                 <implicitTimeout>60</implicitTimeout>
                 <scriptTimeout>60</scriptTimeout>
             </parameters>
@@ -36,6 +36,7 @@
         <parallel>false</parallel>
         <env.default>DEV</env.default>
         <threads>1</threads>
+        <retries>3</retries>
     </execution>
 
     <environments>

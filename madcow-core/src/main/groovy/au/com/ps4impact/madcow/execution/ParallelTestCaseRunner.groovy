@@ -68,17 +68,18 @@ class ParallelTestCaseRunner {
                             testCase.logInfo("Test ${testCase.name} Passed");
                         } catch (e) {
                             testCase.logError("Test ${testCase.name} Failed!\nException: $e");
+                            return callback.act(P.p(testCase, some(e)));
                         } finally {
                             testCase.stepRunner.finishTestCase();
                         }
                     }
-                    callback.act P.p(testCase, none());
+                    callback.act(P.p(testCase, none()));
                 } catch (error) {
                     LOG.error("${testCase.name} threw an unexpected exception:\n$error")
                     //capture the error and create report on it
                     exception = error
                     parameters._2().each { reporter -> reporter.createErrorTestCaseReport(testCase.name, error) }
-                    callback.act P.p(testCase, some(error));
+                    callback.act(P.p(testCase, some(error)));
                 } finally {
                     MadcowLog.shutdownLogging(testCase);
                     //if there was no unexpected errors then report on it
