@@ -31,7 +31,6 @@ import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.grass.GrassParseException
-import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.firefox.FirefoxProfile
 import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
@@ -40,10 +39,6 @@ import com.gargoylesoftware.htmlunit.BrowserVersion
 import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
-import org.openqa.selenium.TimeoutException
-import org.openqa.selenium.support.ThreadGuard
-
-import java.util.concurrent.TimeUnit
 
 /**
  * Implementation of the WebDriver step runner.
@@ -125,10 +120,25 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     }
                     break;
 
+                case WebDriverType.CHROME:
+//                    driverParameters = new ChromeDriverService()
+//                    driverParameters.start()
+//                    initialiseDriver()
+                    break;
+
                 case WebDriverType.FIREFOX:
                     driverParameters = new FirefoxProfile()
                     driverParameters.setEnableNativeEvents(true)
-                    initialiseDriver()
+//                    initialiseDriver()
+                    break;
+
+                case WebDriverType.PHANTOMJS:
+                    //driverParameters = new ResolvingPhantomJSDriverService.createDefaultService(capabilities)
+//                    initialiseDriver()
+                    break;
+
+                case WebDriverType.IE:
+//                    initialiseDriver()
                     break;
 
                 case WebDriverType.HTMLUNIT:
@@ -153,23 +163,21 @@ class WebDriverStepRunner extends MadcowStepRunner {
                         }
                     }
                     testCase.logInfo("Emulating HtmlUnit browser '${driverParameters.getNickname()}'")
-                    initialiseDriver()
+//                    initialiseDriver()
                     break;
-
                 default:
                     break;
             }
 
-//        } catch (WebDriverException webdriverException) {
-//            //retry during execute method then
-//            testCase.logInfo("A time out exception occured, catching it until retry")
-//            initRemoteTimedOut = true
         } catch (ClassNotFoundException cnfe) {
-            throw new Exception("The specified Browser '${parameters.browser}' cannot be found\n\n$cnfe");
+            //cnfe.printStackTrace()
+            throw new Exception("The specified Browser '${parameters.browser}' cannot be found: $cnfe.message");
         } catch (ClassCastException cce) {
-            throw new Exception("The specified Browser '${parameters.browser}' isn't a WebDriver!\n\n$cce");
-        } catch (e) {
-            throw new Exception("Unexpected error creating the Browser '${parameters.browser}'\n\n$e");
+            //cce.printStackTrace()
+            throw new Exception("The specified Browser '${parameters.browser}' isn't a WebDriver! $cce.message");
+        } catch (Exception e) {
+            //e.printStackTrace()
+            throw new Exception("Unexpected error creating the Browser '${parameters.browser}': $e.message");
         }
     }
 
@@ -189,15 +197,15 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     this.driver = this.driverType.driverClass.newInstance() as WebDriver
                 }
 
-//            } catch (WebDriverException wdException) {
-//                //retry during execute method then
-//                throw new Exception("The webdriver setup thew an error \n\n$wdException");
             } catch (ClassNotFoundException cnfe) {
-                throw new Exception("The specified Browser '${driverParameters.browser}' cannot be found\n\n$cnfe");
+                //cnfe.printStackTrace()
+                throw new Exception("The specified Browser '${driverType.name}' cannot be found: $cnfe.message");
             } catch (ClassCastException cce) {
-                throw new Exception("The specified Browser '${driverParameters.browser}' isn't a WebDriver!\n\n$cce");
-            } catch (e) {
-                throw new Exception("Unexpected error creating the Browser '${driverParameters.browser}'\n\n$e");
+                //cce.printStackTrace()
+                throw new Exception("The specified Browser '${driverType.name}' isn't a WebDriver! $cce.message");
+            } catch (Exception e) {
+                //e.printStackTrace()
+                throw new Exception("Unexpected error creating the Browser '${driverType.name}': $e.message");
             }
         }
     }
@@ -259,9 +267,9 @@ class WebDriverStepRunner extends MadcowStepRunner {
     /**
      * Attempts 3 retries of instantiating the driver and then fails if it still doesnt work.
      */
-    private void initialiseDriverWithRetriesIfRequired() {
+    protected void initialiseDriverWithRetriesIfRequired() {
         //do initialise of driver inside the first execution of the testCase
-        if (driverType == WebDriverType.REMOTE && driver == null) {
+        if (driver == null) {
             while (retryCount <= 3) {
                 retryCount++;
                 try {
@@ -306,12 +314,13 @@ class WebDriverStepRunner extends MadcowStepRunner {
      */
     public void captureHtmlResults(MadcowStep step) {
         String originalPageSource = driver.pageSource
-        String alteredPageSource = alterPageSourceURLs(step, originalPageSource)
-
-        new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << alteredPageSource;
-        capturePNGScreenShot(step);
-        lastPageSource = driver.pageSource;
-        step.result.hasResultFile = true;
+        String alteredPageSource = addBaseMetaTagToPageSource(step, originalPageSource)
+        if (originalPageSource) {
+            new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << alteredPageSource;
+            capturePNGScreenShot(step);
+            lastPageSource = originalPageSource;
+            step.result.hasResultFile = true;
+        }
     }
 
     /**
@@ -320,7 +329,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
      * @param pageSource the page source as retrieved by webdriver
      * @return an altered version of the pageSource with FQDN's
      */
-    private String alterPageSourceURLs(MadcowStep step, String pageSource) {
+    private String addBaseMetaTagToPageSource(MadcowStep step, String pageSource) {
         try{
             //not already a base element
             if (!pageSource.contains("<base")){
@@ -369,7 +378,13 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     public void finishTestCase() {
-        if (driver != null)
-            driver.close();
+        if (driver != null){
+            if (driverType == WebDriverType.CHROME
+                || driverType == WebDriverType.PHANTOMJS) {
+                driver.quit();
+            } else {
+                driver.close();
+            }
+        }
     }
 }

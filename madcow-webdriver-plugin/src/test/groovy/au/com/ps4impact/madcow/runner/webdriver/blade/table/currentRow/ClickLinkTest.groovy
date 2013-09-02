@@ -40,8 +40,12 @@ class ClickLinkTest extends GroovyTestCase {
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
-        if (reloadPage)
+        if (!(testCase.stepRunner as WebDriverStepRunner)?.driver) {
+            (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
+        }
+        if (reloadPage){
             (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
+        }
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         return step;

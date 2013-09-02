@@ -22,9 +22,9 @@
 package au.com.ps4impact.madcow
 
 import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.execution.SingleTestCaseRunner
-import au.com.ps4impact.madcow.logging.MadcowLog
 import au.com.ps4impact.madcow.util.ResourceFinder
+import fj.P
+import fj.P2
 import org.apache.log4j.Logger
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.util.PathFormatter
@@ -33,6 +33,8 @@ import fj.data.Option
 import fj.Unit
 import fj.control.parallel.Actor
 import fj.control.parallel.Strategy
+
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import au.com.ps4impact.madcow.execution.ParallelTestCaseRunner
@@ -78,7 +80,7 @@ class MadcowTestRunner {
         int numberTestsToRun = rootTestSuite.size();
 
         LOG.info("Found ${numberTestsToRun} test cases to run");
-        def exceptions = [];
+        ConcurrentHashMap exceptions = [:];
         AtomicInteger numberOfTestsRan = new AtomicInteger(0);
         def allTestCases = rootTestSuite.getTestCasesRecusively();
 
@@ -100,23 +102,43 @@ class MadcowTestRunner {
             strategy = Strategy.executorStrategy(pool);
         }
 
-        def callback = Actor.queueActor(strategy, {Option<Exception> result ->
+        def callback = Actor.queueActor(strategy, {P2<MadcowTestCase, Option<Exception>> result ->
             numberOfTestsRan.andIncrement;
-            result.foreach({Exception e -> exceptions.add(e)} as Effect)
+            exceptions.put(result._1(), result._2())
+            //result._2().foreach({Exception e -> exceptions.put(result._1(), result._2())} as Effect)
             if (numberOfTestsRan.get() >= numberTestsToRun) {
                 pool.shutdown()
             }
         } as Effect);
 
-        def parallelTestCaseRunner = new ParallelTestCaseRunner(strategy, callback)
+        def retries = 0
+        def maxRetries = madcowConfig.retryCount
 
-        allTestCases.each { MadcowTestCase testCase ->
-            parallelTestCaseRunner.act(fj.P.p(testCase, reporters));
-        }
+        //while there is still retries remaining
+        while (retries < maxRetries) {
 
+            if (retries > 1
+                && exceptions?.entrySet()?.count { Option<Exception> option -> option.isSome() } > 0) {
+                LOG.info "Attempting retry number ${retries} of ${exceptions?.size()} errored tests..."
+                allTestCases = allTestCases.findAll { MadcowTestCase testCase ->
+                    exceptions.get(testCase) != null
+                }
+                //decrement number of testRan by the number of failures as these will be retried...
+                def decrementTestCounter = -1*allTestCases.size()
+                numberOfTestsRan.getAndAdd(decrementTestCounter)
+                LOG.trace "Decrementing numberOfTestsRan by ${decrementTestCounter} it is now -> ${numberOfTestsRan}"
+            }
 
-        while (numberOfTestsRan.get() < numberTestsToRun) {
-            Thread.sleep(500);
+            def parallelTestCaseRunner = new ParallelTestCaseRunner(strategy, callback)
+            allTestCases.each { MadcowTestCase testCase ->
+                parallelTestCaseRunner.act(P.p(testCase, reporters));
+            }
+
+            while (numberOfTestsRan.get() < numberTestsToRun) {
+                Thread.sleep(500);
+            }
+
+            retries++
         }
 
         rootTestSuite.stopWatch.stop();

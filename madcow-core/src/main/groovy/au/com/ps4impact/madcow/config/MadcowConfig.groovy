@@ -41,6 +41,8 @@ class MadcowConfig {
 
     public int threads = 10;
 
+    public int retryCount = 0;
+
     public boolean parallel = true;
 
     public String stepRunner;
@@ -113,7 +115,17 @@ class MadcowConfig {
             }
         }
 
-        // get the default environment and use it if none is set
+        // get the default retry count and use it if none is set
+        def retriesText = this.execution."retries".text() ?: '1';
+        if (retriesText != '') {
+            try {
+                retryCount = retriesText as int;
+            } catch (ignored) {
+                throw new Exception('Invalid "retries" specified - only positive integers are allowed');
+            }
+        }
+
+        // get the default thread count and use it if none is set
         def threadsText = this.execution."threads".text() ?: '';
         if (threadsText != '') {
             try {

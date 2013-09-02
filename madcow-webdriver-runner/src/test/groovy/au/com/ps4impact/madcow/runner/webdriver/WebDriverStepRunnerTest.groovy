@@ -47,7 +47,7 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
     public void testDefaultBrowser() {
         WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase, [:]);
-        assertEquals(MadcowHtmlUnitDriver.class, stepRunner.driver.class);
+        assertEquals(MadcowHtmlUnitDriver.class, stepRunner.driverType.driverClass);
     }
 
     public void testRemoteNotInitialised() {

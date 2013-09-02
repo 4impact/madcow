@@ -120,6 +120,11 @@
             <version>2.33.0</version>
         </dependency>
         <dependency>
+            <groupId>com.github.detro.ghostdriver</groupId>
+            <artifactId>phantomjsdriver</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        <dependency>
             <groupId>au.com.ps4impact.madcow</groupId>
             <artifactId>madcow-core</artifactId>
             <version>${project.parent.version}</version>
