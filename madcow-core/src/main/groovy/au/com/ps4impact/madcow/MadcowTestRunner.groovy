@@ -86,7 +86,6 @@ class MadcowTestRunner {
 
         rootTestSuite.stopWatch.start();
 
-
         ExecutorService pool
         Strategy<Unit> strategy
 
@@ -106,9 +105,6 @@ class MadcowTestRunner {
             numberOfTestsRan.andIncrement;
             exceptions.put(result._1(), result._2())
             //result._2().foreach({Exception e -> exceptions.put(result._1(), result._2())} as Effect)
-            if (numberOfTestsRan.get() >= numberTestsToRun) {
-                pool.shutdown()
-            }
         } as Effect);
 
         def retries = 0
@@ -139,6 +135,10 @@ class MadcowTestRunner {
             }
 
             retries++
+        }
+
+        if (numberOfTestsRan.get() >= numberTestsToRun) {
+            pool.shutdown()
         }
 
         rootTestSuite.stopWatch.stop();

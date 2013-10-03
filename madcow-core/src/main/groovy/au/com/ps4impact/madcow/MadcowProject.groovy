@@ -31,37 +31,65 @@ package au.com.ps4impact.madcow
 class MadcowProject {
 
     /**
+     * The system property used to specify the BASE URL for the madcow project's dir
+     */
+    public static final String BASEURL_PROPERTY_NAME = "madcow.project.baseUrl"
+
+    /**
+     * The Madcow Base URL to use if set
+     */
+    public static String getMADCOW_BASE_URL() {
+        def baseUrl = System.getProperty(BASEURL_PROPERTY_NAME)
+        if (!baseUrl) return ''
+        return baseUrl.endsWith("/")?baseUrl:baseUrl+"/"
+    }
+
+    /**
      * Location and name of the configuration file.
      */
-    public static final String CONFIGURATION_FILE = 'conf/madcow-config.xml';
+    public static String getCONFIGURATION_FILE() {
+        return MADCOW_BASE_URL + 'conf/madcow-config.xml';
+    }
 
     /**
      * Location of tests directory.
      */
-    public static final String TESTS_DIRECTORY = 'tests';
+    public static String getTESTS_DIRECTORY() {
+        return MADCOW_BASE_URL + 'tests';
+    }
 
     /**
      * Location of templates directory.
      */
-    public static final String TEMPLATES_DIRECTORY = 'templates';
+    public static String getTEMPLATES_DIRECTORY() {
+        return MADCOW_BASE_URL + 'templates';
+    }
 
     /**
      * Location of mappings directory.
      */
-    public static final String MAPPINGS_DIRECTORY = 'mappings';
+    public static String getMAPPINGS_DIRECTORY() {
+        return MADCOW_BASE_URL + 'mappings';
+    }
 
     /**
      * Location of mappings reference directory.
      */
-    public static final String MAPPINGS_REFERENCE_DIRECTORY = 'mappings-reference';
+    public static String getMAPPINGS_REFERENCE_DIRECTORY() {
+        return MADCOW_BASE_URL + 'mappings-reference';
+    }
 
     /**
      * Location of the results directory.
      */
-    public static final String RESULTS_DIRECTORY = 'results';
+    public static String getRESULTS_DIRECTORY() {
+        return MADCOW_BASE_URL + 'results'
+    };
 
     /**
      * Location of the madcow report directory.
      */
-    public static final String MADCOW_REPORT_DIRECTORY = RESULTS_DIRECTORY + '/madcow-report';
+    public static String getMADCOW_REPORT_DIRECTORY() {
+        return RESULTS_DIRECTORY + '/madcow-report'
+    };
 }

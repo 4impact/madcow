@@ -42,13 +42,15 @@ class SelectFieldTest extends GroovyTestCase {
     def selectField = new SelectField();
     String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
 
-    protected verifyValueExecution(GrassBlade blade, boolean shouldPass) {
+    protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String resultingOutput = null) {
         (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
-        (testCase.stepRunner as WebDriverStepRunner).driver.manage().timeouts().implicitlyWait(1, TimeUnit.MICROSECONDS);
+        (testCase.stepRunner as WebDriverStepRunner).driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
+        if (resultingOutput)
+            assertEquals step.result.message, resultingOutput
     }
 
     void testSelectFieldByHtmlId() {
@@ -60,6 +62,40 @@ class SelectFieldTest extends GroovyTestCase {
         MadcowMappings.addMapping(testCase, 'aSelectId', ['id': 'aSelectId']);
         blade = new GrassBlade('aSelectId.selectField = United States', testCase.grassParser);
         verifyValueExecution(blade, true);
+    }
+
+    void testSelectFieldWithOptionGroupsByHtmlId() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('carMakes.selectField = saab', testCase.grassParser);
+        verifyValueExecution(blade, true);
+
+        // explicit htmlid
+        MadcowMappings.addMapping(testCase, 'carMakers', ['id': 'carMakes']);
+        blade = new GrassBlade('carMakers.selectField = Audi', testCase.grassParser);
+        verifyValueExecution(blade, true);
+    }
+
+    void testSelectMultiFieldByHtmlId() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('carModels.selectField = [\"VLK123\",\"a45\"]', testCase.grassParser);
+        verifyValueExecution(blade, true);
+
+        // explicit htmlid
+        MadcowMappings.addMapping(testCase, 'models', ['id': 'carModels']);
+        blade = new GrassBlade('models.selectField = [\"a45\",\"clk\"]', testCase.grassParser);
+        verifyValueExecution(blade, true);
+    }
+
+    void testSelectMultiFieldOneFailedByHtmlId() {
+        // explicit htmlid
+        MadcowMappings.addMapping(testCase, 'models', ['id': 'carModels']);
+        GrassBlade blade = new GrassBlade('models.selectField = [\"a45\",\"clk200\"]', testCase.grassParser);
+        verifyValueExecution(blade, false, "Cannot find a valid option/s for item [clk200]");
+    }
+
+    void testSelectNonMultiFieldFailedByHtmlId() {
+        GrassBlade blade = new GrassBlade('carMakes.selectField = ["a45","clk200"]', testCase.grassParser);
+        verifyValueExecution(blade, false, "Cannot specify list when select element doesn't have multiple attribute");
     }
 
     void testSelectFieldByName() {

@@ -36,14 +36,21 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 class SelectCheckbox extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
+        def element = findElement(stepRunner, step)
 
-        try {
-            findElement(stepRunner, step).findElement(By.tagName('input')).click();
-        } catch (ignored) {
-            findElement(stepRunner, step).click();
+        if (!element) {
+            step.result = MadcowStepResult.FAIL("Unable to find a matching Checkbox to select")
+        } else {
+
+            try {
+                element.findElement(By.tagName('input')).click();
+            } catch (ignored) {
+                element.click();
+            }
+
+            step.result = MadcowStepResult.PASS();
         }
 
-        step.result = MadcowStepResult.PASS();
     }
 
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {

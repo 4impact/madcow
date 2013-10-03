@@ -314,7 +314,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
      */
     public void captureHtmlResults(MadcowStep step) {
         String originalPageSource = driver.pageSource
-        String alteredPageSource = addBaseMetaTagToPageSource(step, originalPageSource)
+        String alteredPageSource = addBaseMetaTagToPageSource(originalPageSource)
         if (originalPageSource) {
             new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << alteredPageSource;
             capturePNGScreenShot(step);
@@ -325,26 +325,18 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
     /**
      * Alter the retreived page source to use the FQDN in href and src links
-     * @param step the current madcow step (usually the last)
+     *
      * @param pageSource the page source as retrieved by webdriver
      * @return an altered version of the pageSource with FQDN's
      */
-    private String addBaseMetaTagToPageSource(MadcowStep step, String pageSource) {
+    private String addBaseMetaTagToPageSource(String pageSource) {
         try{
             //not already a base element
-            if (!pageSource.contains("<base")){
+            if (!pageSource.contains("<base") &&
+                driver?.currentUrl != null &&
+                !(driver.currentUrl.equals("about:blank"))) {
                 def baseURL = new URL(driver.currentUrl); //may need to use different url here
-                def page = new XmlSlurper().parseText(pageSource)
-
-                //find all links and srcs that start with the URL path not the FQDN host
-                def links = page.'**'.findAll{ it -> it.@href.text().startsWith( "${baseURL.path}" )}*.@href*.text()
-                def srcs = page.'**'.findAll{ it -> it.@src.text().startsWith( "${baseURL.path}" )}*.@src*.text()
-
-                //found some results so try to update add the base href
-                if (links.size()>0 || srcs.size()>0){
-                    //find the HTML/HEAD tag and pump in <base> tag
-                    return pageSource.replace("<head>",'<head><base href="'+baseURL+'"/>')
-                }
+                return pageSource.replace("<head>",'<head><base href="'+baseURL+'"/>')
             }
         }catch(Exception e){
             return pageSource

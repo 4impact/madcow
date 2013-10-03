@@ -28,6 +28,7 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.support.ui.Select;
 
 /**
  * The SelectField blade sets a value on a combo box element.
@@ -39,19 +40,85 @@ class SelectField extends WebDriverBladeRunner {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
         def element = findElement(stepRunner, step);
 
-        def options = element.findElements(By.tagName('option'));
-        WebElement foundOption = null;
+        if (Integer.class.isInstance(step.blade.parameters)) {
+            int item = step.blade.parameters as int;
+            step.result = makeASingleSelection(element, item)
+        } else if (List.class.isInstance(step.blade.parameters)) {
+            //check if it is multi select
+            def selectField = new Select(element)
+            if (selectField.isMultiple()){
+                List<String> paramMap = step.blade.parameters as List;
+                def tempResult = [:]
+                paramMap.each { selection ->
+                    //try to find it and select it
+                    tempResult.put(selection, makeASingleSelection(element, selection.trim()));
+                }
+                def failedItems = tempResult.findAll{ entry ->
+                    if (!(entry.value as MadcowStepResult).passed()){
+                        return entry.key
+                    }
+                }.keySet()
+                if (!failedItems.isEmpty()) {
+                    step.result = MadcowStepResult.FAIL('Cannot find a valid option/s for item '+failedItems.toString());
+                    return
+                }
+                step.result = MadcowStepResult.PASS()
+                return
+            } else {
+                step.result = MadcowStepResult.FAIL('Cannot specify list when select element doesn\'t have multiple attribute');
+                return
+            }
+        }else {
+            String text = step.blade.parameters as String;
+            step.result = makeASingleSelection(element, text.trim())
+        }
+
+    }
+
+    private MadcowStepResult makeASingleSelection(WebElement element, int selectParam) {
+        List<WebElement> options = element.findElements(By.tagName('option'));
+        boolean foundIndex = false;
+
+        if (selectParam <= options.size()){
+            foundIndex = true;
+        }
+
+        if (foundIndex) {
+            new Select(element).selectByIndex(selectParam)
+            return MadcowStepResult.PASS();
+        } else {
+            return MadcowStepResult.FAIL('Unable to find the specified option');
+        }
+    }
+
+    private MadcowStepResult makeASingleSelection(WebElement element, String selectParam) {
+        List<WebElement> options = element.findElements(By.tagName('option'));
+        WebElement foundText = null;
+        WebElement foundValue = null;
+
         options.each { option ->
-            if (option.text == step.blade.parameters as String) {
-                foundOption = option;
+            //if already found option then skip checking rest of options
+            if (foundText || foundValue)
+                return;
+
+            //first attempt to match on text value
+            if (option.text.trim() == selectParam) {
+                foundText = option;
+            }
+            //then attempt to match on value value
+            if (option.getAttribute("value").trim() == selectParam) {
+                foundValue = option;
             }
         }
 
-        if (foundOption != null) {
-            foundOption.click();
-            step.result = MadcowStepResult.PASS();
+        if (foundText != null) {
+            new Select(element).selectByVisibleText(selectParam)
+            return MadcowStepResult.PASS();
+        } else if (foundValue != null) {
+            new Select(element).selectByValue(selectParam)
+            return MadcowStepResult.PASS();
         } else {
-            step.result = MadcowStepResult.FAIL('Unable to find the specified option');
+            return MadcowStepResult.FAIL('Unable to find the specified option');
         }
     }
 
@@ -64,5 +131,9 @@ class SelectField extends WebDriverBladeRunner {
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.CSS ];
+    }
+
+    protected List<Class> getSupportedParameterTypes() {
+        return [List.class, String.class, Integer.class];
     }
 }

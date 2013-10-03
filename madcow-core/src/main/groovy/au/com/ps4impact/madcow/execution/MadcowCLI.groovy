@@ -87,7 +87,7 @@ class MadcowCLI {
         }
 
         if (options.conf) {
-            MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null, 'conf/'+options.conf)
+            MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null, ''+options.conf)
         }else{
             MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null);
         }

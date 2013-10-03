@@ -66,14 +66,14 @@ public class TableXPather {
     }
 
     public String getRowXPath(def rowPositionXPath) {
-        return "${getPrefixXPath()}/tbody/tr[${rowPositionXPath}]"
+        return "${getPrefixXPath()}/tbody/tr[position() = ${rowPositionXPath}]"
     }
 
     /**
      * Returns an xpath expression for a particular cell on a particular row
      */
     public String getCellXPath(def rowPositionXPath, def columnHeaderText) {
-        def xpath = "${getRowXPath(rowPositionXPath)}/td[${getColumnPositionXPath(columnHeaderText)}]"
+        def xpath = "${getRowXPath(rowPositionXPath)}/td[position() = ${getColumnPositionXPath(columnHeaderText)}]"
         return xpath
     }
 
@@ -111,6 +111,6 @@ public class TableXPather {
             return null;
 
         // support for fieldset prior to tbody/thead tags
-        return "($selectorXPath|$selectorXPath/fieldset)";
+        return "$selectorXPath/";
     }
 }
