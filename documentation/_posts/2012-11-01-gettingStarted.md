@@ -71,10 +71,14 @@ It should returns something similar to the below which then means you are all se
 user@host:~/new-madcow-test-project$ ./runMadcow.sh --help
 usage: runMadcow [options]
 Options:
- -a,--all               Run all tests
- -e,--env <env-name>    Environment to load from the madcow-config.xml
- -h,--help              Show usage information
- -t,--test <testname>   Comma seperated list of test names
+ -a,--all                Run all tests
+ -c,--conf <conf-file>   Name of the configuration file to use, defaults
+                         to madcow-config.xml
+ -e,--env <env-name>     Environment to load from the madcow-config.xml
+ -h,--help               Show usage information
+ -m,--mappings           Generate the Mappings Reference files
+ -t,--test <testname>    Comma seperated list of test names
+ -v,--version            Show the current version of Madcow
 {% endhighlight %}
 
 
