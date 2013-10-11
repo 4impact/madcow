@@ -40,6 +40,8 @@ import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
 
+import java.util.concurrent.TimeUnit
+
 /**
  * Implementation of the WebDriver step runner.
  *
@@ -133,7 +135,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
 
                 case WebDriverType.PHANTOMJS:
-                    //driverParameters = new ResolvingPhantomJSDriverService.createDefaultService(capabilities)
+//                    driverParameters = new ResolvingPhantomJSDriverService.createDefaultService(capabilities)
+//                    driverParameters.desiredCapabilities = DesiredCapabilities.phantomjs();
 //                    initialiseDriver()
                     break;
 
@@ -207,11 +210,16 @@ class WebDriverStepRunner extends MadcowStepRunner {
         //if driver is null create it
         if (this.driver == null) {
             try {
-                testCase.logInfo("Instantiating Driver instance")
+                testCase.logDebug("Instantiating Driver instance")
                 if (this.driverParameters != null) {
                     this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver
                 } else {
                     this.driver = this.driverType.driverClass.newInstance() as WebDriver
+                }
+
+                if (this.driver != null){
+                    testCase.logDebug("Setting up timeouts...")
+                    setupDriverTimeouts(this.driverParameters);
                 }
 
             } catch (ClassNotFoundException cnfe) {
@@ -224,6 +232,28 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 //e.printStackTrace()
                 throw new Exception("Unexpected error creating the Browser '${driverType.name}': $e.message");
             }
+        }
+    }
+
+    /**
+     * Setup the required driver timeout values as provided in config
+     *
+     * @param madcowDriverParams driver params
+     */
+    private setupDriverTimeouts(def madcowDriverParams) {
+
+        if ((madcowDriverParams.implicitTimeout ?: '') != '') {
+            //attempt to set the provided timeout value
+            this.driver.manage().timeouts().implicitlyWait(madcowDriverParams.implicitTimeout.toLong(), TimeUnit.SECONDS);
+        }
+        if ((madcowDriverParams.scriptTimeout ?: '') != '') {
+            //attempt to set the javascript timeout value
+            this.driver.manage().timeouts().setScriptTimeout(madcowDriverParams.scriptTimeout.toLong(), TimeUnit.SECONDS);
+        }
+
+        if ((madcowDriverParams.pageLoadTimeout ?: '') != '') {
+            //attempt to set the page load timeout value
+            this.driver.manage().timeouts().pageLoadTimeout(madcowDriverParams.pageLoadTimeout.toLong(), TimeUnit.SECONDS);
         }
     }
 
