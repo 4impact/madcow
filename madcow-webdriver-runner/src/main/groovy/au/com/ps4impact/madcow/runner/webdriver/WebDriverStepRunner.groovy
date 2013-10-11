@@ -142,7 +142,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
 
                 case WebDriverType.HTMLUNIT:
-                    driverParameters = BrowserVersion.FIREFOX_3_6;
+                    driverParameters = BrowserVersion.FIREFOX_17;
                     if ((parameters.emulate ?: '') != '') {
                         switch (StringUtils.upperCase(parameters.emulate)) {
                             case 'IE6':
@@ -154,11 +154,28 @@ class WebDriverStepRunner extends MadcowStepRunner {
                             case 'IE8':
                                 driverParameters = BrowserVersion.INTERNET_EXPLORER_8;
                                 break;
-                            case 'FIREFOX':
+                            case 'IE9':
+                            case 'IE':
+                                driverParameters = BrowserVersion.INTERNET_EXPLORER_9;
+                                break;
+                            case 'CHROME16':
+                                driverParameters = BrowserVersion.CHROME_16;
+                                break;
+                            case 'CHROME':
+                                driverParameters = BrowserVersion.CHROME;
+                                break;
+                            case 'FF10':
+                            case 'FIREFOX10':
+                                driverParameters = BrowserVersion.FIREFOX_10;
+                                break;
                             case 'FF3':
                             case 'FF3.6':
-                            default:
                                 driverParameters = BrowserVersion.FIREFOX_3_6;
+                                break;
+                            case 'FF17':
+                            case 'FIREFOX':
+                            default:
+                                driverParameters = BrowserVersion.FIREFOX_17;
                                 break;
                         }
                     }
