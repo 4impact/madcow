@@ -41,13 +41,26 @@ It is running the above `GoogleTest.grass` file, which will basically do the fol
 
 > Note: Each one of those steps listed here directly correlates to the step in the testcase.
 
-Once completed you will then want to see the results of your test. To do this open the `index.html` file in the `results\madcow-results` folder. It should similar to this
+Once completed you will then want to see the results of your test. To do this simply open the `index.html` file in the `results\madcow-results` folder in your browser of choice.  
+or run at the command line in Mac
+{% highlight bash %}
+open results\madcow-results\index.html 
+{% endhighlight %}
+
+or in Windows 
+{% highlight bash %}
+results\madcow-results\index.html 
+{% endhighlight %}
+
+It should look similar to this: 
 
 <img src="/assets/img/test-results-nofail.png" alt="Test Suite Results page"/>
 
 Here you can see that it all passed successfully. To see further details about the test run click on the "GoogleTest" link and you should see more details step-by-step results showing what the Madcow test did.
 
 <img src="/assets/img/test-results-drilled.png" alt="Test Suite Results page"/>
+
+-------------------------------
 
 ## That's great, but how did that all work?
 The main principle behind Madcow is to easily specify an element in your web application and manipulate it and make assertions on it. To specify an element simply refer to its html ID on the page.  For instance the html:
@@ -140,6 +153,8 @@ waitSeconds = 2
 google_about4impactLink.clickLink
 {% endhighlight %}
 
+-------------------------------
+
 ## Writing in Grass files
 
 The simplest form of tests in Madcow 2.0 is in a GRASS file. Simply create a test ending with `MadcowTest.grass` such as `GoogleMadcowTest.grass` in the `test` directory and Madcow will automatically find and run it. These grass files are the same as properties files used in Madcow version 1.
@@ -160,9 +175,13 @@ import = LogoutActions
 
 The import command will look for properties files, in this case `LoginActions.grass` and `LogoutActions.grass` and insert the contents of these files into the script. See Templates for more information.
 
+-------------------------------
+
 ## Using Data Binding Parameters
 
 Madcow allows the use of data parameters, to specify reusable pieces of test data throughout a test. This allows a test to be _data driven_ rather than being bound to a specific set of data throughout the test. The data parameters are used through the _@_ notation. See <a href="/documentation/dataParameters.html">Data Parameters</a> for more information.
+
+-------------------------------
 
 ## Adding comments to your tests
 To add single line comment to a test simply prepend a \# to the front of the line.
