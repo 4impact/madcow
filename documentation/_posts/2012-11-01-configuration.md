@@ -193,8 +193,6 @@ would run all tests against the Remote Webdriver Grid Server configured in the c
 
 ##### Implicit Timeout
 > Specifies the amount of time the driver should wait when searching for an element if it is not immediately present. 
-> 
-> Only valid when `<browser>Remote</browser>`
 
 For example:
 {% highlight xml %}
@@ -206,8 +204,6 @@ would wait 10 seconds before declaring it could not find an element on the page.
 
 ##### Script Timeout
 > Sets the amount of time to wait for an asynchronous script to finish execution before throwing an error. 
->
-> Only valid when `<browser>Remote</browser>`
 
 For example:
 {% highlight xml %}
@@ -219,8 +215,6 @@ would wait 10 seconds for long running javascript to finish execution before con
 
 ##### Page Load Timeout
 > Sets the amount of time to wait for a page load to complete before throwing an error. 
-> 
-> Only valid when `<browser>Remote</browser>`
 
 For example:
 {% highlight xml %}
