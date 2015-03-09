@@ -36,12 +36,19 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
  */
 class WaitForTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('WaitForTest', new MadcowConfig(), []);
-    WaitFor waitFor = new WaitFor();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def waitFor;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('WaitForTest', new MadcowConfig(), []);
+        waitFor = new WaitFor();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyWaitFor(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

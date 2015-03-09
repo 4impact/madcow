@@ -36,12 +36,19 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
  */
 class ClickLinkTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
-    def clickLink = new ClickLink();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def clickLink;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
+        clickLink = new ClickLink();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyLinkExecution(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

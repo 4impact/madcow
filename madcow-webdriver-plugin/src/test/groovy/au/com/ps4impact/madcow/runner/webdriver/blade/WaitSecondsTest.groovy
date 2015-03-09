@@ -34,8 +34,15 @@ import org.apache.commons.lang3.time.StopWatch
  */
 class WaitSecondsTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('WaitSecondsTest', new MadcowConfig(), []);
-    def waitSeconds = new WaitSeconds();
+    MadcowTestCase testCase;
+    def waitSeconds;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('WaitSecondsTest', new MadcowConfig(), []);
+        waitSeconds = new WaitSeconds();
+    }
 
     void testWaitSeconds() {
         StopWatch watch = new StopWatch();

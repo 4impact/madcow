@@ -12,11 +12,17 @@ class VerifyEnabledTest extends GroovyTestCase {
 
     def inputIdAndNameSuffixes = ['TextInput','CheckboxInput','ButtonInput','PasswordInput','RadioInput', 'SubmitInput','TextArea','Button']
 
-    MadcowTestCase testCase = new MadcowTestCase('VerifyEnabledTest', new MadcowConfig(),[])
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath
+    MadcowTestCase testCase;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('VerifyEnabledTest', new MadcowConfig(), []);
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected executeBladeAndCheckResult(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

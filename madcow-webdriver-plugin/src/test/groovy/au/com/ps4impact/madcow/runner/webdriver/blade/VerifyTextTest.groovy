@@ -36,12 +36,19 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
  */
 class VerifyTextTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('VerifyTextTest', new MadcowConfig(), []);
-    def verifyText = new VerifyText();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def verifyText;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('VerifyTextTest', new MadcowConfig(), []);
+        verifyText = new VerifyText();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyTextContents(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

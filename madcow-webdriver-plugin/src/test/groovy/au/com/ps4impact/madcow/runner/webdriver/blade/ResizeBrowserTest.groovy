@@ -51,7 +51,7 @@ class ResizeBrowserTest {
     String testHtmlFilePath
 
     @Before
-    public void setup(){
+    public void setUp() {
         config = new MadcowConfig('DEV','conf/madcow-config-remote-firefox.xml')
         testCase = new MadcowTestCase('ResizeBrowserTest', config, [])
         resizeBrowser = new ResizeBrowser();

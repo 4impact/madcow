@@ -54,7 +54,6 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public String lastPageSource;
     public String lastPageTitle;
     public boolean initRemoteTimedOut = false;
-    public int retryCount = 0;
     def driverParameters = null;
 
     WebDriverStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
@@ -183,54 +182,61 @@ class WebDriverStepRunner extends MadcowStepRunner {
                         }
                     }
                     testCase.logInfo("Emulating HtmlUnit browser '${driverParameters.getNickname()}'")
-//                    initialiseDriver()
                     break;
                 default:
                     break;
             }
 
+            initialiseDriver();
+
         } catch (ClassNotFoundException cnfe) {
-            //cnfe.printStackTrace()
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found: $cnfe.message");
         } catch (ClassCastException cce) {
-            //cce.printStackTrace()
             throw new Exception("The specified Browser '${parameters.browser}' isn't a WebDriver! $cce.message");
         } catch (Exception e) {
-            //e.printStackTrace()
             throw new Exception("Unexpected error creating the Browser '${parameters.browser}': $e.message");
         }
     }
 
     /**
-     * Initialises the webdriver instance or throws an exception
-     *
-     * @return an exception or an initialised driver
+     * Attempts to initialise the drive, retrying as required.
      */
     private initialiseDriver() {
-        //if driver is null create it
-        if (this.driver == null) {
+        if (this.driver != null) {
+            return;
+        }
+
+        def retryCount = 0;
+        while (retryCount <= 3 && this.driver == null) {
+
+            retryCount++;
             try {
-                testCase.logDebug("Instantiating Driver instance")
-                if (this.driverParameters != null) {
-                    this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver
-                } else {
-                    this.driver = this.driverType.driverClass.newInstance() as WebDriver
-                }
+                try {
+                    testCase.logDebug("Instantiating Driver instance")
+                    if (this.driverParameters != null) {
+                        this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver
+                    } else {
+                        this.driver = this.driverType.driverClass.newInstance() as WebDriver
+                    }
 
-                if (this.driver != null){
-                    testCase.logDebug("Setting up timeouts...")
-                    setupDriverTimeouts(this.driverParameters);
-                }
+                    if (this.driver != null) {
+                        testCase.logDebug("Setting up timeouts...")
+                        setupDriverTimeouts(this.driverParameters);
+                    }
 
-            } catch (ClassNotFoundException cnfe) {
-                //cnfe.printStackTrace()
-                throw new Exception("The specified Browser '${driverType.name}' cannot be found: $cnfe.message");
-            } catch (ClassCastException cce) {
-                //cce.printStackTrace()
-                throw new Exception("The specified Browser '${driverType.name}' isn't a WebDriver! $cce.message");
-            } catch (Exception e) {
-                //e.printStackTrace()
-                throw new Exception("Unexpected error creating the Browser '${driverType.name}': $e.message");
+                } catch (ClassNotFoundException cnfe) {
+                    throw new Exception("The specified Browser '${driverType.name}' cannot be found: $cnfe.message");
+                } catch (ClassCastException cce) {
+                    throw new Exception("The specified Browser '${driverType.name}' isn't a WebDriver! $cce.message");
+                } catch (Exception e) {
+                    throw new Exception("Unexpected error creating the Browser '${driverType.name}': $e.message");
+                }
+            } catch (Exception ex) {
+                testCase.logWarn("Failed to initialise driver! Retry number ${retryCount}... ")
+                if (retryCount >= 3) {
+                    throw ex
+                }
+                testCase.logDebug("Exception was ${ex}")
             }
         }
     }
@@ -242,18 +248,22 @@ class WebDriverStepRunner extends MadcowStepRunner {
      */
     private setupDriverTimeouts(def madcowDriverParams) {
 
-        if ((madcowDriverParams.implicitTimeout ?: '') != '') {
-            //attempt to set the provided timeout value
-            this.driver.manage().timeouts().implicitlyWait(madcowDriverParams.implicitTimeout.toLong(), TimeUnit.SECONDS);
-        }
-        if ((madcowDriverParams.scriptTimeout ?: '') != '') {
-            //attempt to set the javascript timeout value
-            this.driver.manage().timeouts().setScriptTimeout(madcowDriverParams.scriptTimeout.toLong(), TimeUnit.SECONDS);
-        }
+        try {
+            if ((madcowDriverParams.implicitTimeout ?: '') != '') {
+                //attempt to set the provided timeout value
+                this.driver.manage().timeouts().implicitlyWait(madcowDriverParams.implicitTimeout.toLong(), TimeUnit.SECONDS);
+            }
+            if ((madcowDriverParams.scriptTimeout ?: '') != '') {
+                //attempt to set the javascript timeout value
+                this.driver.manage().timeouts().setScriptTimeout(madcowDriverParams.scriptTimeout.toLong(), TimeUnit.SECONDS);
+            }
 
-        if ((madcowDriverParams.pageLoadTimeout ?: '') != '') {
-            //attempt to set the page load timeout value
-            this.driver.manage().timeouts().pageLoadTimeout(madcowDriverParams.pageLoadTimeout.toLong(), TimeUnit.SECONDS);
+            if ((madcowDriverParams.pageLoadTimeout ?: '') != '') {
+                //attempt to set the page load timeout value
+                this.driver.manage().timeouts().pageLoadTimeout(madcowDriverParams.pageLoadTimeout.toLong(), TimeUnit.SECONDS);
+            }
+        } catch (ignored) {
+            // ignore any errors setting up timeouts - e.g. html unit doesn't support them all!
         }
     }
 
@@ -278,59 +288,33 @@ class WebDriverStepRunner extends MadcowStepRunner {
      */
     public void execute(MadcowStep step) {
 
-        //only execute if this is not a skipped test
-        if (!step.testCase.ignoreTestCase) {
-
-            WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
-            try {
-                initialiseDriverWithRetriesIfRequired();
-
-                bladeRunner.execute(this, step);
-
-                if (!driver.title?.equals(lastPageTitle)) {
-                    lastPageTitle = driver.title;
-                    if (lastPageTitle != '') {
-                        testCase.logInfo("Current Page: $lastPageTitle");
-                    }
-                }
-
-                //if pageSource not null and not equal to previous
-                if (driver?.pageSource != null
-                    && !driver?.pageSource?.equals(lastPageSource)) {
-                    captureHtmlResults(step);
-                }
-
-            } catch (NoSuchElementException ignored) {
-                step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
-            } catch (e) {
-                step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
-            }
-        } else {
+        // only execute if this is not a skipped test
+        if (step.testCase.ignoreTestCase) {
             step.result = MadcowStepResult.NOT_YET_EXECUTED('Skipped!');
+            return;
         }
 
-    }
+        WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
+        try {
+            bladeRunner.execute(this, step);
 
-    /**
-     * Attempts 3 retries of instantiating the driver and then fails if it still doesnt work.
-     */
-    protected void initialiseDriverWithRetriesIfRequired() {
-        //do initialise of driver inside the first execution of the testCase
-        if (driver == null) {
-            while (retryCount <= 3) {
-                retryCount++;
-                try {
-                    if (driver == null) {
-                        initialiseDriver()
-                    }
-                } catch (Exception ex) {
-                    testCase.logWarn("Failed to initialise driver! Retry number ${retryCount}... ")
-                    if (retryCount >= 3) {
-                        throw ex
-                    }
-                    testCase.logDebug("Exception was ${ex}")
+            if (!driver.title?.equals(lastPageTitle)) {
+                lastPageTitle = driver.title;
+                if (lastPageTitle != '') {
+                    testCase.logInfo("Current Page: $lastPageTitle");
                 }
             }
+
+            //if pageSource not null and not equal to previous
+            if (driver?.pageSource != null
+                && !driver?.pageSource?.equals(lastPageSource)) {
+                captureHtmlResults(step);
+            }
+
+        } catch (NoSuchElementException ignored) {
+            step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
+        } catch (e) {
+            step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
         }
     }
 

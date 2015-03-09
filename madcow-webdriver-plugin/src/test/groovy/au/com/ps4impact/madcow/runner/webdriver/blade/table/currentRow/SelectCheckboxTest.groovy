@@ -35,14 +35,19 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
  */
 class SelectCheckboxTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('SelectCheckboxTest', new MadcowConfig(), []);
-    SelectCheckbox selectCheckbox = new SelectCheckbox();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def selectCheckbox;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('SelectCheckboxTest', new MadcowConfig(), []);
+        selectCheckbox = new SelectCheckbox();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
-        if (!(testCase.stepRunner as WebDriverStepRunner)?.driver) {
-            (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
-        }
         if (reloadPage){
             (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         }

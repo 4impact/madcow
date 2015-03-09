@@ -35,13 +35,20 @@ import au.com.ps4impact.madcow.util.ResourceFinder
  * @author Tom Romano
  */
 class VerifyExistsTest extends GroovyTestCase {
-    
-    MadcowTestCase testCase = new MadcowTestCase('VerifyExistsTest', new MadcowConfig(), []);
-    def verifyExists = new VerifyExists();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+
+    MadcowTestCase testCase;
+    def verifyExists;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('VerifyExistsTest', new MadcowConfig(), []);
+        verifyExists = new VerifyExists();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyExistsExecution(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

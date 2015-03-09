@@ -36,12 +36,19 @@ import au.com.ps4impact.madcow.util.ResourceFinder
  */
 class HasClassTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('HasClassTest', new MadcowConfig(), []);
-    def hasClass = new HasClass();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def hasClass;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('HasClassTest', new MadcowConfig(), []);
+        hasClass = new HasClass();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyHasClassContents(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

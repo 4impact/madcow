@@ -36,12 +36,19 @@ import au.com.ps4impact.madcow.util.ResourceFinder
  */
 class UnselectFrameTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('UnselectFrameTest', new MadcowConfig(), []);
-    def unselectFrame = new UnselectFrame();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def unselectFrame;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('UnselectFrameTest', new MadcowConfig(), []);
+        unselectFrame = new UnselectFrame();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected unselectFrameValid(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

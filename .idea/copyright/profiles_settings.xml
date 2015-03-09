@@ -1,5 +1,3 @@
 <component name="CopyrightManager">
-  <settings default="4impact Apache">
-    <module2copyright />
-  </settings>
+  <settings default="4impact Apache" />
 </component>

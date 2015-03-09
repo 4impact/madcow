@@ -3,7 +3,6 @@
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
-    <exclude-output />
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
@@ -20,6 +19,16 @@
     <orderEntry type="library" scope="TEST" name="Maven: asm:asm-tree:3.0" level="project" />
     <orderEntry type="library" name="Maven: org.functionaljava:functionaljava:3.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:2.0.5" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.1" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.10" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.cobertura:cobertura:1.9.4.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: oro:oro:2.0.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: asm:asm:3.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: asm:asm-tree:3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.functionaljava:functionaljava:3.1" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.1" level="project" />
   </component>
 </module>
-

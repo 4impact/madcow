@@ -37,13 +37,19 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
  */
 class VerifyTitleTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('VerifyTitleTest', new MadcowConfig(), []);
-    def verifyTitle = new VerifyTitle();
+    MadcowTestCase testCase;
+    def verifyTitle;
+    String testHtmlFilePath;
 
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('VerifyTitleTest', new MadcowConfig(), []);
+        verifyTitle = new VerifyTitle();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyTitleContents(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

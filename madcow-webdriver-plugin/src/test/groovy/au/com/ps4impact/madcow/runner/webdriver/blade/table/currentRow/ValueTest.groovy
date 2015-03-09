@@ -35,14 +35,19 @@ import au.com.ps4impact.madcow.util.ResourceFinder
  */
 class ValueTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('ValueTest', new MadcowConfig(), []);
-    Value value = new Value();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def value;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('ValueTest', new MadcowConfig(), []);
+        value = new Value();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
-        if (!(testCase.stepRunner as WebDriverStepRunner)?.driver) {
-            (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
-        }
         if (reloadPage){
             (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         }

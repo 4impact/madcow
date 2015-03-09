@@ -36,12 +36,19 @@ import au.com.ps4impact.madcow.util.ResourceFinder
  */
 class CheckValueTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('CheckValueTest', new MadcowConfig(), []);
-    def checkValue = new CheckValue();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def checkValue;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('CheckValueTest', new MadcowConfig(), []);
+        checkValue = new CheckValue();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyCheckValueContents(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

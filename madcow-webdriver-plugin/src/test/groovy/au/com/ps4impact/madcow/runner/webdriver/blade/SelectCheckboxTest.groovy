@@ -38,12 +38,19 @@ import au.com.ps4impact.madcow.util.ResourceFinder
  */
 class SelectCheckboxTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('SelectCheckboxTest', new MadcowConfig(), []);
-    def selectCheckbox = new SelectCheckbox();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def selectCheckbox;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('SelectCheckboxTest', new MadcowConfig(), []);
+        selectCheckbox = new SelectCheckbox();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyCheckboxExecution(GrassBlade blade, boolean shouldPass) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);

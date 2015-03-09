@@ -38,12 +38,19 @@ import java.util.concurrent.TimeUnit
  */
 class SelectFieldTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('ValueTest', new MadcowConfig(), []);
-    def selectField = new SelectField();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def selectField;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('SelectFieldTest', new MadcowConfig(), []);
+        selectField = new SelectField();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String resultingOutput = null) {
-        (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         (testCase.stepRunner as WebDriverStepRunner).driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
         MadcowStep step = new MadcowStep(testCase, blade, null);

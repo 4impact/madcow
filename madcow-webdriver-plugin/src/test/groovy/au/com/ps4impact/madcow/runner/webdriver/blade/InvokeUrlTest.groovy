@@ -33,8 +33,15 @@ import au.com.ps4impact.madcow.step.MadcowStep
  */
 class InvokeUrlTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('InvokeUrlTest', new MadcowConfig(), []);
-    def invokeUrl = new InvokeUrl();
+    MadcowTestCase testCase;
+    def invokeUrl;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('InvokeUrlTest', new MadcowConfig(), []);
+        invokeUrl = new InvokeUrl();
+    }
 
     void testInvokeUrl() {
         GrassBlade blade = new GrassBlade('invokeUrl = ADDRESSBOOK/test.html', testCase.grassParser);

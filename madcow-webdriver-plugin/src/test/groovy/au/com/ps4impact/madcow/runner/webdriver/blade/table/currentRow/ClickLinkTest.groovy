@@ -35,14 +35,19 @@ import au.com.ps4impact.madcow.util.ResourceFinder
  */
 class ClickLinkTest extends GroovyTestCase {
 
-    MadcowTestCase testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
-    ClickLink clickLink = new ClickLink();
-    String testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    MadcowTestCase testCase;
+    def clickLink;
+    String testHtmlFilePath;
+
+    void setUp() {
+        super.setUp();
+
+        testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
+        clickLink = new ClickLink();
+        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
+    }
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
-        if (!(testCase.stepRunner as WebDriverStepRunner)?.driver) {
-            (testCase.stepRunner as WebDriverStepRunner).initialiseDriverWithRetriesIfRequired();
-        }
         if (reloadPage){
             (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         }
