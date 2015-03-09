@@ -202,10 +202,6 @@ class WebDriverStepRunner extends MadcowStepRunner {
      * Attempts to initialise the drive, retrying as required.
      */
     private initialiseDriver() {
-        if (this.driver != null) {
-            return;
-        }
-
         def retryCount = 0;
         while (retryCount <= 3 && this.driver == null) {
 
