@@ -111,12 +111,12 @@ Parent Maven POM for Madcow
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>2.0.5</version>
+            <version>2.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
+            <version>3.3.2</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -126,7 +126,7 @@ Parent Maven POM for Madcow
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -149,7 +149,7 @@ Parent Maven POM for Madcow
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.1</version>
+            <version>2.7</version>
         </dependency>
     </dependencies>
 </project>
