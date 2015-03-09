@@ -88,6 +88,8 @@ Options:
 
     protected void checkHelpOutput(Closure functionCall, String expectedHelpMessage) {
 
+        def saveOut = System.out
+
         // capture the system output stream so we can look at the help printed stuff
         ByteArrayOutputStream systemOutOutputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(systemOutOutputStream));
@@ -101,7 +103,7 @@ Options:
         MadcowCLI.main(['-h'] as String[])
         assertEquals(expectedHelpMessage.trim(), systemOutput.trim().replace("\r\n", "\n"));
 
-        System.setOut(null);
+        System.setOut(saveOut);
     }
 
     void testHelp() {
