@@ -44,8 +44,9 @@ import static org.junit.Assert.assertFalse;
  */
 class ResizeBrowserTest {
 
-    void testDummy() {
-
+    @Test
+    public void testDummy() {
+        assertEquals(true, true);
     }
 
 //    MadcowConfig config
