@@ -24,6 +24,7 @@ package au.com.ps4impact.madcow.runner.webdriver
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import org.apache.commons.io.FileUtils
+import org.openqa.selenium.Dimension
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.TakesScreenshot
 import org.openqa.selenium.WebDriver
@@ -55,6 +56,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public String lastPageTitle;
     public boolean initRemoteTimedOut = false;
     def driverParameters = null;
+    private Dimension windowSize = null;
 
     WebDriverStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
 
@@ -62,6 +64,13 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
         // default the browser if not specified
         parameters.browser = StringUtils.upperCase(parameters.browser ?: "${WebDriverType.HTMLUNIT.toString()}");
+
+        // check if width or height is supplied, that both are supplied
+        if (parameters.windowWidth && parameters.windowHeight) {
+            windowSize = new Dimension(parameters.windowWidth as Integer, parameters.windowHeight as Integer)
+        } else {
+            throw new RuntimeException("You need to specify both 'windowWidth' and 'windowHeight' or neither at all");
+        }
 
         try {
             driverType = WebDriverType.getDriverType(parameters.browser);
@@ -144,15 +153,9 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
 
                 case WebDriverType.HTMLUNIT:
-                    driverParameters = BrowserVersion.FIREFOX_17;
+                    driverParameters = BrowserVersion.FIREFOX_24;
                     if ((parameters.emulate ?: '') != '') {
                         switch (StringUtils.upperCase(parameters.emulate)) {
-                            case 'IE6':
-                                driverParameters = BrowserVersion.INTERNET_EXPLORER_6;
-                                break;
-                            case 'IE7':
-                                driverParameters = BrowserVersion.INTERNET_EXPLORER_7;
-                                break;
                             case 'IE8':
                                 driverParameters = BrowserVersion.INTERNET_EXPLORER_8;
                                 break;
@@ -160,24 +163,13 @@ class WebDriverStepRunner extends MadcowStepRunner {
                             case 'IE':
                                 driverParameters = BrowserVersion.INTERNET_EXPLORER_9;
                                 break;
-                            case 'CHROME16':
-                                driverParameters = BrowserVersion.CHROME_16;
-                                break;
                             case 'CHROME':
                                 driverParameters = BrowserVersion.CHROME;
                                 break;
-                            case 'FF10':
-                            case 'FIREFOX10':
-                                driverParameters = BrowserVersion.FIREFOX_10;
-                                break;
-                            case 'FF3':
-                            case 'FF3.6':
-                                driverParameters = BrowserVersion.FIREFOX_3_6;
-                                break;
-                            case 'FF17':
+                            case 'FF24':
                             case 'FIREFOX':
                             default:
-                                driverParameters = BrowserVersion.FIREFOX_17;
+                                driverParameters = BrowserVersion.FIREFOX_24;
                                 break;
                         }
                     }
@@ -218,8 +210,12 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     if (this.driver != null) {
                         testCase.logDebug("Setting up timeouts...")
                         setupDriverTimeouts(this.driverParameters);
-                    }
 
+                        if (windowSize) {
+                            testCase.logDebug("Resizing default browser size to ${windowSize.width} x ${windowSize.height}")
+                            driver.manage().window().setSize(windowSize);
+                        }
+                    }
                 } catch (ClassNotFoundException cnfe) {
                     throw new Exception("The specified Browser '${driverType.name}' cannot be found: $cnfe.message");
                 } catch (ClassCastException cce) {

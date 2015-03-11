@@ -26,6 +26,8 @@
             <type>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</type>
             <parameters>
                 <browser>htmlunit</browser>
+                <windowWidth>1024</windowWidth>
+                <windowHeight>768</windowHeight>
             </parameters>
         </runner>
         <env.default>DEV</env.default>

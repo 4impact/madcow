@@ -27,6 +27,8 @@
             <parameters>
                 <!--<browser>Firefox</browser>-->
                 <browser>HtmlUnit</browser>
+                <windowWidth>1024</windowWidth>
+                <windowHeight>768</windowHeight>
             </parameters>
         </runner>
         <env.default>DEV</env.default>
