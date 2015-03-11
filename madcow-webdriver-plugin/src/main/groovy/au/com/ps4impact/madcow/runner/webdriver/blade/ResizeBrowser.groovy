@@ -41,55 +41,47 @@ class ResizeBrowser extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        //skip under htmlUnit emulation
-        String browser = step.testCase.madcowConfig.stepRunnerParameters.get("browser")
-        if (browser!=null && browser.equalsIgnoreCase('HTMLUNIT')){
-            step.result = MadcowStepResult.FAIL("You cannot use the ResizeBrowser madcow operation under HTMLUnit as resizing has not been implemented");
-            return
+        if (!StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
+            step.result = MadcowStepResult.FAIL("You cannot specify a selector for the ResizeBrowser madcow operation");
+            return;
         }
 
-        if (StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
+        if (Map.class.isInstance(step.blade.parameters)) {
 
-            if (Map.class.isInstance(step.blade.parameters)) {
+            Map paramMap = step.blade.parameters as Map;
+            if (((paramMap.width ?: '') == '') || ((paramMap.height ?: '') == '')) {
+                step.result = MadcowStepResult.FAIL("Both 'width' and 'height' are required parameters when specifying an advanced ResizeBrowser operation");
+                return;
+            }
 
-                Map paramMap = step.blade.parameters as Map;
-                if (((paramMap.width ?: '') == '') || ((paramMap.height ?: '') == '')) {
-                    step.result = MadcowStepResult.FAIL("Both 'width' and 'height' are required parameters when specifying an advanced ResizeBrowser operation");
-                    return;
-                }
-
+            //width x height
+            try{
                 //width x height
-                try{
-                    //width x height
-                    Dimension dimension = new Dimension(paramMap.width,paramMap.height);
-                    stepRunner.driver.manage().window().setSize(dimension);
-                    step.result = MadcowStepResult.PASS();
-                }catch (Exception e){
-                    MadcowStepResult sr = MadcowStepResult.FAIL("Both 'width' and 'height' are required parameters when specifying an advanced ResizeBrowser operation not ${step.blade.parameters}")
-                    sr.detailedMessage = e.getMessage();
-                    step.result = sr;
-                }
-
-            } else {
-                List<String> expectedList = step.blade.parameters as List<String>;
-                if (expectedList.size()==2){
-                    try{
-                        //width x height
-                        Dimension dimension = new Dimension(Integer.valueOf(expectedList[0]),Integer.valueOf(expectedList[1]));
-                        stepRunner.driver.manage().window().setSize(dimension);
-                        step.result = MadcowStepResult.PASS();
-                    }catch (Exception e){
-                        MadcowStepResult sr = MadcowStepResult.FAIL("ResizeBrowser operation requires two numeric parameters of [width,height] not ${step.blade.parameters}")
-                        sr.detailedMessage = e.getMessage();
-                        step.result = sr;
-                    }
-                }else{
-                    step.result = MadcowStepResult.FAIL("ResizeBrowser operation requires two numeric parameters of [width,height] not ${step.blade.parameters}");
-                }
+                Dimension dimension = new Dimension(paramMap.width,paramMap.height);
+                stepRunner.driver.manage().window().setSize(dimension);
+                step.result = MadcowStepResult.PASS();
+            }catch (Exception e){
+                MadcowStepResult sr = MadcowStepResult.FAIL("Both 'width' and 'height' are required parameters when specifying an advanced ResizeBrowser operation not ${step.blade.parameters}")
+                sr.detailedMessage = e.getMessage();
+                step.result = sr;
             }
 
         } else {
-            step.result = MadcowStepResult.FAIL("You cannot specify a selector for the ResizeBrowser madcow operation");
+            List<String> expectedList = step.blade.parameters as List<String>;
+            if (expectedList.size()==2){
+                try{
+                    //width x height
+                    Dimension dimension = new Dimension(Integer.valueOf(expectedList[0]),Integer.valueOf(expectedList[1]));
+                    stepRunner.driver.manage().window().setSize(dimension);
+                    step.result = MadcowStepResult.PASS();
+                }catch (Exception e){
+                    MadcowStepResult sr = MadcowStepResult.FAIL("ResizeBrowser operation requires two numeric parameters of [width,height] not ${step.blade.parameters}")
+                    sr.detailedMessage = e.getMessage();
+                    step.result = sr;
+                }
+            }else{
+                step.result = MadcowStepResult.FAIL("ResizeBrowser operation requires two numeric parameters of [width,height] not ${step.blade.parameters}");
+            }
         }
     }
 
