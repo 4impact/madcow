@@ -68,7 +68,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
         // check if width or height is supplied, that both are supplied
         if (parameters.windowWidth && parameters.windowHeight) {
             windowSize = new Dimension(parameters.windowWidth as Integer, parameters.windowHeight as Integer)
-        } else {
+        } else if ((parameters.windowWidth && !parameters.windowHeight) || (!parameters.windowWidth && parameters.windowHeight)) {
             throw new RuntimeException("You need to specify both 'windowWidth' and 'windowHeight' or neither at all");
         }
 
