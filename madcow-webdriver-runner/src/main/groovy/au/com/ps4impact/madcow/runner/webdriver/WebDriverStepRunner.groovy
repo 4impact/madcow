@@ -37,6 +37,7 @@ import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
 import org.openqa.selenium.NoSuchElementException
 import com.gargoylesoftware.htmlunit.BrowserVersion
+import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -143,9 +144,11 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
 
                 case WebDriverType.PHANTOMJS:
-//                    driverParameters = new ResolvingPhantomJSDriverService.createDefaultService(capabilities)
-//                    driverParameters.desiredCapabilities = DesiredCapabilities.phantomjs();
-//                    initialiseDriver()
+                    DesiredCapabilities caps = new DesiredCapabilities();
+                    caps.setJavascriptEnabled(true);
+                    caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
+                            ["--web-security=no", "--ignore-ssl-errors=yes","--ignore-ssl-errors=true","--ssl-protocol=tlsv1"]);
+                    driverParameters = caps;
                     break;
 
                 case WebDriverType.IE:
@@ -212,7 +215,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                         setupDriverTimeouts(this.driverParameters);
 
                         if (windowSize) {
-                            testCase.logDebug("Resizing default browser size to ${windowSize.width} x ${windowSize.height}")
+                            testCase.logInfo("Resizing default browser size to ${windowSize.width} x ${windowSize.height}")
                             driver.manage().window().setSize(windowSize);
                         }
                     }
