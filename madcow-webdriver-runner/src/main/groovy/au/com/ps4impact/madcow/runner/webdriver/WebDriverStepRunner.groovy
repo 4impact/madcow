@@ -21,7 +21,6 @@
 
 package au.com.ps4impact.madcow.runner.webdriver
 
-import au.com.ps4impact.madcow.runner.webdriver.driver.EventListener
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import org.apache.commons.io.FileUtils
@@ -196,6 +195,13 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     /**
+     * Hook to allow subclasses to override something after the step runner driver has been initialised.
+     */
+    protected void afterDriverInitialised() {
+        // ready for overriding
+    }
+
+    /**
      * Attempts to initialise the drive, retrying as required.
      */
     private initialiseDriver() {
@@ -216,7 +222,6 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
                     if (browserDriver != null) {
                         this.driver = new EventFiringWebDriver(browserDriver);
-                        this.driver.register(new EventListener())
 
                         testCase.logDebug("Setting up timeouts...")
                         setupDriverTimeouts(this.driverParameters);

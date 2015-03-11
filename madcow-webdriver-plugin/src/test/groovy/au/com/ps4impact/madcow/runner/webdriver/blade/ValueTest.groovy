@@ -51,14 +51,14 @@ class ValueTest extends GroovyTestCase {
         testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
     }
 
-    protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String newValue, String elementId = "aInputId") {
+    protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String newValue, String elementId = 'aInputId') {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         (testCase.stepRunner as WebDriverStepRunner).driver.manage().timeouts().implicitlyWait(1, TimeUnit.MICROSECONDS);
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
         if (shouldPass) {
-            def inputElement = (testCase.stepRunner as WebDriverStepRunner).driver.findElement(By.id(elementId))
+            def inputElement = (testCase.stepRunner as WebDriverStepRunner).driver.wrappedDriver.findElement(By.id(elementId))
             assertTrue inputElement.element.getText().equals(newValue)
         }
     }
