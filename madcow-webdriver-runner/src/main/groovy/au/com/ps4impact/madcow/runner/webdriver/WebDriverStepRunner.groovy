@@ -230,6 +230,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
                             testCase.logInfo("Resizing default browser size to ${windowSize.width} x ${windowSize.height}")
                             driver.manage().window().setSize(windowSize);
                         }
+
+                        this.afterDriverInitialised();
                     }
                 } catch (ClassNotFoundException cnfe) {
                     throw new Exception("The specified Browser '${driverType.name}' cannot be found: $cnfe.message");
