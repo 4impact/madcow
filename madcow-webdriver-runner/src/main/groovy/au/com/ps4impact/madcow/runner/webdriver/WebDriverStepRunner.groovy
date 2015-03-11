@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.runner.webdriver
 
+import au.com.ps4impact.madcow.runner.webdriver.driver.EventListener
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import org.apache.commons.io.FileUtils
@@ -41,6 +42,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
+import org.openqa.selenium.support.events.EventFiringWebDriver
 
 import java.util.concurrent.TimeUnit
 
@@ -51,7 +53,7 @@ import java.util.concurrent.TimeUnit
  */
 class WebDriverStepRunner extends MadcowStepRunner {
 
-    public WebDriver driver;
+    public EventFiringWebDriver driver;
     public WebDriverType driverType;
     public String lastPageSource;
     public String lastPageTitle;
@@ -204,13 +206,18 @@ class WebDriverStepRunner extends MadcowStepRunner {
             try {
                 try {
                     testCase.logDebug("Instantiating Driver instance")
+
+                    WebDriver browserDriver;
                     if (this.driverParameters != null) {
-                        this.driver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver
+                        browserDriver = this.driverType.driverClass.newInstance(this.driverParameters) as WebDriver
                     } else {
-                        this.driver = this.driverType.driverClass.newInstance() as WebDriver
+                        browserDriver = this.driverType.driverClass.newInstance() as WebDriver
                     }
 
-                    if (this.driver != null) {
+                    if (browserDriver != null) {
+                        this.driver = new EventFiringWebDriver(browserDriver);
+                        this.driver.register(new EventListener())
+
                         testCase.logDebug("Setting up timeouts...")
                         setupDriverTimeouts(this.driverParameters);
 
