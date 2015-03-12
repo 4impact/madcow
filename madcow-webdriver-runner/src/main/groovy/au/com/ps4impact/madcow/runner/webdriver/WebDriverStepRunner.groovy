@@ -54,6 +54,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
     public EventFiringWebDriver driver;
     public WebDriverType driverType;
+    public String currentPageSource;
     public String lastPageSource;
     public String lastPageTitle;
     public boolean initRemoteTimedOut = false;
@@ -133,27 +134,22 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
 
                 case WebDriverType.CHROME:
-//                    driverParameters = new ChromeDriverService()
-//                    driverParameters.start()
-//                    initialiseDriver()
                     break;
 
                 case WebDriverType.FIREFOX:
                     driverParameters = new FirefoxProfile()
                     driverParameters.setEnableNativeEvents(true)
-//                    initialiseDriver()
                     break;
 
                 case WebDriverType.PHANTOMJS:
                     DesiredCapabilities caps = new DesiredCapabilities();
                     caps.setJavascriptEnabled(true);
                     caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
-                            ["--web-security=no", "--ignore-ssl-errors=yes","--ignore-ssl-errors=true","--ssl-protocol=tlsv1"]);
+                            ["--web-security=no", "--ignore-ssl-errors=yes", "--ignore-ssl-errors=true", "--ssl-protocol=tlsv1", "--webdriver-loglevel=NONE"]);
                     driverParameters = caps;
                     break;
 
                 case WebDriverType.IE:
-//                    initialiseDriver()
                     break;
 
                 case WebDriverType.HTMLUNIT:
@@ -293,6 +289,20 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     /**
+     * Hook to allow subclasses to override before a step is executed.
+     */
+    protected void beforeExecuteStep(MadcowStep step, String pageSource) {
+        // ready for overriding
+    }
+
+    /**
+     * Hook to allow subclasses to override after a step is executed.
+     */
+    protected void afterExecuteStep(MadcowStep step, String pageSource) {
+        // ready for overriding
+    }
+
+    /**
      * Execute the madcow step for a given test case.
      */
     public void execute(MadcowStep step) {
@@ -302,6 +312,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
             step.result = MadcowStepResult.NOT_YET_EXECUTED('Skipped!');
             return;
         }
+
+        this.beforeExecuteStep(step, driver?.pageSource);
 
         WebDriverBladeRunner bladeRunner = getBladeRunner(step.blade) as WebDriverBladeRunner;
         try {
@@ -314,10 +326,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 }
             }
 
-            //if pageSource not null and not equal to previous
-            if (driver?.pageSource != null
-                && !driver?.pageSource?.equals(lastPageSource)) {
+            currentPageSource = driver?.pageSource;
+            if (currentPageSource && !currentPageSource.equals(lastPageSource)) {
                 captureHtmlResults(step);
+                lastPageSource = currentPageSource;
             }
 
         } catch (NoSuchElementException ignored) {
@@ -325,6 +337,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
         } catch (e) {
             step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
         }
+
+        this.afterExecuteStep(step, currentPageSource);
     }
 
     /**
@@ -353,51 +367,49 @@ class WebDriverStepRunner extends MadcowStepRunner {
      * Capture the html result file.
      */
     public void captureHtmlResults(MadcowStep step) {
-        String originalPageSource = driver.pageSource
-        String alteredPageSource = addBaseMetaTagToPageSource(originalPageSource)
-        if (originalPageSource) {
-            new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << alteredPageSource;
-            capturePNGScreenShot(step);
-            lastPageSource = originalPageSource;
-            step.result.hasResultFile = true;
-        }
+        new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.html") << addBaseMetaTagToPageSource(currentPageSource);
+        capturePNGScreenShot(step);
+        step.result.hasResultFile = true;
     }
 
     /**
-     * Alter the retreived page source to use the FQDN in href and src links
+     * Alter the retrieved page source to use the fully-qualified domain names in href and src links
      *
-     * @param pageSource the page source as retrieved by webdriver
-     * @return an altered version of the pageSource with FQDN's
+     * @param pageSource the page source as retrieved by WebDriver
+     * @return an altered version of the pageSource with fully-qualified domain names
      */
     private String addBaseMetaTagToPageSource(String pageSource) {
-        try{
-            //not already a base element
+        try {
+            // not already a base element
             if (!pageSource.contains("<base") &&
                 driver?.currentUrl != null &&
                 !(driver.currentUrl.equals("about:blank"))) {
-                def baseURL = new URL(driver.currentUrl); //may need to use different url here
+                def baseURL = new URL(driver.currentUrl); // may need to use different url here
                 return pageSource.replace("<head>",'<head><base href="'+baseURL+'"/>')
             }
-        }catch(Exception e){
+
+            return pageSource
+        } catch(Exception ignored) {
             return pageSource
         }
-        return pageSource
     }
 
-    private void capturePNGScreenShot(MadcowStep step){
-        //HTML UNIT DOESN'T SUPPORT TAKING SCREENSHOTS AS NEVER RENDERS
-        if (driver instanceof org.openqa.selenium.remote.RemoteWebDriver){
-            File screenShot
-            if (!(driver instanceof TakesScreenshot)) {
-                WebDriver augmentedDriver = new Augmenter().augment(driver as RemoteWebDriver)
-                screenShot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE)
-            } else {
-                screenShot = ((TakesScreenshot) driver as RemoteWebDriver).getScreenshotAs(OutputType.FILE)
-            }
-            File saveTo = new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.png")
-            FileUtils.copyFile(screenShot, saveTo)
-            step.result.hasScreenshot = true;
+    private void capturePNGScreenShot(MadcowStep step) {
+
+        if (!(driver.wrappedDriver instanceof RemoteWebDriver)) {
+            return;
         }
+
+        File screenShot
+        if (!(driver.wrappedDriver instanceof TakesScreenshot)) {
+            WebDriver augmentedDriver = new Augmenter().augment(driver.wrappedDriver as RemoteWebDriver)
+            screenShot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE)
+        } else {
+            screenShot = ((TakesScreenshot) driver.wrappedDriver as RemoteWebDriver).getScreenshotAs(OutputType.FILE)
+        }
+
+        FileUtils.moveFile(screenShot, new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.png"))
+        step.result.hasScreenshot = true;
     }
 
     /**
