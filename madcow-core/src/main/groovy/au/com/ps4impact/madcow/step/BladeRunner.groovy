@@ -52,6 +52,12 @@ abstract class BladeRunner {
         Enumeration pluginFiles = loader.getResources("madcow.bladerunner.plugins");
         ArrayList<String> packages = new ArrayList<String>();
         pluginFiles.each { URL url -> packages.addAll(IOUtils.readLines(url.openStream())) }
+
+        // sort packages to keep our default madcow ones at the bottom of the list, allows for easier overloading of a property name
+        packages = packages.sort { a, b ->
+            return (a.startsWith('au.com.ps4impact.madcow.runner')) ? 1 : -1;
+        }
+
         LOG.info("Plugin Packages: $packages");
         return packages;
     }
@@ -85,9 +91,9 @@ abstract class BladeRunner {
                 bladeRunner = getBladeRunner(pluginPackage, bladeClassName);
                 if (bladeRunner != null)
                     return bladeRunner;
-            } catch (ClassNotFoundException ignored) { }
+            } catch (Exception ignored) { }
         }
 
-        throw new Exception("The specified BladeRunner '$bladeClassName' cannot be found");
+        throw new Exception("The specified BladeRunner '$bladeClassName' cannot be found!");
     }
 }

@@ -147,6 +147,7 @@ class MadcowTestCase {
 
         // only execute blades that need executing
         if (step.blade.executable()) {
+            step.stopWatch.reset();
             step.stopWatch.start();
             this.stepRunner.execute(step);
             step.stopWatch.stop();
@@ -159,6 +160,7 @@ class MadcowTestCase {
             throw new RuntimeException("Step failed - ${step.result}");
 
         if ((step.children != null) && (!step.children.empty)) {
+            step.stopWatch.reset();
             step.stopWatch.start();
             step.children.each { child -> executeStep (child) }
             step.stopWatch.stop();

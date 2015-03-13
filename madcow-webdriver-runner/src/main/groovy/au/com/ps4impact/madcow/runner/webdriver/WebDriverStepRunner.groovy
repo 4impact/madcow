@@ -145,7 +145,13 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     DesiredCapabilities caps = new DesiredCapabilities();
                     caps.setJavascriptEnabled(true);
                     caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
-                            ["--web-security=no", "--ignore-ssl-errors=yes", "--ignore-ssl-errors=true", "--ssl-protocol=tlsv1", "--webdriver-loglevel=NONE"]);
+                            [
+                             '--web-security=no',
+                             '--ignore-ssl-errors=yes',
+                             '--ignore-ssl-errors=true',
+                             '--ssl-protocol=tlsv1',
+                             '--webdriver-loglevel=OFF'
+                            ]);
                     driverParameters = caps;
                     break;
 
