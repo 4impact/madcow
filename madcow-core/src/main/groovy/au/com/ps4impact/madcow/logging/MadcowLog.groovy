@@ -83,7 +83,7 @@ public class MadcowLog {
         fileAppender.activateOptions();
         logger.addAppender(fileAppender);
 
-        ConsoleAppender consoleAppender = new ConsoleAppender(new PatternLayout("%d [%c] - %m%n"));
+        ConsoleAppender consoleAppender = new ConsoleAppender(new ANSIColorLayout("%d [%c] - %m%n"));
         consoleAppender.setName(testCase.name);
         consoleAppender.setThreshold(Level.INFO);
         consoleAppender.activateOptions();
