@@ -53,6 +53,8 @@ abstract class AbstractGrassFileHelper {
             return [:];
         }
 
+        getLog().info("Processing ${grassFiles.length} mappings files");
+
         grassFiles.each { Resource r ->
             def properties = loadMappingProperties(r)
             getLog().debug "Parsing ${getPropertiesFilePrettyName()} File [${r.URL}] "
