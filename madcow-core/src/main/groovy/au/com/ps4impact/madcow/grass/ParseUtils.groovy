@@ -54,7 +54,7 @@ class ParseUtils {
         if (originalString.contains('$'))
         {
             //treat this as a replacement GString-age
-            originalString = originalString.replaceAll(/\$$/,'\\\\\\$');
+            originalString = originalString.replaceAll($/\$$/$,'\\\\\\$');
         }
         return originalString;
     }
