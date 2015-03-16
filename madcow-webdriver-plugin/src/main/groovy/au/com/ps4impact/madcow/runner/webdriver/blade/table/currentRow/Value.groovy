@@ -64,6 +64,7 @@ class Value extends CurrentRowBladeRunner {
                 valueBlade.mappingSelectorValue = cellXPath;
                 valueBlade.operation = 'value';
                 valueBlade.parameters = value;
+                valueBlade.parseParameters(value, step.testCase.grassParser)
                 step.blade = valueBlade;
                 BladeRunner valueBladeRunner = getValueBladeRunner();
                 valueBladeRunner.execute(stepRunner, step);

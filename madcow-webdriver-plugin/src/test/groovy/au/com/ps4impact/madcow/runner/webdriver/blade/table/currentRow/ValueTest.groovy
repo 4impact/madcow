@@ -73,6 +73,21 @@ class ValueTest extends GroovyTestCase {
         verifyTableValue(blade, true, false);
     }
 
+    void testSetValueByDataParameter() {
+        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
+        executeBlade(blade, true);
+
+        // set data parameter
+        new GrassBlade('@valueToSet = Tennis', testCase.grassParser);
+
+        // use data parameter in blade
+        blade = new GrassBlade("theTable.table.currentRow.value = ['Column Number 1' : '@valueToSet']", testCase.grassParser);
+        verifyTableValue(blade, true, false);
+
+        blade = new GrassBlade('theTable.table.currentRow.checkValue = [\'Column Number 1\' : \'Tennis\']', testCase.grassParser);
+        verifyTableValue(blade, true, false);
+    }
+
     void testSetValueNeedToSelectRowFirst() {
         GrassBlade blade = new GrassBlade("theTable.table.currentRow.value = ['Column Number 1' : 'Tent']", testCase.grassParser);
         MadcowStep step = verifyTableValue(blade, false);

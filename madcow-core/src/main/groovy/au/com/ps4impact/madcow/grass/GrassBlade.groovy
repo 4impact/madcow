@@ -127,7 +127,7 @@ class GrassBlade {
      *
      * Returns the type of blade, DATA_PARAMETER or EQUATION.
      */
-    protected GrassBladeType parseParameters(String parametersString, GrassParser parser) {
+    public GrassBladeType parseParameters(String parametersString, GrassParser parser) {
 
         Matcher inlineParameters = parametersString =~ DATA_PARAMETER_INLINE_REGEX;
         if (inlineParameters.size() > 0) {
