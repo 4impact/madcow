@@ -26,6 +26,8 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
+import org.apache.commons.lang3.StringUtils
+import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.internal.Locatable
 
@@ -36,7 +38,7 @@ class Click extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        WebElement webElement = findElement(stepRunner, step);
+        WebElement webElement = findElementForClickStep(stepRunner, step);
 
         // scroll the element into view
         ((Locatable)webElement).getCoordinates().inViewPort()
@@ -46,7 +48,20 @@ class Click extends WebDriverBladeRunner {
         step.result = MadcowStepResult.PASS();
     }
 
+    protected WebElement findElementForClickStep(WebDriverStepRunner stepRunner, MadcowStep step) {
+        // when there is no mapping selector, we need to use the parameters as the click target
+        if (StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
+            return stepRunner.driver.findElement(By.linkText(step.blade.parameters as String))
+        } else {
+            return findElement(stepRunner, step);
+        }
+    }
+
+    protected boolean allowEmptyParameterValue() {
+        return true;
+    }
+
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
-        return [GrassBlade.GrassBladeType.STATEMENT];
+        return [GrassBlade.GrassBladeType.STATEMENT, GrassBlade.GrassBladeType.EQUATION];
     }
 }

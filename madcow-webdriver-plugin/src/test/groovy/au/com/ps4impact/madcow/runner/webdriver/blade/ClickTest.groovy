@@ -116,6 +116,11 @@ class ClickTest extends GroovyTestCase {
         verifyLinkExecution(blade, true);
     }
 
+    void testClickByEquationParameter() {
+        GrassBlade blade = new GrassBlade('click = This is a link to google that should off the bottom of the viewable screen area on most resolutions', testCase.grassParser);
+        verifyLinkExecution(blade, true);
+    }
+
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.click', testCase.grassParser);
@@ -135,16 +140,6 @@ class ClickTest extends GroovyTestCase {
             fail('should always exception');
         } catch (e) {
             assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
-        }
-    }
-
-    void testEquationNotSupported() {
-        try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.click = yeah yeah', testCase.grassParser);
-            assertFalse(click.isValidBladeToExecute(blade));
-            fail('should always exception');
-        } catch (e) {
-            assertEquals('Unsupported grass format. Only grass blades of type \'[STATEMENT]\' are supported.', e.message);
         }
     }
 }

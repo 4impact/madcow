@@ -193,8 +193,6 @@ abstract class WebDriverBladeRunner extends BladeRunner {
             default:
                 return stepRunner.driver.findElement(By.id(step.blade.mappingSelectorValue));
         }
-
-        return null;
     }
 
     /**

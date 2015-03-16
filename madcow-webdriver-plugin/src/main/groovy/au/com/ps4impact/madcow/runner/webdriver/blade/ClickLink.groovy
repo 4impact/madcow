@@ -21,13 +21,10 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
-import au.com.ps4impact.madcow.grass.GrassBlade
 import org.openqa.selenium.By
-import org.openqa.selenium.Point
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.internal.Locatable
 
@@ -41,7 +38,7 @@ class ClickLink extends Click {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
         try {
-            WebElement webElement = findElement(stepRunner, step);
+            WebElement webElement = findElementForClickStep(stepRunner, step);
             // scroll the element into view
             ((Locatable)webElement).getCoordinates().inViewPort()
             webElement.findElement(By.tagName('a')).click();
@@ -51,9 +48,5 @@ class ClickLink extends Click {
         }
 
         step.result = MadcowStepResult.PASS("URL now: <a href=\"${stepRunner.driver.currentUrl}\">${stepRunner.driver.currentUrl}</a>");
-    }
-
-    protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
-        return [GrassBlade.GrassBladeType.STATEMENT];
     }
 }
