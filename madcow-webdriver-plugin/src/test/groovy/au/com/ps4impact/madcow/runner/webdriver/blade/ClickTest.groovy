@@ -131,15 +131,4 @@ class ClickTest extends GroovyTestCase {
             assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
-
-    void testMappingSelectorRequired() {
-        try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.click', testCase.grassParser);
-            blade.mappingSelectorType = null;
-            assertFalse(click.isValidBladeToExecute(blade));
-            fail('should always exception');
-        } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
-        }
-    }
 }

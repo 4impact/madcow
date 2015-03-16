@@ -61,6 +61,10 @@ class Click extends WebDriverBladeRunner {
         return true;
     }
 
+    protected boolean allowNullSelectorType() {
+        return true;
+    }
+
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
         return [GrassBlade.GrassBladeType.STATEMENT, GrassBlade.GrassBladeType.EQUATION];
     }
