@@ -87,11 +87,14 @@ class GrassParser {
             MadcowStep step = new MadcowStep(testCase, new GrassBlade(line, this), parentStep);
 
             // verify the executable blade can actually be executed by the configured blade runner
-            if (step.blade.executable() && !testCase.stepRunner.hasBladeRunner(step.blade)) {
-                String error = "Unsupported operation '${step.blade.operation}'";
-                LOG.error("$error\n\nBlade: ${step.blade.toString()} | Type: ${step.blade.type}");
-                throw new GrassParseException(step.blade.line, error);
+            try {
+                if (step.blade.executable() && !testCase.stepRunner.hasBladeRunner(step.blade)) {
+                    throw new GrassParseException("Unsupported operation '${step.blade.operation}'");
+                }
+            } catch (GrassParseException gpe) {
+                throw new GrassParseException(step.blade.line, "Error processing blade: ${step.blade.toString()}\n${gpe.message}");
             }
+
 
             if (parentStep != null)
                 parentStep.children.add(step);

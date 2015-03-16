@@ -86,7 +86,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
                 }
 
                 if (!validParameterClassType) {
-                    throw new GrassParseException("Unsupported grass format. Only parameters of type '${this.getSupportedParameterTypes()}' are supported.");
+                    throw new GrassParseException("Unsupported grass format. Only parameters of type '${this.getSupportedParameterTypes()*.simpleName}' are supported.");
                 }
             }
         }
