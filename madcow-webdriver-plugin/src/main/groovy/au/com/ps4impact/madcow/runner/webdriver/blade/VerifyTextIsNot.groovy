@@ -28,11 +28,11 @@ import au.com.ps4impact.madcow.step.MadcowStepResult
 import org.apache.commons.lang3.StringUtils
 
 /**
- * VerifyNotText exists on a page
+ * Verify text doesn't exist on a page
  *
  * @author Tom Romano
  */
-class VerifyNotText extends WebDriverBladeRunner {
+class VerifyTextIsNot extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
