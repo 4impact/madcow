@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 4impact, Brisbane, Australia
+ * Copyright 2015 4impact, Brisbane, Australia
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,36 +21,29 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
+import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
-import au.com.ps4impact.madcow.grass.GrassBlade
-import org.openqa.selenium.By
-import org.openqa.selenium.Point
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.internal.Locatable
 
 /**
- * The ClickLink Blade is used to click on an elements link.
- *
- * @author Gavin Bunney
+ * The Click Blade is used to click on an element - such as radio buttons or html links.
  */
-class ClickLink extends Click {
+class Click extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        try {
-            WebElement webElement = findElement(stepRunner, step);
-            // scroll the element into view
-            ((Locatable)webElement).getCoordinates().inViewPort()
-            webElement.findElement(By.tagName('a')).click();
-        } catch (ignored) {
-            // failed to click, try again with the element directly
-            super.execute(stepRunner, step);
-        }
+        WebElement webElement = findElement(stepRunner, step);
 
-        step.result = MadcowStepResult.PASS("URL now: <a href=\"${stepRunner.driver.currentUrl}\">${stepRunner.driver.currentUrl}</a>");
+        // scroll the element into view
+        ((Locatable)webElement).getCoordinates().inViewPort()
+
+        webElement.click();
+
+        step.result = MadcowStepResult.PASS();
     }
 
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
