@@ -83,7 +83,10 @@ public class MadcowLog {
         fileAppender.activateOptions();
         logger.addAppender(fileAppender);
 
-        ConsoleAppender consoleAppender = new ConsoleAppender(new ANSIColorLayout("%d [%c] - %m%n"));
+        ColorConsoleAppender consoleAppender = new ColorConsoleAppender(new PatternLayout("%d [%c] - %m%n"));
+        consoleAppender.setInfoColour(ColorConsoleAppender.GREEN)
+        consoleAppender.setDebugColour(ColorConsoleAppender.CYAN)
+        consoleAppender.setTraceColour(ColorConsoleAppender.CYAN)
         consoleAppender.setName(testCase.name);
         consoleAppender.setThreshold(Level.INFO);
         consoleAppender.activateOptions();

@@ -21,9 +21,6 @@
 
 package au.com.ps4impact.madcow.logging
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.EnhancedPatternLayout;
 import org.apache.log4j.Layout;
@@ -50,15 +47,29 @@ class ColorConsoleAppender extends ConsoleAppender {
     static final String HIGHLIGHT_START = "{highlight}";
     static final String HIGHLIGHT_END = "{/highlight}";
 
+    public static final String BLUE         = '\u001B[0;34m';
+    public static final String GREEN        = '\u001B[0;32m';
+    public static final String CYAN         = '\u001B[0;36m';
+    public static final String RED          = '\u001B[0;31m';
+    public static final String DARK_GRAY    = '\u001B[1;30m';
+    public static final String LIGHT_BLUE   = '\u001B[1;34m';
+    public static final String LIGHT_GREEN  = '\u001B[1;32m';
+    public static final String LIGHT_CYAN   = '\u001B[1;36m';
+    public static final String LIGHT_RED    = '\u001B[1;31m';
+    public static final String LIGHT_PURPLE = '\u001B[1;35m';
+    public static final String YELLOW       = '\u001B[1;33m';
+    public static final String WHITE        = '\u001B[1;37m';
+
     protected static final String COLOR_RESET = "\u001b[0m";
 
     {
-        levelToColor.put(Level.FATAL, "\u001b[1;37;41m");
-        levelToColor.put(Level.ERROR, "\u001b[1;31m");
-        levelToColor.put(Level.WARN,  "\u001b[1;33m");
-        levelToColor.put(Level.INFO,  "\u001b[22;32m");
-        levelToColor.put(Level.DEBUG, "\u001b[22;36m");
-        levelToColor.put(Level.TRACE, "\u001b[1;30m");
+        // default colors
+        levelToColor.put(Level.FATAL, RED);
+        levelToColor.put(Level.ERROR, RED);
+        levelToColor.put(Level.WARN,  YELLOW);
+        levelToColor.put(Level.INFO,  LIGHT_BLUE);
+        levelToColor.put(Level.DEBUG, LIGHT_CYAN);
+        levelToColor.put(Level.TRACE, LIGHT_CYAN);
     }
 
     public ColorConsoleAppender() {
