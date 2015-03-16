@@ -36,7 +36,15 @@ class ShowOnReport extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        String elementText = getElementText(findElement(stepRunner, step));
+        String foundValue = null;
+        try {
+            foundValue = getElementText(findElement(stepRunner, step))
+        } catch (Exception ignored) { }
+
+        // xpath run some JS to try and get the value out
+        if ((!foundValue || foundValue.length() == 0) && getSelectorType(step.blade.mappingSelectorType) == WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH) {
+            foundValue = getElementTextByExecutingXPath(stepRunner, step.blade.mappingSelectorValue);
+        }
 
         if (Map.class.isInstance(step.blade.parameters)) {
 
@@ -46,9 +54,9 @@ class ShowOnReport extends WebDriverBladeRunner {
                 return;
             }
 
-            step.testCase.reportDetails.put(paramMap.name, paramMap.format.replaceAll('%s', elementText));
+            step.testCase.reportDetails.put(paramMap.name as String, paramMap.format.replaceAll('%s', foundValue) as String);
         } else {
-            step.testCase.reportDetails.put(step.blade.parameters as String, elementText);
+            step.testCase.reportDetails.put(step.blade.parameters as String, foundValue);
         }
 
         step.result = MadcowStepResult.PASS();

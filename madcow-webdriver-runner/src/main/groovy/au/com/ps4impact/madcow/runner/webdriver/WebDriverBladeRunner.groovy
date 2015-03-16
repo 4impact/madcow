@@ -216,4 +216,10 @@ abstract class WebDriverBladeRunner extends BladeRunner {
                 return StringUtils.trim(webElement.text);
         }
     }
+
+    protected String getElementTextByExecutingXPath(WebDriverStepRunner stepRunner, String xpath) {
+        return stepRunner.driver.executeScript("""
+            return document.evaluate(arguments[0], document, null, XPathResult.ANY_TYPE, null).stringValue;
+        """, xpath);
+    }
 }

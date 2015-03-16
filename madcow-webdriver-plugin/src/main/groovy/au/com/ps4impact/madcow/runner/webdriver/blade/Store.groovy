@@ -27,38 +27,47 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import org.apache.commons.lang3.StringUtils
+import org.openqa.selenium.WebElement
 
 /**
- * User: andy.souyave
- * Date: 20/09/12
- * Time: 1:32 PM
+ * Store parameter value Blade Runner.
  */
 class Store extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        if (!StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
-
-            if (findElement(stepRunner, step)) {
-                def parser = step.testCase.grassParser
-                def storedParamName = step.blade.parameters
-                def storedDataParam = "${GrassBlade.DATA_PARAMETER_KEY}${storedParamName}"
-
-                // set the runtime parameter
-                parser.setDataParameter(storedDataParam, getElementText(findElement(stepRunner, step)))
-
-                // replace all the stored param placeholders with the corresponding value from the html element
-                step.testCase.steps.each { MadcowStep madStep ->
-
-                    if ((madStep?.blade?.parameters as String)?.contains("${GrassBlade.DATA_PARAMETER_KEY}{${storedParamName}}"))
-                        madStep.blade.parameters = (madStep?.blade?.parameters as String).replaceAll("${GrassBlade.DATA_PARAMETER_KEY}\\{${storedParamName}\\}", parser.getDataParameter(storedDataParam))
-                }
-
-                step.result = MadcowStepResult.PASS();
-            } else {
-                step.result = MadcowStepResult.FAIL("Element ${step.blade.mappingSelectorValue} was not found for parameter store.");
-            }
+        if (StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
+            return;
         }
+
+        def storedParamName = step.blade.parameters
+        def storedDataParam = "${GrassBlade.DATA_PARAMETER_KEY}${storedParamName}"
+
+        String foundValue = null;
+        try {
+            foundValue = getElementText(findElement(stepRunner, step))
+        } catch (Exception ignored) { }
+
+        // xpath run some JS to try and get the value out
+        if ((!foundValue || foundValue.length() == 0) && getSelectorType(step.blade.mappingSelectorType) == WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH) {
+            foundValue = getElementTextByExecutingXPath(stepRunner, step.blade.mappingSelectorValue);
+        }
+
+        if (!foundValue) {
+            step.result = MadcowStepResult.FAIL("Element ${step.blade.mappingSelectorValue} was not found for parameter store.");
+            return;
+        }
+
+        // set the runtime parameter
+        step.testCase.grassParser.setDataParameter(storedDataParam, foundValue)
+        // replace all the stored param placeholders with the corresponding value from the html element
+        step.testCase.steps.each { MadcowStep madStep ->
+
+            if ((madStep?.blade?.parameters as String)?.contains("${GrassBlade.DATA_PARAMETER_KEY}{${storedParamName}}"))
+                madStep.blade.parameters = (madStep?.blade?.parameters as String).replaceAll("${GrassBlade.DATA_PARAMETER_KEY}\\{${storedParamName}\\}", step.testCase.grassParser.getDataParameter(storedDataParam))
+        }
+
+        step.result = MadcowStepResult.PASS();
     }
 
     /**
