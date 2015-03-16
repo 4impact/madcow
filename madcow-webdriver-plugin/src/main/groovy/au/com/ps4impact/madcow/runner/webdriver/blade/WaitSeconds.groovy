@@ -44,7 +44,7 @@ class WaitSeconds extends WebDriverBladeRunner {
             return;
         }
 
-        // waiting it not really recommended... so log it as warning!
+        // waiting is not really recommended... so log it as warning!
         step.testCase.logWarn("Waiting for $secondsToSleep seconds");
 
         sleep(secondsToSleep * 1000);

@@ -32,7 +32,7 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
  */
 public class TableXPather {
 
-    private GrassBlade blade;
+    protected GrassBlade blade;
 
     public TableXPather(GrassBlade blade) {
         this.blade = blade;

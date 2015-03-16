@@ -22,6 +22,7 @@
 package au.com.ps4impact.madcow.runner.webdriver.blade.table.currentRow
 
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
+import au.com.ps4impact.madcow.step.BladeRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.runner.webdriver.blade.table.util.TableXPather
@@ -37,9 +38,17 @@ class Value extends CurrentRowBladeRunner {
 
     protected static final String XPATH_POSTFIX = "//*[(local-name() = 'input' or local-name() = 'textarea') and position() = 1]";
 
+    public TableXPather getTableXPather(MadcowStep step) {
+        return new TableXPather(step.blade);
+    }
+
+    public BladeRunner getValueBladeRunner() {
+        return new au.com.ps4impact.madcow.runner.webdriver.blade.Value();
+    }
+
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        TableXPather xPather = new TableXPather(step.blade);
+        TableXPather xPather = getTableXPather(step);
 
         if (!super.validateSelectedRow(xPather, step))
             return;
@@ -56,7 +65,7 @@ class Value extends CurrentRowBladeRunner {
                 valueBlade.operation = 'value';
                 valueBlade.parameters = value;
                 step.blade = valueBlade;
-                au.com.ps4impact.madcow.runner.webdriver.blade.Value valueBladeRunner = new au.com.ps4impact.madcow.runner.webdriver.blade.Value();
+                BladeRunner valueBladeRunner = getValueBladeRunner();
                 valueBladeRunner.execute(stepRunner, step);
             } catch (e) {
                 step.result = MadcowStepResult.FAIL("Unexpected exception: $e");

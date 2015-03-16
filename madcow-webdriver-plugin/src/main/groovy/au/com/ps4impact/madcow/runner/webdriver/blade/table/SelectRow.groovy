@@ -35,9 +35,13 @@ import au.com.ps4impact.madcow.runner.webdriver.blade.table.util.TableXPather
  */
 class SelectRow extends WebDriverBladeRunner {
 
+    public TableXPather getTableXPather(MadcowStep step) {
+        return new TableXPather(step.blade);
+    }
+
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        TableXPather xPather = new TableXPather(step.blade);
+        TableXPather xPather = getTableXPather(step);
 
         String rowPositionXPath;
 

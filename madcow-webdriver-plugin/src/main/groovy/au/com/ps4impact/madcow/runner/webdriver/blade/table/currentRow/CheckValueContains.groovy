@@ -37,9 +37,13 @@ import org.openqa.selenium.WebElement
  */
 class CheckValueContains extends CurrentRowBladeRunner {
 
+    public TableXPather getTableXPather(MadcowStep step) {
+        return new TableXPather(step.blade);
+    }
+
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        TableXPather xPather = new TableXPather(step.blade);
+        TableXPather xPather = getTableXPather(step);
 
         if (!super.validateSelectedRow(xPather, step))
             return;

@@ -28,9 +28,9 @@ package au.com.ps4impact.madcow.runner.webdriver.blade.table.util
  */
 class Column {
 
-    private String tableXPath
+    protected String tableXPath
 
-    private def columnHeader
+    protected def columnHeader
 
     public Column(String tableXPath, def columnHeader) {
         this.tableXPath = tableXPath

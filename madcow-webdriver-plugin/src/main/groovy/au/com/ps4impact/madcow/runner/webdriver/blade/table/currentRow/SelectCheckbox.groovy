@@ -37,9 +37,13 @@ class SelectCheckbox extends CurrentRowBladeRunner {
 
     protected static final String XPATH_POSTFIX = "//*[local-name() = 'input' and @type = 'checkbox']";
 
+    public TableXPather getTableXPather(MadcowStep step) {
+        return new TableXPather(step.blade);
+    }
+
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        TableXPather xPather = new TableXPather(step.blade);
+        TableXPather xPather = getTableXPather(step);
 
         if (!super.validateSelectedRow(xPather, step))
             return;
