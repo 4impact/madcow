@@ -97,6 +97,6 @@ class StoreTest extends GroovyTestCase {
 
     void testStoreEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.store = ', testCase.grassParser);
-        verifyStoreContents(blade, true);
+        verifyStoreContents(blade, false);
     }
 }
