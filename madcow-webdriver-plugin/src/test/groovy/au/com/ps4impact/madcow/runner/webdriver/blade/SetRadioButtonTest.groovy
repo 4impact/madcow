@@ -111,25 +111,4 @@ class SetRadioButtonTest extends GroovyTestCase {
             assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
-
-    void testMappingSelectorRequired() {
-        try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.setRadioButton', testCase.grassParser);
-            blade.mappingSelectorType = null;
-            assertFalse(setRadioButton.isValidBladeToExecute(blade));
-            fail('should always exception');
-        } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
-        }
-    }
-
-    void testEquationNotSupported() {
-        try {
-            GrassBlade blade = new GrassBlade('testsite_menu_createAddress.setRadioButton = yeah yeah', testCase.grassParser);
-            assertFalse(setRadioButton.isValidBladeToExecute(blade));
-            fail('should always exception');
-        } catch (e) {
-            assertEquals('Unsupported grass format. Only grass blades of type \'[STATEMENT]\' are supported.', e.message);
-        }
-    }
 }
