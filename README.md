@@ -15,6 +15,6 @@ All files are now of type `grass`. Be sure to rename any `*.madcow.mappings.prop
 ### Operation Changes
 
 * `import` is now `importTemplate`
-# `checkSelectValue` is now `verifySelectFieldOptions`
-# `waitUntilExists` is now `waitFor`
-# `setRadioButton` has been removed - setting radio buttons can be accomplished using `click`
+* `checkSelectValue` is now `verifySelectFieldOptions`
+* `waitUntilExists` is now `waitFor`
+* `setRadioButton` has been removed - setting radio buttons can be accomplished using `click`
