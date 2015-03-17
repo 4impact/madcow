@@ -164,7 +164,8 @@ class GrassParserTest extends GroovyTestCase {
             parser.processScriptForTestCase(grassScript);
             fail('should always expection');
         } catch (GrassParseException gpe) {
-            assertEquals("Unsupported operation 'notAValidOperation'", gpe.message);
+            assertEquals("Error processing blade: addressbook_search_country.notAValidOperation = this will fail!\n" +
+                         "Unsupported operation 'notAValidOperation'", gpe.message);
         }
     }
 

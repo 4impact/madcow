@@ -40,7 +40,7 @@ class GrassParseExceptionStepTest extends GroovyTestCase {
         } catch (RuntimeException re) {
             def parseErrorStep = testCase.steps.first();
             assertTrue(parseErrorStep.result.parseError());
-            assertEquals('Unsupported operation \'notAValidOperation\'', parseErrorStep.result.detailedMessage);
+            assertEquals('Error processing blade: notAValidOperation = will fail\nUnsupported operation \'notAValidOperation\'', parseErrorStep.result.detailedMessage);
         }
     }
 }
