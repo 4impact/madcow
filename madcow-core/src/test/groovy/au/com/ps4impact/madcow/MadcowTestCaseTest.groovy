@@ -65,7 +65,7 @@ class MadcowTestCaseTest extends GroovyTestCase {
             testCase.execute();
             fail('should always exception due to step failure')
         } catch (e) {
-            assertEquals('Step failed - Status: FAIL | Message: Mocked Fail', e.message)
+            assertTrue(e.message.contains('Status: FAIL | Message: Mocked Fail'));
         }
     }
 

@@ -57,7 +57,7 @@ abstract class AbstractGrassFileHelper {
 
         grassFiles.each { Resource r ->
             def properties = loadMappingProperties(r)
-            getLog().debug "Parsing ${getPropertiesFilePrettyName()} File [${r.URL}] "
+            getLog().trace "Parsing ${getPropertiesFilePrettyName()} File [${r.URL}] "
 
             List duplicateProperties = duplicateProperties(localProperties, properties)
             if (duplicateProperties.size() > 0){

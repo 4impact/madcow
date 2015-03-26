@@ -157,7 +157,7 @@ class MadcowTestCase {
 
         this.lastExecutedStep = step;
         if (step.result.failed())
-            throw new RuntimeException("Step failed - ${step.result}");
+            throw new RuntimeException("Step <${step.blade.line}> failed - ${step.result}");
 
         if ((step.children != null) && (!step.children.empty)) {
             step.stopWatch.reset();

@@ -75,7 +75,7 @@ class MappingsFileHelper extends AbstractGrassFileHelper {
             
 			mappingNamespace = fileURLSplit[i] + (mappingNamespace != '' ? '_' : '') + mappingNamespace
 		}
-		LOG.debug("Mapping Namespace being applied '${mappingNamespace}'")
+		LOG.trace("Mapping Namespace being applied '${mappingNamespace}'")
         def result = properties.collectEntries( [:] ) { mapKey, mapValue ->
             [(mappingNamespace != '' ? mappingNamespace + '_'+ mapKey : mapKey),mapValue]
         }
@@ -103,8 +103,6 @@ class MappingsFileHelper extends AbstractGrassFileHelper {
 			attr."$prop" = value?.trim()
 			mappings.put(id, attr)
 		}
-
-		LOG.debug "Processed mappings : $mappings"
 
 		return mappings;
 	}

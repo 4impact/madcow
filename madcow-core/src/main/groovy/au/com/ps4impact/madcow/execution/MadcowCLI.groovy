@@ -92,10 +92,14 @@ class MadcowCLI {
             MadcowConfig.SHARED_CONFIG = new MadcowConfig(options.env ?: null);
         }
 
-        if (options.test)
-            MadcowTestRunner.executeTests(options.tests as ArrayList<String>, MadcowConfig.SHARED_CONFIG);
-        else
-            MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
+        try {
+            if (options.test)
+                MadcowTestRunner.executeTests(options.tests as ArrayList<String>, MadcowConfig.SHARED_CONFIG);
+            else
+                MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
+        } catch (Exception e) {
+            println("There was an error running Madcow: ${e.message}");
+        }
     }
 
 }

@@ -25,6 +25,7 @@ import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import org.apache.commons.io.FileUtils
 import org.openqa.selenium.Dimension
+import org.openqa.selenium.ElementNotVisibleException
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.TakesScreenshot
 import org.openqa.selenium.WebDriver
@@ -340,8 +341,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
         } catch (NoSuchElementException ignored) {
             step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
+        } catch (ElementNotVisibleException ignored) {
+            step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' can't be seen - be sure to click on anything required to display it!");
         } catch (e) {
-            step.result = MadcowStepResult.FAIL("Unexpected Exception: $e");
+            step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' has an unknown error:\n$e");
         }
 
         this.afterExecuteStep(step, currentPageSource);

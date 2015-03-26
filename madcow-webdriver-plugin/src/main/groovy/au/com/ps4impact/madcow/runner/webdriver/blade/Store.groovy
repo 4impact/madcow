@@ -60,14 +60,25 @@ class Store extends WebDriverBladeRunner {
 
         // set the runtime parameter
         step.testCase.grassParser.setDataParameter(storedDataParam, foundValue)
-        // replace all the stored param placeholders with the corresponding value from the html element
-        step.testCase.steps.each { MadcowStep madStep ->
-
-            if ((madStep?.blade?.parameters as String)?.contains("${GrassBlade.DATA_PARAMETER_KEY}{${storedParamName}}"))
-                madStep.blade.parameters = (madStep?.blade?.parameters as String).replaceAll("${GrassBlade.DATA_PARAMETER_KEY}\\{${storedParamName}\\}", step.testCase.grassParser.getDataParameter(storedDataParam))
-        }
+        this.updateStepParameters(step.testCase.steps, storedParamName, storedDataParam)
 
         step.result = MadcowStepResult.PASS();
+    }
+
+    protected void updateStepParameters(ArrayList<MadcowStep> steps, def storedParamName, def storedDataParam) {
+
+        // TODO - this really isn't the best solution. We should have a pre-eval step on each execute that checks for run-time parameters and sets it that way.
+
+        // replace all the stored param placeholders with the corresponding value from the html element
+        steps.each { MadcowStep madStep ->
+
+            if ((madStep?.blade?.parameters as String)?.contains("${GrassBlade.DATA_PARAMETER_KEY}{${storedParamName}}"))
+                madStep.blade.parameters = (madStep?.blade?.parameters as String).replaceAll("${GrassBlade.DATA_PARAMETER_KEY}\\{${storedParamName}\\}", madStep.testCase.grassParser.getDataParameter(storedDataParam))
+
+            if (!madStep.children?.isEmpty()) {
+                this.updateStepParameters(madStep.children, storedParamName, storedDataParam)
+            }
+        }
     }
 
     /**

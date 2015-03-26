@@ -39,6 +39,10 @@ class VerifySelectFieldOptions extends WebDriverBladeRunner {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
         def element = findElement(stepRunner, step);
 
+        if (String.class.isInstance(step.blade.parameters)) {
+            step.blade.parameters = [step.blade.parameters];
+        }
+
         List<WebElement> options = element.findElements(By.tagName('option'));
 
         List<String> presentList = options*.text;
@@ -70,7 +74,7 @@ class VerifySelectFieldOptions extends WebDriverBladeRunner {
     }
 
     protected List<Class> getSupportedParameterTypes() {
-        return [List.class];
+        return [String.class, List.class];
     }
 
     protected Collection<WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE> getSupportedSelectorTypes() {
