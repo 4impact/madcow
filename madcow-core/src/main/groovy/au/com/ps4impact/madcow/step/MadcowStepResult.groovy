@@ -19,13 +19,16 @@
  * under the License.
  */
 
-package au.com.ps4impact.madcow.step;
+package au.com.ps4impact.madcow.step
+
+import groovy.transform.AutoClone;
 
 /**
  * A result of a step.
  *
  * @author Gavin Bunney
  */
+@AutoClone
 class MadcowStepResult {
 
     enum StatusType {

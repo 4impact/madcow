@@ -72,8 +72,12 @@ class MadcowStep {
      * to throw upto the parent steps that the child has failed
      */
     public void setResult(MadcowStepResult madcowStepResult) {
-        if (this.parent != null)
-            this.parent.setResult(madcowStepResult);
+        if (this.parent != null) {
+            MadcowStepResult parentResult = madcowStepResult.clone() as MadcowStepResult
+            parentResult.hasResultFile = false;
+            parentResult.hasScreenshot = false;
+            this.parent.setResult(parentResult);
+        }
 
         this.result = madcowStepResult;
     }

@@ -3,7 +3,7 @@
 
     <%
 
-    idxString = (idxString ?: '') != '' ? idxString + ".${step.sequenceNumberString}" : "${step.sequenceNumberString}";
+    idxString = (idxString ?: '') != '' ? idxString + "_${step.sequenceNumberString}" : "${step.sequenceNumberString}";
 
     String stepTime = '';
     String statusIcon = '';
