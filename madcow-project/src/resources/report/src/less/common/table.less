@@ -1,0 +1,35 @@
+table {
+  width: 100%;
+  max-width: 100%;
+  font-size: 0.6em;
+  font-weight: 400;
+
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  th, td, tr {
+    padding: 10px;
+    height: @table-row-min-height;
+    line-height: 20px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  thead {
+    font-family: @heading-font;
+    font-size: 1.2em;
+    font-weight: 300;
+    color: @table-header-color;
+
+    tr {
+      white-space: nowrap;
+      height: @table-header-height;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid @table-row-border-color;
+    }
+  }
+}

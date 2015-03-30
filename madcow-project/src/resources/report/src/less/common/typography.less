@@ -1,0 +1,23 @@
+@import '../variables';
+
+html, body {
+  font-family: @body-font;
+  font-size: 22px;
+  color: @body-color;
+  line-height: 1em;
+  -webkit-font-smoothing: antialiased;
+
+  /* fix any odd mobile font resizing */
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: @heading-font;
+}
+
+a {
+  text-decoration: none;
+  color: @link-color;
+}

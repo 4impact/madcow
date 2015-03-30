@@ -1,0 +1,51 @@
+@import '../variables';
+
+.testcase {
+  padding: 30px;
+}
+
+.testcase-results {
+  padding: 30px;
+
+  table {
+    border: 0;
+
+    th:first-child {
+      width: 30px;
+    }
+
+  }
+
+}
+
+.testcase-info {
+  margin-top: @header-height;
+  font-size: 0.6em;
+  font-weight: 400;
+
+  padding: 20px 30px 20px;
+  margin-bottom: 30px;
+
+  ul, ol {
+    li {
+      a {
+        color: @testcase-info-link-color;
+      }
+    }
+  }
+
+  .test-info, .runtime-data {
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .runtime-data {
+    font-weight: 700;
+
+    .details {
+      margin-left: 30px;
+      font-weight: 300;
+    }
+  }
+}

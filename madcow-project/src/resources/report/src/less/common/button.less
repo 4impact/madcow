@@ -1,0 +1,17 @@
+@import '../variables';
+
+a.btn, button {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: @btn-primary-background;
+  cursor: pointer;
+  white-space: nowrap;
+  color: @btn-primary-text-color;
+  font-size: 0.8em;
+  line-height: 0.8em;
+  padding: 5px 10px 10px;
+
+  &:focus {
+    outline: 0;
+  }
+}

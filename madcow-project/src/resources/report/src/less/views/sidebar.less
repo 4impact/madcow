@@ -1,0 +1,60 @@
+@import '../variables';
+
+.sidebar {
+
+  padding: 10px;
+  padding-left: 2px;
+
+  h1 {
+    font-family: @madcow-font;
+    font-size: 1.3em;
+    font-weight: 300;
+    color: #ffffff;
+    text-align: center;
+
+    .subtitle {
+      display: block;
+      line-height: 0.7em;
+      font-size: 0.7em;
+    }
+  }
+
+  ul.nav {
+    padding: 0;
+    margin: 40px 0 0;
+
+    line-height: 2.0em;
+
+    li {
+      font-size: 1.4em;
+
+
+      &, a {
+        color: #ffffff;
+      }
+
+      a {
+        margin: 0 auto;
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+
+        i {
+          padding-left: 10px;
+        }
+      }
+
+      &.active a, a:hover {
+        border-left: 2px solid @active-color;
+        color: @active-color;
+      }
+
+      padding: 10px 10px 10px 0;
+      display: block;
+      list-style: none;
+
+      text-decoration: none;
+    }
+  }
+}

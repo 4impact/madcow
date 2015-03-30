@@ -1,0 +1,32 @@
+@import "../variables";
+
+body, .wrap {
+  width: 100%;
+  padding: 0;
+  min-height: 100%;
+  height: 100%;
+  background-color: #f9f9fb;
+}
+
+/* Clearfix for floated children */
+.wrap:after {
+  content: " ";
+  clear: both;
+  display: block;
+}
+
+.sidebar {
+  position: fixed;
+  float: left;
+  width: @sidebar-width;
+  min-height: 100%;
+  height: 100%;
+  background-color: #313236;
+}
+
+.content {
+  margin: 0 0 0 @sidebar-width;
+  background-color: #f9f9fb;
+  min-height: 100%;
+  height: 100%;
+}

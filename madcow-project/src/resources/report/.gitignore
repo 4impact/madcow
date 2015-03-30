@@ -1,0 +1,5 @@
+workspace.xml
+test/reports
+components
+dist
+node_modules
