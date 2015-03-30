@@ -40,6 +40,13 @@
         <module name="madcow-webdriver-runner" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="madcow" target="1.5" />
+      <module name="madcow-core" target="1.5" />
+      <module name="madcow-parent-pom" target="1.5" />
+      <module name="madcow-project" target="1.5" />
+      <module name="madcow-webdriver-plugin" target="1.5" />
+      <module name="madcow-webdriver-runner" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
-
