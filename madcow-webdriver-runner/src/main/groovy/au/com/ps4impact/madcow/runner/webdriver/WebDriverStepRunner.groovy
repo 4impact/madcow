@@ -61,6 +61,9 @@ class WebDriverStepRunner extends MadcowStepRunner {
     public boolean initRemoteTimedOut = false;
     def driverParameters = null;
     private Dimension windowSize = null;
+    private Long implicitTimeout;
+    private Long scriptTimeout;
+    private Long pageLoadTimeout;
 
     WebDriverStepRunner(MadcowTestCase testCase, HashMap<String, String> parameters) {
 
@@ -68,7 +71,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
         // default the browser if not specified
         parameters.browser = StringUtils.upperCase(parameters.browser ?: "${WebDriverType.HTMLUNIT.toString()}");
-
+        initialiseTimeouts(parameters)
         // check if width or height is supplied, that both are supplied
         if (parameters.windowWidth && parameters.windowHeight) {
             windowSize = new Dimension(parameters.windowWidth as Integer, parameters.windowHeight as Integer)
@@ -129,7 +132,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                         driverParameters.requiredCapabilities = null;
 
                         testCase.logInfo("Test case will attempt to start using remoteServerUrl '${parameters.remoteServerUrl}'")
-                    }else{
+                    } else {
                         throw new Exception("Cannot start '${driverType.name}' WebDriver without remoteServerUrl config parameter");
                     }
                     break;
@@ -147,11 +150,11 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     caps.setJavascriptEnabled(true);
                     caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
                             [
-                             '--web-security=no',
-                             '--ignore-ssl-errors=yes',
-                             '--ignore-ssl-errors=true',
-                             '--ssl-protocol=tlsv1',
-                             '--webdriver-loglevel=OFF'
+                                    '--web-security=no',
+                                    '--ignore-ssl-errors=yes',
+                                    '--ignore-ssl-errors=true',
+                                    '--ssl-protocol=tlsv1',
+                                    '--webdriver-loglevel=OFF'
                             ]);
                     driverParameters = caps;
                     break;
@@ -197,6 +200,19 @@ class WebDriverStepRunner extends MadcowStepRunner {
         }
     }
 
+    private void initialiseTimeouts(HashMap<String, String> parameters) {
+        if (parameters.implicitTimeout && parameters.implicitTimeout.isLong()) {
+            implicitTimeout = parameters.implicitTimeout.toLong()
+        }
+        if (parameters.scriptTimeout) {
+            scriptTimeout = parameters.scriptTimeout as Long;
+        }
+        if (parameters.pageLoadTimeout) {
+            pageLoadTimeout = parameters.pageLoadTimeout as Long;
+        }
+
+    }
+
     /**
      * Hook to allow subclasses to override something after the step runner driver has been initialised.
      */
@@ -227,7 +243,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
                         this.driver = new EventFiringWebDriver(browserDriver);
 
                         testCase.logDebug("Setting up timeouts...")
-                        setupDriverTimeouts(this.driverParameters);
+                        setupDriverTimeouts();
 
                         if (windowSize) {
                             testCase.logInfo("Resizing default browser size to ${windowSize.width} x ${windowSize.height}")
@@ -258,21 +274,21 @@ class WebDriverStepRunner extends MadcowStepRunner {
      *
      * @param madcowDriverParams driver params
      */
-    private setupDriverTimeouts(def madcowDriverParams) {
+    private setupDriverTimeouts() {
 
         try {
-            if ((madcowDriverParams.implicitTimeout ?: '') != '') {
+            if (implicitTimeout) {
                 //attempt to set the provided timeout value
-                this.driver.manage().timeouts().implicitlyWait(madcowDriverParams.implicitTimeout.toLong(), TimeUnit.SECONDS);
+                this.driver.manage().timeouts().implicitlyWait(implicitTimeout, TimeUnit.SECONDS);
             }
-            if ((madcowDriverParams.scriptTimeout ?: '') != '') {
+            if (scriptTimeout) {
                 //attempt to set the javascript timeout value
-                this.driver.manage().timeouts().setScriptTimeout(madcowDriverParams.scriptTimeout.toLong(), TimeUnit.SECONDS);
+                this.driver.manage().timeouts().setScriptTimeout(scriptTimeout, TimeUnit.SECONDS);
             }
 
-            if ((madcowDriverParams.pageLoadTimeout ?: '') != '') {
+            if (pageLoadTimeout) {
                 //attempt to set the page load timeout value
-                this.driver.manage().timeouts().pageLoadTimeout(madcowDriverParams.pageLoadTimeout.toLong(), TimeUnit.SECONDS);
+                this.driver.manage().timeouts().pageLoadTimeout(pageLoadTimeout, TimeUnit.SECONDS);
             }
         } catch (ignored) {
             // ignore any errors setting up timeouts - e.g. html unit doesn't support them all!
@@ -287,7 +303,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
         if (StringUtils.contains(operation, '.')) {
             operation = String.format("%s.%s", StringUtils.substringBeforeLast(operation, '.'),
-                                               StringUtils.capitalize(StringUtils.substringAfterLast(operation, '.')));
+                    StringUtils.capitalize(StringUtils.substringAfterLast(operation, '.')));
         } else {
             operation = StringUtils.capitalize(operation);
         }
@@ -391,14 +407,14 @@ class WebDriverStepRunner extends MadcowStepRunner {
         try {
             // not already a base element
             if (!pageSource.contains("<base") &&
-                driver?.currentUrl != null &&
-                !(driver.currentUrl.equals("about:blank"))) {
+                    driver?.currentUrl != null &&
+                    !(driver.currentUrl.equals("about:blank"))) {
                 def baseURL = new URL(driver.currentUrl); // may need to use different url here
-                return pageSource.replace("<head>",'<head><base href="'+baseURL+'"/>')
+                return pageSource.replace("<head>", '<head><base href="' + baseURL + '"/>')
             }
 
             return pageSource
-        } catch(Exception ignored) {
+        } catch (Exception ignored) {
             return pageSource
         }
     }
@@ -431,9 +447,9 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     public void finishTestCase() {
-        if (driver != null){
+        if (driver != null) {
             if (driverType == WebDriverType.CHROME
-                || driverType == WebDriverType.PHANTOMJS) {
+                    || driverType == WebDriverType.PHANTOMJS) {
                 driver.quit();
             } else {
                 driver.close();
