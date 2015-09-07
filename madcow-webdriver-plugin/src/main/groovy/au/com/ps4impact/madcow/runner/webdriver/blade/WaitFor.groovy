@@ -40,7 +40,7 @@ class WaitFor extends WebDriverBladeRunner {
 
             try {
                 if (StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
-                    if (step.blade.parameters ?: '' == '' || stepRunner.driver.pageSource.contains(step.blade.parameters as String)){
+                    if (step.blade.parameters ?: '' == '' || stepRunner.driver.pageSource.contains(step.blade.parameters as String)) {
                         step.testCase.logInfo("Waiting for: $step.blade.parameters");
                         return true;
                     } else {
@@ -49,12 +49,11 @@ class WaitFor extends WebDriverBladeRunner {
                 } else {
                     def element = findElement(stepRunner, step);
                     if (StringUtils.isNotEmpty((step.blade.parameters ?: '')))
-                        return element.text == step.blade.parameters as String;
+                        return element.text == step.blade.parameters as String || element.getAttribute('value')==step.blade.parameters as String;
                     else
                         return true;
                 }
             } catch (Exception ignored) { }
-
             Thread.sleep(1000);
             return false;
         }
