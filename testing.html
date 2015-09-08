@@ -1,11 +1,6 @@
 <div class="nav-collapse">
   <ul class="nav">
-    <li
-      >
-      <a href="/madcow-test-site-2/address/create">Create Address</a>
-    </li>
-    <li
-      >
+    <li>
       <a href="/madcow-test-site-2/">Search</a>
     </li>
     <li class="divider-vertical">
@@ -51,43 +46,47 @@
 </ul>
 
 
-<form action="/madcow-test-site-2/address/showSearchResults" method="post" class="form-horizontal show-search-results" >
+<form action="/madcow-test-site-2/address/showSearchResults" method="post" class="form-horizontal show-search-results">
   <legend>Search Address</legend>
   <fieldset>
     <div class="control-group">
       <label for="addressLines" class="control-label">Address</label>
+
       <div class="controls">
-        <input type="text" name="addressLines" class="input-large" value="" id="addressLines" />
+        <input type="text" name="addressLines" class="input-large" value="" id="addressLines"/>
       </div>
     </div>
 
     <div class="control-group">
       <label for="postCode" class="control-label">Post Code</label>
+
       <div class="controls">
-        <input type="text" name="postCode" class="input-large" value="" id="postCode" />
+        <input type="text" name="postCode" class="input-large" value="" id="postCode"/>
       </div>
     </div>
 
     <div class="control-group">
       <label for="suburb" class="control-label">Suburb</label>
+
       <div class="controls">
-        <input type="text" name="suburb" class="input-large" value="" id="suburb" />
+        <input type="text" name="suburb" class="input-large" value="" id="suburb"/>
       </div>
     </div>
 
     <div class="control-group">
       <label for="state" class="control-label">State</label>
+
       <div class="controls">
-        <select class="input-large" name="state" id="state" >
+        <select class="input-large" name="state" id="state">
           <option value="">Select One...</option>
-          <option value="3" >Australian Capital Territories</option>
-          <option value="2" >New South Wales</option>
-          <option value="1" >Northern Territory</option>
-          <option value="5" >Queensland</option>
-          <option value="6" >South Australia</option>
-          <option value="8" >Tasmania</option>
-          <option value="4" >Victoria</option>
-          <option value="7" >Western Australia</option>
+          <option value="3">Australian Capital Territories</option>
+          <option value="2">New South Wales</option>
+          <option value="1">Northern Territory</option>
+          <option value="5">Queensland</option>
+          <option value="6">South Australia</option>
+          <option value="8">Tasmania</option>
+          <option value="4">Victoria</option>
+          <option value="7">Western Australia</option>
         </select>
       </div>
     </div>
@@ -108,6 +107,7 @@
   <fieldset>
     <div class="control-group ">
       <label class="control-label" for="addressLine1">Address Line 1</label>
+
       <div class="controls">
         <input type="text" name="addressLine1" value="" id="addressLine1">
       </div>
@@ -115,6 +115,7 @@
 
     <div class="control-group ">
       <label class="control-label" for="addressLine2">Address Line 2</label>
+
       <div class="controls">
         <input type="text" name="addressLine2" value="" id="addressLine2">
       </div>
@@ -122,18 +123,23 @@
 
     <div class="control-group">
       <label class="control-label" for="postCodeEntry">Post Code</label>
+
       <div class="controls">
-        <input type="text" name="postCodeEntry" onchange="showSpinner(true);;jQuery.ajax({type:'POST',data:'id=' + escape(this.value), url:'/madcow-test-site-2/address/ajaxGetSuburbs',success:function(data,textStatus){},error:function(XMLHttpRequest,textStatus,errorThrown){},complete:function(XMLHttpRequest,textStatus){updateSuburb(XMLHttpRequest);showSpinner(false);}});" value="" id="postCodeEntry">
+        <input type="text" name="postCodeEntry"
+               onchange="showSpinner(true);;jQuery.ajax({type:'POST',data:'id=' + escape(this.value), url:'/madcow-test-site-2/address/ajaxGetSuburbs',success:function(data,textStatus){},error:function(XMLHttpRequest,textStatus,errorThrown){},complete:function(XMLHttpRequest,textStatus){updateSuburb(XMLHttpRequest);showSpinner(false);}});"
+               value="" id="postCodeEntry">
       </div>
     </div>
 
     <div class="control-group">
       <label class="control-label" for="suburbOptions">Suburb</label>
+
       <div id="suburbOptions" class="controls"></div>
     </div>
 
     <div class="control-group ">
       <label class="control-label" for="wirelessAccessPointDetected">Wireless Access Point Detected</label>
+
       <div class="controls">
         <input type="hidden" name="_wirelessAccessPointDetected"><input type="checkbox" name="wirelessAccessPointDetected" id="wirelessAccessPointDetected">
       </div>
@@ -143,7 +149,10 @@
       <div class="control-label">
       </div>
       <div class="controls">
-        <input onclick="showSpinner(true);;jQuery.ajax({type:'POST',data:jQuery(this).parents('form:first').serialize(), url:'/madcow-test-site-2/address/ajaxCheckForDuplicates',success:function(data,textStatus){},error:function(XMLHttpRequest,textStatus,errorThrown){},complete:function(XMLHttpRequest,textStatus){showNumberOfDuplicates(XMLHttpRequest); showSpinner(false);}});return false" type="button" name="checkForDuplicates" value="Check For Duplicates" class="btn btn-info">
+        <input
+          onclick="showSpinner(true);;jQuery.ajax({type:'POST',data:jQuery(this).parents('form:first').serialize(), url:'/madcow-test-site-2/address/ajaxCheckForDuplicates',success:function(data,textStatus){},error:function(XMLHttpRequest,textStatus,errorThrown){},complete:function(XMLHttpRequest,textStatus){showNumberOfDuplicates(XMLHttpRequest); showSpinner(false);}});return false"
+          type="button" name="checkForDuplicates" value="Check For Duplicates" class="btn btn-info">
+
         <div class="spinner" id="spinner" style="display:none;">
           <img src="/madcow-test-site-2/images/spinner.gif" alt="Loading...">
         </div>
@@ -163,7 +172,7 @@
 </div>
 <script src="./assets/js/jquery.js"></script>
 <script type="application/javascript">
-  $('#create-address-id').click(function(){
+  $('#create-address-id').click(function() {
     $('.show-search-results').hide()
     $('.create-address-form').show()
   })
