@@ -46,12 +46,12 @@
 <ul class="breadcrumb">
 
   <li>
-    <a href="/madcow-test-site-2/address/create" class="create">Create Address</a>
+    <a id="create-address-id" href="#" class="create">Create Address</a>
   </li>
 </ul>
 
 
-<form action="/madcow-test-site-2/address/showSearchResults" method="post" class="form-horizontal" >
+<form action="/madcow-test-site-2/address/showSearchResults" method="post" class="form-horizontal show-search-results" >
   <legend>Search Address</legend>
   <fieldset>
     <div class="control-group">
@@ -102,7 +102,69 @@
     </div>
   </fieldset>
 </form>
+
+<form action="/madcow-test-site-2/address/save" method="post" style="display:none" class="form-horizontal create-address-form">
+  <legend>Create Address</legend>
+  <fieldset>
+    <div class="control-group ">
+      <label class="control-label" for="addressLine1">Address Line 1</label>
+      <div class="controls">
+        <input type="text" name="addressLine1" value="" id="addressLine1">
+      </div>
+    </div>
+
+    <div class="control-group ">
+      <label class="control-label" for="addressLine2">Address Line 2</label>
+      <div class="controls">
+        <input type="text" name="addressLine2" value="" id="addressLine2">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="postCodeEntry">Post Code</label>
+      <div class="controls">
+        <input type="text" name="postCodeEntry" onchange="showSpinner(true);;jQuery.ajax({type:'POST',data:'id=' + escape(this.value), url:'/madcow-test-site-2/address/ajaxGetSuburbs',success:function(data,textStatus){},error:function(XMLHttpRequest,textStatus,errorThrown){},complete:function(XMLHttpRequest,textStatus){updateSuburb(XMLHttpRequest);showSpinner(false);}});" value="" id="postCodeEntry">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="suburbOptions">Suburb</label>
+      <div id="suburbOptions" class="controls"></div>
+    </div>
+
+    <div class="control-group ">
+      <label class="control-label" for="wirelessAccessPointDetected">Wireless Access Point Detected</label>
+      <div class="controls">
+        <input type="hidden" name="_wirelessAccessPointDetected"><input type="checkbox" name="wirelessAccessPointDetected" id="wirelessAccessPointDetected">
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-label">
+      </div>
+      <div class="controls">
+        <input onclick="showSpinner(true);;jQuery.ajax({type:'POST',data:jQuery(this).parents('form:first').serialize(), url:'/madcow-test-site-2/address/ajaxCheckForDuplicates',success:function(data,textStatus){},error:function(XMLHttpRequest,textStatus,errorThrown){},complete:function(XMLHttpRequest,textStatus){showNumberOfDuplicates(XMLHttpRequest); showSpinner(false);}});return false" type="button" name="checkForDuplicates" value="Check For Duplicates" class="btn btn-info">
+        <div class="spinner" id="spinner" style="display:none;">
+          <img src="/madcow-test-site-2/images/spinner.gif" alt="Loading...">
+        </div>
+        <div class="warning" id="duplicatesMessage"></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <input type="submit" class="btn btn-primary" name="create" value="Create" id="create">
+      <a href="/madcow-test-site-2/address/create" class="btn">Cancel</a>
+    </div>
+  </fieldset>
+</form>
 </div>
 
 
 </div>
+<!--<script src="./assets/js/jquery.js"></script>-->
+<script type="application/javascript">
+  $('#create-address-id').click(function(){
+    $('.show-search-results').hide()
+    $('.create-address-form').show()
+  })
+</script>
