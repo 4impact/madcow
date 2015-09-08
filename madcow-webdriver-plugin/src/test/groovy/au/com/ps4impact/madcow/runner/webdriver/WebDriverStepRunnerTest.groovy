@@ -37,8 +37,11 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
             # verify the text exists on the page
             verifyText = @expectedValue
+            verifyText = Create Address
 
+            testsite_menu_createAddress.verifyExists
             testsite_menu_createAddress.clickLink
+            verifyText = Address Line 1
             verifyText = Check For Duplicates
         """;
         ArrayList<String> grassScript = new ArrayList<String>();

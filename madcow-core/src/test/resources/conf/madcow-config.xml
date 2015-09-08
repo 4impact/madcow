@@ -35,12 +35,12 @@
     <environments>
         <environment name="DEV">
             <invokeUrl>
-                <ADDRESSBOOK>http://madcow.4impact.net.au/testing</ADDRESSBOOK>
+                <ADDRESSBOOK>http://madcow.4impact.net.au/testing.html</ADDRESSBOOK>
             </invokeUrl>
         </environment>
         <environment name="TEST">
             <invokeUrl>
-                <ADDRESSBOOK>http://madcow.4impact.net.au/testing</ADDRESSBOOK>
+                <ADDRESSBOOK>http://madcow.4impact.net.au/testing.html</ADDRESSBOOK>
             </invokeUrl>
         </environment>
     </environments>
