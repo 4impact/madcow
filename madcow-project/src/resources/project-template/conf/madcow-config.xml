@@ -37,13 +37,13 @@
     <environments>
         <environment name="DEV">
             <invokeUrl>
-                <ADDRESSBOOK>http://madcow-test.4impact.net.au:8080/madcow-test-site-2</ADDRESSBOOK>
-                <CREATETABLE>http://madcow-test.4impact.net.au:8080/madcow-test-site-2/address/createTableLayout</CREATETABLE>
+                <ADDRESSBOOK>http://madcow.4impact.net.au/testing</ADDRESSBOOK>
+                <CREATETABLE>http://madcow.4impact.net.au/testing</CREATETABLE>
             </invokeUrl>
         </environment>
         <environment name="TEST">
             <invokeUrl>
-                <ADDRESSBOOK>http://madcow-test.4impact.net.au:8080/madcow-test-site-2</ADDRESSBOOK>
+                <ADDRESSBOOK>http://madcow.4impact.net.au/testing</ADDRESSBOOK>
             </invokeUrl>
         </environment>
     </environments>
