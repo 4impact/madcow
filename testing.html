@@ -1,0 +1,108 @@
+<div class="nav-collapse">
+  <ul class="nav">
+    <li
+      >
+      <a href="/madcow-test-site-2/address/create">Create Address</a>
+    </li>
+    <li
+      >
+      <a href="/madcow-test-site-2/">Search</a>
+    </li>
+    <li class="divider-vertical">
+
+    </li>
+    <li>
+      <a href="http://www.projectmadcow.com">Project Madcow</a>
+    </li>
+  </ul>
+
+  <ul class="nav pull-right">
+    <li class="dropdown">
+      <a href="#"
+         class="dropdown-toggle"
+         data-toggle="dropdown">
+        Admin
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="/madcow-test-site-2/postCodeReference/create">Create Post Code</a>
+        </li>
+        <li>
+          <a href="/madcow-test-site-2/postCodeReference/list">View Post Codes</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="/madcow-test-site-2/state/create">Create State</a>
+        </li>
+        <li>
+          <a href="/madcow-test-site-2/state/list">View States</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<ul class="breadcrumb">
+
+  <li>
+    <a href="/madcow-test-site-2/address/create" class="create">Create Address</a>
+  </li>
+</ul>
+
+
+<form action="/madcow-test-site-2/address/showSearchResults" method="post" class="form-horizontal" >
+  <legend>Search Address</legend>
+  <fieldset>
+    <div class="control-group">
+      <label for="addressLines" class="control-label">Address</label>
+      <div class="controls">
+        <input type="text" name="addressLines" class="input-large" value="" id="addressLines" />
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label for="postCode" class="control-label">Post Code</label>
+      <div class="controls">
+        <input type="text" name="postCode" class="input-large" value="" id="postCode" />
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label for="suburb" class="control-label">Suburb</label>
+      <div class="controls">
+        <input type="text" name="suburb" class="input-large" value="" id="suburb" />
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label for="state" class="control-label">State</label>
+      <div class="controls">
+        <select class="input-large" name="state" id="state" >
+          <option value="">Select One...</option>
+          <option value="3" >Australian Capital Territories</option>
+          <option value="2" >New South Wales</option>
+          <option value="1" >Northern Territory</option>
+          <option value="5" >Queensland</option>
+          <option value="6" >South Australia</option>
+          <option value="8" >Tasmania</option>
+          <option value="4" >Victoria</option>
+          <option value="7" >Western Australia</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <i class="icon-search icon-white">
+        </i>
+        Search
+      </button>
+      <button type="reset" class="btn">Cancel</button>
+    </div>
+  </fieldset>
+</form>
+</div>
+
+
+</div>
