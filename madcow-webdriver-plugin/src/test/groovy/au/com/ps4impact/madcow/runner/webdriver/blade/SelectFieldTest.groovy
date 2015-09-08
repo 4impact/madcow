@@ -50,14 +50,18 @@ class SelectFieldTest extends GroovyTestCase {
         testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
     }
 
-    protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String resultingOutput = null) {
+    protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String resultingOutput = null, boolean exactMatch = true) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         (testCase.stepRunner as WebDriverStepRunner).driver.manage().timeouts().implicitlyWait(1, TimeUnit.MILLISECONDS);
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
-        if (resultingOutput)
+        if (exactMatch && resultingOutput) {
             assertEquals step.result.message, resultingOutput
+        } else {
+           if (!exactMatch && resultingOutput)
+               assertTrue(step.result.message.indexOf(resultingOutput) != -1)
+        }
     }
 
     void testSelectFieldByHtmlId() {
@@ -97,7 +101,7 @@ class SelectFieldTest extends GroovyTestCase {
         // explicit htmlid
         MadcowMappings.addMapping(testCase, 'models', ['id': 'carModels']);
         GrassBlade blade = new GrassBlade('models.selectField = [\"a45\",\"clk200\"]', testCase.grassParser);
-        verifyValueExecution(blade, false, "Cannot find a valid option/s for item [clk200]");
+        verifyValueExecution(blade, false, "Timed out after 10 seconds waiting", false);
     }
 
     void testSelectNonMultiFieldFailedByHtmlId() {
