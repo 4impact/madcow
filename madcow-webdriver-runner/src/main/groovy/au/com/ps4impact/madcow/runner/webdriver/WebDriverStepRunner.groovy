@@ -355,8 +355,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 lastPageSource = currentPageSource;
             }
 
-        } catch (NoSuchElementException ignored) {
-            step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!");
+        } catch (NoSuchElementException nsee) {
+            step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' not found on the page!\nDetails: ${nsee.message}");
         } catch (ElementNotVisibleException ignored) {
             step.result = MadcowStepResult.FAIL("Element '${step.blade.mappingSelectorType} : ${step.blade.mappingSelectorValue}' can't be seen - be sure to click on anything required to display it!");
         } catch (e) {

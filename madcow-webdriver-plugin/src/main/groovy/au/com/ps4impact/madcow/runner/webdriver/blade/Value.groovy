@@ -43,24 +43,46 @@ class Value extends WebDriverBladeRunner {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
         def element = findElement(stepRunner, step);
 
+        def valueToSet
+        def submitAfterSet = false
+        if (Map.class.isInstance(step.blade.parameters)) {
+            Map paramMap = step.blade.parameters as Map;
+
+            if (paramMap.submit != null && (paramMap.submit == true || (paramMap.submit as String).toLowerCase() == 'true')) {
+                submitAfterSet = true
+            }
+
+            valueToSet = paramMap.value as String
+        } else {
+            valueToSet = step.blade.parameters as String
+        }
+
         if (stepRunner.driver instanceof MadcowHtmlUnitDriver) {
             def htmlUnitWebElement = (element as MadcowHtmlUnitWebElement).getElement();
             htmlUnitWebElement.focus();
 
             if (htmlUnitWebElement instanceof HtmlInput) {
                 htmlUnitWebElement.setAttribute("value", "");
-                htmlUnitWebElement.type(step.blade.parameters as String);
+                htmlUnitWebElement.type(valueToSet);
             } else if (htmlUnitWebElement instanceof HtmlTextArea) {
-                (htmlUnitWebElement as HtmlTextArea).setText(step.blade.parameters as String);
+                (htmlUnitWebElement as HtmlTextArea).setText(valueToSet);
             } else {
-                element.sendKeys(step.blade.parameters as String);
+                element.sendKeys(valueToSet);
             }
 
-            // unfocus the element to fire onchange
-            ((HtmlPage) htmlUnitWebElement.getPage()).setFocusedElement(null);
+            if (submitAfterSet) {
+                element.submit();
+            } else {
+                // unfocus the element to fire onchange
+                ((HtmlPage) htmlUnitWebElement.getPage()).setFocusedElement(null);
+            }
         } else {
             element.clear();
-            element.sendKeys(step.blade.parameters as String, Keys.TAB);
+            if (submitAfterSet) {
+                element.sendKeys(valueToSet, Keys.ENTER);
+            } else {
+                element.sendKeys(valueToSet, Keys.TAB);
+            }
         }
 
         step.result = MadcowStepResult.PASS();
@@ -79,5 +101,9 @@ class Value extends WebDriverBladeRunner {
 
     protected boolean allowEmptyParameterValue() {
         return true;
+    }
+
+    protected List<Class> getSupportedParameterTypes() {
+        return [String.class, Map.class];
     }
 }

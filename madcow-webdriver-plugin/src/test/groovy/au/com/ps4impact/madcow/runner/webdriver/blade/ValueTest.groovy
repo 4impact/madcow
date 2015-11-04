@@ -74,6 +74,18 @@ class ValueTest extends GroovyTestCase {
         verifyValueExecution(blade, true, "NoTennis");
     }
 
+    void testValueByHtmlIdSubmitting() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aInputId.value = [value: \'Tennis\', submit: true]', testCase.grassParser);
+        verifyValueExecution(blade, true, "Input Value" /* submitting, so will reset the value back */);
+    }
+
+    void testValueByHtmlIdSubmittingButNot() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('aInputId.value = [value: \'Tennis\', submit: false]', testCase.grassParser);
+        verifyValueExecution(blade, true, "Tennis");
+    }
+
     void testValueByCSS() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aInputId.value = Tennis!', testCase.grassParser);
