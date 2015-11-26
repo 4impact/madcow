@@ -22,6 +22,8 @@
 package au.com.ps4impact.madcow.step;
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.report.IJSONSerializable
+
 import java.text.DecimalFormat
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -30,7 +32,7 @@ import org.apache.commons.lang3.time.StopWatch;
  *
  * @author Gavin Bunney
  */
-class MadcowStep {
+class MadcowStep implements IJSONSerializable {
 
     GrassBlade blade;
     MadcowTestCase testCase;
@@ -92,5 +94,16 @@ class MadcowStep {
 
     String toString() {
         return "[testCase: $testCase, blade: $blade, parent: $parent, children: $children]";
+    }
+
+    @Override
+    Map toJSON() {
+        return [
+                sequenceNumber: this.sequenceNumber,
+                blade: this.blade.toJSON(),
+                children: this.children*.toJSON(),
+                result: this.result.toJSON(),
+                time: this.getStepTimeInSeconds()
+        ]
     }
 }

@@ -22,6 +22,7 @@
 package au.com.ps4impact.madcow;
 
 import au.com.ps4impact.madcow.grass.GrassParser
+import au.com.ps4impact.madcow.report.IJSONSerializable
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
@@ -37,7 +38,7 @@ import au.com.ps4impact.madcow.logging.MadcowLog
  *
  * @author Gavin Bunney
  */
-class MadcowTestCase {
+class MadcowTestCase implements IJSONSerializable {
 
     public String name;
     public MadcowTestSuite testSuite;
@@ -205,5 +206,16 @@ class MadcowTestCase {
 
     public void logTrace(String message) {
         MadcowLog.trace(this, message);
+    }
+
+    @Override
+    Map toJSON() {
+        return [
+                name: this.name,
+                ignoreTestCase: this.ignoreTestCase,
+                steps: this.steps*.toJSON(),
+                reportDetails: this.reportDetails.clone(),
+                time: this.getTotalTimeInSeconds()
+        ]
     }
 }

@@ -27,6 +27,7 @@ import au.com.ps4impact.madcow.MadcowTestCaseException
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.util.ResourceFinder
+import groovy.json.JsonOutput
 import org.apache.log4j.Logger
 import org.apache.commons.io.FileUtils
 import java.text.DecimalFormat
@@ -175,6 +176,18 @@ class MadcowExecutionReport implements IMadcowReport {
             result.write(templateContents);
         } catch (e) {
             LOG.error("Error creating the Madcow Test Suite Execution Report: $e");
+        }
+
+        // TODO - remove all the stuff above here... since we'll render client side from now on! But for now... write out the javascript until the new world reporting is done
+        try {
+            def engine = new GStringTemplateEngine();
+            def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-js.gtemplate').URL);
+            def template = templateEngine.make([resultJSON: JsonOutput.prettyPrint(JsonOutput.toJson(testSuite.toJSON()))]);
+            String templateContents = template.toString();
+            def result = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/results.js");
+            result.write(templateContents);
+        } catch (e) {
+            LOG.error("Error creating the Madcow Test Suite Results: $e");
         }
 
         // copy the assets if they are available

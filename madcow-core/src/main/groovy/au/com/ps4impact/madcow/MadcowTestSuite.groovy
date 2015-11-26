@@ -21,6 +21,9 @@
 
 package au.com.ps4impact.madcow
 
+import au.com.ps4impact.madcow.report.IJSONSerializable
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -29,7 +32,7 @@ import org.apache.commons.lang3.time.StopWatch;
  *
  * @author Gavin Bunney
  */
-class MadcowTestSuite {
+class MadcowTestSuite implements IJSONSerializable {
 
     String name;
     ArrayList<MadcowTestCase> testCases;
@@ -101,5 +104,14 @@ class MadcowTestSuite {
         }
 
         return null;
+    }
+
+    @Override
+    Map toJSON() {
+        return [
+                name: this.name,
+                testCases: this.testCases*.toJSON(),
+                suites: this.children*.toJSON()
+        ]
     }
 }

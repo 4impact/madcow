@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.step
 
+import au.com.ps4impact.madcow.report.IJSONSerializable
 import groovy.transform.AutoClone;
 
 /**
@@ -29,7 +30,7 @@ import groovy.transform.AutoClone;
  * @author Gavin Bunney
  */
 @AutoClone
-class MadcowStepResult {
+class MadcowStepResult implements IJSONSerializable {
 
     enum StatusType {
         PASS,
@@ -94,5 +95,16 @@ class MadcowStepResult {
 
     String toString() {
         return "Status: $status | Message: $message";
+    }
+
+    @Override
+    Map toJSON() {
+        return [
+                status: this.status.toString(),
+                message: this.message,
+                detailedMessage: this.detailedMessage,
+                hasResultFile: this.hasResultFile,
+                hasScreenshot: this.hasScreenshot
+        ]
     }
 }

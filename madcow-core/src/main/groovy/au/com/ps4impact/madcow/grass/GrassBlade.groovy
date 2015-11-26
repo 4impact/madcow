@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.grass
 
+import au.com.ps4impact.madcow.report.IJSONSerializable
 import java.util.regex.Matcher
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.mappings.MadcowMappings
@@ -45,7 +46,7 @@ import au.com.ps4impact.madcow.util.FormatUtil
  * @author Gavin Bunney
  */
 @AutoClone
-class GrassBlade {
+class GrassBlade implements IJSONSerializable {
 
     /**
      * Type of Grass Blade.<br/>
@@ -209,5 +210,14 @@ class GrassBlade {
             default:
                 return '';
         }
+    }
+
+    @Override
+    Map toJSON() {
+        return [
+            type: this.type.toString(),
+            operation: this.operation,
+            line: this.line
+        ]
     }
 }
