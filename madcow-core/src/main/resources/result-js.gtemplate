@@ -2,6 +2,6 @@ if (!window.Madcow) {
   window.Madcow = {};
 }
 
-window.Madcow.Results = {
+window.Madcow.Results =
   $resultJSON
-};
+;
