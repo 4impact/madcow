@@ -109,9 +109,9 @@ class MadcowTestSuite implements IJSONSerializable {
     @Override
     Map toJSON() {
         return [
-                name: this.name,
-                testCases: this.testCases*.toJSON(),
-                suites: this.children*.toJSON()
+                name: this.name != null && this.name.length() > 0 ? this.name : null,
+                testCases: this.testCases.size() > 0 ? this.testCases*.toJSON() : null,
+                suites: this.children.size() > 0 ? this.children*.toJSON() : null
         ]
     }
 }

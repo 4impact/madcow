@@ -100,10 +100,11 @@ class MadcowStep implements IJSONSerializable {
     Map toJSON() {
         return [
                 sequenceNumber: this.sequenceNumber,
+                sequenceNumberString: this.getSequenceNumberString(),
                 blade: this.blade.toJSON(),
-                children: this.children*.toJSON(),
+                steps: this.children.size() > 0 ? this.children*.toJSON() : null,
                 result: this.result.toJSON(),
-                time: this.getStepTimeInSeconds()
+                time: this.getStepTimeInSeconds() != "0" ? this.getStepTimeInSeconds() : null
         ]
     }
 }

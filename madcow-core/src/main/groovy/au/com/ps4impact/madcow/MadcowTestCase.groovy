@@ -210,12 +210,29 @@ class MadcowTestCase implements IJSONSerializable {
 
     @Override
     Map toJSON() {
+
+        def status = MadcowStepResult.StatusType.PASS;
+        if (this.ignoreTestCase) {
+            status = MadcowStepResult.StatusType.NO_OPERATION;
+        }
+
+        this.steps.each { step ->
+            if (step.result == null) /* ignore steps not yet run */
+                return;
+
+            if (step.result.parseError())
+                status = MadcowStepResult.StatusType.PARSE_ERROR;
+            else if (step.result.failed())
+                status = MadcowStepResult.StatusType.FAIL;
+        }
+
         return [
-                name: this.name,
-                ignoreTestCase: this.ignoreTestCase,
-                steps: this.steps*.toJSON(),
-                reportDetails: this.reportDetails.clone(),
-                time: this.getTotalTimeInSeconds()
+                name: this.name != null && this.name.length() > 0 ? this.name : null,
+                suiteName: this.testSuite?.name,
+                status: status,
+                steps: this.steps.size() > 0 ? this.steps*.toJSON() : null,
+                reportDetails: this.reportDetails.size() > 0 ? this.reportDetails.clone() : null,
+                time: this.getTotalTimeInSeconds() != "0" ? this.getTotalTimeInSeconds() : null
         ]
     }
 }
