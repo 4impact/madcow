@@ -49,6 +49,9 @@ public class TableXPather {
         return new Column(prefixXPath, columnHeaderText).getColumnPositionXPath()
     }
 
+    public String getRowCountXPath(){
+        "${getPrefixXPath()}/tbody/tr"
+    }
     /**
      * Returns an xpath expression to get the row number within the table, with the specific cellText.
      * Parameter must be a map of [columnHeaderText : cellText]
@@ -89,7 +92,7 @@ public class TableXPather {
         return "count(${getPrefixXPath()}/tbody/tr[position() = last()]/preceding-sibling::*)+1"
     }
 
-    protected String getPrefixXPath() {
+    public String getPrefixXPath() {
 
         String selectorXPath = '';
         switch (WebDriverBladeRunner.getSelectorType(this.blade.mappingSelectorType)) {
@@ -98,7 +101,7 @@ public class TableXPather {
                 selectorXPath = this.blade.mappingSelectorValue;
                 break;
 
-            case WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID:
+            case WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.ID:
                 selectorXPath = "//table[@id='${this.blade.mappingSelectorValue}']"
                 break;
 

@@ -24,6 +24,7 @@ package au.com.ps4impact.madcow.runner.webdriver.blade.table.currentRow
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
+import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.util.ResourceFinder
@@ -65,6 +66,11 @@ class CheckValueTest extends GroovyTestCase {
         executeBlade(blade);
 
         blade = new GrassBlade('theTable.table.currentRow.checkValue = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
+        verifyTableCheckValue(blade, true);
+
+        //check now via mapping
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'theTable']);
+        blade = new GrassBlade('mapping.table.currentRow.checkValue = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         verifyTableCheckValue(blade, true);
     }
 

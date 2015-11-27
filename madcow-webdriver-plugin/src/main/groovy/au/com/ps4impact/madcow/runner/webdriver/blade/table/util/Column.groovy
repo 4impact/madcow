@@ -48,6 +48,11 @@ class Column {
             return "count((" +
                         "${tableXPath}/thead/tr/th[normalize-space(.//text()) = '${columnHeader}' or normalize-space(.//@value) = '${columnHeader}'] |" +
                         "${tableXPath}/tbody/tr/td[normalize-space(.//text()) = '${columnHeader}' or normalize-space(.//@id) = '${columnHeader}' or normalize-space(.//@name) = '${columnHeader}']" +
-                        ")/preceding-sibling::*)+1"
+                        ")/preceding-sibling::*)"+
+                    "+"+
+                    "number(boolean((" +
+                        "${tableXPath}/thead/tr/th[normalize-space(.//text()) = '${columnHeader}' or normalize-space(.//@value) = '${columnHeader}'] |" +
+                        "${tableXPath}/tbody/tr/td[normalize-space(.//text()) = '${columnHeader}' or normalize-space(.//@id) = '${columnHeader}' or normalize-space(.//@name) = '${columnHeader}']" +
+                        ")))"
     }
 }
