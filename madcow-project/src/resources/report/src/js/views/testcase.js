@@ -1,4 +1,4 @@
-(function($, window) {
+(function($, window, dataService) {
   'use strict';
 
   function TestCaseView() {
@@ -9,18 +9,23 @@
 
     setup: function () {
 
+      this.testCase = dataService.findTestCase('search.SearchAddressTest');
+
       $('.sidebar').html(JST.sidebar({}));
-      $('.content').html(JST.testcase({}));
+      $('.content').html(JST['testcase/testcase']({
+        testCase: this.testCase
+      }));
 
       this.refresh = $.proxy(this.refresh, this);
       this.refresh();
     },
 
     refresh: function() {
-      //
+      //var testCase = dataService.findTestCase('AddressTest');
+      console.log(this.testCase);
     }
   };
 
   window.TestCaseView = TestCaseView;
 
-})(jQuery, window);
+})(jQuery, window, window.DataService);

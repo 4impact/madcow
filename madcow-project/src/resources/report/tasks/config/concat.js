@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     },
 		js: {
 			src: require('../pipeline').javascriptFiles,
-			dest: 'dist/js/app.js'
+			dest: 'dist/assets/js/app.js'
 		}
 	});
 

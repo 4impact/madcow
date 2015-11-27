@@ -27,12 +27,25 @@
     display: inline-block;
     margin: 0;
     float: right;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
 
-    &.passed {
-
+  &.header-PASS {
+    .subtitle {
       color: @green;
-      font-weight: 700;
-      text-transform: uppercase;
+    }
+  }
+
+  &.header-FAIL {
+    .subtitle {
+      color: @failed;
+    }
+  }
+
+  &.header-NOT_YET_EXECUTED, &.header-NO_OPERATION {
+    .subtitle {
+      color: @skipped;
     }
   }
 

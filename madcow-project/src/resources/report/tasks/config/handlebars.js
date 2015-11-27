@@ -10,7 +10,7 @@ module.exports = function(grunt) {
         }
       },
       files: {
-        'dist/js/templates.js': 'src/templates/**/*.hbs'
+        'dist/assets/js/templates.js': 'src/templates/**/*.hbs'
       }
     }
   });

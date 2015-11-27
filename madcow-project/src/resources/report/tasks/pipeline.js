@@ -8,7 +8,7 @@ module.exports.javascriptFiles = [
   'components/jquery/dist/jquery.min.js',
   'components/handlebars/handlebars.runtime.min.js',
 
-  'dist/js/templates.js',
+  'dist/assets/js/templates.js',
 
   'src/js/plugins/*.js',
   'src/js/services/*.js',

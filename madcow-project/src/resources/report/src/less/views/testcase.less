@@ -13,9 +13,60 @@
     th:first-child {
       width: 30px;
     }
-
   }
 
+  .testInfo {
+    background-color: @neutral-lightest;
+  }
+
+  .step-PASS, .step-NO_OPERATION, .step-FAIL, .step-NOT_YET_EXECUTED {
+    .btn.btn-info {
+      background-color: @btn-primary-background;
+    }
+  }
+
+  .step-PASS, .step-NO_OPERATION {
+    .btn {
+      background-color: @passed;
+    }
+  }
+
+  .step-FAIL {
+    .btn {
+      background-color: @failed;
+    }
+  }
+
+  .step-NOT_YET_EXECUTED {
+    .btn {
+      background-color: @skipped;
+    }
+  }
+
+  .is-parent {
+    background-color: @table-accordion-color;
+    border-right: 1px solid @table-accordion-color;
+  }
+
+  .has-parent {
+    border-left: 1px solid @table-accordion-color;
+    border-right: 1px solid @table-accordion-color;
+
+    &.last {
+      border-bottom: 1px solid @table-accordion-color;
+    }
+
+    td:first-child {
+      padding-left: 15px;
+    }
+  }
+
+  .step-spacer, .step-spacer td {
+    padding: 0;
+    margin: 0;
+    height: 5px;
+    line-height: 5px;
+  }
 }
 
 .testcase-info {

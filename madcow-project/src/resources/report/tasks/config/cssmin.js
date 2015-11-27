@@ -2,8 +2,8 @@ module.exports = function(grunt) {
 
   grunt.config.set('cssmin', {
     app: {
-      src: ['dist/css/app.css'],
-      dest: 'dist/css/app.min.css'
+      src: ['dist/assets/css/app.css'],
+      dest: 'dist/assets/css/app.min.css'
     }
   });
 

@@ -16,6 +16,14 @@ module.exports = function(grunt) {
         src: ['**/*', '!**/*.psd'],
         dest: './dist/assets'
       }]
+    },
+    results: {
+      files: [{
+        expand: true,
+        cwd: './src/results',
+        src: ['**/*'],
+        dest: './dist/results'
+      }]
     }
   });
 

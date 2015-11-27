@@ -5,8 +5,8 @@ module.exports = function (grunt) {
       banner: require('../pipeline').banner
     },
     dist: {
-      src: ['dist/js/app.js'],
-      dest: 'dist/js/app.min.js'
+      src: ['dist/assets/js/app.js'],
+      dest: 'dist/assets/js/app.min.js'
     }
   });
 

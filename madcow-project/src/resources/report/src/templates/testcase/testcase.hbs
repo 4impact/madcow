@@ -1,0 +1,75 @@
+<div class="header header-{{{testCase.status}}}">
+    <h1>
+        <a href="#" class="back-link"><i class="fa fa-angle-left"></i></a> {{{testCase.name}}}
+        <p class="subtitle">{{niceStatus testCase.status}}</p>
+    </h1>
+
+    <ul class="links">
+        <li>
+            <span class="title"><a href="results/{{{testCase.name}}}/madcow.log" class="btn">Open Log</a></span>
+        </li>
+        <li>
+            <span class="title">Steps</span>
+            <span>{{{testCase.steps.length}}}</span>
+        </li>
+        <li>
+            <span class="title">Time</span>
+            <span>{{{testCase.time}}}s</span>
+        </li>
+       {{#if testCase.suiteName}}
+        <li>
+            <span class="title">Suite</span>
+            <span>{{{testCase.suiteName}}}</span>
+        </li>
+       {{/if}}
+    </ul>
+</div>
+
+<div class="testcase">
+
+    <div class="testcase-info box">
+        <div class="test-info">
+            <h3>Test Information</h3>
+
+            {{#if testCase.testInfo}}
+            <ol>
+                {{#each testCase.testInfo}}
+                    <li>
+                        <a href="#">{{this}}</a>
+                    </li>
+                {{/each}}
+            </ol>
+            {{else}}
+              None
+            {{/if}}
+        </div>
+
+        {{#if testCase.reportDetails}}
+        <div class="runtime-data">
+            {{#eachInMap testCase.reportDetails}}
+            <h3>{{{key}}} <span class="details">{{{value}}}</span></h3>
+            {{/eachInMap}}
+        </div>
+        {{/if}}
+    </div>
+
+    <div class="testcase-results box">
+      <table>
+          <thead>
+            <tr>
+                <th>#</th>
+                <th>Status</th>
+                <th>Time</th>
+                <th>Grass</th>
+                <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each testCase.steps}}
+              {{> step testCase=../testCase}}
+            {{/each}}
+          </tbody>
+      </table>
+    </div>
+
+</div>
