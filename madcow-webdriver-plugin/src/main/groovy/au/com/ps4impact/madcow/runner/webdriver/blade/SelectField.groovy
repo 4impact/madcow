@@ -44,10 +44,7 @@ class SelectField extends WebDriverBladeRunner {
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
         def element = findElement(stepRunner, step);
 
-        if (Integer.class.isInstance(step.blade.parameters)) {
-            int item = step.blade.parameters as int;
-            step.result = makeASingleSelection(stepRunner, step, element, item)
-        } else if (List.class.isInstance(step.blade.parameters)) {
+        if (List.class.isInstance(step.blade.parameters)) {
             //check if it is multi select
             def selectField = new Select(element)
             if (selectField.isMultiple()) {
@@ -79,48 +76,10 @@ class SelectField extends WebDriverBladeRunner {
 
     }
 
-    private MadcowStepResult makeASingleSelection(WebDriverStepRunner stepRunner, MadcowStep step, WebElement element, int selectParam) {
-        boolean result = new WebDriverWait(stepRunner.driver, 10, 1000)
-                .ignoring(StaleElementReferenceException.class)
-                .until(new ExpectedCondition() {
-            Boolean apply(WebDriver driver) {
-                try {
-                    List<WebElement> options = element.findElements(By.tagName('option'));
-                    boolean foundIndex = false;
-
-                    if (selectParam <= options.size()) {
-                        foundIndex = true;
-                    }
-
-                    if (foundIndex) {
-                        new Select(element).selectByIndex(selectParam)
-                        return Boolean.valueOf(true)
-                    }
-                }
-                catch (StaleElementReferenceException ex) {
-                    println('Stale reference caught, retrying...')
-                    element = findElement(stepRunner, step)
-                    return Boolean.valueOf(false);
-                }
-            }
-        })
-        if (result) {
-            return MadcowStepResult.PASS();
-        } else {
-            return MadcowStepResult.FAIL('Unable to update specified option');
-
-        }
-    }
-
-    private MadcowStepResult makeASingleSelection(WebDriverStepRunner stepRunner, MadcowStep step, WebElement element, String selectParam) {
-        boolean result = new WebDriverWait(stepRunner.driver, 10, 1000)
-                .ignoring(StaleElementReferenceException.class)
-                .until(new ExpectedCondition() {
-            Boolean apply(WebDriver driver) {
-                try {
-                    List<WebElement> options = element.findElements(By.tagName('option'));
-                    WebElement foundText = null;
-                    WebElement foundValue = null;
+    private MadcowStepResult makeASingleSelection(WebElement element, String selectParam) {
+        List<WebElement> options = element.findElements(By.tagName('option'));
+        WebElement foundText = null;
+        WebElement foundValue = null;
 
                     options.each { option ->
                         //if already found option then skip checking rest of options
