@@ -85,9 +85,9 @@ class ResizeBrowserTest {
 
     @Test
     void testResizeBrowserByHtmlIdMapping() {
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'addressLines']);
-        GrassBlade blade = new GrassBlade('aLinkId.resizeBrowser', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'ResizeBrowserTest', ['id': 'addressLines']);
+        GrassBlade blade = new GrassBlade('ResizeBrowserTest.resizeBrowser', testCase.grassParser);
         verifyResizeBrowserExecution(blade, false);
     }
 
@@ -169,7 +169,7 @@ class ResizeBrowserTest {
             assertFalse(resizeBrowser.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
 
     }

@@ -60,7 +60,7 @@ class ClickLinkTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
         blade = new GrassBlade('aLinkId.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
@@ -71,9 +71,9 @@ class ClickLinkTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.clickLink = A link', testCase.grassParser);
         verifyLinkExecution(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'cssLinkName', ['css': '#aLinkId']);
-        blade = new GrassBlade('cssLinkName.clickLink', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['css': '#aLinkId']);
+        blade = new GrassBlade('mapping.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
@@ -110,7 +110,7 @@ class ClickLinkTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkOffScreenId.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'aLinkOffScreenId', ['id': 'aLinkOffScreenId']);
         blade = new GrassBlade('aLinkOffScreenId.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
@@ -128,7 +128,7 @@ class ClickLinkTest extends GroovyTestCase {
             assertFalse(clickLink.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 }

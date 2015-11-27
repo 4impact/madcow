@@ -39,6 +39,6 @@ class WebDriverBladeRunnerTest extends GroovyTestCase {
     WebDriverBladeRunner bladeRunner = new MockWebDriverBladeRunner();
 
     void testSupportedTypesAsStringArray() {
-        assertEquals(['htmlid', 'text', 'name', 'xpath', 'css'], bladeRunner.getSupportedSelectorTypesAsStringArray())
+        assertEquals(['id', 'text', 'name', 'xpath', 'css'], bladeRunner.getSupportedSelectorTypesAsStringArray())
     }
 }

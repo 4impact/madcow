@@ -60,9 +60,9 @@ class ClickTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.click', testCase.grassParser);
         verifyLinkExecution(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.click', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aLinkId']);
+        blade = new GrassBlade('mapping.click', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
@@ -71,7 +71,7 @@ class ClickTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.click = A link', testCase.grassParser);
         verifyLinkExecution(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'cssLinkName', ['css': '#aLinkId']);
         blade = new GrassBlade('cssLinkName.click', testCase.grassParser);
         verifyLinkExecution(blade, true);
@@ -110,7 +110,7 @@ class ClickTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkOffScreenId.click', testCase.grassParser);
         verifyLinkExecution(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'aLinkOffScreenId', ['id': 'aLinkOffScreenId']);
         blade = new GrassBlade('aLinkOffScreenId.click', testCase.grassParser);
         verifyLinkExecution(blade, true);
@@ -128,7 +128,7 @@ class ClickTest extends GroovyTestCase {
             assertFalse(click.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 }

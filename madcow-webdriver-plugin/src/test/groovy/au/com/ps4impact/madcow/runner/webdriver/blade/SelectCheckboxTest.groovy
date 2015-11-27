@@ -62,9 +62,9 @@ class SelectCheckboxTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aCheckboxId.selectCheckbox', testCase.grassParser);
         verifyCheckboxExecution(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aCheckboxId', ['id': 'aCheckboxId']);
-        blade = new GrassBlade('aCheckboxId.selectCheckbox', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'ResizeBrowserTest', ['id': 'aCheckboxId']);
+        blade = new GrassBlade('ResizeBrowserTest.selectCheckbox', testCase.grassParser);
         verifyCheckboxExecution(blade, true);
     }
 
@@ -97,7 +97,7 @@ class SelectCheckboxTest extends GroovyTestCase {
             assertFalse(selectCheckbox.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -108,7 +108,7 @@ class SelectCheckboxTest extends GroovyTestCase {
             assertFalse(selectCheckbox.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

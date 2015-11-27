@@ -60,9 +60,9 @@ class CheckValueNotEmptyTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.checkValueNotEmpty', testCase.grassParser);
         verifyCheckValueContents(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.checkValueNotEmpty', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aLinkId']);
+        blade = new GrassBlade('mapping.checkValueNotEmpty', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
@@ -71,7 +71,7 @@ class CheckValueNotEmptyTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.checkValueNotEmpty = A link', testCase.grassParser);
         verifyCheckValueContents(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'cssLinkName', ['css': '#aLinkId']);
         blade = new GrassBlade('cssLinkName.checkValueNotEmpty', testCase.grassParser);
         verifyCheckValueContents(blade, true);
@@ -112,7 +112,7 @@ class CheckValueNotEmptyTest extends GroovyTestCase {
             assertFalse(checkValueNotEmpty.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -123,7 +123,7 @@ class CheckValueNotEmptyTest extends GroovyTestCase {
             assertFalse(checkValueNotEmpty.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

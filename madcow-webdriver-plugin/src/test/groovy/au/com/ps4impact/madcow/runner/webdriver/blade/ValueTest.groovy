@@ -68,9 +68,9 @@ class ValueTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aInputId.value = Tennis', testCase.grassParser);
         verifyValueExecution(blade, true, "Tennis");
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aInputId', ['id': 'aInputId']);
-        blade = new GrassBlade('aInputId.value = NoTennis', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aInputId']);
+        blade = new GrassBlade('mapping.value = NoTennis', testCase.grassParser);
         verifyValueExecution(blade, true, "NoTennis");
     }
 
@@ -91,9 +91,9 @@ class ValueTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aInputId.value = Tennis!', testCase.grassParser);
         verifyValueExecution(blade, true, "Tennis!");
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'cssInputId', ['css': '#aInputId']);
-        blade = new GrassBlade('cssInputId.value = TennisTwo', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['css': '#aInputId']);
+        blade = new GrassBlade('mapping.value = TennisTwo', testCase.grassParser);
         verifyValueExecution(blade, true, "TennisTwo");
     }
 
@@ -103,21 +103,21 @@ class ValueTest extends GroovyTestCase {
         verifyValueExecution(blade, true, "TennisT");
 
         // explicit css
-        MadcowMappings.addMapping(testCase, 'cssInputId', ['css': '.aInputClass']);
-        blade = new GrassBlade('cssInputId.value = TennisThree', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['css': '.aInputClass']);
+        blade = new GrassBlade('mapping.value = TennisThree', testCase.grassParser);
         verifyValueExecution(blade, true, "TennisThree");
 
     }
 
     void testValueByName() {
-        MadcowMappings.addMapping(testCase, 'aInputName', ['name': 'aInputName']);
-        GrassBlade blade = new GrassBlade('aInputName.value = TennisByName', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['name': 'aInputName']);
+        GrassBlade blade = new GrassBlade('mapping.value = TennisByName', testCase.grassParser);
         verifyValueExecution(blade, true, "TennisByName");
     }
 
     void testValueByXPath() {
-        MadcowMappings.addMapping(testCase, 'aInputXPath', ['xpath': '//input[@id=\'aInputId\']']);
-        GrassBlade blade = new GrassBlade('aInputXPath.value = TennisByXpath', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['xpath': '//input[@id=\'aInputId\']']);
+        GrassBlade blade = new GrassBlade('mapping.value = TennisByXpath', testCase.grassParser);
         verifyValueExecution(blade, true, "TennisByXpath");
     }
 
@@ -126,8 +126,8 @@ class ValueTest extends GroovyTestCase {
         verifyValueExecution(blade, true, "TennisForTextArea", "aTextAreaId");
 
         // explicit css
-        MadcowMappings.addMapping(testCase, 'cssaTextAreaId', ['css': '#aTextAreaId']);
-        blade = new GrassBlade('cssaTextAreaId.value = TennisFour', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['css': '#aTextAreaId']);
+        blade = new GrassBlade('mapping.value = TennisFour', testCase.grassParser);
         verifyValueExecution(blade, true, "TennisFour", "aTextAreaId");
     }
 
@@ -143,7 +143,7 @@ class ValueTest extends GroovyTestCase {
             assertFalse(value.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -154,7 +154,7 @@ class ValueTest extends GroovyTestCase {
             assertFalse(value.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

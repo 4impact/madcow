@@ -440,10 +440,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
     /**
      * Retrieve the default mappings selector this step runner.
      * This is used as the 'type' of selector when no type is given.
-     * For WebDriver, this is 'htmlid'.
+     * For WebDriver, this is 'id'.
      */
     public String getDefaultSelector() {
-        return 'htmlid';
+        return 'id';
     }
 
     public void finishTestCase() {

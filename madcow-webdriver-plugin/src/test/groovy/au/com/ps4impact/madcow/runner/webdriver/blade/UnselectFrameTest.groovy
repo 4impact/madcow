@@ -60,7 +60,7 @@ class UnselectFrameTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aIframeId.unselectFrame', testCase.grassParser);
         unselectFrameValid(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'aIframe', ['id': 'aIframeId']);
         blade = new GrassBlade('aIframe.unselectFrame', testCase.grassParser);
         unselectFrameValid(blade, true);

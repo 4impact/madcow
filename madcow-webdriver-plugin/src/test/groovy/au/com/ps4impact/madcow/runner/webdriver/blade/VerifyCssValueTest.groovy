@@ -60,9 +60,9 @@ class VerifyCssValueTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.verifyCssValue = font-weight: 700;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.verifyCssValue = font-weight: 700', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aLinkId']);
+        blade = new GrassBlade('mapping.verifyCssValue = font-weight: 700', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
@@ -134,7 +134,7 @@ class VerifyCssValueTest extends GroovyTestCase {
             assertFalse(verifyCssValue.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH] are supported.', e.message);
         }
     }
 
@@ -145,7 +145,7 @@ class VerifyCssValueTest extends GroovyTestCase {
             assertFalse(verifyCssValue.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH] are supported.', e.message);
         }
     }
 

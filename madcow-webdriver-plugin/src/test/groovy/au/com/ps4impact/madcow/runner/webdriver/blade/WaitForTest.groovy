@@ -60,9 +60,9 @@ class WaitForTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.waitFor', testCase.grassParser);
         verifyWaitFor(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.waitFor', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aLinkId']);
+        blade = new GrassBlade('mapping.waitFor', testCase.grassParser);
         verifyWaitFor(blade, true);
     }
 

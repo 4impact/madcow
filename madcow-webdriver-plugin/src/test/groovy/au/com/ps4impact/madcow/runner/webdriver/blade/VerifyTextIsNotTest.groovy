@@ -60,9 +60,9 @@ class VerifyTextIsNotTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.verifyTextIsNot = A link', testCase.grassParser);
         verifyTextIsNotContents(blade, false);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.verifyTextIsNot = A link', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aLinkId']);
+        blade = new GrassBlade('mapping.verifyTextIsNot = A link', testCase.grassParser);
         verifyTextIsNotContents(blade, false);
     }
 
@@ -72,20 +72,20 @@ class VerifyTextIsNotTest extends GroovyTestCase {
     }
 
     void testVerifyTextIsNotByName() {
-        MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
-        GrassBlade blade = new GrassBlade('aLinkName.verifyTextIsNot = A link', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['name': 'aLinkName']);
+        GrassBlade blade = new GrassBlade('mapping.verifyTextIsNot = A link', testCase.grassParser);
         verifyTextIsNotContents(blade, false);
     }
 
     void testVerifyTextIsNotByXPath() {
-        MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
-        GrassBlade blade = new GrassBlade('aLinkXPath.verifyTextIsNot = A link', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['xpath': '//a[@id=\'aLinkId\']']);
+        GrassBlade blade = new GrassBlade('mapping.verifyTextIsNot = A link', testCase.grassParser);
         verifyTextIsNotContents(blade, false);
     }
 
     void testVerifyTextIsNotByText() {
-        MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
-        GrassBlade blade = new GrassBlade('aLinkText.verifyTextIsNot = A link', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['text': 'A link']);
+        GrassBlade blade = new GrassBlade('mapping.verifyTextIsNot = A link', testCase.grassParser);
         verifyTextIsNotContents(blade, false);
     }
 

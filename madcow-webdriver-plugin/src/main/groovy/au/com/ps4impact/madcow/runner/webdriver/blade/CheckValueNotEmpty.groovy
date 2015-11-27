@@ -26,7 +26,6 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
-import org.apache.commons.lang3.StringUtils
 
 /**
  * CheckValue.
@@ -64,7 +63,7 @@ class CheckValueNotEmpty extends WebDriverBladeRunner {
      * Types of supported selectors.
      */
     protected Collection<WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE> getSupportedSelectorTypes() {
-        return [WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID,
+        return [WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.ID,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.CSS];

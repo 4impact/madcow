@@ -60,9 +60,9 @@ class StoreTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link', testCase.grassParser);
         verifyStoreContents(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.store = storedParam', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aLinkId']);
+        blade = new GrassBlade('mapping.store = storedParam', testCase.grassParser);
         verifyStoreContents(blade, true);
     }
 
@@ -71,7 +71,7 @@ class StoreTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.store = A link', testCase.grassParser);
         verifyStoreContents(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
         blade = new GrassBlade('aLinkId.store = A link', testCase.grassParser);
         verifyStoreContents(blade, true);

@@ -64,9 +64,9 @@ class IsRadioButtonSelectedTest extends GroovyTestCase {
          blade = new GrassBlade('aRadioButtonIdUnSelected.isRadioButtonSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, false);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aRadioButtonId', ['id': 'aRadioButtonId']);
-        blade = new GrassBlade('aRadioButtonId.isRadioButtonSelected', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aRadioButtonId']);
+        blade = new GrassBlade('mapping.isRadioButtonSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, true);
     }
 
@@ -99,7 +99,7 @@ class IsRadioButtonSelectedTest extends GroovyTestCase {
             assertFalse(isRadioButtonSelected.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -110,7 +110,7 @@ class IsRadioButtonSelectedTest extends GroovyTestCase {
             assertFalse(isRadioButtonSelected.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, TEXT, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

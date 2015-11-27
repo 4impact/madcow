@@ -42,7 +42,7 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
     public void testDefaultSelector() {
         WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase, [:]);
-        assertEquals('htmlid', stepRunner.defaultSelector);
+        assertEquals('id', stepRunner.defaultSelector);
     }
 
     public void testDefaultBrowser() {

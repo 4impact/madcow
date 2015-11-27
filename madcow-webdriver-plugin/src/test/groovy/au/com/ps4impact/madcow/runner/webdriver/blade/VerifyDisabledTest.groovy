@@ -38,8 +38,8 @@ class VerifyDisabledTest extends GroovyTestCase {
 
     void testVerifyEnabledByName() {
         inputIdAndNameSuffixes.each {
-            MadcowMappings.addMapping(testCase, 'inputName', ['name': "enabled${it}"]);
-            GrassBlade blade = new GrassBlade("inputName.verifyDisabled",testCase.grassParser)
+            MadcowMappings.addMapping(testCase, 'mapping', ['name': "enabled${it}"]);
+            GrassBlade blade = new GrassBlade("mapping.verifyDisabled",testCase.grassParser)
             executeBladeAndCheckResult(blade, false)
         }
     }
@@ -47,8 +47,8 @@ class VerifyDisabledTest extends GroovyTestCase {
     void testVerifyEnabledByXpath() {
         inputIdAndNameSuffixes.each {
             println "$it"
-            MadcowMappings.addMapping(testCase, 'inputByXpath', ['xpath': "//*[@id='enabled${it}']"]);
-            GrassBlade blade = new GrassBlade("inputByXpath.verifyDisabled",testCase.grassParser)
+            MadcowMappings.addMapping(testCase, 'mapping', ['xpath': "//*[@id='enabled${it}']"]);
+            GrassBlade blade = new GrassBlade("mapping.verifyDisabled",testCase.grassParser)
             executeBladeAndCheckResult(blade, false)
         }
     }
@@ -62,16 +62,16 @@ class VerifyDisabledTest extends GroovyTestCase {
 
     void testVerifyEnabledFailingByName() {
         inputIdAndNameSuffixes.each {
-            MadcowMappings.addMapping(testCase, 'inputName', ['name': "disabled${it}"]);
-            GrassBlade blade = new GrassBlade("inputName.verifyDisabled",testCase.grassParser)
+            MadcowMappings.addMapping(testCase, 'mapping', ['name': "disabled${it}"]);
+            GrassBlade blade = new GrassBlade("mapping.verifyDisabled",testCase.grassParser)
             executeBladeAndCheckResult(blade, true)
         }
     }
 
     void testVerifyEnabledFailingByXpath() {
         inputIdAndNameSuffixes.each {
-            MadcowMappings.addMapping(testCase, 'inputByXpath', ['xpath': "//*[@id='disabled${it}']"]);
-            GrassBlade blade = new GrassBlade("inputByXpath.verifyDisabled",testCase.grassParser)
+            MadcowMappings.addMapping(testCase, 'mapping', ['xpath': "//*[@id='disabled${it}']"]);
+            GrassBlade blade = new GrassBlade("mapping.verifyDisabled",testCase.grassParser)
             executeBladeAndCheckResult(blade, true)
         }
     }

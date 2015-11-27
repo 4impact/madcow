@@ -69,7 +69,7 @@ class SelectFieldTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aSelectId.selectField = New Zealand', testCase.grassParser);
         verifyValueExecution(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'aSelectId', ['id': 'aSelectId']);
         blade = new GrassBlade('aSelectId.selectField = United States', testCase.grassParser);
         verifyValueExecution(blade, true);
@@ -80,7 +80,7 @@ class SelectFieldTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('carMakes.selectField = saab', testCase.grassParser);
         verifyValueExecution(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'carMakers', ['id': 'carMakes']);
         blade = new GrassBlade('carMakers.selectField = Audi', testCase.grassParser);
         verifyValueExecution(blade, true);
@@ -91,14 +91,14 @@ class SelectFieldTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('carModels.selectField = [\"VLK123\",\"a45\"]', testCase.grassParser);
         verifyValueExecution(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'models', ['id': 'carModels']);
         blade = new GrassBlade('models.selectField = [\"a45\",\"clk\"]', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
     void testSelectMultiFieldOneFailedByHtmlId() {
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'models', ['id': 'carModels']);
         GrassBlade blade = new GrassBlade('models.selectField = [\"a45\",\"clk200\"]', testCase.grassParser);
         verifyValueExecution(blade, false, "Timed out after 10 seconds waiting", false);
@@ -133,7 +133,7 @@ class SelectFieldTest extends GroovyTestCase {
             assertFalse(selectField.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -144,7 +144,7 @@ class SelectFieldTest extends GroovyTestCase {
             assertFalse(selectField.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

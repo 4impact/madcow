@@ -60,9 +60,9 @@ class VerifyTextTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.verifyText = A link', testCase.grassParser);
         verifyTextContents(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.verifyText = A link', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aLinkId']);
+        blade = new GrassBlade('mapping.verifyText = A link', testCase.grassParser);
         verifyTextContents(blade, true);
     }
 

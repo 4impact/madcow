@@ -63,21 +63,21 @@ class VerifySelectFieldOptionsTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aSelectId.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
         verifyValueExecution(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aSelectId', ['id': 'aSelectId']);
-        blade = new GrassBlade('aSelectId.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aSelectId']);
+        blade = new GrassBlade('mapping.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
     void testSelectFieldByName() {
-        MadcowMappings.addMapping(testCase, 'aSelectName', ['name': 'aSelectName']);
-        GrassBlade blade = new GrassBlade('aSelectName.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['name': 'aSelectName']);
+        GrassBlade blade = new GrassBlade('mapping.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
     void testSelectFieldByXPath() {
-        MadcowMappings.addMapping(testCase, 'aSelectXPath', ['xpath': '//select[@id=\'aSelectId\']']);
-        GrassBlade blade = new GrassBlade('aSelectXPath.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'mapping', ['xpath': '//select[@id=\'aSelectId\']']);
+        GrassBlade blade = new GrassBlade('mapping.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
@@ -93,7 +93,7 @@ class VerifySelectFieldOptionsTest extends GroovyTestCase {
             assertFalse(verifySelectFieldOptions.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -104,7 +104,7 @@ class VerifySelectFieldOptionsTest extends GroovyTestCase {
             assertFalse(verifySelectFieldOptions.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

@@ -62,7 +62,7 @@ class SelectFrameTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aIframeId.selectFrame', testCase.grassParser);
         selectFrameValid(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'aIframe', ['id': 'aIframeId']);
         blade = new GrassBlade('aIframe.selectFrame', testCase.grassParser);
         selectFrameValid(blade, true);

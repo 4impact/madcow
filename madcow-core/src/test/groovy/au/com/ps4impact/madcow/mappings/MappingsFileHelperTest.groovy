@@ -60,7 +60,7 @@ class MappingsFileHelperTest extends GroovyTestCase {
 
         def fileHelper = new MappingsFileHelper();
         def processed = fileHelper.processProperties(testCase, properties);
-        assertEquals('[htmlid:nice-value]', processed['nice-key'].toString());
+        assertEquals('[id:nice-value]', processed['nice-key'].toString());
     }
 
     public void testDuplicateProperties() {

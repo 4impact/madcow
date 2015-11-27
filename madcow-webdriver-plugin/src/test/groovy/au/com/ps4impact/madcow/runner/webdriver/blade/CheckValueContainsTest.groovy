@@ -60,7 +60,7 @@ class CheckValueContainsTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = link', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
         blade = new GrassBlade('aLinkId.checkValueContains = lin', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
@@ -71,9 +71,9 @@ class CheckValueContainsTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = link', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'cssLinkName', ['css': '#aLinkId']);
-        blade = new GrassBlade('cssLinkName.checkValueContains = ink', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['css': '#aLinkId']);
+        blade = new GrassBlade('mapping.checkValueContains = ink', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }    
 
@@ -117,7 +117,7 @@ class CheckValueContainsTest extends GroovyTestCase {
             assertFalse(checkValueContains.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -128,7 +128,7 @@ class CheckValueContainsTest extends GroovyTestCase {
             assertFalse(checkValueContains.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 

@@ -60,9 +60,9 @@ class HasClassTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('aLinkId.hasClass = aLinkClass', testCase.grassParser);
         verifyHasClassContents(blade, true);
 
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aLinkId', ['id': 'aLinkId']);
-        blade = new GrassBlade('aLinkId.hasClass = aLinkClass', testCase.grassParser);
+        // explicit id
+        MadcowMappings.addMapping(testCase, 'mapping', ['id': 'aLinkId']);
+        blade = new GrassBlade('mapping.hasClass = aLinkClass', testCase.grassParser);
         verifyHasClassContents(blade, true);
     }
 
@@ -118,7 +118,7 @@ class HasClassTest extends GroovyTestCase {
             assertFalse(hasClass.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH] are supported.', e.message);
         }
     }
 
@@ -129,7 +129,7 @@ class HasClassTest extends GroovyTestCase {
             assertFalse(hasClass.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH] are supported.', e.message);
         }
     }
 
