@@ -8,7 +8,7 @@ state.selectField = Queensland
 testsite_search_searchButton.clickLink
 
 @textToVerify = Address Search Results
-importTemplate = AddressSearchResultsFailingTemplate
+#importTemplate = AddressSearchResultsFailingTemplate
 
 invokeUrl = ADDRESSBOOK
 @expectedValue = Search Address

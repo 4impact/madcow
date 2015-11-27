@@ -12,6 +12,6 @@ addressLines.checkValueContains = "Harvey"
 testsite_search_searchButton.showOnReport = Search Button Text
 testsite_search_searchButton.showOnReport = ['name' : 'Search Formatting', format: 'This is bold - <b>%s</b>']
 testsite_search_searchButton.hasClass = btn-primary
-footer.hasStyle = border: 0px; margin-top: 10px; margin-right: 10px; float: right;
+testsite_create_footer.hasStyle = border: 0px; margin-top: 10px; margin-right: 10px; float: right;
 testsite_search_searchButton.clickLink
 verifyText = Address Search Results

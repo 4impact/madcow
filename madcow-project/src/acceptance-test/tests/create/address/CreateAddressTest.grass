@@ -1,7 +1,8 @@
-invokeUrl = ADDRESSBOOK/address/create
+invokeUrl = ADDRESSBOOK
 
 verifyText = Create Address
 testsite_create_carina.verifyDoesNotExist
+create-address-id.click
 postCodeEntry.value = 4152
 
 testsite_create_carina.waitFor
@@ -13,5 +14,5 @@ testsite_create_brisbane.verifyDoesNotExist
 testsite_create_checkForDuplicatesButton.hasClass = btn btn-info
 testsite_create_checkForDuplicatesButton.doesNotHaveClass = btn-danger btn-error
 
-testsite_create_formActions.verifyCssValue = "padding-left: 160px;border-top-width: 1px;"
-footer.hasStyle = border: 0px; margin-top: 10px;
+testsite_create_formActions.verifyCssValue = "border-top-width : 0px"
+testsite_create_footer.hasStyle = border: 0px; margin-top: 10px; margin-right: 10px; float: right;
