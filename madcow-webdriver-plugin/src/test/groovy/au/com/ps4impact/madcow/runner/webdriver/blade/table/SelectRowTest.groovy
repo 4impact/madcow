@@ -61,9 +61,9 @@ class SelectRowTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         verifySelectRow(blade, true);
 
-        // explicit htmlid
+        // explicit id
         MadcowMappings.addMapping(testCase, 'theTableMapping', ['id': 'theTable']);
-        blade = new GrassBlade('theTableMapping.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
+         blade = new GrassBlade('theTableMapping.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         verifySelectRow(blade, true);
     }
 
@@ -98,7 +98,7 @@ class SelectRowTest extends GroovyTestCase {
             assertFalse(selectRow.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH] are supported.', e.message);
         }
     }
 
@@ -109,7 +109,7 @@ class SelectRowTest extends GroovyTestCase {
             assertFalse(selectRow.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH] are supported.', e.message);
         }
     }
 

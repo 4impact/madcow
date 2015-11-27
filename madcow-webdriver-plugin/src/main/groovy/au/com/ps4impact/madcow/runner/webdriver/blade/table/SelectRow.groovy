@@ -27,6 +27,7 @@ import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.runner.webdriver.blade.table.util.TableXPather
+import org.openqa.selenium.By
 
 /**
  * The SelectRow table blade runner will save the specified table row.
@@ -51,11 +52,25 @@ class SelectRow extends WebDriverBladeRunner {
             rowPositionXPath = xPather.getLastRowPositionXPath()
         else if (step.blade.parameters.toString().toLowerCase() ==~ /row\d*/)
             rowPositionXPath = step.blade.parameters.toString().substring(3)
-        else
-            rowPositionXPath = xPather.getRowPositionXPath(step.blade.parameters)
+        else {
+            def columnText = step.blade.parameters.keySet().toArray()[0]
+            def colPosition = xPather.getColumnPositionXPath(columnText)
+            def cellText = step.blade.parameters.get(columnText)
+            def query = "${xPather.getPrefixXPath()}/tbody/tr/td[${colPosition}]"
+            query=query+"[(normalize-space(.//text())='${cellText}' or normalize-space(.//@value)='${cellText}')]"
 
-        step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()] = rowPositionXPath;
-        step.result = MadcowStepResult.PASS("Row selected: ${step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()]}");
+
+            def rows = stepRunner.driver.findElements(By.xpath(query)).size()
+            if (rows == 1) {
+                rowPositionXPath = xPather.getRowPositionXPath(step.blade.parameters)
+            } else {
+                step.result = MadcowStepResult.FAIL("No match found")
+                return
+            }
+        }
+        step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()] = rowPositionXPath
+        step.result = MadcowStepResult.PASS("Row selected: ${step.testCase.runtimeStorage[xPather.getRuntimeStorageKey()]}")
+
     }
 
     protected Collection<GrassBlade.GrassBladeType> getSupportedBladeTypes() {
@@ -74,7 +89,7 @@ class SelectRow extends WebDriverBladeRunner {
      * HtmlId, Name and XPath are supported.
      */
     protected Collection<WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE> getSupportedSelectorTypes() {
-        return [WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.HTMLID,
+        return [WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.ID,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH];
     }
