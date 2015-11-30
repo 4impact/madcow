@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Madcow test page</title>
+</head>
+<body>
+
 <div class="nav-collapse">
   <ul class="nav">
     <li>
@@ -92,7 +100,7 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary">
+      <button class="search-button btn btn-primary">
         <i class="icon-search icon-white">
         </i>
         Search
@@ -101,6 +109,8 @@
     </div>
   </fieldset>
 </form>
+
+<div class="address-search-results" style="display: none;">Address Search Results</div>
 
 <form action="/madcow-test-site-2/address/save" method="post" style="display:none" class="form-horizontal create-address-form">
   <legend>Create Address</legend>
@@ -125,9 +135,7 @@
       <label class="control-label" for="postCodeEntry">Post Code</label>
 
       <div class="controls">
-        <input type="text" name="postCodeEntry"
-               onchange="showSpinner(true);;jQuery.ajax({type:'POST',data:'id=' + escape(this.value), url:'/madcow-test-site-2/address/ajaxGetSuburbs',success:function(data,textStatus){},error:function(XMLHttpRequest,textStatus,errorThrown){},complete:function(XMLHttpRequest,textStatus){updateSuburb(XMLHttpRequest);showSpinner(false);}});"
-               value="" id="postCodeEntry">
+        <input type="text" name="postCodeEntry" value="" id="postCodeEntry">
       </div>
     </div>
 
@@ -166,14 +174,54 @@
     </div>
   </fieldset>
 </form>
-</div>
 
+<table id="createTable" border="1">
+  <thead>
+  <th>Address Line 1</th>
+  <th>Post Code</th>
+  </thead>
+  <tbody>
+  <tr>
+    <td><input type="text"/></td>
+    <td><input type="text"/></td>
+  </tr>
+  <tr>
+    <td><input type="text"/></td>
+    <td><input type="text"/></td>
+  </tr>
+  <tr>
+    <td><a href="#" id="aLink">My Link</a></td>
+    <td>
+      <div id="aLink-has-been-clicked"></div>
+    </td>
+  </tr>
+  </tbody>
+</table>
 
-</div>
+<footer id="footerID" style="border: 0px; margin-top: 10px; margin-right: 10px; float: right">Footer...</footer>
 <script src="./assets/js/jquery.js"></script>
 <script type="application/javascript">
   $('#create-address-id').click(function() {
-    $('.show-search-results').hide()
-    $('.create-address-form').show()
-  })
+    $('.show-search-results').hide();
+    $('.create-address-form').show();
+  });
+
+  $('.search-button').on('click', function() {
+    $('.show-search-results').hide();
+    $('.address-search-results').show();
+    return false;
+  });
+
+  $('#postCodeEntry').on('change', function() {
+    $('#suburbOptions').append("<label for='8381'>CARINA</label>");
+  });
+
+  $('#aLink').on('click', function() {
+    $('#aLink-has-been-clicked').text('Nothing to see here');
+  });
+
+
 </script>
+
+</body>
+</html>
