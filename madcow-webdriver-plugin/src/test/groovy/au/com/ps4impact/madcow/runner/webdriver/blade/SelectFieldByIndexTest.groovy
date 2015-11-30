@@ -91,7 +91,7 @@ class SelectFieldByIndexTest extends GroovyTestCase {
 
     void testSelectFieldDoesNotExist() {
         GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = 6', testCase.grassParser);
-        verifyValueExecution(blade, false, "Unable to find the specified option");
+        verifyValueExecution(blade, false, "Unable to find specified option");
     }
 
     void testSelectFieldByIndexWithAListShouldFail() {
@@ -121,7 +121,7 @@ class SelectFieldByIndexTest extends GroovyTestCase {
             assertFalse(selectFieldByIndex.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
@@ -132,7 +132,7 @@ class SelectFieldByIndexTest extends GroovyTestCase {
             assertFalse(selectFieldByIndex.isValidBladeToExecute(blade));
             fail('should always exception');
         } catch (e) {
-            assertEquals('Mapping selector must be supplied. One of [HTMLID, NAME, XPATH, CSS] are supported.', e.message);
+            assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH, CSS] are supported.', e.message);
         }
     }
 
