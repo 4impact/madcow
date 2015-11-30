@@ -101,7 +101,7 @@ class SelectFieldTest extends GroovyTestCase {
         // explicit id
         MadcowMappings.addMapping(testCase, 'models', ['id': 'carModels']);
         GrassBlade blade = new GrassBlade('models.selectField = [\"a45\",\"clk200\"]', testCase.grassParser);
-        verifyValueExecution(blade, false, "Timed out after 10 seconds waiting", false);
+        verifyValueExecution(blade, false, "Cannot find a valid option/s for item [clk200]");
     }
 
     void testSelectNonMultiFieldFailedByHtmlId() {
@@ -111,7 +111,7 @@ class SelectFieldTest extends GroovyTestCase {
 
     void testSelectWithInvalidIntegerParamFails() {
         GrassBlade blade = new GrassBlade('carCylinders.selectField = 1', testCase.grassParser);
-        verifyValueExecution(blade, false, "Unable to find the specified option");
+        verifyValueExecution(blade, false, "Unable to find specified option");
     }
 
     void testSelectWithValidIntegerParamPass() {

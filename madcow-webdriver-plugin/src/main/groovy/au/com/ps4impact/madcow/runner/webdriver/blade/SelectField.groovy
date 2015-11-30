@@ -76,46 +76,55 @@ class SelectField extends WebDriverBladeRunner {
 
     }
 
-    private MadcowStepResult makeASingleSelection(WebElement element, String selectParam) {
-        List<WebElement> options = element.findElements(By.tagName('option'));
-        WebElement foundText = null;
-        WebElement foundValue = null;
+    private MadcowStepResult makeASingleSelection(WebDriverStepRunner stepRunner, MadcowStep step, WebElement element, String selectParam) {
+        try {
+            boolean result = new WebDriverWait(stepRunner.driver, 10, 1000)
+                    .ignoring(StaleElementReferenceException.class)
+                    .until(new ExpectedCondition() {
+                Boolean apply(WebDriver driver) {
+                    try {
+                        List<WebElement> options = element.findElements(By.tagName('option'));
+                        WebElement foundText = null;
+                        WebElement foundValue = null;
 
-                    options.each { option ->
-                        //if already found option then skip checking rest of options
-                        if (foundText || foundValue)
-                            return;
+                        options.each { option ->
+                            //if already found option then skip checking rest of options
+                            if (foundText || foundValue)
+                                return;
 
-                        //first attempt to match on text value
-                        if (option.text.trim() == selectParam) {
-                            foundText = option;
+                            //first attempt to match on text value
+                            if (option.text.trim() == selectParam) {
+                                foundText = option;
+                            }
+                            //then attempt to match on value value
+                            if (option.getAttribute("value").trim() == selectParam) {
+                                foundValue = option;
+                            }
                         }
-                        //then attempt to match on value value
-                        if (option.getAttribute("value").trim() == selectParam) {
-                            foundValue = option;
-                        }
-                    }
 
-                    if (foundText != null) {
-                        new Select(element).selectByVisibleText(selectParam)
-                        return Boolean.valueOf(true)
-                    } else if (foundValue != null) {
-                        new Select(element).selectByValue(selectParam)
-                        return Boolean.valueOf(true)
-                    } else {
+                        if (foundText != null) {
+                            new Select(element).selectByVisibleText(selectParam)
+                            return Boolean.valueOf(true)
+                        } else if (foundValue != null) {
+                            new Select(element).selectByValue(selectParam)
+                            return Boolean.valueOf(true)
+                        } else {
+                            return Boolean.valueOf(false)
+                        }
+                    } catch (StaleElementReferenceException ex) {
+                        println('Stale reference caught, retrying...')
+                        element = findElement(stepRunner, step)
                         return Boolean.valueOf(false)
                     }
-                } catch (StaleElementReferenceException ex) {
-                    println('Stale reference caught, retrying...')
-                    element = findElement(stepRunner, step)
-                    return Boolean.valueOf(false)
                 }
+            });
+            if (result) {
+                return MadcowStepResult.PASS();
+            } else {
+                return MadcowStepResult.FAIL('Unable to update specified option');
             }
-        });
-        if (result) {
-            return MadcowStepResult.PASS();
-        } else {
-            return MadcowStepResult.FAIL('Unable to update specified option');
+        } catch (Exception e) {
+            return MadcowStepResult.FAIL('Unable to find specified option');
         }
     }
 
