@@ -118,8 +118,8 @@ class SelectFieldByIndexTest extends GroovyTestCase {
     }
 
     void testSelectFieldDoesNotExist() {
-        GrassBlade blade = new GrassBlade('aSelectThatDoesntExist.selectFieldByIndex = Tennis', testCase.grassParser);
-        verifyValueExecution(blade, false);
+        GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = 6', testCase.grassParser);
+        verifyValueExecution(blade, false, "Unable to find the specified option");
     }
 
     void testMappingSelectorInvalidRequired() {

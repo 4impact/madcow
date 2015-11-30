@@ -109,6 +109,16 @@ class SelectFieldTest extends GroovyTestCase {
         verifyValueExecution(blade, false, "Cannot specify list when select element doesn't have multiple attribute");
     }
 
+    void testSelectWithIntegerParamFails() {
+        GrassBlade blade = new GrassBlade('carCylinders.selectField = 1', testCase.grassParser);
+        verifyValueExecution(blade, false, "Unable to find the specified option");
+    }
+
+    void testSelectWithIntegerParamPass() {
+        GrassBlade blade = new GrassBlade('carCylinders.selectField = 2', testCase.grassParser);
+        verifyValueExecution(blade, true);
+    }
+
     void testSelectFieldByName() {
         MadcowMappings.addMapping(testCase, 'aSelectName', ['name': 'aSelectName']);
         GrassBlade blade = new GrassBlade('aSelectName.selectField = New Zealand', testCase.grassParser);
