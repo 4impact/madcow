@@ -60,66 +60,58 @@ class SelectFieldByIndexTest extends GroovyTestCase {
             assertEquals step.result.message, resultingOutput
     }
 
-    void testSelectFieldByHtmlId() {
+    void testSelectFieldByIndexByHtmlId() {
         // defaults to html id
-        GrassBlade blade = new GrassBlade('aSelectId.selectFieldByIndex = New Zealand', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = 2', testCase.grassParser);
         verifyValueExecution(blade, true);
 
         // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'aSelectId', ['id': 'aSelectId']);
-        blade = new GrassBlade('aSelectId.selectFieldByIndex = United States', testCase.grassParser);
+        MadcowMappings.addMapping(testCase, 'carCylinders', ['id': 'carCylinders']);
+        blade = new GrassBlade('carCylinders.selectFieldByIndex = 1', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
-    void testSelectFieldWithOptionGroupsByHtmlId() {
-        // defaults to html id
-        GrassBlade blade = new GrassBlade('carMakes.selectFieldByIndex = saab', testCase.grassParser);
-        verifyValueExecution(blade, true);
-
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'carMakers', ['id': 'carMakes']);
-        blade = new GrassBlade('carMakers.selectFieldByIndex = Audi', testCase.grassParser);
+    void testSelectFieldByIndexByName() {
+        MadcowMappings.addMapping(testCase, 'aSelectName', ['name': 'carCylindersName']);
+        GrassBlade blade = new GrassBlade('aSelectName.selectFieldByIndex = 0', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
-    void testSelectMultiFieldByHtmlId() {
-        // defaults to html id
-        GrassBlade blade = new GrassBlade('carModels.selectFieldByIndex = [\"VLK123\",\"a45\"]', testCase.grassParser);
-        verifyValueExecution(blade, true);
-
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'models', ['id': 'carModels']);
-        blade = new GrassBlade('models.selectFieldByIndex = [\"a45\",\"clk\"]', testCase.grassParser);
-        verifyValueExecution(blade, true);
+    void testSelectFieldByIndexByNameOutsideRange() {
+        MadcowMappings.addMapping(testCase, 'aSelectName', ['name': 'carCylindersName']);
+        GrassBlade blade = new GrassBlade('aSelectName.selectFieldByIndex = 3', testCase.grassParser);
+        verifyValueExecution(blade, false);
     }
 
-    void testSelectMultiFieldOneFailedByHtmlId() {
-        // explicit htmlid
-        MadcowMappings.addMapping(testCase, 'models', ['id': 'carModels']);
-        GrassBlade blade = new GrassBlade('models.selectFieldByIndex = [\"a45\",\"clk200\"]', testCase.grassParser);
-        verifyValueExecution(blade, false, "Cannot find a valid option/s for item [clk200]");
-    }
-
-    void testSelectNonMultiFieldFailedByHtmlId() {
-        GrassBlade blade = new GrassBlade('carMakes.selectFieldByIndex = ["a45","clk200"]', testCase.grassParser);
-        verifyValueExecution(blade, false, "Cannot specify list when select element doesn't have multiple attribute");
-    }
-
-    void testSelectFieldByName() {
-        MadcowMappings.addMapping(testCase, 'aSelectName', ['name': 'aSelectName']);
-        GrassBlade blade = new GrassBlade('aSelectName.selectFieldByIndex = New Zealand', testCase.grassParser);
-        verifyValueExecution(blade, true);
-    }
-
-    void testSelectFieldByXPath() {
-        MadcowMappings.addMapping(testCase, 'aSelectXPath', ['xpath': '//select[@id=\'aSelectId\']']);
-        GrassBlade blade = new GrassBlade('aSelectXPath.selectFieldByIndex = New Zealand', testCase.grassParser);
+    void testSelectFieldByIndexByXPath() {
+        MadcowMappings.addMapping(testCase, 'aSelectXPath', ['xpath': '//select[@id=\'carCylinders\']']);
+        GrassBlade blade = new GrassBlade('aSelectXPath.selectFieldByIndex = 2', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
     void testSelectFieldDoesNotExist() {
         GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = 6', testCase.grassParser);
         verifyValueExecution(blade, false, "Unable to find the specified option");
+    }
+
+    void testSelectFieldByIndexWithAListShouldFail() {
+        try {
+            GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = ["1","2"]', testCase.grassParser);
+            assertFalse(selectFieldByIndex.isValidBladeToExecute(blade));
+            fail('should always exception');
+        } catch (e) {
+            assertEquals('Unsupported grass format. Only parameters of type \'[Integer]\' are supported.', e.message);
+        }
+    }
+
+    void testSelectFieldByIndexWithStringShouldFail() {
+        try {
+            GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = "1"', testCase.grassParser);
+            assertFalse(selectFieldByIndex.isValidBladeToExecute(blade));
+            fail('should always exception');
+        } catch (e) {
+            assertEquals('Unsupported grass format. Only parameters of type \'[Integer]\' are supported.', e.message);
+        }
     }
 
     void testMappingSelectorInvalidRequired() {

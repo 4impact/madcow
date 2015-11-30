@@ -31,7 +31,7 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.Select;
 
 /**
- * The SelectFieldByIndex blade sets a value on a combo box element based on the index.
+ * The SelectFieldByIndex blade sets a value on a combo box element based on the 0-th based index.
  *
  * @author Tom Romano
  */
