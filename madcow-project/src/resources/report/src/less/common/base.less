@@ -1,3 +1,6 @@
+@import '../variables';
+@import 'mixins';
+
 * {
   /* apply a natural box layout model to all elements */
   .box-sizing(border-box);
@@ -27,12 +30,4 @@ image {
   width: 100%;
   max-width: 100%;
   .box-shadow(0 1px 1px @shadow-color);
-}
-
-.loader {
-  text-align: center;
-  color: @neutral-faded;
-  position: fixed;
-  left: 50%;
-  top: 50%;
 }
