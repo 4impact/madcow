@@ -18,6 +18,8 @@
       $('.content').html(JST['testcase/testcase']({
         testCase: this.testCase
       }));
+
+      window.document.title = 'Madcow Results: ' + testCaseName;
     }
   };
 

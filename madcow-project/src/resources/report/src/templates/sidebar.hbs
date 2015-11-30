@@ -4,10 +4,13 @@
 </h1>
 
 <ul class="nav">
-    <li class="active">
-        <a href="#"><i class="fa fa-tasks"></i></a>
+    <li {{#if suite}}class="active"{{/if}}>
+        <a href="#" alt="Results"><i class="fa fa-tasks"></i></a>
     </li>
-    <li>
-        <a href="#"><i class="fa fa-wrench"></i></a>
+    <li {{#if mappings}}class="active"{{/if}}>
+        <a href="#mappings" alt="Mappings"><i class="fa fa-globe"></i></a>
+    </li>
+    <li {{#if settings}}class="active"{{/if}}>
+        <a href="#settings" alt="Settings"><i class="fa fa-wrench"></i></a>
     </li>
 </ul>

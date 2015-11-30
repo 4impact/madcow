@@ -9,14 +9,26 @@
 
     setup: function () {
 
-      $('.sidebar').html(JST.sidebar({}));
+      window.document.title = 'Madcow Results';
 
       routie('', function() {
         window.SuiteView.render(dataService.rootSuite);
+        window.SidebarView.render('suite');
       });
 
       routie('testcase/:name', function(name) {
         window.TestCaseView.render(name);
+        window.SidebarView.render('testcase');
+      });
+
+      routie('mappings', function() {
+        window.MappingsView.render();
+        window.SidebarView.render('mappings');
+      });
+
+      routie('settings', function() {
+        window.SettingsView.render();
+        window.SidebarView.render('settings');
       });
     }
   };

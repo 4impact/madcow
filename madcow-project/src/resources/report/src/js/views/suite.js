@@ -16,6 +16,12 @@
       $('.content').html(JST['suite/suite']({
         suite: suite
       }));
+
+      if (suite.name) {
+        window.document.title = 'Madcow Results: ' + suite.name;
+      } else {
+        window.document.title = 'Madcow Results';
+      }
     }
   };
 
