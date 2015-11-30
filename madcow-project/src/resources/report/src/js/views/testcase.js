@@ -7,25 +7,20 @@
 
   TestCaseView.prototype = {
 
-    setup: function () {
+    setup: function() {
+      // nothing... yet
+    },
 
-      this.testCase = dataService.findTestCase('search.SearchAddressTest');
+    render: function(testCaseName) {
+      this.testCase = dataService.findTestCase(testCaseName);
 
       $('.sidebar').html(JST.sidebar({}));
       $('.content').html(JST['testcase/testcase']({
         testCase: this.testCase
       }));
-
-      this.refresh = $.proxy(this.refresh, this);
-      this.refresh();
-    },
-
-    refresh: function() {
-      //var testCase = dataService.findTestCase('AddressTest');
-      console.log(this.testCase);
     }
   };
 
-  window.TestCaseView = TestCaseView;
+  window.TestCaseView = new TestCaseView();
 
 })(jQuery, window, window.DataService);

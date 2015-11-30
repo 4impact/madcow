@@ -1,0 +1,25 @@
+<div class="header">
+    Suite
+</div>
+
+<div class="suite">
+
+  <div class="suite-results box">
+    <table>
+        <thead>
+
+        </thead>
+        <tbody>
+
+          {{#each suite.testCases}}
+              <tr>
+                  <td>
+                    <a href="#testcase/{{name}}">{{{name}}}</a>
+                  </td>
+                  <td>{{niceStatus status}}</td>
+              </tr>
+          {{/each}}
+        </tbody>
+    </table>
+  </div>
+</div>

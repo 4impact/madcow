@@ -7,6 +7,7 @@ module.exports.banner = ['/*!',
 module.exports.javascriptFiles = [
   'components/jquery/dist/jquery.min.js',
   'components/handlebars/handlebars.runtime.min.js',
+  'components/routie/dist/routie.js',
 
   'dist/assets/js/templates.js',
 

@@ -3,7 +3,8 @@
   "dependencies": {
     "jquery": "~2.1.1",
     "normalize.css": "~3.0.2",
-    "handlebars": "~2.0.0"
+    "handlebars": "~2.0.0",
+    "routie": "~0.3.2"
   },
   "private": true,
   "devDependencies": {}
