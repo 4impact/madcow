@@ -1,0 +1,8 @@
+testInfo = "This test will check the ability to click a link on a sepecific column number on the current row"
+invokeUrl = ADDRESSBOOK
+
+aLink-has-been-clicked.checkValue = ''
+createTable.table.selectRow = ['Address Line 1': 'My Link']
+createTable.table.currentRow.clickLink = 'column1'
+aLink-has-been-clicked.checkValue = "Nothing to see here"
+

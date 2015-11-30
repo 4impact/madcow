@@ -61,6 +61,10 @@ class SelectRowTest extends GroovyTestCase {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         verifySelectRow(blade, true);
 
+        //select row from link text
+        blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : "A link"]', testCase.grassParser);
+        verifySelectRow(blade, true);
+
         // explicit id
         MadcowMappings.addMapping(testCase, 'theTableMapping', ['id': 'theTable']);
          blade = new GrassBlade('theTableMapping.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
