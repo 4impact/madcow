@@ -48,11 +48,13 @@ class VerifyTextTest extends GroovyTestCase {
         testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
     }
 
-    protected verifyTextContents(GrassBlade blade, boolean shouldPass) {
+    protected verifyTextContents(GrassBlade blade, boolean shouldPass, String resultingOutput = null) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
+        if (resultingOutput)
+            assertEquals step.result.message, resultingOutput
     }
 
     void testVerifyTextByHtmlId() {
@@ -102,5 +104,20 @@ class VerifyTextTest extends GroovyTestCase {
     void testVerifyTextNotOnPage() {
         GrassBlade blade = new GrassBlade('verifyText = This won\'t be on the page', testCase.grassParser);
         verifyTextContents(blade, false);
+    }
+
+    void testVerifyTextWithRegexByHtmlId() {
+        GrassBlade blade = new GrassBlade('aLinkId.verifyText = [regex: ".*link"]', testCase.grassParser);
+        verifyTextContents(blade, true);
+    }
+
+    void testVerifyTextOnPageWithRegex() {
+        GrassBlade blade = new GrassBlade('verifyText = [regex: ".*content.*"]', testCase.grassParser);
+        verifyTextContents(blade, true);
+    }
+
+    void testVerifyTextWithMapButNotRegexParam() {
+        GrassBlade blade = new GrassBlade('aLinkId.verifyText = [other: ".*annel.*"]', testCase.grassParser);
+        verifyTextContents(blade, false, "The 'regex' parameter is required when specifying an advanced VerifyText operation");
     }
 }
