@@ -36,47 +36,16 @@ class VerifyText extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        if (Map.class.isInstance(step.blade.parameters)) {
-            //map so must be regex param
-            Map paramMap = step.blade.parameters as Map;
-            if (((paramMap.regex ?: '') == '')) {
-                step.result = MadcowStepResult.FAIL("The 'regex' parameter is required when specifying an advanced VerifyText operation");
-                return;
-            }
-
-            if (StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
-                //search entire page source
-                def searchHtml = stepRunner.driver.pageSource
-                def xml = new XmlSlurper().parseText(searchHtml)
-                def matched = xml.'**'.findAll { (it.text() ==~ /${paramMap.regex}/) || (it.name() ==~ /${paramMap.regex}/) }
-
-                if (matched.size()>0 || (searchHtml ==~ /${paramMap.regex}/)) {
-                    step.result = MadcowStepResult.PASS();
-                } else {
-                    step.result = MadcowStepResult.FAIL("Page doesn't contain text matching regex '${paramMap.regex as String}'");
-                }
-            } else {
-                //search single element's text for regex
-                def searchText = findElement(stepRunner, step).text
-                if (searchText ==~ /${paramMap.regex}/)
-                    step.result = MadcowStepResult.PASS();
-                else
-                    step.result = MadcowStepResult.FAIL("Element doesn't contain text matching regex '${paramMap.regex as String}'");
-            }
-
+        if (StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
+            if (stepRunner.driver.pageSource.contains(step.blade.parameters as String))
+                step.result = MadcowStepResult.PASS();
+            else
+                step.result = MadcowStepResult.FAIL("Page doesn't contain text '${step.blade.parameters as String}'");
         } else {
-
-            if (StringUtils.isEmpty(step.blade.mappingSelectorValue)) {
-                if (stepRunner.driver.pageSource.contains(step.blade.parameters as String))
-                    step.result = MadcowStepResult.PASS();
-                else
-                    step.result = MadcowStepResult.FAIL("Page doesn't contain text '${step.blade.parameters as String}'");
-            } else {
-                if (findElement(stepRunner, step).text.equals(step.blade.parameters as String))
-                    step.result = MadcowStepResult.PASS();
-                else
-                    step.result = MadcowStepResult.FAIL("Element doesn't contain text '${step.blade.parameters as String}'");
-            }
+            if (findElement(stepRunner, step).text.equals(step.blade.parameters as String))
+                step.result = MadcowStepResult.PASS();
+            else
+                step.result = MadcowStepResult.FAIL("Element doesn't contain text '${step.blade.parameters as String}'");
         }
     }
 
@@ -92,12 +61,5 @@ class VerifyText extends WebDriverBladeRunner {
      */
     protected boolean allowEmptyParameterValue() {
         return true;
-    }
-
-    /**
-     * Allow strings or a map with a regex.
-     */
-    protected List<Class> getSupportedParameterTypes() {
-        return [Map.class, String.class];
     }
 }
