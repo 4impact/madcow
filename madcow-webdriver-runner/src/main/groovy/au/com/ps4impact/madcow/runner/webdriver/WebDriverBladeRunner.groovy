@@ -40,7 +40,9 @@ abstract class WebDriverBladeRunner extends BladeRunner {
     /**
      * All WebDriver blade mapping selector types.
      */
-    public static enum BLADE_MAPPING_SELECTOR_TYPE { ID, TEXT, NAME, XPATH, CSS }
+    public static enum BLADE_MAPPING_SELECTOR_TYPE {
+        ID, TEXT, NAME, XPATH, CSS
+    }
 
     /**
      * Called to execute a particular step operation.
@@ -73,7 +75,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
 
         if (this.getSupportedBladeTypes().contains(GrassBlade.GrassBladeType.EQUATION)) {
             if (!this.allowEmptyParameterValue()
-                    && (   (blade.parameters == null)
+                    && ((blade.parameters == null)
                     || (blade.parameters.toString() == "")))
                 throw new GrassParseException("Unsupported grass format. Parameter must have a value supplied.");
 
@@ -81,8 +83,17 @@ abstract class WebDriverBladeRunner extends BladeRunner {
                 boolean validParameterClassType = false;
 
                 for (Class paramType in this.getSupportedParameterTypes()) {
-                    if (paramType.isInstance(blade.parameters))
-                        validParameterClassType = true;
+
+                    if (paramType == Integer.class) {
+                        try {
+                            Integer.valueOf(blade.parameters)
+                            validParameterClassType = true
+                        } catch (Exception) {
+                        }
+                    } else {
+                        if (paramType.isInstance(blade.parameters))
+                            validParameterClassType = true
+                    }
                 }
 
                 if (!validParameterClassType) {
@@ -132,7 +143,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
     protected boolean enforceNullSelectorType() {
         return false;
     }
-    
+
     /**
      * Convert the given collection of blade mapping selector types to a string array.
      */

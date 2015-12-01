@@ -104,14 +104,10 @@ class SelectFieldByIndexTest extends GroovyTestCase {
         }
     }
 
-    void testSelectFieldByIndexWithStringShouldFail() {
-        try {
-            GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = "1"', testCase.grassParser);
-            assertFalse(selectFieldByIndex.isValidBladeToExecute(blade));
-            fail('should always exception');
-        } catch (e) {
-            assertEquals('Unsupported grass format. Only parameters of type \'[Integer]\' are supported.', e.message);
-        }
+    void testSelectFieldByIndexLessThanZeroByHtmlId() {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = -1', testCase.grassParser);
+        verifyValueExecution(blade, false, "Unable to find specified option");
     }
 
     void testMappingSelectorInvalidRequired() {

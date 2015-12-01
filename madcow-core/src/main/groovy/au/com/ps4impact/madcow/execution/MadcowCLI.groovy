@@ -82,6 +82,9 @@ class MadcowCLI {
         }
 
         if (options.mappings) {
+            println("----------------------------------------------------");
+            println("Generating Madcow Mappings");
+            println("----------------------------------------------------");
             new MappingsReference().generate();
             return;
         }
@@ -110,7 +113,7 @@ class MadcowCLI {
                 MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
         } catch (Exception e) {
             println("There was an error running Madcow: ${e.message}");
-            System.exit(1)
+            System.exit(1);
         }
     }
 
