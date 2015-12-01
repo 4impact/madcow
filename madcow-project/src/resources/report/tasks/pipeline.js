@@ -5,9 +5,12 @@ module.exports.banner = ['/*!',
                          ].join('\n');
 
 module.exports.javascriptFiles = [
+  'components/underscore/underscore-min.js',
   'components/jquery/dist/jquery.min.js',
   'components/handlebars/handlebars.runtime.min.js',
-  'components/routie/dist/routie.js',
+  'components/routie/dist/routie.min.js',
+  'components/Chart.js/Chart.min.js',
+  'components/moment/min/moment.min.js',
 
   'dist/assets/js/templates.js',
 

@@ -1,0 +1,35 @@
+
+
+{{#if testCases}}
+<div class="suite-results box">
+
+    <div class="box-header">
+      {{name}}
+    </div>
+    <div class="box-body">
+      <table>
+          <thead>
+
+          </thead>
+          <tbody>
+
+          {{#each testCases}}
+            {{> testcase this}}
+          {{/each}}
+
+          </tbody>
+      </table>
+    </div>
+</div>
+{{/if}}
+
+{{#each suites}}
+  {{> suite this}}
+{{/each}}
+
+<!--<tr class="suite-result-header-row">-->
+    <!--<td colspan="3">-->
+      <!--<h3>{{name}} <p class="subtitle">{{testCases.length}} test(s)</p></h3>-->
+        <!--{{name}}-->
+    <!--</td>-->
+<!--</tr>-->

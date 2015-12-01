@@ -59,4 +59,8 @@
       return new Handlebars.SafeString(step.sequenceNumber);
     }
   });
+
+  Handlebars.registerHelper('stripSuiteName', function(testCaseName) {
+    return new Handlebars.SafeString(testCaseName.substring(testCaseName.lastIndexOf('.') + 1));
+  });
 })(window.Handlebars);

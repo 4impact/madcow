@@ -1,25 +1,38 @@
-<div class="header">
-    Suite
+<div class="header suite-header">
+    <h1>
+        Suite Results
+        <p class="subtitle">{{{overview.timestampFormatted}}}</p>
+    </h1>
+    <div class="header-stats">
+      <div class="header-stats-box chart-wrapper">
+          <canvas class="chart"></canvas>
+      </div>
+      <div class="header-stats-box time-wrapper">
+          {{{overview.totalTime}}}
+      </div>
+    </div>
 </div>
 
 <div class="suite">
 
   <div class="suite-results box">
-    <table>
-        <thead>
+      <div class="box-body">
+        <table>
+            <thead>
 
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
 
-          {{#each suite.testCases}}
-              <tr>
-                  <td>
-                    <a href="#testcase/{{name}}">{{{name}}}</a>
-                  </td>
-                  <td>{{niceStatus status}}</td>
-              </tr>
-          {{/each}}
-        </tbody>
-    </table>
+              {{#each suite.testCases}}
+                {{> testcase this}}
+              {{/each}}
+            </tbody>
+        </table>
+      </div>
   </div>
+
+  {{#each suite.suites}}
+    {{> suite this}}
+  {{/each}}
+
 </div>

@@ -30,4 +30,35 @@ image {
   width: 100%;
   max-width: 100%;
   .box-shadow(0 1px 1px @shadow-color);
+
+  .box-header {
+    border-bottom: 1px solid #f4f4f4;
+    color: #444;
+    display: block;
+    padding: 10px;
+    position: relative;
+
+    h3 {
+      display: inline-block;
+      font-size: 1.3em;
+      margin: 0;
+      padding: 0;
+      line-height: 1.2em;
+    }
+  }
+
+  .box-body {
+    padding: 20px 30px 20px;
+  }
+
+  .box-header, .box-body {
+    &:before, &:after {
+      content: " ";
+      display: table;
+    }
+
+    &:after {
+      clear: both;
+    }
+  }
 }

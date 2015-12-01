@@ -1,4 +1,4 @@
-(function($, window) {
+(function($, window, moment) {
   'use strict';
 
   function DataService() {
@@ -8,7 +8,31 @@
   DataService.prototype = {
 
     setup: function() {
-      this.rootSuite = window.Madcow ? window.Madcow.Results : null;
+
+      if (!window.Madcow) {
+        return;
+      }
+
+      var madcowResults =  window.Madcow.Results;
+
+      this.rootSuite = madcowResults.results;
+
+      var totalTests = madcowResults.passedCount + madcowResults.errorCount + madcowResults.failedCount + madcowResults.skippedCount;
+      this.overview = {
+        total: totalTests,
+        passed: madcowResults.passedCount,
+        passedPercentage: Math.round(madcowResults.passedCount / totalTests * 100),
+        error: madcowResults.errorCount,
+        errorPercentage: Math.round(madcowResults.errorCount / totalTests * 100),
+        failed: madcowResults.failedCount,
+        failedPercentage: Math.round(madcowResults.failedCount / totalTests * 100),
+        skipped: madcowResults.skippedCount,
+        skippedPercentage: Math.round(madcowResults.skippedCount / totalTests * 100),
+        timestamp: new Date(madcowResults.timestamp),
+        timestampFormatted: madcowResults.timestampFormatted,
+        totalTime: moment.duration(parseInt(madcowResults.totalTime), 'seconds').humanize(),
+        madcowVersion: madcowResults.madcowVersion
+      };
 
       // sanitize the results for display
       this.applyAgainstEachTestCase = $.proxy(this.applyAgainstEachTestCase, this);
@@ -86,4 +110,4 @@
 
   window.DataService = new DataService();
 
-})(jQuery, window);
+})(jQuery, window, window.moment);
