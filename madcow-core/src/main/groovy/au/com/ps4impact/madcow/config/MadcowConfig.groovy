@@ -147,11 +147,10 @@ class MadcowConfig implements IJSONSerializable {
     @Override
     Map toJSON() {
 
-        def environment = this.environment.attributes()
+        def environmentMap = this.environment.attributes()
 
-        def environmentChildren = [:];
         this.environment.children()?.each { Node child ->
-            environmentChildren[child.name().toString()] = child.text();
+            environmentMap[child.name().toString()] = child.text();
 
             if (child.children()) {
                 def environmentGrandchildren = [:];
@@ -159,11 +158,9 @@ class MadcowConfig implements IJSONSerializable {
                     environmentGrandchildren[grandchild.name().toString()] = grandchild.text();
                 }
 
-                environmentChildren[child.name().toString()] = environmentGrandchildren;
+                environmentMap[child.name().toString()] = environmentGrandchildren;
             }
         }
-
-        environment['children'] = environmentChildren;
 
         return [
                 threads: this.threads,
@@ -171,7 +168,7 @@ class MadcowConfig implements IJSONSerializable {
                 parallel: this.parallel,
                 stepRunner: this.stepRunner,
                 stepRunnerParameters: this.stepRunnerParameters.clone(),
-                environment: environment
+                environment: environmentMap
         ]
     }
 }
