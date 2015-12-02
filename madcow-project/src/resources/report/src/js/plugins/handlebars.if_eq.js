@@ -12,4 +12,11 @@
     else
       return opts.inverse(this);
   });
+
+  Handlebars.registerHelper('if_object', function(a, opts) {
+    if (typeof(a) === 'object')
+      return opts.fn(this);
+    else
+      return opts.inverse(this);
+  });
 })(window.Handlebars);

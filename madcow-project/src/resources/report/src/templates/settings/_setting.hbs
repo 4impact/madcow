@@ -1,0 +1,33 @@
+    <tr>
+        <td class="setting-key"><h3>{{capitalize (humanize key)}}</h3></td>
+        <td>
+          {{#if_object value}}
+            {{#eachInMap value}}
+
+              <ul>
+                <li>
+                  {{#if_object value}}
+
+                    <b>{{ key }}</b>
+
+                    <ul class="child-setting">
+                        {{#eachInMap value}}
+                        <li>
+                          <b>{{ key }}:</b> {{value}}
+                        </li>
+                        {{/eachInMap}}
+                    </ul>
+                  {{else}}
+                    <b>{{ key }}:</b> {{value}} <br/>
+                  {{/if_object}}
+                </li>
+
+              </ul>
+
+            {{/eachInMap}}
+          {{else}}
+            {{{ value }}}
+          {{/if_object}}
+        </td>
+    </tr>
+

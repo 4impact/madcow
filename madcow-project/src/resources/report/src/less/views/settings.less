@@ -1,5 +1,36 @@
 @import '../variables';
 
 .settings {
-  /* TODO */
+
+  padding: 140px 30px 30px;
+
+  .settings-list {
+
+    table {
+      th, td, tr {
+        line-height: 10px;
+
+        &.setting-key {
+          vertical-align: top;
+        }
+      }
+    }
+
+    ol, ul {
+
+      list-style: none;
+
+      li {
+        margin-left: -40px;
+      }
+
+      &.child-setting {
+        list-style: circle;
+
+        li {
+          margin: 10px;
+        }
+      }
+    }
+  }
 }

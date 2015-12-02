@@ -5,5 +5,19 @@
 </div>
 
 <div class="settings">
-    TODO - dump runtime settings
+
+    <div class="settings-list box">
+        <div class="box-body">
+            <table>
+                <tbody>
+
+                {{#eachInMap config}}
+                  {{> setting this}}
+                {{/eachInMap}}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>

@@ -11,6 +11,7 @@ module.exports.javascriptFiles = [
   'components/routie/dist/routie.min.js',
   'components/Chart.js/Chart.min.js',
   'components/moment/min/moment.min.js',
+  'components/string/dist/string.js',
 
   'dist/assets/js/templates.js',
 

@@ -16,6 +16,9 @@
       var madcowResults =  window.Madcow.Results;
 
       this.rootSuite = madcowResults.results;
+      this.config = madcowResults.config;
+      this.config.environmentName = this.config.environment.name;
+      delete this.config.environment.name;
 
       var totalTests = madcowResults.passedCount + madcowResults.errorCount + madcowResults.failedCount + madcowResults.skippedCount;
       this.overview = {

@@ -7,7 +7,8 @@
     "handlebars": "~2.0.0",
     "routie": "~0.3.2",
     "Chart.js": "~1.0.2",
-    "moment": "~2.10.6"
+    "moment": "~2.10.6",
+    "string": "~3.3.1"
   },
   "private": true,
   "devDependencies": {}

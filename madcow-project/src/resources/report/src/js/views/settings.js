@@ -1,4 +1,4 @@
-(function($, window) {
+(function($, window, dataService) {
   'use strict';
 
   function SettingsView() {
@@ -13,7 +13,9 @@
 
     render: function() {
       $('.sidebar').html(JST.sidebar({}));
-      $('.content').html(JST['settings/settings']({}));
+      $('.content').html(JST['settings/settings']({
+        config: dataService.config
+      }));
 
       window.document.title = 'Madcow Settings';
     }
@@ -21,4 +23,4 @@
 
   window.SettingsView = new SettingsView();
 
-})(jQuery, window);
+})(jQuery, window, window.DataService);
