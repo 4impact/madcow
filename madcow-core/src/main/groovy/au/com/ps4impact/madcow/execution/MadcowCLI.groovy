@@ -110,6 +110,7 @@ class MadcowCLI {
                 MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
         } catch (Exception e) {
             println("There was an error running Madcow: ${e.message}");
+            System.exit(1)
         }
     }
 
