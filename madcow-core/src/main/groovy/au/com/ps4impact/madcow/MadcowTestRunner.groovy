@@ -22,6 +22,7 @@
 package au.com.ps4impact.madcow
 
 import au.com.ps4impact.madcow.config.MadcowConfig
+import au.com.ps4impact.madcow.report.ConsoleReport
 import au.com.ps4impact.madcow.util.ResourceFinder
 import fj.P
 import fj.P2
@@ -53,7 +54,7 @@ class MadcowTestRunner {
 
     protected static final Logger LOG = Logger.getLogger(MadcowTestRunner.class);
 
-    protected static List<IMadcowReport> reporters = [new MadcowExecutionReport(), new JUnitMadcowReport()];
+    protected static List<IMadcowReport> reporters = [new MadcowExecutionReport(), new JUnitMadcowReport(), new ConsoleReport()];
 
     /**
      * Prep the results directory, but removing it
