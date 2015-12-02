@@ -48,7 +48,7 @@ class MappingsReference {
         def resources = mappingsFileHelper.getAllMappingsFromClasspath();
         def mappingsMap = [:]
         def menuMap = [:]
-        LOG.info("Loading all the mappings files to process")
+        LOG.info("Loading all the mappings files to create the reference")
         resources.each { resource ->
             Properties properties = new Properties()
             properties.load(resource.getInputStream())
@@ -82,6 +82,8 @@ class MappingsReference {
         } else {
             LOG.warn("No assets found for Madcow Report...");
         }
+
+        LOG.info("Finished creating madcow mappings reference. Open ${rootOutputDirectory.canonicalPath}/index.html} to view it.")
     }
 
     def appendTreeStructureToMappings(Resource resource, Properties properties, def mappings, boolean generateMenu = false) {
