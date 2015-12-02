@@ -24,6 +24,7 @@ package au.com.ps4impact.madcow.report
 import au.com.ps4impact.madcow.MadcowProject
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.MadcowTestCaseException
+import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.util.ResourceFinder
@@ -191,6 +192,7 @@ class MadcowExecutionReport implements IMadcowReport {
                     totalTime: TIME_SECONDS_FORMAT.format(totalTime > 0 ? (totalTime / 1000) : 0),
                     totalTimeExec: TIME_SECONDS_FORMAT.format(totalTime > 0 ? (testSuite.stopWatch.time / 1000) : 0),
                     madcowVersion: VersionUtil.getVersionString(),
+                    config: MadcowConfig.SHARED_CONFIG.toJSON(),
                     results: testSuite.toJSON()
             ];
 

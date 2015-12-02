@@ -21,6 +21,8 @@
 
 package au.com.ps4impact.madcow.config
 
+import groovy.json.JsonOutput
+
 /**
  * Class for MadcowConfig testing.
  *
@@ -190,6 +192,47 @@ class MadcowConfigTest extends GroovyTestCase {
         } catch (e) {
             assertEquals('Check for exception defaulting to unknown env', "Environment 'UNKNOWN ENV' specified, but not found in config!", e.message);
         }
+    }
 
+    void testJSONOutput() {
+        MadcowConfig config = new MadcowConfig();
+        config.parseConfig("""<?xml version="1.0" encoding="UTF-8"?>
+                                <madcow>
+                                    <execution>
+                                        <runner>
+                                            <type>au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner</type>
+                                            <parameters>
+                                                <!--<browser>Firefox</browser>-->
+                                                <browser>HtmlUnit</browser>
+                                                <windowWidth>1024</windowWidth>
+                                                <windowHeight>768</windowHeight>
+                                            </parameters>
+                                        </runner>
+                                        <env.default>DEV</env.default>
+                                    </execution>
+
+                                    <environments>
+                                        <environment name="DEV">
+                                            <invokeUrl>
+                                                <ADDRESSBOOK>http://madcow.4impact.net.au/testing.html</ADDRESSBOOK>
+                                                <CREATETABLE>http://madcow.4impact.net.au/testing.html</CREATETABLE>
+                                            </invokeUrl>
+                                        </environment>
+                                        <environment name="TEST">
+                                            <invokeUrl>
+                                                <ADDRESSBOOK>http://madcow.4impact.net.au/testing.html</ADDRESSBOOK>
+                                            </invokeUrl>
+                                        </environment>
+                                    </environments>
+                                </madcow>""", null);
+
+        Map json = config.toJSON();
+
+        assertEquals(json['environment']['name'], 'DEV')
+        assertEquals(json['environment']['children'], ['invokeUrl':
+                                                               ['ADDRESSBOOK' : 'http://madcow.4impact.net.au/testing.html',
+                                                                'CREATETABLE' : 'http://madcow.4impact.net.au/testing.html'
+                                                               ]
+        ])
     }
 }

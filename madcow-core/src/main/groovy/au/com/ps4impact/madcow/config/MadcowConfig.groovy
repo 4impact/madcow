@@ -21,6 +21,8 @@
 
 package au.com.ps4impact.madcow.config
 
+import au.com.ps4impact.madcow.report.IJSONSerializable
+
 import javax.xml.XMLConstants
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.SchemaFactory
@@ -34,7 +36,7 @@ import au.com.ps4impact.madcow.MadcowProject
  *
  * @author Gavin Bunney
  */
-class MadcowConfig {
+class MadcowConfig implements IJSONSerializable {
 
     public Node execution;
     public Node environment;
@@ -142,4 +144,34 @@ class MadcowConfig {
             throw new Exception("Environment '$envName' specified, but not found in config!");
     }
 
+    @Override
+    Map toJSON() {
+
+        def environment = this.environment.attributes()
+
+        def environmentChildren = [:];
+        this.environment.children()?.each { Node child ->
+            environmentChildren[child.name().toString()] = child.text();
+
+            if (child.children()) {
+                def environmentGrandchildren = [:];
+                child.children()?.each { Node grandchild ->
+                    environmentGrandchildren[grandchild.name().toString()] = grandchild.text();
+                }
+
+                environmentChildren[child.name().toString()] = environmentGrandchildren;
+            }
+        }
+
+        environment['children'] = environmentChildren;
+
+        return [
+                threads: this.threads,
+                retryCount: this.retryCount,
+                parallel: this.parallel,
+                stepRunner: this.stepRunner,
+                stepRunnerParameters: this.stepRunnerParameters.clone(),
+                environment: environment
+        ]
+    }
 }
