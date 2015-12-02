@@ -83,14 +83,14 @@ class MappingsReference {
             LOG.warn("No assets found for Madcow Report...");
         }
 
-        LOG.info("Finished creating madcow mappings reference. Open ${rootOutputDirectory.canonicalPath}/index.html} to view it.")
+        LOG.info("Finished creating madcow mappings reference. Open ${rootOutputDirectory.canonicalPath}/index.html to view it.")
     }
 
     def appendTreeStructureToMappings(Resource resource, Properties properties, def mappings, boolean generateMenu = false) {
 
         // create initialised nested map structure
         properties.each { prop ->
-            LOG.info("Appending Tree Structure To Mappings for "+prop.key);
+            LOG.debug("Appending Tree Structure To Mappings for "+prop.key);
             def key = removeMappingKeywords(prop.key)
             def keyTokens = key.tokenize('_')
             def keyBuilder
@@ -165,7 +165,7 @@ class MappingsReference {
     def walkTheMappingsMenuStyle(def mappings, def htmlList = [], def i = 1){
 
         mappings.each { key, value ->
-            LOG.info("Walking the Mappings doing menu styling for " + key);
+            LOG.debug("Walking the Mappings doing menu styling for " + key);
             key = deCamelCase(key)
 
             if (value instanceof String || value instanceof GString){
@@ -185,7 +185,7 @@ class MappingsReference {
 
         mappings = mappings.sort()
         mappings.each { key, value ->
-            LOG.info("Walking the Mappings doing table styling for " + key);
+            LOG.debug("Walking the Mappings doing table styling for " + key);
             if (value instanceof String || value instanceof GString) {
 
                 String readableKey = deCamelCase(key)
