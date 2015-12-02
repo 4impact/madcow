@@ -31,7 +31,7 @@ import au.com.ps4impact.madcow.MadcowProject
 import org.apache.log4j.Logger
 
 /**
- * 
+ * Generates an output HTML page for use to understand what a mapping relates to and its structure
  *
  * @author: Gavin Bunney
  */
@@ -48,10 +48,12 @@ class MappingsReference {
         def resources = mappingsFileHelper.getAllMappingsFromClasspath();
         def mappingsMap = [:]
         def menuMap = [:]
+        LOG.info("Loading all the mappings files to process")
         resources.each { resource ->
             Properties properties = new Properties()
             properties.load(resource.getInputStream())
-            mappingsFileHelper.applyMappingNamespace(resource, properties)
+            LOG.info("Creating Mappings for filename "+resource.filename)
+            properties = mappingsFileHelper.applyMappingNamespace(resource, properties)
             appendTreeStructureToMappings(resource, properties, mappingsMap)
             appendTreeStructureToMappings(resource, properties, menuMap, true)
         }
@@ -65,6 +67,7 @@ class MappingsReference {
         def menuTemplateParams = [menuItems : generateMenuItems(menuMap) ]
         def templateEngine = new GStringTemplateEngine()
 
+        LOG.info("Packaging up all the mappings reference HTML pages");
         // process the index page
         def indexHtml = templateEngine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference/index.gtemplate').URL).make(menuTemplateParams);
         new File("${rootOutputDirectory.canonicalPath}/index.html").text = indexHtml.toString();
@@ -85,6 +88,7 @@ class MappingsReference {
 
         // create initialised nested map structure
         properties.each { prop ->
+            LOG.info("Appending Tree Structure To Mappings for "+prop.key);
             def key = removeMappingKeywords(prop.key)
             def keyTokens = key.tokenize('_')
             def keyBuilder
@@ -106,6 +110,7 @@ class MappingsReference {
         // populate map structure using Eval resulting in the executation lines such as
         // mappings.testsite.create = testsite_create_button1
         properties.each { prop ->
+            LOG.debug("Populating map structure using Eval for "+prop.key);
             def key
             if (!generateMenu) {
                 key = removeMappingKeywords(prop.key)
@@ -135,6 +140,7 @@ class MappingsReference {
     }
 
     def generateMenuItems(def menuMap) {
+        LOG.info("Generating Menu Map");
 
         def list = []
         walkTheMappingsMenuStyle(menuMap, list)
@@ -157,7 +163,7 @@ class MappingsReference {
     def walkTheMappingsMenuStyle(def mappings, def htmlList = [], def i = 1){
 
         mappings.each { key, value ->
-
+            LOG.info("Walking the Mappings doing menu styling for " + key);
             key = deCamelCase(key)
 
             if (value instanceof String || value instanceof GString){
@@ -177,7 +183,7 @@ class MappingsReference {
 
         mappings = mappings.sort()
         mappings.each { key, value ->
-
+            LOG.info("Walking the Mappings doing table styling for " + key);
             if (value instanceof String || value instanceof GString) {
 
                 String readableKey = deCamelCase(key)
@@ -199,6 +205,7 @@ class MappingsReference {
         }
 
         if (creatingNewFile) {
+            LOG.debug("Creating output HTML file with filename " + filename);
 
             // make a friendly breadcrumb esq title; testsite_create becomes Testsite >> Create
             def pageTitle = WordUtils.capitalize(filename.replaceAll('_', ' &#187; '))
