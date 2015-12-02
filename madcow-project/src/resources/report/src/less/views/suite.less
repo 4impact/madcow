@@ -1,13 +1,89 @@
 @import '../variables';
 
 .suite {
-  padding: 80px 30px 30px;
+  padding: 140px 30px 30px;
+}
+
+.header.suite-header {
+  .subtitle {
+    font-size: 0.7em;
+    font-weight: 300;
+  }
+}
+
+@chart-size: 50px;
+
+.header-stats {
+  display: inline-block;
+  position: absolute;
+  left: 150px;
+  top: 30px;
+  right: 0;
+
+  height: @chart-size;
+
+  .header-stats-box {
+    width: @chart-size * 2;
+    height: @chart-size;
+
+    &.chart-wrapper {
+      position: absolute;
+      left: 0;
+      width: @chart-size * 8;
+
+      .chart {
+        width: @chart-size * 3;
+        height: @chart-size;
+      }
+    }
+
+    &.time-wrapper {
+      position: absolute;
+      top: 12px;
+      left: 120px;
+      width: 150px;
+    }
+  }
+}
+
+.suite-info {
+  font-size: 0.6em;
+  font-weight: 400;
 }
 
 .suite-results {
-  padding: 30px;
+  margin-bottom: 30px;
+
+  .box-header {
+    padding: 15px;
+    margin-bottom: -20px;
+    font-weight: 600;
+    font-family: @heading-font;
+  }
+
+  .box-body {
+    padding: 30px;
+  }
 
   table {
     border: 0;
+
+    tbody {
+      font-size: 1.2em;
+
+      td:nth-child(2), td:nth-child(3) {
+        text-align: center;
+        width: 120px;
+      }
+
+      td a {
+        color: @black-text;
+      }
+
+      tr:hover {
+        background-color: @table-row-border-color;
+        cursor: pointer;
+      }
+    }
   }
 }

@@ -1,10 +1,13 @@
 {
   "name": "treble",
   "dependencies": {
+    "underscore": "~1.8.3",
     "jquery": "~2.1.1",
     "normalize.css": "~3.0.2",
     "handlebars": "~2.0.0",
-    "routie": "~0.3.2"
+    "routie": "~0.3.2",
+    "Chart.js": "~1.0.2",
+    "moment": "~2.10.6"
   },
   "private": true,
   "devDependencies": {}
