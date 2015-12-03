@@ -92,4 +92,11 @@ class MadcowProject {
     public static String getMADCOW_REPORT_DIRECTORY() {
         return RESULTS_DIRECTORY + '/madcow-report'
     };
+
+    /**
+     * Location of the madcow test case report directory.
+     */
+    public static String getMADCOW_TESTCASE_REPORT_DIRECTORY() {
+        return MADCOW_REPORT_DIRECTORY + '/results'
+    };
 }

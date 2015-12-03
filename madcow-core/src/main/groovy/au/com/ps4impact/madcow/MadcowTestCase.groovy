@@ -169,7 +169,7 @@ class MadcowTestCase implements IJSONSerializable {
     }
 
     public File getResultDirectory() {
-        File resultDir = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/${this.name}");
+        File resultDir = new File("${MadcowProject.MADCOW_TESTCASE_REPORT_DIRECTORY}/${this.name}");
         if (!resultDir.exists())
             resultDir.mkdirs();
 

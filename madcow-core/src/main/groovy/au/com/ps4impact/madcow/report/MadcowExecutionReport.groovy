@@ -25,8 +25,6 @@ import au.com.ps4impact.madcow.MadcowProject
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.MadcowTestCaseException
 import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.util.VersionUtil
 import groovy.json.JsonOutput
@@ -48,62 +46,28 @@ class MadcowExecutionReport implements IMadcowReport {
 
     public void prepareReportDirectory() {
 
-        if (new File(MadcowProject.MADCOW_REPORT_DIRECTORY).exists())
+        if (new File(MadcowProject.MADCOW_REPORT_DIRECTORY).exists()) {
             new File(MadcowProject.MADCOW_REPORT_DIRECTORY).deleteDir();
+        }
 
         new File(MadcowProject.MADCOW_REPORT_DIRECTORY).mkdirs();
+        new File(MadcowProject.MADCOW_TESTCASE_REPORT_DIRECTORY).mkdirs();
+
+        // copy the report assets
+        File assetsDir = new File('./.madcow/report');
+        if (assetsDir.exists()) {
+            LOG.info("Preparing assets for Madcow Report...");
+            FileUtils.copyDirectory(assetsDir, new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/"));
+        } else {
+            LOG.warn("No assets found for Madcow Report...");
+        }
     }
 
     /**
      * Create the result files.
      */
     public void createTestCaseReport(MadcowTestCase testCase) {
-
-        boolean isParseError = false;
-        boolean isFailure = false;
-        boolean isSkipped = false;
-
-        //if this is a exception test case then skip out and report it
-        if (testCase instanceof MadcowTestCaseException) {
-            createErrorTestCaseReport(testCase.name, testCase.error)
-            return
-        }
-
-        if (testCase.ignoreTestCase) {
-            isSkipped = true;
-        }
-
-        testCase.steps.each { step ->
-            if (step.result == null)
-                return;
-
-            if (step.result.parseError())
-                isParseError = true;
-            else if (step.result.failed())
-                isFailure = true;
-        }
-
-        def binding = [ 'testCase'          : testCase,
-                        'testName'          : testCase.name,
-                        'steps'             : testCase.steps,
-                        'isParseError'      : isParseError,
-                        'isFailure'         : isFailure,
-                        'isSkipped'         : isSkipped,
-                        'totalSteps'        : testCase.steps.size(),
-                        'totalTime'         : testCase.getTotalTimeInSeconds() + 's',
-                        'lastExecutedStep'  : testCase.lastExecutedStep,
-                      ];
-
-        try {
-            def engine = new GStringTemplateEngine();
-            def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-madcow-testcase.gtemplate').URL);
-            def template = templateEngine.make(binding);
-            String templateContents = template.toString();
-            def result = new File(testCase.getResultDirectory().path + "/index.html")
-            result.write(templateContents);
-        } catch (e) {
-            LOG.error("Error creating the Madcow Test Case Execution Report for $testCase.name: $e")
-        }
+        // nothing... yet - suite report handles all this now
     }
 
     /**
@@ -113,21 +77,7 @@ class MadcowExecutionReport implements IMadcowReport {
      * @param parsedException the exception that was thrown
      */
     public void createErrorTestCaseReport(String testName, Throwable parsedException) {
-
-        def binding = [ 'testName'          : testName,
-                        'exception'         : parsedException,
-                      ];
-
-        try {
-            def engine = new GStringTemplateEngine();
-            def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'failed-runtime-madcow-testcase.gtemplate').URL);
-            def template = templateEngine.make(binding);
-            String templateContents = template.toString();
-            def result = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/${testName}/index.html");
-            result.write(templateContents);
-        } catch (e) {
-            LOG.error("Error creating the Madcow Error Test Case Execution Report for $testName: $e");
-        }
+        // nothing... yet - suite report handles all this now
     }
 
     /**
@@ -160,27 +110,6 @@ class MadcowExecutionReport implements IMadcowReport {
                 totalTime += testCase.stopWatch.time;
         }
 
-        def binding = [ 'testSuite'         : testSuite,
-                        'passedCount'       : passedCount,
-                        'errorCount'        : errorCount,
-                        'failedCount'       : failedCount,
-                        'skippedCount'      : skippedCount,
-                        'totalTime'         : TIME_SECONDS_FORMAT.format(totalTime > 0 ? (totalTime / 1000) : 0) + 's',
-                        'totalTimeExec'     : TIME_SECONDS_FORMAT.format(totalTime > 0 ? (testSuite.stopWatch.time / 1000) : 0) + 's',
-                      ];
-
-        try {
-            def engine = new GStringTemplateEngine();
-            def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-madcow-testsuite.gtemplate').URL);
-            def template = templateEngine.make(binding);
-            String templateContents = template.toString();
-            def result = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/index.html");
-            result.write(templateContents);
-        } catch (e) {
-            LOG.error("Error creating the Madcow Test Suite Execution Report: $e");
-        }
-
-        // TODO - remove all the stuff above here... since we'll render client side from now on! But for now... write out the javascript until the new world reporting is done
         try {
             def resultJSON = [
                     passedCount: passedCount,
@@ -200,19 +129,10 @@ class MadcowExecutionReport implements IMadcowReport {
             def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'result-js.gtemplate').URL);
             def template = templateEngine.make([resultJSON: JsonOutput.prettyPrint(JsonOutput.toJson(resultJSON))]);
             String templateContents = template.toString();
-            def result = new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/results.js");
+            def result = new File("${MadcowProject.MADCOW_TESTCASE_REPORT_DIRECTORY}/results.js");
             result.write(templateContents);
         } catch (e) {
             LOG.error("Error creating the Madcow Test Suite Results: $e");
-        }
-
-        // copy the assets if they are available
-        File assetsDir = new File('./.madcow/assets');
-        if (assetsDir.exists()) {
-            LOG.info("Copying assets for Madcow Report...");
-            FileUtils.copyDirectory(assetsDir, new File("${MadcowProject.MADCOW_REPORT_DIRECTORY}/.assets"));
-        } else {
-            LOG.warn("No assets found for Madcow Report...");
         }
     }
 }
