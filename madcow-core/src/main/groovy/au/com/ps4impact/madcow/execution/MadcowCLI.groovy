@@ -107,8 +107,15 @@ class MadcowCLI {
                 MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
             }
 
-            File reportFile = new File(MadcowProject.MADCOW_REPORT_DIRECTORY + '/index.html');
-            Desktop.getDesktop().browse(reportFile.toURI());
+            try {
+                File reportFile = new File(MadcowProject.MADCOW_REPORT_DIRECTORY + '/index.html');
+                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(reportFile.toURI());
+                }
+            } catch (Exception ignored) {
+                // failed to open report... oh well
+            }
         } catch (Exception e) {
             println("There was an error running Madcow: ${e.message}");
             System.exit(1);
