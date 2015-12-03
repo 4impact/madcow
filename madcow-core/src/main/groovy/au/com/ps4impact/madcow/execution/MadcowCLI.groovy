@@ -26,7 +26,6 @@ import groovyjarjarcommonscli.ParseException;
 import groovyjarjarcommonscli.Option
 import au.com.ps4impact.madcow.MadcowTestRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.mappings.MappingsReference
 import au.com.ps4impact.madcow.util.VersionUtil
 /**
  * Run Madcow from the Command Line.
@@ -45,7 +44,6 @@ class MadcowCLI {
             s(longOpt: 'suite', args: 1, argName: 'suite-dir', 'Name of the top level directory')
             t(longOpt: 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName: 'testname', 'Comma seperated list of test names')
             a(longOpt: 'all', 'Run all tests')
-            m(longOpt: 'mappings', 'Generate the Mappings Reference files')
             v(longOpt: 'version', 'Show the current version of Madcow')
         }
 
@@ -78,14 +76,6 @@ class MadcowCLI {
             println("----------------------------------------------------");
             println("Madcow Version " + VersionUtil.getVersionString());
             println("----------------------------------------------------");
-            return;
-        }
-
-        if (options.mappings) {
-            println("----------------------------------------------------");
-            println("Generating Madcow Mappings");
-            println("----------------------------------------------------");
-            new MappingsReference().generate();
             return;
         }
 
