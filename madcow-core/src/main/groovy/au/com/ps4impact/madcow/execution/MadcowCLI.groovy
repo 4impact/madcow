@@ -42,14 +42,14 @@ class MadcowCLI {
             e(longOpt: 'env', args: 1, argName: 'env-name', 'Environment to load from the madcow-config.xml')
             c(longOpt: 'conf', args: 1, argName: 'conf-file', 'Name of the configuration file to use, defaults to madcow-config.xml')
             s(longOpt: 'suite', args: 1, argName: 'suite-dir', 'Name of the top level directory')
-            t(longOpt: 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName: 'testname', 'Comma seperated list of test names')
+            t(longOpt: 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName: 'testname', 'Comma separated list of test names')
             a(longOpt: 'all', 'Run all tests')
             v(longOpt: 'version', 'Show the current version of Madcow')
         }
 
         def options = cli.parse(incomingArgs);
 
-        if (options.help || incomingArgs.size() == 0 || (incomingArgs.first() == '')) {
+        if (options.help) {
             cli.usage();
         }
 
@@ -69,8 +69,9 @@ class MadcowCLI {
 
         args = args ?: new String()[];
         def options = parseArgs(args);
-        if (options.help || args.size() == 0 || (args.first() == ''))
+        if (options.help) {
             return;
+        }
 
         if (options.version) {
             println("----------------------------------------------------");

@@ -40,7 +40,7 @@ Options:
  -h,--help               Show usage information
  -m,--mappings           Generate the Mappings Reference files
  -s,--suite <suite-dir>  Name of the top level directory
- -t,--test <testname>    Comma seperated list of test names
+ -t,--test <testname>    Comma separated list of test names
  -v,--version            Show the current version of Madcow
 """;
 
@@ -83,11 +83,6 @@ Options:
         options = MadcowCLI.parseArgs(['--env', 'DEV'].toArray() as String[]);
         assertEquals('DEV', options.e);
         assertEquals('DEV', options.env);
-    }
-
-    void testMappingsReference() {
-        def options = MadcowCLI.parseArgs(['-m'].toArray() as String[]);
-        assertNotNull(options.mappings);
     }
 
     protected void checkHelpOutput(Closure functionCall, String expectedHelpMessage) {
