@@ -1,5 +1,5 @@
 {
-  "name": "treble",
+  "name": "madcow-report",
   "dependencies": {
     "underscore": "~1.8.3",
     "jquery": "~2.1.1",
