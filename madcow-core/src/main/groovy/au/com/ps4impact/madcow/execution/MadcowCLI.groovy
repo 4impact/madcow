@@ -21,12 +21,16 @@
 
 package au.com.ps4impact.madcow.execution
 
+import au.com.ps4impact.madcow.MadcowProject
 import groovy.io.FileType;
 import groovyjarjarcommonscli.ParseException;
 import groovyjarjarcommonscli.Option
 import au.com.ps4impact.madcow.MadcowTestRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.util.VersionUtil
+
+import java.awt.Desktop
+
 /**
  * Run Madcow from the Command Line.
  *
@@ -99,9 +103,12 @@ class MadcowCLI {
                 }
                 println(list)
                 MadcowTestRunner.executeTests(list, MadcowConfig.SHARED_CONFIG);
-            }
-            else
+            } else {
                 MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
+            }
+
+            File reportFile = new File(MadcowProject.MADCOW_REPORT_DIRECTORY + '/index.html');
+            Desktop.getDesktop().browse(reportFile.toURI());
         } catch (Exception e) {
             println("There was an error running Madcow: ${e.message}");
             System.exit(1);
