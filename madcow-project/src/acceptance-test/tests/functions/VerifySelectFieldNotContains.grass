@@ -1,0 +1,7 @@
+testInfo = "This test will check the VerifySelectFieldNotContains function"
+invokeUrl = ADDRESSBOOK
+
+# verify the options do not exit in the select element
+state.VerifySelectFieldNotContains=["UK"]
+state.VerifySelectFieldNotContains=["UK","Queensland"]
+
