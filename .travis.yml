@@ -11,6 +11,8 @@ notifications:
     on_success: change
     on_failure: always
     on_start: never
+  slack:
+    secure: OpHPVXixQOZovw4OFZAeH9UsX8pqxt7RrrfzvlRq0khkV9KNWlOGPXVRLO1PpNlx3lGaLbPntz/XNqJImHRloZRPB40pZgqsoptO7yNGE4QfRwA5oQGt3nrGWbBG5CWLH/C5YvF/kRTV/4Mp/FoMjLFLlFOf0I3TG+EAUN1quTQ=
 deploy:
   provider: releases
   api_key:
