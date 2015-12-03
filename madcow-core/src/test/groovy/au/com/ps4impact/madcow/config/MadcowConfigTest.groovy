@@ -21,8 +21,6 @@
 
 package au.com.ps4impact.madcow.config
 
-import groovy.json.JsonOutput
-
 /**
  * Class for MadcowConfig testing.
  *
@@ -229,10 +227,9 @@ class MadcowConfigTest extends GroovyTestCase {
         Map json = config.toJSON();
 
         assertEquals(json['environment']['name'], 'DEV')
-        assertEquals(json['environment']['children'], ['invokeUrl':
-                                                               ['ADDRESSBOOK' : 'http://madcow.4impact.net.au/testing.html',
-                                                                'CREATETABLE' : 'http://madcow.4impact.net.au/testing.html'
-                                                               ]
-        ])
+        assertEquals(json['environment']['invokeUrl'],
+                                           ['ADDRESSBOOK' : 'http://madcow.4impact.net.au/testing.html',
+                                            'CREATETABLE' : 'http://madcow.4impact.net.au/testing.html'
+                                           ])
     }
 }
