@@ -1,11 +1,7 @@
 {
-  "name": "treble",
+  "name": "madcow-report",
   "version": "0.0.1",
   "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:gavinbunney/treble.git"
-  },
   "dependencies": {
     "handlebars": "^2.0.0"
   },

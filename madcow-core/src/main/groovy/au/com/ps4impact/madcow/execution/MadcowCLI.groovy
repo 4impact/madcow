@@ -21,13 +21,16 @@
 
 package au.com.ps4impact.madcow.execution
 
+import au.com.ps4impact.madcow.MadcowProject
 import groovy.io.FileType;
 import groovyjarjarcommonscli.ParseException;
 import groovyjarjarcommonscli.Option
 import au.com.ps4impact.madcow.MadcowTestRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.mappings.MappingsReference
 import au.com.ps4impact.madcow.util.VersionUtil
+
+import java.awt.Desktop
+
 /**
  * Run Madcow from the Command Line.
  *
@@ -43,15 +46,14 @@ class MadcowCLI {
             e(longOpt: 'env', args: 1, argName: 'env-name', 'Environment to load from the madcow-config.xml')
             c(longOpt: 'conf', args: 1, argName: 'conf-file', 'Name of the configuration file to use, defaults to madcow-config.xml')
             s(longOpt: 'suite', args: 1, argName: 'suite-dir', 'Name of the top level directory')
-            t(longOpt: 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName: 'testname', 'Comma seperated list of test names')
+            t(longOpt: 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName: 'testname', 'Comma separated list of test names')
             a(longOpt: 'all', 'Run all tests')
-            m(longOpt: 'mappings', 'Generate the Mappings Reference files')
             v(longOpt: 'version', 'Show the current version of Madcow')
         }
 
         def options = cli.parse(incomingArgs);
 
-        if (options.help || incomingArgs.size() == 0 || (incomingArgs.first() == '')) {
+        if (options.help) {
             cli.usage();
         }
 
@@ -71,21 +73,14 @@ class MadcowCLI {
 
         args = args ?: new String()[];
         def options = parseArgs(args);
-        if (options.help || args.size() == 0 || (args.first() == ''))
+        if (options.help) {
             return;
+        }
 
         if (options.version) {
             println("----------------------------------------------------");
             println("Madcow Version " + VersionUtil.getVersionString());
             println("----------------------------------------------------");
-            return;
-        }
-
-        if (options.mappings) {
-            println("----------------------------------------------------");
-            println("Generating Madcow Mappings");
-            println("----------------------------------------------------");
-            new MappingsReference().generate();
             return;
         }
 
@@ -108,9 +103,19 @@ class MadcowCLI {
                 }
                 println(list)
                 MadcowTestRunner.executeTests(list, MadcowConfig.SHARED_CONFIG);
-            }
-            else
+            } else {
                 MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
+            }
+
+            try {
+                File reportFile = new File(MadcowProject.MADCOW_REPORT_DIRECTORY + '/index.html');
+                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(reportFile.toURI());
+                }
+            } catch (Exception ignored) {
+                // failed to open report... oh well
+            }
         } catch (Exception e) {
             println("There was an error running Madcow: ${e.message}");
             System.exit(1);
