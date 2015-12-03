@@ -20,4 +20,4 @@ deploy:
   file: madcow-project/target/madcow-project-2.0-SNAPSHOT-install.zip
   skip_cleanup: true
   on:
-    repo: 4impact/madcow
+    tags: true
