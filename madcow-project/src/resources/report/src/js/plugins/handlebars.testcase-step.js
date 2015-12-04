@@ -43,6 +43,9 @@
       case 'NO_OPERATION':
         translated = 'Skipped';
         break;
+      case 'PARSE_ERROR':
+        translated = 'Parse Error';
+        break;
       default:
         translated = status;
         break;
