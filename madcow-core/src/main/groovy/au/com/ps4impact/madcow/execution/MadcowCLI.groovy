@@ -29,7 +29,7 @@ import au.com.ps4impact.madcow.MadcowTestRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.util.VersionUtil
 import au.com.ps4impact.madcow.mappings.*
-import groovy.json.*
+
 import java.awt.Desktop
 
 /**
@@ -90,15 +90,13 @@ class MadcowCLI {
             println("----------------------------------------------------");
             println("Madcow Mappings Reference ");
             println("----------------------------------------------------");
-//            new MappingsFileHelper.applyMappingNamespace();
             def MappingsFileHelper mappingsFileHelper = new MappingsFileHelper();
             def resources = mappingsFileHelper.getAllMappingsFromClasspath();
             resources.each { resource ->
-                MadcowMappingsReference propList = new MadcowMappingsReference()
+                MappingsReferenceWrapper propList = new MappingsReferenceWrapper()
                 propList.load(resource.getInputStream())
                 propList = mappingsFileHelper.applyMappingNamespace(resource, propList)
-                //def json = new JsonBuilder( propList ).toPrettyString()
-                println(propList.toJSON());
+                propList.toJSON();
             }
             return;
         }

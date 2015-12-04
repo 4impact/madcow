@@ -20,16 +20,23 @@
  */
 
 package au.com.ps4impact.madcow.mappings
+
+import au.com.ps4impact.madcow.MadcowProject
+import au.com.ps4impact.madcow.util.ResourceFinder
+import groovy.json.JsonOutput
+import groovy.text.GStringTemplateEngine
 import org.apache.commons.lang3.StringUtils
 import au.com.ps4impact.madcow.report.IJSONSerializable
+import org.apache.log4j.Logger
 
 /**
  * Mappings Reference for output to JSON and use in reference html
  *
  * @author Tom Romano
  */
-class MadcowMappingsReference extends Properties implements IJSONSerializable {
+class MappingsReferenceWrapper extends Properties implements IJSONSerializable {
 
+    protected static final Logger LOG = Logger.getLogger(MappingsReferenceWrapper.class);
 
     def getMappingType(String key){
         return StringUtils.substringAfter(key, '.').toUpperCase()?:"ID";
@@ -65,21 +72,30 @@ class MadcowMappingsReference extends Properties implements IJSONSerializable {
 
     @Override
     Map toJSON() {
+        try{
+            def referenceJSON = [:];
+            this.each { key, value ->
+                referenceJSON.put(key,
+                    [
+                            value: value,
+                            type: getMappingType(key as String)?:"ID",
+                            parents: getMappingParents(key as String),
+                            shortName: getMappingShortName(key as String),
+                            fullName: getMappingFullName(key as String),
+                            prettyName: getMappingPrettyName(key as String)
+                    ]
+                );
+            }
 
-        def output = [:];
-        this.each { key, value ->
-            output.put(key,
-                [
-                        value: value,
-                        type: getMappingType(key as String)?:"ID",
-                        parents: getMappingParents(key as String),
-                        shortName: getMappingShortName(key as String),
-                        fullName: getMappingFullName(key as String),
-                        prettyName: getMappingPrettyName(key as String)
-                ]
-            );
+            def engine = new GStringTemplateEngine();
+            def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference-js.gtemplate').URL);
+            def template = templateEngine.make([referenceJSON: JsonOutput.prettyPrint(JsonOutput.toJson(referenceJSON))]);
+            String templateContents = template.toString();
+            def result = new File("${MadcowProject.MAPPINGS_REFERENCE_DIRECTORY}/reference.js");
+            result.write(templateContents);
+        } catch (e) {
+            LOG.error("Error creating the Madcow Mappings Reference: $e");
         }
-        return output
     }
 
 }
