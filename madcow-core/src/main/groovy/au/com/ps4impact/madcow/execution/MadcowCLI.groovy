@@ -22,7 +22,10 @@
 package au.com.ps4impact.madcow.execution
 
 import au.com.ps4impact.madcow.MadcowProject
-import groovy.io.FileType;
+import au.com.ps4impact.madcow.util.ResourceFinder
+import groovy.io.FileType
+import groovy.json.JsonOutput
+import groovy.text.GStringTemplateEngine;
 import groovyjarjarcommonscli.ParseException;
 import groovyjarjarcommonscli.Option
 import au.com.ps4impact.madcow.MadcowTestRunner
@@ -92,12 +95,25 @@ class MadcowCLI {
             println("----------------------------------------------------");
             def MappingsFileHelper mappingsFileHelper = new MappingsFileHelper();
             def resources = mappingsFileHelper.getAllMappingsFromClasspath();
+            Properties propList = new Properties()
             resources.each { resource ->
-                MappingsReferenceWrapper propList = new MappingsReferenceWrapper()
                 propList.load(resource.getInputStream())
                 propList = mappingsFileHelper.applyMappingNamespace(resource, propList)
-                propList.toJSON();
             }
+
+            def referenceJSON = (propList as MappingsReferenceWrapper).toJSON();
+
+            try{
+                def engine = new GStringTemplateEngine();
+                def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference-js.gtemplate').URL);
+                def template = templateEngine.make([referenceJSON: JsonOutput.prettyPrint(JsonOutput.toJson(referenceJSON))]);
+                String templateContents = template.toString();
+                def result = new File("${MadcowProject.MAPPINGS_REFERENCE_DIRECTORY}/reference.js");
+                result.write(templateContents);
+            } catch (e) {
+                println("Error creating the Madcow Mappings Reference: $e");
+            }
+
             return;
         }
 

@@ -72,30 +72,21 @@ class MappingsReferenceWrapper extends Properties implements IJSONSerializable {
 
     @Override
     Map toJSON() {
-        try{
-            def referenceJSON = [:];
-            this.each { key, value ->
-                referenceJSON.put(key,
-                    [
-                            value: value,
-                            type: getMappingType(key as String)?:"ID",
-                            parents: getMappingParents(key as String),
-                            shortName: getMappingShortName(key as String),
-                            fullName: getMappingFullName(key as String),
-                            prettyName: getMappingPrettyName(key as String)
-                    ]
-                );
-            }
-
-            def engine = new GStringTemplateEngine();
-            def templateEngine = engine.createTemplate(ResourceFinder.locateResourceOnClasspath(this.class.classLoader, 'reference-js.gtemplate').URL);
-            def template = templateEngine.make([referenceJSON: JsonOutput.prettyPrint(JsonOutput.toJson(referenceJSON))]);
-            String templateContents = template.toString();
-            def result = new File("${MadcowProject.MAPPINGS_REFERENCE_DIRECTORY}/reference.js");
-            result.write(templateContents);
-        } catch (e) {
-            LOG.error("Error creating the Madcow Mappings Reference: $e");
+        def referenceJSON = [:];
+        this.each { key, value ->
+            referenceJSON.put(key,
+                [
+                        value: value,
+                        type: getMappingType(key as String)?:"ID",
+                        parents: getMappingParents(key as String),
+                        shortName: getMappingShortName(key as String),
+                        fullName: getMappingFullName(key as String),
+                        prettyName: getMappingPrettyName(key as String)
+                ]
+            );
         }
+
+        return referenceJSON
     }
 
 }
