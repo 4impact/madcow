@@ -28,7 +28,8 @@ import groovyjarjarcommonscli.Option
 import au.com.ps4impact.madcow.MadcowTestRunner
 import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.util.VersionUtil
-
+import au.com.ps4impact.madcow.mappings.*
+import groovy.json.*
 import java.awt.Desktop
 
 /**
@@ -45,6 +46,7 @@ class MadcowCLI {
             h(longOpt: 'help', 'Show usage information')
             e(longOpt: 'env', args: 1, argName: 'env-name', 'Environment to load from the madcow-config.xml')
             c(longOpt: 'conf', args: 1, argName: 'conf-file', 'Name of the configuration file to use, defaults to madcow-config.xml')
+            m(longOpt: 'mappings', 'Creates the Mappings Reference')
             s(longOpt: 'suite', args: 1, argName: 'suite-dir', 'Name of the top level directory')
             t(longOpt: 'test', args: Option.UNLIMITED_VALUES, valueSeparator: ',', argName: 'testname', 'Comma separated list of test names')
             a(longOpt: 'all', 'Run all tests')
@@ -81,6 +83,23 @@ class MadcowCLI {
             println("----------------------------------------------------");
             println("Madcow Version " + VersionUtil.getVersionString());
             println("----------------------------------------------------");
+            return;
+        }
+
+        if (options.mappings){
+            println("----------------------------------------------------");
+            println("Madcow Mappings Reference ");
+            println("----------------------------------------------------");
+//            new MappingsFileHelper.applyMappingNamespace();
+            def MappingsFileHelper mappingsFileHelper = new MappingsFileHelper();
+            def resources = mappingsFileHelper.getAllMappingsFromClasspath();
+            resources.each { resource ->
+                MadcowMappingsReference propList = new MadcowMappingsReference()
+                propList.load(resource.getInputStream())
+                propList = mappingsFileHelper.applyMappingNamespace(resource, propList)
+                //def json = new JsonBuilder( propList ).toPrettyString()
+                println(propList.toJSON());
+            }
             return;
         }
 
