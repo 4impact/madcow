@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.runner.webdriver
 
+import au.com.ps4impact.madcow.runner.webdriver.driver.phantomjs.PhantomJSInstaller
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import org.apache.commons.io.FileUtils
@@ -146,7 +147,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
 
                 case WebDriverType.PHANTOMJS:
-                    DesiredCapabilities caps = new DesiredCapabilities();
+                    File phantomJSInstallation = PhantomJSInstaller.unpack();
+
+                    DesiredCapabilities caps = DesiredCapabilities.phantomjs();
+                    caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomJSInstallation.getAbsolutePath());
                     caps.setJavascriptEnabled(true);
                     caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
                             [
@@ -425,16 +429,22 @@ class WebDriverStepRunner extends MadcowStepRunner {
             return;
         }
 
-        File screenShot
-        if (!(driver.wrappedDriver instanceof TakesScreenshot)) {
-            WebDriver augmentedDriver = new Augmenter().augment(driver.wrappedDriver as RemoteWebDriver)
-            screenShot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE)
-        } else {
-            screenShot = ((TakesScreenshot) driver.wrappedDriver as RemoteWebDriver).getScreenshotAs(OutputType.FILE)
-        }
+        try {
+            File screenShot
+            if (!(driver.wrappedDriver instanceof TakesScreenshot)) {
+                WebDriver augmentedDriver = new Augmenter().augment(driver.wrappedDriver as RemoteWebDriver)
+                screenShot = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE)
+            } else {
+                screenShot = ((TakesScreenshot) driver.wrappedDriver as RemoteWebDriver).getScreenshotAs(OutputType.FILE)
+            }
 
-        FileUtils.moveFile(screenShot, new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.png"))
-        step.result.hasScreenshot = true;
+            File destinationFile = new File("${step.testCase.resultDirectory.path}/${step.sequenceNumberString}.png");
+            FileUtils.deleteQuietly(destinationFile);
+            FileUtils.moveFile(screenShot, destinationFile);
+            step.result.hasScreenshot = true;
+        } catch (Exception e) {
+            step.testCase.logWarn("Failed to take screenshot: ${e}");
+        }
     }
 
     /**
