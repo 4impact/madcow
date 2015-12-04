@@ -1,6 +1,6 @@
 /*!
  * madcow-report - v0.0.1
- * 2015-12-03
+ * 2015-12-04
  */
 
 //     Underscore.js 1.8.3
@@ -1400,7 +1400,7 @@ Handlebars.registerPartial("step", Handlebars.template({"1":function(depth0,help
   if (stack1 != null) { buffer += stack1; }
   return buffer;
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data,depths) {
-  var stack1, lambda=this.lambda, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<tr class=\"step-";
+  var stack1, lambda=this.lambda, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<tr class=\"step-action step-";
   stack1 = lambda(((stack1 = (depth0 != null ? depth0.result : depth0)) != null ? stack1.status : stack1), depth0);
   if (stack1 != null) { buffer += stack1; }
   buffer += " ";
@@ -1422,13 +1422,13 @@ Handlebars.registerPartial("step", Handlebars.template({"1":function(depth0,help
   buffer += "\n";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.result : depth0)) != null ? stack1.hasScreenshot : stack1), {"name":"if","hash":{},"fn":this.program(9, data, depths),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "        </div>\n    </td>\n\n    <td>";
+  buffer += "        </div>\n    </td>\n\n    <td class=\"step-time\">";
   stack1 = ((helpers.if_noteq || (depth0 && depth0.if_noteq) || helperMissing).call(depth0, ((stack1 = (depth0 != null ? depth0.result : depth0)) != null ? stack1.status : stack1), "NOT_YET_EXECUTED", {"name":"if_noteq","hash":{},"fn":this.program(11, data, depths),"inverse":this.noop,"data":data}));
   if (stack1 != null) { buffer += stack1; }
-  buffer += "    </td>\n\n    <td>";
+  buffer += "    </td>\n\n    <td class=\"step-blade\">";
   stack1 = lambda(((stack1 = (depth0 != null ? depth0.blade : depth0)) != null ? stack1.line : stack1), depth0);
   if (stack1 != null) { buffer += stack1; }
-  buffer += "</td>\n\n    <td>";
+  buffer += "</td>\n\n    <td class=\"step-message\">";
   stack1 = lambda(((stack1 = (depth0 != null ? depth0.result : depth0)) != null ? stack1.message : stack1), depth0);
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n";
@@ -1678,6 +1678,9 @@ this["JST"]["testcase/testcase"] = Handlebars.template({"1":function(depth0,help
       case 'NO_OPERATION':
         translated = 'Skipped';
         break;
+      case 'PARSE_ERROR':
+        translated = 'Parse Error';
+        break;
       default:
         translated = status;
         break;
@@ -1699,47 +1702,6 @@ this["JST"]["testcase/testcase"] = Handlebars.template({"1":function(depth0,help
     return new Handlebars.SafeString(testCaseName.substring(testCaseName.lastIndexOf('.') + 1));
   });
 })(window.Handlebars);
-(function($, window) {
-  'use strict';
-
-  var pluginName = 'hello';
-
-  function Hello(el) {
-    this.$el = $(el);
-    this.setup();
-  }
-
-  Hello.prototype = {
-
-    setup: function() {
-      this.$el.off('click.hello').on('click.hello', $.proxy(function() {
-        console.log('Hello!');
-      }, this));
-    }
-  };
-
-  /**
-   * Plugin wrapper to ensure 1 instance per element.
-   */
-  $.fn.hello = function() {
-
-    var instance = null;
-    this.each(function() {
-      instance = $.data(this, 'plugin_' + pluginName);
-      if (!instance) {
-        instance = new Hello(this);
-        $.data(this, 'plugin_' + pluginName, instance);
-      } else {
-        instance.setup();
-      }
-    });
-
-    return instance;
-  };
-
-  window.Hello = Hello;
-
-})(jQuery, window);
 (function($, window, moment) {
   'use strict';
 

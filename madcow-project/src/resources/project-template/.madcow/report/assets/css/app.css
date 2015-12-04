@@ -576,6 +576,8 @@ button {
   font-size: 0.8em;
   line-height: 0.8em;
   padding: 5px 10px 10px;
+  margin-left: 0;
+  margin-right: 5px;
 }
 a.btn:focus,
 button:focus {
@@ -689,7 +691,8 @@ table tbody tr {
 .label.label-NO_OPERATION {
   background-color: #4caf50;
 }
-.label.label-FAIL {
+.label.label-FAIL,
+.label.label-PARSE_ERROR {
   background-color: #f44336;
 }
 .label.label-NOT_YET_EXECUTED {
@@ -775,7 +778,8 @@ table tbody tr {
 .header.header-PASS .subtitle {
   color: #4caf50;
 }
-.header.header-FAIL .subtitle {
+.header.header-FAIL .subtitle,
+.header.header-PARSE_ERROR .subtitle {
   color: #f44336;
 }
 .header.header-NOT_YET_EXECUTED .subtitle,
@@ -823,10 +827,22 @@ footer {
   padding: 30px;
 }
 .testcase-results table {
+  max-width: 100%;
   border: 0;
 }
 .testcase-results table th:first-child {
   width: 30px;
+}
+.testcase-results table th:nth-child(2) {
+  width: 220px;
+}
+.testcase-results table td.step-message {
+  white-space: -moz-pre-wrap !important;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: -webkit-pre-wrap;
+  word-break: break-all;
+  white-space: normal;
 }
 .testcase-results .testInfo {
   background-color: #f4f5f7;
@@ -834,14 +850,16 @@ footer {
 .testcase-results .step-PASS .btn.btn-info,
 .testcase-results .step-NO_OPERATION .btn.btn-info,
 .testcase-results .step-FAIL .btn.btn-info,
-.testcase-results .step-NOT_YET_EXECUTED .btn.btn-info {
+.testcase-results .step-NOT_YET_EXECUTED .btn.btn-info,
+.testcase-results .step-PARSE_ERROR .btn.btn-info {
   background-color: #607d8b;
 }
 .testcase-results .step-PASS .btn,
 .testcase-results .step-NO_OPERATION .btn {
   background-color: #4caf50;
 }
-.testcase-results .step-FAIL .btn {
+.testcase-results .step-FAIL .btn,
+.testcase-results .step-PARSE_ERROR .btn {
   background-color: #f44336;
 }
 .testcase-results .step-NOT_YET_EXECUTED .btn {

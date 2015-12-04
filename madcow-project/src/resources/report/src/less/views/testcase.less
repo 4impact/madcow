@@ -21,6 +21,10 @@
       width: 30px;
     }
 
+    th:nth-child(2) {
+      width: 220px;
+    }
+
     td.step-message {
       white-space: -moz-pre-wrap !important;
       white-space: pre-wrap;
@@ -35,7 +39,7 @@
     background-color: @neutral-lightest;
   }
 
-  .step-PASS, .step-NO_OPERATION, .step-FAIL, .step-NOT_YET_EXECUTED {
+  .step-PASS, .step-NO_OPERATION, .step-FAIL, .step-NOT_YET_EXECUTED, .step-PARSE_ERROR {
     .btn.btn-info {
       background-color: @btn-primary-background;
     }
@@ -47,7 +51,7 @@
     }
   }
 
-  .step-FAIL {
+  .step-FAIL, .step-PARSE_ERROR {
     .btn {
       background-color: @failed;
     }
