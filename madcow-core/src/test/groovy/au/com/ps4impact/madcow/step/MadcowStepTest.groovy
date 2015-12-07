@@ -58,6 +58,6 @@ class MadcowStepTest extends GroovyTestCase {
     }
 
     void testToString() {
-        assertToString(new MadcowStep(new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig()), null, null), "[testCase: StepTest, blade: null, parent: null, children: []]") ;
+        assertToString(new MadcowStep(new MadcowTestCase('StepTest', MockMadcowConfig.getMadcowConfig()), null, null), "[testCase: StepTest, blade: null, children: []]") ;
     }
 }

@@ -14,10 +14,24 @@
   padding: 30px;
 
   table {
+    max-width: 100%;
     border: 0;
 
     th:first-child {
       width: 30px;
+    }
+
+    th:nth-child(2) {
+      width: 120px;
+    }
+
+    td.step-message, td.step-blade {
+      white-space: -moz-pre-wrap !important;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      white-space: -webkit-pre-wrap;
+      word-break: break-all;
+      white-space: normal;
     }
   }
 
@@ -25,26 +39,26 @@
     background-color: @neutral-lightest;
   }
 
-  .step-PASS, .step-NO_OPERATION, .step-FAIL, .step-NOT_YET_EXECUTED {
-    .btn.btn-info {
+  .step-PASS, .step-NO_OPERATION, .step-FAIL, .step-NOT_YET_EXECUTED, .step-PARSE_ERROR {
+    .icon-btn.icon-btn-info {
       background-color: @btn-primary-background;
     }
   }
 
   .step-PASS, .step-NO_OPERATION {
-    .btn {
+    .icon-btn {
       background-color: @passed;
     }
   }
 
-  .step-FAIL {
-    .btn {
+  .step-FAIL, .step-PARSE_ERROR {
+    .icon-btn {
       background-color: @failed;
     }
   }
 
   .step-NOT_YET_EXECUTED {
-    .btn {
+    .icon-btn {
       background-color: @skipped;
     }
   }

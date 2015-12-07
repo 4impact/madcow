@@ -4,7 +4,7 @@
 
     if (step.result.status === 'FAIL') {
       return new Handlebars.SafeString(
-             '<a href="#" class="btn linkless">' +
+             '<a href="#" class="icon-btn linkless">' +
              '<i class="fa fa-times"></i>' +
              '</a>');
     }
@@ -13,7 +13,7 @@
       return new Handlebars.SafeString('');
     }
 
-    var icon = '<a href="#" class="btn linkless">';
+    var icon = '<a href="#" class="icon-btn linkless">';
 
     if (step.blade.operation === 'testInfo') {
       icon += '<i class="fa fa-sliders"></i>';
@@ -42,6 +42,9 @@
         break;
       case 'NO_OPERATION':
         translated = 'Skipped';
+        break;
+      case 'PARSE_ERROR':
+        translated = 'Parse Error';
         break;
       default:
         translated = status;

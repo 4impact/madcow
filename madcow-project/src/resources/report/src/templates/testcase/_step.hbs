@@ -1,4 +1,4 @@
-<tr class="step-{{{result.status}}} {{#if parentStep}}has-parent{{/if}} {{#if steps}}is-parent{{/if}} {{#if @last}}last{{/if}}">
+<tr class="step-action step-{{{result.status}}} {{#if parentStep}}has-parent{{/if}} {{#if steps}}is-parent{{/if}} {{#if @last}}last{{/if}}">
     <td>
         {{formatSequenceNumber this parentStepSequenceNumber}}
     </td>
@@ -8,29 +8,29 @@
           {{stepKeyIcon this}}
 
           {{#if result.hasResultFile}}
-            <a class="btn btn-info" href="results/{{{testCase.name}}}/{{{sequenceNumberString}}}.html">
+            <a class="icon-btn icon-btn-info" href="results/{{{testCase.name}}}/{{{sequenceNumberString}}}.html">
               <i class="fa fa-download"></i>
             </a>
           {{/if}}
 
           {{#if result.hasScreenshot}}
-            <a class="btn btn-info" href="results/{{{testCase.name}}}/{{{sequenceNumberString}}}.png">
+            <a class="icon-btn icon-btn-info" href="results/{{{testCase.name}}}/{{{sequenceNumberString}}}.png">
               <i class="fa fa-camera"></i>
             </a>
           {{/if}}
         </div>
     </td>
 
-    <td>{{#if_noteq result.status "NOT_YET_EXECUTED"}}
+    <td class="step-time">{{#if_noteq result.status "NOT_YET_EXECUTED"}}
       {{#if time}}
         {{{ time }}}s
       {{/if}}
       {{/if_noteq}}
     </td>
 
-    <td>{{{ blade.line }}}</td>
+    <td class="step-blade">{{{ blade.line }}}</td>
 
-    <td>{{{ result.message }}}
+    <td class="step-message">{{{ result.message }}}
         {{#if result.detailMessage}}
           <br/><br/>{{{ result.detailMessage }}}
         {{/if}}

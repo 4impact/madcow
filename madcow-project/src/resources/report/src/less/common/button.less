@@ -10,13 +10,32 @@ a.btn, button {
   font-size: 0.8em;
   line-height: 0.8em;
   padding: 5px 10px 10px;
+  margin-left: 0;
+  margin-right: 5px;
 
   &:focus {
     outline: 0;
   }
+}
 
-  &.linkless {
-    pointer-events: none;
-    cursor: default;
-  }
+.linkless {
+  pointer-events: none;
+  cursor: default;
+}
+
+@icon-size: 30px;
+
+a.icon-btn {
+  display: inline-block;
+  font-size: @icon-size / 2;
+  line-height: @icon-size;
+  color: white;
+  width: @icon-size;
+  height: @icon-size;
+  text-align: center;
+  vertical-align: middle;
+
+  border: 0 solid transparent;
+  border-radius: 5px;
+  background-color: @btn-primary-background;
 }

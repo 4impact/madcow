@@ -93,7 +93,7 @@ class MadcowStep implements IJSONSerializable {
     }
 
     String toString() {
-        return "[testCase: $testCase, blade: $blade, parent: $parent, children: $children]";
+        return "[testCase: $testCase, blade: $blade, children: $children]";
     }
 
     @Override

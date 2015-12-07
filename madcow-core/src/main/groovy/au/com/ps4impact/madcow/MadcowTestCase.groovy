@@ -146,6 +146,8 @@ class MadcowTestCase implements IJSONSerializable {
      */
     protected void executeStep(MadcowStep step) {
 
+        this.logDebug("Executing step: ${step}");
+
         // only execute blades that need executing
         if (step.blade.executable()) {
             step.stopWatch.reset();

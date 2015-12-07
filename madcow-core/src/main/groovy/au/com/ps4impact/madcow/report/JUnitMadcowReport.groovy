@@ -71,7 +71,7 @@ class JUnitMadcowReport implements IMadcowReport {
 
         try {
             def binding = [ 'errorCount'        : testCase instanceof MadcowTestCaseException ? '1' : '0',
-                            'failureCount'      : testCase.lastExecutedStep.result.failed() ? '1' : '0',
+                            'failureCount'      : testCase.lastExecutedStep?.result?.failed() ? '1' : '0',
                             'skipCount'         : testCase.ignoreTestCase ? '1' : '0', //not used as ant-junit not supported
                             'hostname'          : StringEscapeUtils.escapeXml(InetAddress.localHost.hostName),
                             'testName'          : StringEscapeUtils.escapeXml(testCase.name),
