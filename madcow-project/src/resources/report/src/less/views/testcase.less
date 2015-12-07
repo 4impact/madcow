@@ -22,10 +22,10 @@
     }
 
     th:nth-child(2) {
-      width: 220px;
+      width: 120px;
     }
 
-    td.step-message {
+    td.step-message, td.step-blade {
       white-space: -moz-pre-wrap !important;
       white-space: pre-wrap;
       word-wrap: break-word;
@@ -40,25 +40,25 @@
   }
 
   .step-PASS, .step-NO_OPERATION, .step-FAIL, .step-NOT_YET_EXECUTED, .step-PARSE_ERROR {
-    .btn.btn-info {
+    .icon-btn.icon-btn-info {
       background-color: @btn-primary-background;
     }
   }
 
   .step-PASS, .step-NO_OPERATION {
-    .btn {
+    .icon-btn {
       background-color: @passed;
     }
   }
 
   .step-FAIL, .step-PARSE_ERROR {
-    .btn {
+    .icon-btn {
       background-color: @failed;
     }
   }
 
   .step-NOT_YET_EXECUTED {
-    .btn {
+    .icon-btn {
       background-color: @skipped;
     }
   }

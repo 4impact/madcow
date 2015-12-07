@@ -8,13 +8,13 @@
           {{stepKeyIcon this}}
 
           {{#if result.hasResultFile}}
-            <a class="btn btn-info" href="results/{{{testCase.name}}}/{{{sequenceNumberString}}}.html">
+            <a class="icon-btn icon-btn-info" href="results/{{{testCase.name}}}/{{{sequenceNumberString}}}.html">
               <i class="fa fa-download"></i>
             </a>
           {{/if}}
 
           {{#if result.hasScreenshot}}
-            <a class="btn btn-info" href="results/{{{testCase.name}}}/{{{sequenceNumberString}}}.png">
+            <a class="icon-btn icon-btn-info" href="results/{{{testCase.name}}}/{{{sequenceNumberString}}}.png">
               <i class="fa fa-camera"></i>
             </a>
           {{/if}}
