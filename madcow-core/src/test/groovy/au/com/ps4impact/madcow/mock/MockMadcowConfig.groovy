@@ -32,6 +32,7 @@ class MockMadcowConfig {
 
     static MadcowConfig getMadcowConfig(boolean alwaysPass = true, String stepRunner = 'au.com.ps4impact.madcow.mock.MockMadcowStepRunner') {
         def config = new MadcowConfig();
+        config.parallel = false;
         config.stepRunner = stepRunner;
         config.stepRunnerParameters = ['alwaysPass' : alwaysPass ? 'true' : 'false',
                                        'throwsException': 'false' ];
@@ -40,6 +41,7 @@ class MockMadcowConfig {
 
     static MadcowConfig getMadcowConfig(boolean alwaysPass, boolean throwsException, String stepRunner = 'au.com.ps4impact.madcow.mock.MockMadcowStepRunner') {
         def config = new MadcowConfig();
+        config.parallel = false;
         config.stepRunner = stepRunner;
         config.stepRunnerParameters = ['alwaysPass' : alwaysPass ? 'true' : 'false',
                                        'throwsException' : throwsException ? 'true' : 'false'];

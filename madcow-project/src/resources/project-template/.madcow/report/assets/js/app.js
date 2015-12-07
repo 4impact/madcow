@@ -1,6 +1,6 @@
 /*!
  * madcow-report - v0.0.1
- * 2015-12-04
+ * 2015-12-07
  */
 
 //     Underscore.js 1.8.3
@@ -1355,7 +1355,7 @@ Handlebars.registerPartial("step", Handlebars.template({"1":function(depth0,help
   },"5":function(depth0,helpers,partials,data) {
   return "last";
   },"7":function(depth0,helpers,partials,data) {
-  var stack1, helper, lambda=this.lambda, functionType="function", helperMissing=helpers.helperMissing, buffer = "            <a class=\"btn btn-info\" href=\"results/";
+  var stack1, helper, lambda=this.lambda, functionType="function", helperMissing=helpers.helperMissing, buffer = "            <a class=\"icon-btn icon-btn-info\" href=\"results/";
   stack1 = lambda(((stack1 = (depth0 != null ? depth0.testCase : depth0)) != null ? stack1.name : stack1), depth0);
   if (stack1 != null) { buffer += stack1; }
   buffer += "/";
@@ -1363,7 +1363,7 @@ Handlebars.registerPartial("step", Handlebars.template({"1":function(depth0,help
   if (stack1 != null) { buffer += stack1; }
   return buffer + ".html\">\n              <i class=\"fa fa-download\"></i>\n            </a>\n";
 },"9":function(depth0,helpers,partials,data) {
-  var stack1, helper, lambda=this.lambda, functionType="function", helperMissing=helpers.helperMissing, buffer = "            <a class=\"btn btn-info\" href=\"results/";
+  var stack1, helper, lambda=this.lambda, functionType="function", helperMissing=helpers.helperMissing, buffer = "            <a class=\"icon-btn icon-btn-info\" href=\"results/";
   stack1 = lambda(((stack1 = (depth0 != null ? depth0.testCase : depth0)) != null ? stack1.name : stack1), depth0);
   if (stack1 != null) { buffer += stack1; }
   buffer += "/";
@@ -1506,9 +1506,9 @@ this["JST"]["testcase/testcase"] = Handlebars.template({"1":function(depth0,help
   return buffer + "            </ol>\n";
 },"4":function(depth0,helpers,partials,data) {
   var lambda=this.lambda, escapeExpression=this.escapeExpression;
-  return "                    <li>\n                        <a href=\"#\">"
+  return "                    <li>\n                        "
     + escapeExpression(lambda(depth0, depth0))
-    + "</a>\n                    </li>\n";
+    + "\n                    </li>\n";
 },"6":function(depth0,helpers,partials,data) {
   return "              None\n";
   },"8":function(depth0,helpers,partials,data) {
@@ -1639,7 +1639,7 @@ this["JST"]["testcase/testcase"] = Handlebars.template({"1":function(depth0,help
 
     if (step.result.status === 'FAIL') {
       return new Handlebars.SafeString(
-             '<a href="#" class="btn linkless">' +
+             '<a href="#" class="icon-btn linkless">' +
              '<i class="fa fa-times"></i>' +
              '</a>');
     }
@@ -1648,7 +1648,7 @@ this["JST"]["testcase/testcase"] = Handlebars.template({"1":function(depth0,help
       return new Handlebars.SafeString('');
     }
 
-    var icon = '<a href="#" class="btn linkless">';
+    var icon = '<a href="#" class="icon-btn linkless">';
 
     if (step.blade.operation === 'testInfo') {
       icon += '<i class="fa fa-sliders"></i>';

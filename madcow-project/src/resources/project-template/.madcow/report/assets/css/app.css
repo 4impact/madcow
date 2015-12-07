@@ -583,10 +583,22 @@ a.btn:focus,
 button:focus {
   outline: 0;
 }
-a.btn.linkless,
-button.linkless {
+.linkless {
   pointer-events: none;
   cursor: default;
+}
+a.icon-btn {
+  display: inline-block;
+  font-size: 15px;
+  line-height: 30px;
+  color: white;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  border: 0 solid transparent;
+  border-radius: 5px;
+  background-color: #607d8b;
 }
 table {
   width: 100%;
@@ -834,9 +846,10 @@ footer {
   width: 30px;
 }
 .testcase-results table th:nth-child(2) {
-  width: 220px;
+  width: 120px;
 }
-.testcase-results table td.step-message {
+.testcase-results table td.step-message,
+.testcase-results table td.step-blade {
   white-space: -moz-pre-wrap !important;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -847,22 +860,22 @@ footer {
 .testcase-results .testInfo {
   background-color: #f4f5f7;
 }
-.testcase-results .step-PASS .btn.btn-info,
-.testcase-results .step-NO_OPERATION .btn.btn-info,
-.testcase-results .step-FAIL .btn.btn-info,
-.testcase-results .step-NOT_YET_EXECUTED .btn.btn-info,
-.testcase-results .step-PARSE_ERROR .btn.btn-info {
+.testcase-results .step-PASS .icon-btn.icon-btn-info,
+.testcase-results .step-NO_OPERATION .icon-btn.icon-btn-info,
+.testcase-results .step-FAIL .icon-btn.icon-btn-info,
+.testcase-results .step-NOT_YET_EXECUTED .icon-btn.icon-btn-info,
+.testcase-results .step-PARSE_ERROR .icon-btn.icon-btn-info {
   background-color: #607d8b;
 }
-.testcase-results .step-PASS .btn,
-.testcase-results .step-NO_OPERATION .btn {
+.testcase-results .step-PASS .icon-btn,
+.testcase-results .step-NO_OPERATION .icon-btn {
   background-color: #4caf50;
 }
-.testcase-results .step-FAIL .btn,
-.testcase-results .step-PARSE_ERROR .btn {
+.testcase-results .step-FAIL .icon-btn,
+.testcase-results .step-PARSE_ERROR .icon-btn {
   background-color: #f44336;
 }
-.testcase-results .step-NOT_YET_EXECUTED .btn {
+.testcase-results .step-NOT_YET_EXECUTED .icon-btn {
   background-color: #ffc107;
 }
 .testcase-results .is-parent {
