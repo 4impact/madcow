@@ -1,3 +1,0 @@
-RELEASE NOTES FOR VERSION 108
--------------------------------------
-+ Merge branch 'addRetry'  + attempting to add basic retry functionality moving default driver creation time to be first "execute" call, updated tests to suit added java_opts to runMadcow scripts added basic phantomJS/chrome/IE web driver support  + attempting to add test case retries  + fixing default to 1 for MadcowConfig RetryCount  + Merge branch 'master' into addRetry Conflicts: 	madcow-webdriver-runner/src/main/groovy/au/com/ps4impact/madcow/runner/webdriver/WebDriverStepRunner.groovy  + Merge branch 'master' into addRetry  + first attempt at adding test case exception retry  

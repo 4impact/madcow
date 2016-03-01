@@ -1,3 +1,0 @@
-RELEASE NOTES FOR VERSION 109
--------------------------------------
-+ - fixing issues with selectField to support multi select lists - fixing table xpather to work on webkit based browsers - altering cli conf to now require the directory "conf" part which means you will get autocomplete support on unix/mac - altering test runner to attempt to fix issues with running single/multiple tests  
