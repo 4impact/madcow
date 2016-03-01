@@ -160,7 +160,7 @@ abstract class WebDriverBladeRunner extends BladeRunner {
      */
     public static BLADE_MAPPING_SELECTOR_TYPE getSelectorType(String mappingSelectorType) {
         for (BLADE_MAPPING_SELECTOR_TYPE type in BLADE_MAPPING_SELECTOR_TYPE.values()) {
-            if (type.toString().compareToIgnoreCase(mappingSelectorType) == 0)
+            if (type.name().equalsIgnoreCase(mappingSelectorType))
                 return type;
         }
         return null

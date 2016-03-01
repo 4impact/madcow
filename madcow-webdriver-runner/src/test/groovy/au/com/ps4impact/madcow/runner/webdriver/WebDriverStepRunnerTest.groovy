@@ -57,24 +57,6 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
         assertEquals(920, stepRunner.driver.manage().window().size.height);
     }
 
-    public void testPhantomJSRunner() {
-        WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase,
-                ['browser':'PhantomJs']);
-
-        def step = new MadcowStep(testCase, new GrassBlade("invokeUrl = http://www.google.com", testCase.grassParser), null);
-        def mockWebDriverBladeRunner = new MockFor(WebDriverBladeRunner.class)
-        mockWebDriverBladeRunner.demand.getBladeRunner {
-            return fakeBladeRunner
-        }
-        mockWebDriverBladeRunner.use {
-            stepRunner.execute(step)
-        }
-        assertNotNull(stepRunner.driver)
-        assertNotNull(stepRunner?.driver?.class)
-
-        stepRunner.finishTestCase()
-    }
-
 //    public void testRemoteNotInitialised() {
 //        WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase,
 //                ['browser':'REMOTE',

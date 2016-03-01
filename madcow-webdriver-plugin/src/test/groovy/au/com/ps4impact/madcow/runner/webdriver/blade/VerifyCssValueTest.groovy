@@ -52,7 +52,13 @@ class VerifyCssValueTest extends GroovyTestCase {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
-        assertEquals(shouldPass, step.result.passed());
+
+        if (shouldPass) {
+            assertTrue(step.result.message, step.result.passed())
+        } else {
+            assertFalse(step.result.message, step.result.passed())
+        }
+
     }
 
     void testVerifyCssValueByHtmlId() {
@@ -89,7 +95,7 @@ class VerifyCssValueTest extends GroovyTestCase {
     }
 
     void testVerifyCssValueWithMapUnordered() {
-        GrassBlade blade = new GrassBlade('aLinkId.verifyCssValue = [ \'font-weight\': \'700\', \'font-size\': \'20px\', \'color\': \'rgb(51, 51, 51)\' ]', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('aLinkId.verifyCssValue = [ \'font-weight\': \'700\', \'font-size\': \'20px\', \'color\': \'rgba(51, 51, 51, 1)\' ]', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 

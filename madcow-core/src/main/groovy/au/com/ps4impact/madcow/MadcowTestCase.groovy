@@ -138,6 +138,7 @@ class MadcowTestCase implements IJSONSerializable {
             executeStep(step);
         }
 
+        stepRunner.finishTestCase();
         stopWatch.stop();
     }
 

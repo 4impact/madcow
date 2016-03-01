@@ -21,7 +21,6 @@
 
 package au.com.ps4impact.madcow.runner.webdriver
 
-import au.com.ps4impact.madcow.runner.webdriver.driver.phantomjs.PhantomJSInstaller
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import org.apache.commons.io.FileUtils
@@ -39,7 +38,6 @@ import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
 import org.openqa.selenium.NoSuchElementException
 import com.gargoylesoftware.htmlunit.BrowserVersion
-import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.Augmenter
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -95,14 +93,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
                         driverParameters.url = parameters.remoteServerUrl;
                         if ((parameters.emulate ?: '') != '') {
                             switch (StringUtils.upperCase(parameters.emulate)) {
-                                case 'IE7':
-                                case 'IE8':
-                                case 'IE9':
                                 case 'IE':
                                     driverParameters.desiredCapabilities = DesiredCapabilities.internetExplorer();
-                                    break;
-                                case 'OPERA':
-                                    driverParameters.desiredCapabilities = DesiredCapabilities.opera();
                                     break;
                                 case 'CHROME':
                                     driverParameters.desiredCapabilities = DesiredCapabilities.chrome();
@@ -120,14 +112,13 @@ class WebDriverStepRunner extends MadcowStepRunner {
                                     driverParameters.desiredCapabilities = DesiredCapabilities.iphone();
                                     break;
                                 case 'FIREFOX':
-                                case 'FF3':
-                                case 'FF3.6':
                                 default:
                                     driverParameters.desiredCapabilities = DesiredCapabilities.firefox();
                                     break;
                             }
                         }
-                        driverParameters.desiredCapabilities.setCapability("selenium-version", "2.33.0");
+                        driverParameters.desiredCapabilities.setCapability("selenium-version", "2.52.0");
+
                         //set javascript on
                         driverParameters.desiredCapabilities.setJavascriptEnabled(true);
                         driverParameters.requiredCapabilities = null;
@@ -146,44 +137,27 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     driverParameters.setEnableNativeEvents(true)
                     break;
 
-                case WebDriverType.PHANTOMJS:
-                    File phantomJSInstallation = PhantomJSInstaller.unpack();
-
-                    DesiredCapabilities caps = DesiredCapabilities.phantomjs();
-                    caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomJSInstallation.getAbsolutePath());
-                    caps.setJavascriptEnabled(true);
-                    caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
-                            [
-                                    '--web-security=no',
-                                    '--ignore-ssl-errors=yes',
-                                    '--ignore-ssl-errors=true',
-                                    '--ssl-protocol=tlsv1',
-                                    '--webdriver-loglevel=OFF'
-                            ]);
-                    driverParameters = caps;
-                    break;
-
                 case WebDriverType.IE:
                     break;
 
                 case WebDriverType.HTMLUNIT:
-                    driverParameters = BrowserVersion.FIREFOX_24;
+                    driverParameters = BrowserVersion.FIREFOX_38;
                     if ((parameters.emulate ?: '') != '') {
                         switch (StringUtils.upperCase(parameters.emulate)) {
                             case 'IE8':
                                 driverParameters = BrowserVersion.INTERNET_EXPLORER_8;
                                 break;
-                            case 'IE9':
+                            case 'IE11':
                             case 'IE':
-                                driverParameters = BrowserVersion.INTERNET_EXPLORER_9;
+                                driverParameters = BrowserVersion.INTERNET_EXPLORER_11;
                                 break;
                             case 'CHROME':
                                 driverParameters = BrowserVersion.CHROME;
                                 break;
-                            case 'FF24':
+                            case 'FF38':
                             case 'FIREFOX':
                             default:
-                                driverParameters = BrowserVersion.FIREFOX_24;
+                                driverParameters = BrowserVersion.FIREFOX_38;
                                 break;
                         }
                     }
@@ -458,8 +432,7 @@ class WebDriverStepRunner extends MadcowStepRunner {
 
     public void finishTestCase() {
         if (driver != null) {
-            if (driverType == WebDriverType.CHROME
-                    || driverType == WebDriverType.PHANTOMJS) {
+            if (driverType == WebDriverType.CHROME) {
                 driver.quit();
             } else {
                 driver.close();
