@@ -86,6 +86,8 @@ Parent Maven POM for Madcow
         <quick.build>false</quick.build>
         <bamboo.buildNumber>999999</bamboo.buildNumber>
         <bamboo.buildTimeStamp>2012-11-05T01:15:30.999+10:00</bamboo.buildTimeStamp>
+
+        <selenium.version>2.52.0</selenium.version>
     </properties>
 
     <build>
@@ -111,12 +113,12 @@ Parent Maven POM for Madcow
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>2.4.1</version>
+            <version>2.4.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
+            <version>3.4</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
