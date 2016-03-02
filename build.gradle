@@ -1,0 +1,147 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        
+    }
+}
+
+configure(allprojects) { project ->
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    group = "au.com.ps4impact.${rootProject.name}"
+
+    ext.antVersion       = '1.8.2'
+    ext.seleniumVersion  = '2.52.0'
+    ext.groovyVersion    = '2.4.6'
+
+    apply plugin: 'groovy'
+
+    dependencies {
+        compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+        compile "org.apache.commons:commons-lang3:3.4"
+        compile "log4j:log4j:1.2.17"
+        compile "org.fusesource.jansi:jansi:1.11"
+        compile "org.functionaljava:functionaljava:3.1"
+        compile "joda-time:joda-time:2.7"
+        testCompile "junit:junit:4.2"
+    }
+
+    compileGroovy {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    compileTestGroovy {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    task sourcesJar(type: Jar, dependsOn:classes) {
+        from sourceSets.main.allSource
+        classifier 'sources'
+        extension 'jar'
+    }
+
+    task testJar(type: Jar, dependsOn: testClasses) {
+        baseName = "test-${project.archivesBaseName}"
+        from sourceSets.test.output
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+}
+
+project(':madcow-core') {
+    dependencies {
+        compile 'commons-cli:commons-cli:1.2'
+        compile 'commons-io:commons-io:2.4'
+        compile('org.springframework:spring-core:3.1.0.RELEASE') {
+            exclude group: 'log4j'
+            exclude group: 'asm'
+            exclude group: 'backport-util-concurrent'
+        }
+        compile "org.apache.ant:ant:${antVersion}"
+        compile ("org.apache.ant:ant-junit:${antVersion}") {
+            exclude group: 'junit'
+            exclude group: 'org.apache.ant', module: 'ant'
+        }
+        testCompile "org.seleniumhq.selenium:selenium-api:${seleniumVersion}"
+    }
+
+    configurations {
+        tests
+    }
+
+    artifacts {
+        tests testJar
+    }
+}
+
+project(':madcow-webdriver') {
+    dependencies {
+        compile "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+        compile(project(':madcow-core'))
+        testCompile project(path: ':madcow-core', configuration: 'tests')
+    }
+}
+
+project(':madcow-project') {
+    dependencies {
+        compile(project(':madcow-core'))
+        compile(project(':madcow-webdriver'))
+    }
+
+    // don't publish the default jar for this project
+    configurations.archives.artifacts.clear()
+
+    task upgradeZip(dependsOn: 'compileGroovy', type: Zip) { zipTask ->
+        group = "Distribution"
+        baseName = "madcow"
+        classifier = "upgrade"
+        description = "Builds -${classifier} archive, containing just the madcow release changes."
+
+        ext.baseDir = "${baseName}-${project.version}";
+
+        into(".madcow/lib") {
+            from project(':madcow-core').jar
+            from project(':madcow-core').configurations.runtime
+
+            from project(':madcow-webdriver').jar
+            from project(':madcow-webdriver').configurations.runtime
+        }
+
+        from('src/resources/project-template') {
+            include('.madcow/**/*.*')
+            include('runMadcow.*')
+        }
+    }
+
+    task installZip(dependsOn: [upgradeZip], type: Zip) { zipTask ->
+        group = "Distribution"
+        baseName = "madcow"
+        classifier = "install"
+        description = "Builds -${classifier} archive, containing all jars and project template."
+
+        ext.baseDir = "${baseName}-${project.version}";
+
+        from('src/resources/project-template') {
+            include('**/*.*')
+        }
+
+        from(zipTree(upgradeZip.archivePath))
+    }
+
+    
+
+    artifacts {
+        archives installZip
+    }
+}
+

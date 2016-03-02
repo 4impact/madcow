@@ -20,3 +20,4 @@ Thumbs.db
 .DS_Store
 madcow-project/src/resources/project-template/conf/madcow-config-saucelab-remote.xml
 madcow-project/src/resources/project-template/conf/madcow-config-local-remote.xml
+.gradle

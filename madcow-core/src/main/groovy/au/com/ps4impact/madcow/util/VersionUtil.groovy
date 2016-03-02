@@ -34,23 +34,25 @@ public class VersionUtil {
 
     protected static final String VERSION_FILENAME = "madcow.version";
 
-    public static String version;
-    public static int buildNumber;
-    public static DateTime timestamp;
+    public static String version = "?";
+    public static int buildNumber = 0;
+    public static DateTime timestamp = new DateTime();
 
     static {
-        List<String> lines = ResourceFinder.locateResourceOnClasspath(VersionUtil.class.classLoader, VERSION_FILENAME).URL.readLines();
-        lines.each { line ->
-            String[] parts = line.split('=');
-            if ('madcow.version'.equals(parts[0].trim())) {
-                version = parts[1].trim();
-            } else if ('madcow.build'.equals(parts[0].trim())) {
-                buildNumber = parts[1].trim() as int;
-            } else if ('madcow.buildTimestamp'.equals(parts[0].trim())) {
-                DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
-                timestamp = parser.parseDateTime(parts[1].trim());
+        try {
+            List<String> lines = ResourceFinder.locateResourceOnClasspath(VersionUtil.class.classLoader, VERSION_FILENAME).URL.readLines();
+            lines.each { line ->
+                String[] parts = line.split('=');
+                if ('madcow.version'.equals(parts[0].trim())) {
+                    version = parts[1].trim();
+                } else if ('madcow.build'.equals(parts[0].trim())) {
+                    buildNumber = parts[1].trim() as int;
+                } else if ('madcow.buildTimestamp'.equals(parts[0].trim())) {
+                    DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
+                    timestamp = parser.parseDateTime(parts[1].trim());
+                }
             }
-        }
+        } catch (ignored) { }
     }
 
     static String getVersionString() {
