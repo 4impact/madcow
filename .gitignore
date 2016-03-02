@@ -7,7 +7,6 @@ junitvmwatcher*.properties
 madcow-core/madcow-core.iml
 madcow-project/madcow-project.iml
 madcow-webdriver-plugin/madcow-webdriver-plugin.iml
-madcow-webdriver-runner/madcow-webdriver-runner.iml
 
 # OS generated files #
 ######################

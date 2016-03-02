@@ -55,7 +55,6 @@
                     <artifactSet>
                         <excludes>
                             <exclude>au.com.ps4impact.madcow:madcow-core</exclude>
-                            <exclude>au.com.ps4impact.madcow:madcow-webdriver-runner</exclude>
                         </excludes>
                     </artifactSet>
                     <filters>
@@ -161,8 +160,13 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+        <dependency>
             <groupId>au.com.ps4impact.madcow</groupId>
-            <artifactId>madcow-webdriver-runner</artifactId>
+            <artifactId>madcow-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

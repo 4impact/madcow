@@ -12,7 +12,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="madcow-webdriver-runner" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-java:2.52.0" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-chrome-driver:2.52.0" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-remote-driver:2.52.0" level="project" />
@@ -52,7 +51,6 @@
     <orderEntry type="library" name="Maven: io.netty:netty:3.5.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-leg-rc:2.52.0" level="project" />
     <orderEntry type="module" module-name="madcow-core" />
-    <orderEntry type="module" module-name="madcow-core" scope="TEST" production-on-test="" />
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:3.1.0.RELEASE" level="project" />
@@ -61,6 +59,7 @@
     <orderEntry type="library" name="Maven: org.apache.ant:ant:1.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-junit:1.8.2" level="project" />
+    <orderEntry type="module" module-name="madcow-core" scope="TEST" production-on-test="" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:2.4.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.4" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />

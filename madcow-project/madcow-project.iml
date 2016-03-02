@@ -21,7 +21,6 @@
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ant:ant-junit:1.8.2" level="project" />
     <orderEntry type="module" module-name="madcow-webdriver-plugin" />
-    <orderEntry type="module" module-name="madcow-webdriver-runner" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-java:2.52.0" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-chrome-driver:2.52.0" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-remote-driver:2.52.0" level="project" />

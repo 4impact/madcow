@@ -24,7 +24,7 @@
 <!--
 Ant build file for Madcow.
 -->
-<project name="Madcow WebDriver BladeRunner Plugin" basedir=".">
+<project name="Madcow WebDriver Plugin" basedir=".">
 
     <property name="parent.pom.dir" value="${basedir}/../madcow-parent-pom/"/>
     <import file="${basedir}/../madcow-parent-pom/build.xml"/>

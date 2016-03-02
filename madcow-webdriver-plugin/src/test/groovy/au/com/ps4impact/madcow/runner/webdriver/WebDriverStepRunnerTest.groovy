@@ -22,6 +22,9 @@
 package au.com.ps4impact.madcow.runner.webdriver
 
 import au.com.ps4impact.madcow.MadcowTestCase
+import au.com.ps4impact.madcow.mock.MockMadcowConfig
+import au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver
+import au.com.ps4impact.madcow.step.MadcowStep
 
 /**
  * Test for running WebDriver grass
@@ -75,5 +78,40 @@ class WebDriverStepRunnerTest extends GroovyTestCase {
 
         MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest-testRunIt', grassScript);
         testCase.execute();
+    }
+
+    MadcowTestCase testCase = new MadcowTestCase('WebDriverStepRunnerTest', MockMadcowConfig.getMadcowConfig());
+    WebDriverBladeRunner fakeBladeRunner = new MockWebDriverBladeRunner();
+
+    public void testDefaultSelector() {
+        WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase, [:]);
+        assertEquals('id', stepRunner.defaultSelector);
+    }
+
+    public void testDefaultBrowser() {
+        WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase, [:]);
+        assertEquals(MadcowHtmlUnitDriver.class, stepRunner.driverType.driverClass);
+    }
+
+    public void testDefaultBrowserResized() {
+        WebDriverStepRunner stepRunner = new WebDriverStepRunner(testCase, ['windowWidth': '300', 'windowHeight': '920']);
+        assertEquals(MadcowHtmlUnitDriver.class, stepRunner.driverType.driverClass);
+        assertEquals(300, stepRunner.driver.manage().window().size.width);
+        assertEquals(920, stepRunner.driver.manage().window().size.height);
+    }
+
+    public void testBrowserNotFound() {
+        try {
+            WebDriverStepRunner stepRunner = new WebDriverStepRunner(null, ['browser':'tent.tent.tennis.tent']);
+            fail('should always exception with ClassNotFoundException');
+        } catch (e) {
+            assertTrue( e.message.startsWith("The specified Browser 'TENT.TENT.TENNIS.TENT' cannot be found"));
+        }
+    }
+
+    class MockWebDriverBladeRunner extends WebDriverBladeRunner {
+        void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
+            //
+        }
     }
 }

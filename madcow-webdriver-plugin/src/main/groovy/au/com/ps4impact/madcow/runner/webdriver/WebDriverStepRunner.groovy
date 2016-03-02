@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.runner.webdriver
 
+import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import org.apache.commons.io.FileUtils
@@ -34,7 +35,6 @@ import au.com.ps4impact.madcow.step.MadcowStepResult
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.grass.GrassParseException
 import org.openqa.selenium.firefox.FirefoxProfile
-import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.MadcowTestCase
 import org.openqa.selenium.NoSuchElementException
 import com.gargoylesoftware.htmlunit.BrowserVersion
