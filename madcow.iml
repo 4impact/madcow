@@ -23,5 +23,6 @@
     <orderEntry type="library" name="Gradle: org.functionaljava:functionaljava:3.1" level="project" />
     <orderEntry type="library" name="Gradle: joda-time:joda-time:2.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.slf4j:slf4j-api:1.7.10" level="project" />
   </component>
 </module>

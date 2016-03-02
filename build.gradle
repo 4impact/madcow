@@ -4,8 +4,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        
+        classpath "net.saliman:gradle-cobertura-plugin:2.3.0"
     }
+}
+
+plugins {
+    id 'net.saliman.cobertura' version '2.3.0'
 }
 
 configure(allprojects) { project ->
@@ -21,6 +25,7 @@ configure(allprojects) { project ->
     ext.groovyVersion    = '2.4.6'
 
     apply plugin: 'groovy'
+    apply plugin: 'net.saliman.cobertura'
 
     dependencies {
         compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
@@ -30,6 +35,7 @@ configure(allprojects) { project ->
         compile "org.functionaljava:functionaljava:3.1"
         compile "joda-time:joda-time:2.7"
         testCompile "junit:junit:4.2"
+        testRuntime "org.slf4j:slf4j-api:1.7.10"
     }
 
     compileGroovy {
@@ -52,6 +58,15 @@ configure(allprojects) { project ->
         baseName = "test-${project.archivesBaseName}"
         from sourceSets.test.output
     }
+
+    cobertura {
+        coverageFormats = ['html', 'xml']
+        coverageIgnoreTrivial = true
+        coverageIgnores = ['org.slf4j.Logger.*']
+        coverageReportDir = new File("${buildDir}/reports/cobertura")
+    }
+
+    test.finalizedBy(project.tasks.cobertura)
 
     artifacts {
         archives sourcesJar
