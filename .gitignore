@@ -2,6 +2,7 @@
 build/
 results/
 junitvmwatcher*.properties
+*.iml
 
 # OS generated files #
 ######################
