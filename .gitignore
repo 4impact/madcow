@@ -1,12 +1,7 @@
-.idea/*
-.idea/encodings.xml
-target/
+.idea/workspace.xml
+build/
 results/
 junitvmwatcher*.properties
-.idea/
-madcow-core/madcow-core.iml
-madcow-project/madcow-project.iml
-madcow-webdriver-plugin/madcow-webdriver-plugin.iml
 
 # OS generated files #
 ######################
@@ -18,9 +13,4 @@ Thumbs.db
 .idea/dictionaries/gavin.xml
 
 .DS_Store
-madcow-project/src/resources/project-template/conf/madcow-config-saucelab-remote.xml
-madcow-project/src/resources/project-template/conf/madcow-config-local-remote.xml
 .gradle
-madcow-core/build
-madcow-project/build
-madcow-webdriver/build

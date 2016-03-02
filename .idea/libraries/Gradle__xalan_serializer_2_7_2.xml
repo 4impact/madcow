@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: xalan:serializer:2.7.2">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/xalan/serializer/2.7.2/serializer-2.7.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/xalan/serializer/2.7.2/serializer-2.7.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

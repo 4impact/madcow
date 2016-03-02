@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/madcow.iml" filepath="$PROJECT_DIR$/madcow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/madcow-core/madcow-core.iml" filepath="$PROJECT_DIR$/madcow-core/madcow-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/madcow-project/madcow-project.iml" filepath="$PROJECT_DIR$/madcow-project/madcow-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/madcow-webdriver/madcow-webdriver.iml" filepath="$PROJECT_DIR$/madcow-webdriver/madcow-webdriver.iml" />
+    </modules>
+  </component>
+</project>
