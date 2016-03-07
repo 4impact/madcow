@@ -27,26 +27,19 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import au.com.ps4impact.madcow.runner.webdriver.blade.AbstractBladeTestCase
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for Table GreaterThanOrEquals blade runner.
  *
  * @author Paul Bevis
  */
-class CountRowsLessThanOrEqualsTest extends GroovyTestCase {
+class CountRowsLessThanOrEqualsTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def countRowsLessThanOrEquals;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('CountRowsGreaterThanOrEqualsTest', new MadcowConfig(), []);
-        countRowsLessThanOrEquals = new LessThanOrEquals();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def countRowsLessThanOrEquals = new LessThanOrEquals();
 
     protected verifyCountRow(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -57,6 +50,7 @@ class CountRowsLessThanOrEqualsTest extends GroovyTestCase {
     /**
      * EQUALS TESTING
      */
+    @Test
     void testCountByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('theTable.table.countRows.lessThanOrEquals = 4', testCase.grassParser);
@@ -72,18 +66,21 @@ class CountRowsLessThanOrEqualsTest extends GroovyTestCase {
         verifyCountRow(blade, false);
     }
 
+    @Test
     void testCountByName() {
         MadcowMappings.addMapping(testCase, 'theTableMapping', ['name': 'theTableName']);
         GrassBlade blade = new GrassBlade('theTableMapping.table.countRows.lessThanOrEquals = 5', testCase.grassParser);
         verifyCountRow(blade, true);
     }
 
+    @Test
     void testCountByXPath() {
         MadcowMappings.addMapping(testCase, 'theTableMapping', ['xpath': '//table[@id=\'theTable\']']);
         GrassBlade blade = new GrassBlade('theTableMapping.table.countRows.lessThanOrEquals = 5', testCase.grassParser);
         verifyCountRow(blade, true);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.countRows.lessThanOrEquals = 5', testCase.grassParser);
@@ -95,6 +92,7 @@ class CountRowsLessThanOrEqualsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.countRows.lessThanOrEquals = 5', testCase.grassParser);
@@ -106,6 +104,7 @@ class CountRowsLessThanOrEqualsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.countRows.lessThanOrEquals', testCase.grassParser);

@@ -27,26 +27,19 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import au.com.ps4impact.madcow.runner.webdriver.blade.AbstractBladeTestCase
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the table CheckValue blade runner.
  *
  * @author Gavin Bunney
  */
-class CheckValueTest extends GroovyTestCase {
+class CheckValueTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def checkValue;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('CheckValueTest', new MadcowConfig(), []);
-        checkValue = new CheckValue();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def checkValue = new CheckValue();
 
     protected MadcowStep executeBlade(GrassBlade blade) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -61,6 +54,7 @@ class CheckValueTest extends GroovyTestCase {
         return step;
     }
 
+    @Test
     void testCheckValue() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         executeBlade(blade);
@@ -74,6 +68,7 @@ class CheckValueTest extends GroovyTestCase {
         verifyTableCheckValue(blade, true);
     }
 
+    @Test
     void testCheckValueInputField() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         executeBlade(blade);
@@ -82,6 +77,7 @@ class CheckValueTest extends GroovyTestCase {
         verifyTableCheckValue(blade, true);
     }
 
+    @Test
     void testCheckValueFail() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         executeBlade(blade);
@@ -91,6 +87,7 @@ class CheckValueTest extends GroovyTestCase {
         assertEquals("Expected: 'This will fail', Present: 'Country'", step.result.message);
     }
 
+    @Test
     void testCheckValueMultiples() {
         GrassBlade blade = new GrassBlade("theTable.table.selectRow = ['Column Number 2' : 'Country']", testCase.grassParser);
         executeBlade(blade);
@@ -99,12 +96,14 @@ class CheckValueTest extends GroovyTestCase {
         verifyTableCheckValue(blade, true);
     }
 
+    @Test
     void testCheckValueNeedToSelectRowFirst() {
         GrassBlade blade = new GrassBlade("theTable.table.currentRow.checkValue = ['Column Number 1' : 'Input Value']", testCase.grassParser);
         MadcowStep step = verifyTableCheckValue(blade, false);
         assertEquals('No row has been selected - call selectRow first', step.result.message);
     }
 
+    @Test
     void testCheckValueMapOnly() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         executeBlade(blade);
@@ -113,6 +112,7 @@ class CheckValueTest extends GroovyTestCase {
         verifyTableCheckValue(blade, false);
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.currentRow.checkValue', testCase.grassParser);

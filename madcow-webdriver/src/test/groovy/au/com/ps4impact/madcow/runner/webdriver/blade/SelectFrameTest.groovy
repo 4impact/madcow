@@ -19,36 +19,22 @@
  * under the License.
  */
 
-
-
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the SelectFrameTest BladeRunner.
  *
  * @author Tom Romano
  */
-class SelectFrameTest extends GroovyTestCase {
-
-    MadcowTestCase testCase;
-    def selectFrame;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('SelectFrameTest', new MadcowConfig(), []);
-        selectFrame = new SelectFrame();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+class SelectFrameTest extends AbstractBladeTestCase {
 
     protected selectFrameValid(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -57,6 +43,7 @@ class SelectFrameTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testSelectFrameByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aIframeId.selectFrame', testCase.grassParser);
@@ -68,50 +55,59 @@ class SelectFrameTest extends GroovyTestCase {
         selectFrameValid(blade, true);
     }
 
+    @Test
     void testSelectFrameValidWithIncorrectParam() {
         GrassBlade blade = new GrassBlade('aIframeId.selectFrame = A link that isn\'t a link is still a link', testCase.grassParser);
         selectFrameValid(blade, true);
     }
 
+    @Test
     void testSelectFrameByName() {
         MadcowMappings.addMapping(testCase, 'aIframeByName', ['name': 'aIframeName']);
         GrassBlade blade = new GrassBlade('aIframeByName.selectFrame', testCase.grassParser);
         selectFrameValid(blade, true);
     }
 
+    @Test
     void testSelectFrameByNameWithParam() {
         MadcowMappings.addMapping(testCase, 'aIframeByName', ['name': 'aIframeName']);
         GrassBlade blade = new GrassBlade('aIframeByName.selectFrame = Bob', testCase.grassParser);
         selectFrameValid(blade, true);
     }
 
+    @Test
     void testSelectFrameByInvalidName() {
         GrassBlade blade = new GrassBlade('aIframeIdWrong.selectFrame = A link that isn\'t a link is still a link', testCase.grassParser);
         selectFrameValid(blade, false);
     }
 
+    @Test
     void testSelectFrameByXPath() {
         MadcowMappings.addMapping(testCase, 'aIframeXPath', ['xpath': '//iframe[@id=\'aIframeId\']']);
         GrassBlade blade = new GrassBlade('aIframeXPath.selectFrame', testCase.grassParser);
         selectFrameValid(blade, true);
     }
 
+    @Test
     void testSelectFrameByText() {
         MadcowMappings.addMapping(testCase, 'aIframeText', ['text': 'Like']);
         GrassBlade blade = new GrassBlade('aIframeText.selectFrame', testCase.grassParser);
         selectFrameValid(blade, false);
     }
 
+    @Test
     void testSelectFrameEmpty() {
         GrassBlade blade = new GrassBlade('aIframeId.selectFrame = ', testCase.grassParser);
         selectFrameValid(blade, true);
     }
 
+    @Test
     void testSelectFrameOnPage() {
         GrassBlade blade = new GrassBlade('selectFrame = Madcow WebDriver Runner Test HTML', testCase.grassParser);
         selectFrameValid(blade, false);
     }
 
+    @Test
     void testSelectFrameNotOnPage() {
         GrassBlade blade = new GrassBlade('selectFrame = This won\'t be on the page', testCase.grassParser);
         selectFrameValid(blade, false);

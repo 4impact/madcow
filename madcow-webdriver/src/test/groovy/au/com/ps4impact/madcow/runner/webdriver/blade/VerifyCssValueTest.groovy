@@ -27,26 +27,18 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * This class is to test the VerifyCssValue madcow operation
  *
  * @author Tom Romano
  */
-class VerifyCssValueTest extends GroovyTestCase {
+class VerifyCssValueTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def verifyCssValue;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('VerifyCssValueTest', new MadcowConfig(), []);
-        verifyCssValue = new VerifyCssValue();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    VerifyCssValue verifyCssValue = new VerifyCssValue()
 
     protected verifyVerifyCssValueContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -61,6 +53,7 @@ class VerifyCssValueTest extends GroovyTestCase {
 
     }
 
+    @Test
     void testVerifyCssValueByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.verifyCssValue = font-weight: 700;', testCase.grassParser);
@@ -72,67 +65,79 @@ class VerifyCssValueTest extends GroovyTestCase {
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueByHtmlIdInherited() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.verifyCssValue = font-size: 20px;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValuePartiallyIncorrect() {
         GrassBlade blade = new GrassBlade('aLinkId.verifyCssValue = font-size: 20px;color: #333;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, false);
     }
 
+    @Test
     void testVerifyCssValueWrongOrderByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.verifyCssValue = border-bottom-width: 2px;display: block;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueWithMap() {
         GrassBlade blade = new GrassBlade('aInputId.verifyCssValue = [ \'line-height\': \'28px\', \'cursor\': \'wait\' ]', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueWithMapUnordered() {
         GrassBlade blade = new GrassBlade('aLinkId.verifyCssValue = [ \'font-weight\': \'700\', \'font-size\': \'20px\', \'color\': \'rgba(51, 51, 51, 1)\' ]', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueByName() {
         MadcowMappings.addMapping(testCase, 'aInputName', ['name': 'aInputName']);
         GrassBlade blade = new GrassBlade('aInputName.verifyCssValue = line-height:28px;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueMultiplesByName() {
         MadcowMappings.addMapping(testCase, 'aInputName', ['name': 'aInputName']);
         GrassBlade blade = new GrassBlade('aInputName.verifyCssValue = cursor: wait;line-height:28px;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.verifyCssValue = border-bottom-width: 2px;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.verifyCssValue = border-bottom-width: 2px;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueForTextArea() {
         GrassBlade blade = new GrassBlade('aTextAreaId.verifyCssValue = border-bottom-width: 2px;', testCase.grassParser);
         verifyVerifyCssValueContents(blade, true);
     }
 
+    @Test
     void testVerifyCssValueEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.verifyCssValue = ', testCase.grassParser);
         verifyVerifyCssValueContents(blade, false);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifyCssValue = Tennis', testCase.grassParser);
@@ -144,6 +149,7 @@ class VerifyCssValueTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifyCssValue = Tennis', testCase.grassParser);
@@ -155,6 +161,7 @@ class VerifyCssValueTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifyCssValue', testCase.grassParser);

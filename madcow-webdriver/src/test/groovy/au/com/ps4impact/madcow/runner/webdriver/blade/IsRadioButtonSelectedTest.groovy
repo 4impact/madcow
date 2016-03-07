@@ -19,49 +19,38 @@
  * under the License.
  */
 
-
-
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the SelectCheckbox BladeRunner.
  *
  * @author Paul Bevis
  */
-class IsRadioButtonSelectedTest extends GroovyTestCase {
+class IsRadioButtonSelectedTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def isRadioButtonSelected;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('IsRadioButtonSelectedTest', new MadcowConfig(), []);
-        isRadioButtonSelected = new IsRadioButtonSelected();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    IsRadioButtonSelected isRadioButtonSelected = new IsRadioButtonSelected();
 
     protected verifyIsSelectedExecution(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
-        assertEquals(shouldPass, step.result.passed());
+        assertEquals(step.result.message, shouldPass, step.result.passed());
     }
 
+    @Test
     void testCheckboxByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aRadioButtonId.isRadioButtonSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, true);
-         blade = new GrassBlade('aRadioButtonIdUnSelected.isRadioButtonSelected', testCase.grassParser);
+        blade = new GrassBlade('aRadioButtonIdUnSelected.isRadioButtonSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, false);
 
         // explicit id
@@ -70,28 +59,33 @@ class IsRadioButtonSelectedTest extends GroovyTestCase {
         verifyIsSelectedExecution(blade, true);
     }
 
+    @Test
     void testCheckboxByName() {
         MadcowMappings.addMapping(testCase, 'aRadioButtonName', ['name': 'aRadioButtonName']);
         GrassBlade blade = new GrassBlade('aRadioButtonName.isRadioButtonSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, true);
     }
 
+    @Test
     void testCheckboxByXPath() {
         MadcowMappings.addMapping(testCase, 'aRadioButtonXPath', ['xpath': '//input[@id=\'aRadioButtonId\']']);
         GrassBlade blade = new GrassBlade('aRadioButtonXPath.isRadioButtonSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, true);
     }
-    
+
+    @Test
     void testCheckboxDoesNotExist() {
         GrassBlade blade = new GrassBlade('aRadioButtonThatDoesntExist.isRadioButtonSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, false);
     }
 
+    @Test
     void testDefaultMappingSelector() {
         GrassBlade blade = new GrassBlade('testsite_menu_createAddress.isRadioButtonSelected', testCase.grassParser);
         assertTrue(isRadioButtonSelected.isValidBladeToExecute(blade));
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.isRadioButtonSelected', testCase.grassParser);
@@ -103,6 +97,7 @@ class IsRadioButtonSelectedTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.isRadioButtonSelected', testCase.grassParser);
@@ -114,6 +109,7 @@ class IsRadioButtonSelectedTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testEquationNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.isRadioButtonSelected = yeah yeah', testCase.grassParser);

@@ -26,26 +26,19 @@ import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import au.com.ps4impact.madcow.runner.webdriver.blade.AbstractBladeTestCase
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the table ClickLink blade runner.
  *
  * @author Gavin Bunney
  */
-class ClickLinkTest extends GroovyTestCase {
+class ClickLinkTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def clickLink;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
-        clickLink = new ClickLink();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def clickLink = new ClickLink();
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
         if (reloadPage){
@@ -62,6 +55,7 @@ class ClickLinkTest extends GroovyTestCase {
         return step;
     }
 
+    @Test
     void testClickTableLinkByName() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'A link\']', testCase.grassParser);
         executeBlade(blade, true);
@@ -70,6 +64,7 @@ class ClickLinkTest extends GroovyTestCase {
         verifyTableValue(blade, true, false);
     }
 
+    @Test
     void testClickTableLinkByColumn() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'A link\']', testCase.grassParser);
         executeBlade(blade, true);
@@ -78,12 +73,14 @@ class ClickLinkTest extends GroovyTestCase {
         verifyTableValue(blade, true, false);
     }
 
+    @Test
     void testClickTableLinkNeedToSelectRowFirst() {
         GrassBlade blade = new GrassBlade("theTable.table.currentRow.clickLink = ['Column Number 1' : 'Tent']", testCase.grassParser);
         MadcowStep step = verifyTableValue(blade, false);
         assertEquals('No row has been selected - call selectRow first', step.result.message);
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.currentRow.clickLink', testCase.grassParser);

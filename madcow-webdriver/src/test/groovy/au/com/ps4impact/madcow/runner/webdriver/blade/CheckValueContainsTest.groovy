@@ -21,40 +21,31 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+import static groovy.test.GroovyAssert.*
 
 /**
  * This class is the testcase for check value contains
  *
  * @author Tom Romano
  */
-class CheckValueContainsTest extends GroovyTestCase {
+class CheckValueContainsTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def checkValueContains;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('CheckValueContainsTest', new MadcowConfig(), []);
-        checkValueContains = new CheckValueContains();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    CheckValueContains checkValueContains = new CheckValueContains();
 
     protected verifyCheckValueContainsContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
+        String source = (testCase.stepRunner as WebDriverStepRunner).driver.pageSource;
         MadcowStep step = new MadcowStep(testCase, blade, null);
         testCase.stepRunner.execute(step);
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testCheckValueContainsByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = link', testCase.grassParser);
@@ -66,6 +57,7 @@ class CheckValueContainsTest extends GroovyTestCase {
         verifyCheckValueContainsContents(blade, true);
     }
 
+    @Test
     void testCheckValueContainsByCss() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = link', testCase.grassParser);
@@ -75,41 +67,48 @@ class CheckValueContainsTest extends GroovyTestCase {
         MadcowMappings.addMapping(testCase, 'mapping', ['css': '#aLinkId']);
         blade = new GrassBlade('mapping.checkValueContains = ink', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
-    }    
+    }
 
+    @Test
     void testCheckValueContainsIncorrect() {
         GrassBlade blade = new GrassBlade('aLinkId.checkValueContains = is still a link', testCase.grassParser);
         verifyCheckValueContainsContents(blade, false);
     }
 
+    @Test
     void testCheckValueContainsByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.checkValueContains = A li', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
+    @Test
     void testCheckValueContainsByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.checkValueContains = nk', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
+    @Test
     void testCheckValueContainsByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.checkValueContains = A l', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
+    @Test
     void testCheckValueContainsForTextArea() {
         GrassBlade blade = new GrassBlade('aTextAreaId.checkValueContains = contents', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
+    @Test
     void testCheckValueContainsEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.checkValueContains = ', testCase.grassParser);
         verifyCheckValueContainsContents(blade, true);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValueContains = Tennis', testCase.grassParser);
@@ -121,6 +120,7 @@ class CheckValueContainsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValueContains = Tennis', testCase.grassParser);
@@ -132,6 +132,7 @@ class CheckValueContainsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValueContains', testCase.grassParser);

@@ -21,13 +21,13 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 import org.openqa.selenium.By
 
 import java.util.concurrent.TimeUnit
@@ -37,19 +37,9 @@ import java.util.concurrent.TimeUnit
  *
  * @author Gavin Bunney
  */
-class ValueTest extends GroovyTestCase {
+class ValueTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def value;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('ValueTest', new MadcowConfig(), []);
-        value = new Value();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    Value value = new Value()
 
     protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String newValue, String elementId = 'aInputId') {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -63,6 +53,7 @@ class ValueTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testValueByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aInputId.value = Tennis', testCase.grassParser);
@@ -74,18 +65,21 @@ class ValueTest extends GroovyTestCase {
         verifyValueExecution(blade, true, "NoTennis");
     }
 
+    @Test
     void testValueByHtmlIdSubmitting() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aInputId.value = [value: \'Tennis\', submit: true]', testCase.grassParser);
         verifyValueExecution(blade, true, "Input Value" /* submitting, so will reset the value back */);
     }
 
+    @Test
     void testValueByHtmlIdSubmittingButNot() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aInputId.value = [value: \'Tennis\', submit: false]', testCase.grassParser);
         verifyValueExecution(blade, true, "Tennis");
     }
 
+    @Test
     void testValueByCSS() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aInputId.value = Tennis!', testCase.grassParser);
@@ -97,6 +91,7 @@ class ValueTest extends GroovyTestCase {
         verifyValueExecution(blade, true, "TennisTwo");
     }
 
+    @Test
     void testValueByCSSClass() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aInputId.value = TennisT', testCase.grassParser);
@@ -109,18 +104,21 @@ class ValueTest extends GroovyTestCase {
 
     }
 
+    @Test
     void testValueByName() {
         MadcowMappings.addMapping(testCase, 'mapping', ['name': 'aInputName']);
         GrassBlade blade = new GrassBlade('mapping.value = TennisByName', testCase.grassParser);
         verifyValueExecution(blade, true, "TennisByName");
     }
 
+    @Test
     void testValueByXPath() {
         MadcowMappings.addMapping(testCase, 'mapping', ['xpath': '//input[@id=\'aInputId\']']);
         GrassBlade blade = new GrassBlade('mapping.value = TennisByXpath', testCase.grassParser);
         verifyValueExecution(blade, true, "TennisByXpath");
     }
 
+    @Test
     void testValueForTextArea() {
         GrassBlade blade = new GrassBlade('aTextAreaId.value = TennisForTextArea', testCase.grassParser);
         verifyValueExecution(blade, true, "TennisForTextArea", "aTextAreaId");
@@ -131,11 +129,13 @@ class ValueTest extends GroovyTestCase {
         verifyValueExecution(blade, true, "TennisFour", "aTextAreaId");
     }
 
+    @Test
     void testValueDoesNotExist() {
         GrassBlade blade = new GrassBlade('aInputThatDoesntExist.value = Tennis', testCase.grassParser);
         verifyValueExecution(blade, false, null);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.value = Tennis', testCase.grassParser);
@@ -147,6 +147,7 @@ class ValueTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.value = Tennis', testCase.grassParser);
@@ -158,6 +159,7 @@ class ValueTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.value', testCase.grassParser);

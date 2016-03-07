@@ -22,43 +22,23 @@
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
 import au.com.ps4impact.madcow.grass.GrassBlade
-import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.mappings.MadcowMappings
-import org.junit.After
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
-import org.junit.Assert.*
 import org.openqa.selenium.Dimension
 
-import static junit.framework.Assert.assertEquals
-import static org.junit.Assert.assertFalse;
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the ResizeBrowser BladeRunner.
  *
  * @author Tom Romano
  */
-class ResizeBrowserTest {
+class ResizeBrowserTest extends AbstractBladeTestCase {
 
-    MadcowConfig config
-    MadcowTestCase testCase
-    def resizeBrowser
-    def invokeUrl
-    String testHtmlFilePath
-
-    @Before
-    public void setUp() {
-        config = new MadcowConfig()
-        testCase = new MadcowTestCase('ResizeBrowserTest', config, [])
-        resizeBrowser = new ResizeBrowser();
-        invokeUrl = new InvokeUrl()
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    ResizeBrowser resizeBrowser = new ResizeBrowser()
 
     protected verifyResizeBrowserExecution(GrassBlade blade, boolean shouldPass, String resultingMessage = null) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -72,8 +52,8 @@ class ResizeBrowserTest {
     }
 
     protected verifyWindowSize(Dimension size) {
-        assertEquals((testCase.stepRunner as WebDriverStepRunner).driver.manage().window().size.width, size.width);
-        assertEquals((testCase.stepRunner as WebDriverStepRunner).driver.manage().window().size.height, size.height);
+        assertEquals(size.width, (testCase.stepRunner as WebDriverStepRunner).driver.manage().window().size.width);
+        assertEquals(size.height, (testCase.stepRunner as WebDriverStepRunner).driver.manage().window().size.height);
     }
 
     @Test
@@ -201,10 +181,5 @@ class ResizeBrowserTest {
         String message = "ResizeBrowser operation requires two numeric parameters of [width,height] not yeah yeah"
         verifyResizeBrowserExecution(blade, false, message);
 
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        testCase.stepRunner.finishTestCase();
     }
 }

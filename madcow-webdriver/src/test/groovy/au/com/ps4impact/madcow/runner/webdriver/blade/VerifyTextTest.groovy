@@ -22,31 +22,21 @@
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
 import au.com.ps4impact.madcow.grass.GrassBlade
-import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.mappings.MadcowMappings
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the VerifyTextTest BladeRunner.
  *
  * @author Gavin Bunney
  */
-class VerifyTextTest extends GroovyTestCase {
+class VerifyTextTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def verifyText;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('VerifyTextTest', new MadcowConfig(), []);
-        verifyText = new VerifyText();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def verifyText = new VerifyText()
 
     protected verifyTextContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +45,7 @@ class VerifyTextTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testVerifyTextByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.verifyText = A link', testCase.grassParser);
@@ -66,39 +57,46 @@ class VerifyTextTest extends GroovyTestCase {
         verifyTextContents(blade, true);
     }
 
+    @Test
     void testVerifyTextIncorrect() {
         GrassBlade blade = new GrassBlade('aLinkId.verifyText = A link that isn\'t a link is still a link', testCase.grassParser);
         verifyTextContents(blade, false);
     }
 
+    @Test
     void testVerifyTextByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.verifyText = A link', testCase.grassParser);
         verifyTextContents(blade, true);
     }
 
+    @Test
     void testVerifyTextByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.verifyText = A link', testCase.grassParser);
         verifyTextContents(blade, true);
     }
 
+    @Test
     void testVerifyTextByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.verifyText = A link', testCase.grassParser);
         verifyTextContents(blade, true);
     }
 
+    @Test
     void testVerifyTextEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.verifyText = ', testCase.grassParser);
         verifyTextContents(blade, true);
     }
 
+    @Test
     void testVerifyTextOnPage() {
         GrassBlade blade = new GrassBlade('verifyText = Madcow WebDriver Runner Test HTML', testCase.grassParser);
         verifyTextContents(blade, true);
     }
 
+    @Test
     void testVerifyTextNotOnPage() {
         GrassBlade blade = new GrassBlade('verifyText = This won\'t be on the page', testCase.grassParser);
         verifyTextContents(blade, false);

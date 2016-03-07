@@ -1,26 +1,16 @@
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
 
-class VerifyDisabledTest extends GroovyTestCase {
+import static groovy.test.GroovyAssert.*
+
+class VerifyDisabledTest extends AbstractBladeTestCase {
 
     def inputIdAndNameSuffixes = ['TextInput','CheckboxInput','ButtonInput','PasswordInput','RadioInput', 'SubmitInput','TextArea','Button']
-
-    MadcowTestCase testCase;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('VerifyDisabledTest', new MadcowConfig(), []);
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
 
     protected executeBladeAndCheckResult(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -29,6 +19,7 @@ class VerifyDisabledTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testVerifyEnabledByHtmlId() {
         inputIdAndNameSuffixes.each {
             GrassBlade blade = new GrassBlade("enabled${it}.verifyDisabled",testCase.grassParser)
@@ -36,6 +27,7 @@ class VerifyDisabledTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testVerifyEnabledByName() {
         inputIdAndNameSuffixes.each {
             MadcowMappings.addMapping(testCase, 'mapping', ['name': "enabled${it}"]);
@@ -44,6 +36,7 @@ class VerifyDisabledTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testVerifyEnabledByXpath() {
         inputIdAndNameSuffixes.each {
             println "$it"
@@ -53,6 +46,7 @@ class VerifyDisabledTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testVerifyEnabledFailingByHtmlId() {
         inputIdAndNameSuffixes.each {
             GrassBlade blade = new GrassBlade("disabled${it}.verifyDisabled",testCase.grassParser)
@@ -60,6 +54,7 @@ class VerifyDisabledTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testVerifyEnabledFailingByName() {
         inputIdAndNameSuffixes.each {
             MadcowMappings.addMapping(testCase, 'mapping', ['name': "disabled${it}"]);
@@ -68,6 +63,7 @@ class VerifyDisabledTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testVerifyEnabledFailingByXpath() {
         inputIdAndNameSuffixes.each {
             MadcowMappings.addMapping(testCase, 'mapping', ['xpath': "//*[@id='disabled${it}']"]);

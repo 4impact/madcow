@@ -21,13 +21,13 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 import java.util.concurrent.TimeUnit
 
@@ -36,19 +36,9 @@ import java.util.concurrent.TimeUnit
  *
  * @author Gavin Bunney
  */
-class VerifySelectFieldOptionsTest extends GroovyTestCase {
+class VerifySelectFieldOptionsTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def verifySelectFieldOptions;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('VerifySelectFieldOptionsTest', new MadcowConfig(), []);
-        verifySelectFieldOptions = new VerifySelectFieldOptions();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def verifySelectFieldOptions = new VerifySelectFieldOptions()
 
     protected verifyValueExecution(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -58,6 +48,7 @@ class VerifySelectFieldOptionsTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testSelectFieldByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aSelectId.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
@@ -69,23 +60,27 @@ class VerifySelectFieldOptionsTest extends GroovyTestCase {
         verifyValueExecution(blade, true);
     }
 
+    @Test
     void testSelectFieldByName() {
         MadcowMappings.addMapping(testCase, 'mapping', ['name': 'aSelectName']);
         GrassBlade blade = new GrassBlade('mapping.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
+    @Test
     void testSelectFieldByXPath() {
         MadcowMappings.addMapping(testCase, 'mapping', ['xpath': '//select[@id=\'aSelectId\']']);
         GrassBlade blade = new GrassBlade('mapping.verifySelectFieldOptions = [\'Australia\', \'New Zealand\', \'United States\']', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
+    @Test
     void testSelectFieldDoesNotExist() {
         GrassBlade blade = new GrassBlade('aSelectThatDoesntExist.verifySelectFieldOptions = [\'Tennis\']', testCase.grassParser);
         verifyValueExecution(blade, false);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifySelectFieldOptions = [\'Tennis\']', testCase.grassParser);
@@ -97,6 +92,7 @@ class VerifySelectFieldOptionsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifySelectFieldOptions = [\'Tennis\']', testCase.grassParser);
@@ -108,6 +104,7 @@ class VerifySelectFieldOptionsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifySelectFieldOptions', testCase.grassParser);

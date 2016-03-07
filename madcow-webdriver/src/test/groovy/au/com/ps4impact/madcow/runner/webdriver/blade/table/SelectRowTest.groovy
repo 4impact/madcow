@@ -21,33 +21,24 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade.table
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.blade.table.util.TableXPather
+import au.com.ps4impact.madcow.runner.webdriver.blade.AbstractBladeTestCase
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for Table SelectRow blade runner.
  *
  * @author Gavin Bunney
  */
-class SelectRowTest extends GroovyTestCase {
+class SelectRowTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def selectRow;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
-        selectRow = new SelectRow();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def selectRow = new SelectRow();
 
     protected verifySelectRow(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -56,6 +47,7 @@ class SelectRowTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testSelectByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
@@ -71,18 +63,21 @@ class SelectRowTest extends GroovyTestCase {
         verifySelectRow(blade, true);
     }
 
+    @Test
     void testSelectByName() {
         MadcowMappings.addMapping(testCase, 'theTableMapping', ['name': 'theTableName']);
         GrassBlade blade = new GrassBlade('theTableMapping.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         verifySelectRow(blade, true);
     }
 
+    @Test
     void testSelectByXPath() {
         MadcowMappings.addMapping(testCase, 'theTableMapping', ['xpath': '//table[@id=\'theTable\']']);
         GrassBlade blade = new GrassBlade('theTableMapping.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         verifySelectRow(blade, true);
     }
 
+    @Test
     void testSelectBySpecialKeyword() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = first', testCase.grassParser);
         verifySelectRow(blade, true);
@@ -95,6 +90,7 @@ class SelectRowTest extends GroovyTestCase {
         assertEquals('2', testCase.runtimeStorage[xPather.getRuntimeStorageKey()]);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.selectRow = first', testCase.grassParser);
@@ -106,6 +102,7 @@ class SelectRowTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.selectRow = first', testCase.grassParser);
@@ -117,6 +114,7 @@ class SelectRowTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.selectRow', testCase.grassParser);

@@ -19,36 +19,24 @@
  * under the License.
  */
 
-
-
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the Set Radio Button BladeRunner.
  *
  * @author Gavin Bunney
  */
-class SetRadioButtonTest extends GroovyTestCase {
+class SetRadioButtonTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def setRadioButton;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('SetRadioButtonTest', new MadcowConfig(), []);
-        setRadioButton = new SetRadioButton();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    SetRadioButton setRadioButton = new SetRadioButton();
 
     protected verifyRadioExecution(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -57,6 +45,7 @@ class SetRadioButtonTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testRadioButtonByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('enabledRadioInput.setRadioButton', testCase.grassParser);
@@ -68,28 +57,33 @@ class SetRadioButtonTest extends GroovyTestCase {
         verifyRadioExecution(blade, true);
     }
 
+    @Test
     void testRadioButtonByName() {
         MadcowMappings.addMapping(testCase, 'aRadioName', ['name': 'enabledRadioInput']);
         GrassBlade blade = new GrassBlade('aRadioName.setRadioButton', testCase.grassParser);
         verifyRadioExecution(blade, true);
     }
 
+    @Test
     void testRadioButtonByXPath() {
         MadcowMappings.addMapping(testCase, 'aRadioXPath', ['xpath': '//input[@id=\'enabledRadioInput\']']);
         GrassBlade blade = new GrassBlade('aRadioXPath.setRadioButton', testCase.grassParser);
         verifyRadioExecution(blade, true);
     }
 
+    @Test
     void testRadioButtonDoesNotExist() {
         GrassBlade blade = new GrassBlade('aRadioThatDoesntExist.setRadioButton', testCase.grassParser);
         verifyRadioExecution(blade, false);
     }
 
+    @Test
     void testDefaultMappingSelector() {
         GrassBlade blade = new GrassBlade('testsite_menu_createAddress.setRadioButton', testCase.grassParser);
         assertTrue(setRadioButton.isValidBladeToExecute(blade));
     }
 
+    @Test
     void testRadioButtonByHtmlIdOffScreen() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aRadioOffScreenId.setRadioButton', testCase.grassParser);
@@ -101,6 +95,7 @@ class SetRadioButtonTest extends GroovyTestCase {
         verifyRadioExecution(blade, true);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.setRadioButton', testCase.grassParser);

@@ -21,34 +21,24 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
 
 import java.util.concurrent.TimeUnit
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the SelectFieldByIndex BladeRunner.
  *
  * @author Tom Romano
  */
-class SelectFieldByIndexTest extends GroovyTestCase {
+class SelectFieldByIndexTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def selectFieldByIndex;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('SelectFieldByIndexTest', new MadcowConfig(), []);
-        selectFieldByIndex = new SelectFieldByIndex();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    SelectFieldByIndex selectFieldByIndex = new SelectFieldByIndex()
 
     protected verifyValueExecution(GrassBlade blade, boolean shouldPass, String resultingOutput = null) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -60,6 +50,7 @@ class SelectFieldByIndexTest extends GroovyTestCase {
             assertEquals step.result.message, resultingOutput
     }
 
+    @Test
     void testSelectFieldByIndexByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = 2', testCase.grassParser);
@@ -71,29 +62,34 @@ class SelectFieldByIndexTest extends GroovyTestCase {
         verifyValueExecution(blade, true);
     }
 
+    @Test
     void testSelectFieldByIndexByName() {
         MadcowMappings.addMapping(testCase, 'aSelectName', ['name': 'carCylindersName']);
         GrassBlade blade = new GrassBlade('aSelectName.selectFieldByIndex = 0', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
+    @Test
     void testSelectFieldByIndexByNameOutsideRange() {
         MadcowMappings.addMapping(testCase, 'aSelectName', ['name': 'carCylindersName']);
         GrassBlade blade = new GrassBlade('aSelectName.selectFieldByIndex = 3', testCase.grassParser);
         verifyValueExecution(blade, false);
     }
 
+    @Test
     void testSelectFieldByIndexByXPath() {
         MadcowMappings.addMapping(testCase, 'aSelectXPath', ['xpath': '//select[@id=\'carCylinders\']']);
         GrassBlade blade = new GrassBlade('aSelectXPath.selectFieldByIndex = 2', testCase.grassParser);
         verifyValueExecution(blade, true);
     }
 
+    @Test
     void testSelectFieldDoesNotExist() {
         GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = 6', testCase.grassParser);
         verifyValueExecution(blade, false, "Unable to find specified option");
     }
 
+    @Test
     void testSelectFieldByIndexWithAListShouldFail() {
         try {
             GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = ["1","2"]', testCase.grassParser);
@@ -104,12 +100,14 @@ class SelectFieldByIndexTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testSelectFieldByIndexLessThanZeroByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('carCylinders.selectFieldByIndex = -1', testCase.grassParser);
         verifyValueExecution(blade, false, "Unable to find specified option");
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectFieldByIndex = Tennis', testCase.grassParser);
@@ -121,6 +119,7 @@ class SelectFieldByIndexTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectFieldByIndex = Tennis', testCase.grassParser);
@@ -132,6 +131,7 @@ class SelectFieldByIndexTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectFieldByIndex', testCase.grassParser);

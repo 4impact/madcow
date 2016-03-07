@@ -21,32 +21,22 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the ShowOnReport BladeRunner.
  *
  * @author Gavin Bunney
  */
-class ShowOnReportTest extends GroovyTestCase {
+class ShowOnReportTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def showOnReport;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('ShowOnReportTest', new MadcowConfig(), []);
-        showOnReport = new ShowOnReport();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    ShowOnReport showOnReport = new ShowOnReport();
 
     protected verifyShowOnReport(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +45,7 @@ class ShowOnReportTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testShowOnReportByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.showOnReport = The link name', testCase.grassParser);
@@ -69,6 +60,7 @@ class ShowOnReportTest extends GroovyTestCase {
         assertEquals('A link', testCase.reportDetails['The link name']);
     }
 
+    @Test
     void testShowOnReportByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.showOnReport = The link name', testCase.grassParser);
@@ -76,6 +68,7 @@ class ShowOnReportTest extends GroovyTestCase {
         assertEquals('A link', testCase.reportDetails['The link name']);
     }
 
+    @Test
     void testShowOnReportByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.showOnReport = The link name', testCase.grassParser);
@@ -83,6 +76,7 @@ class ShowOnReportTest extends GroovyTestCase {
         assertEquals('A link', testCase.reportDetails['The link name']);
     }
 
+    @Test
     void testShowOnReportByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.showOnReport = The link name', testCase.grassParser);
@@ -90,13 +84,14 @@ class ShowOnReportTest extends GroovyTestCase {
         assertEquals('A link', testCase.reportDetails['The link name']);
     }
 
-
+    @Test
     void testShowOnReportFormatted() {
         GrassBlade blade = new GrassBlade('aLinkId.showOnReport = [ name: \'The link name\', format: \'<b>%s</b>\']', testCase.grassParser);
         verifyShowOnReport(blade, true);
         assertEquals('<b>A link</b>', testCase.reportDetails['The link name']);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.showOnReport = Tennis', testCase.grassParser);
@@ -108,6 +103,7 @@ class ShowOnReportTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.showOnReport = Tennis', testCase.grassParser);
@@ -119,6 +115,7 @@ class ShowOnReportTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.showOnReport', testCase.grassParser);
