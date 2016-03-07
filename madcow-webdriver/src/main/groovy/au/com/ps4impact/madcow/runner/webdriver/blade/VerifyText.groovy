@@ -42,7 +42,8 @@ class VerifyText extends WebDriverBladeRunner {
             else
                 step.result = MadcowStepResult.FAIL("Page doesn't contain text '${step.blade.parameters as String}'");
         } else {
-            if (findElement(stepRunner, step).text.equals(step.blade.parameters as String))
+            def element = findElement(stepRunner, step);
+            if (element.text.equals(step.blade.parameters as String) || element.getAttribute('value').equals(step.blade.parameters as String))
                 step.result = MadcowStepResult.PASS();
             else
                 step.result = MadcowStepResult.FAIL("Element doesn't contain text '${step.blade.parameters as String}'");

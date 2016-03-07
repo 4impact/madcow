@@ -37,7 +37,13 @@ class CheckValue extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        String elementText = getElementText(findElement(stepRunner, step));
+        def element = findElement(stepRunner, step);
+        if (!element) {
+            step.result = MadcowStepResult.FAIL("Unable to find element!");
+            return;
+        }
+
+        String elementText = getElementText(element);
 
         String expectedValue = StringUtils.trim(step.blade.parameters as String);
         if (expectedValue == elementText) {

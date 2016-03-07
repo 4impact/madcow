@@ -37,28 +37,24 @@ class HasStyle extends WebDriverBladeRunner {
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
 
-        //get list of element classes from html (and split on spaces if not null)
-        List<String> elementClasses = findElement(stepRunner, step).getAttribute('style')?.split(';')?.toList();
-
-        //set default to blank string for null comparison to pass
-        if (elementClasses==null){
-            elementClasses = [""];
-        }
-
-        //list of expected classes (may not be in order)
+        def element = findElement(stepRunner, step);
         List<String> expectedValues = (StringUtils.trim(step.blade.parameters as String))?.split(';')?.toList();
 
         boolean foundMatch = false
 
-        //compare if elementClasses list has all of the expected values list
-        if (elementClasses.containsAll( expectedValues )){
-            foundMatch = true;
+        expectedValues.each { expectedValue ->
+            def split = StringUtils.trim(expectedValue).split(':', 2)
+            def expectedValueSelector = StringUtils.trim(split[0]);
+            def expectedValueValue = StringUtils.trim(split[1]);
+
+            def elementValue = element.getCssValue(expectedValueSelector);
+            foundMatch = (StringUtils.trim(elementValue).compareToIgnoreCase(expectedValueValue) == 0);
         }
 
         if (foundMatch) {
             step.result = MadcowStepResult.PASS();
         } else {
-            step.result = MadcowStepResult.FAIL("Expected Styles: '${expectedValues.toList()}', Present Styles: '${elementClasses.toList()}'");
+            step.result = MadcowStepResult.FAIL("Expected Styles: '${expectedValues.toList()}'");
         }
     }
 

@@ -39,8 +39,14 @@ class ClickLink extends Click {
 
         try {
             WebElement webElement = findElementForClickStep(stepRunner, step);
-            // scroll the element into view
-            ((Locatable)webElement).getCoordinates().inViewPort()
+
+            try {
+                // scroll the element into view
+                ((Locatable)webElement).getCoordinates()?.inViewPort();
+            } catch (ignored) {
+                // this can exception when there is _no_ viewport.. ignore it
+            }
+
             webElement.findElement(By.tagName('a')).click();
         } catch (ignored) {
             // failed to click, try again with the element directly
