@@ -51,8 +51,6 @@ class SingleTestCaseRunner {
                 } catch (e) {
                     testCase.logError("Test ${testCase.name} Failed!\n\nException: $e");
                 }
-
-                testCase.stepRunner.finishTestCase();
             }
         } catch (e) {
             LOG.error("${testCase.name} throw an unexpected exception:\n$e");
