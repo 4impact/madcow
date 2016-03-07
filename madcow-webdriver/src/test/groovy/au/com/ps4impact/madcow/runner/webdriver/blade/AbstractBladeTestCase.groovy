@@ -10,33 +10,27 @@ class AbstractBladeTestCase {
 
     MadcowTestCase testCase;
     String testHtmlFilePath;
-    String lastTestCase = null;
+    static AbstractBladeTestCase currentInstance;
 
     @Before
-    void setUp_test() {
-//        if (this.class.name != lastTestCase) {
-//            lastTestCase = this.class.name;
-//
-//            if (testCase && testCase.stepRunner) {
-//                testCase.stepRunner.finishTestCase()
-//            }
-//
-//            testCase = null;
-//        }
-//
-//        if (testCase == null) {
+    void setUp() {
+        currentInstance = this;
+        if (testCase == null) {
             testCase = new MadcowTestCase('BladeTest', new MadcowConfig(), []);
-//        }
-//
-//        if (testHtmlFilePath == null) {
+        }
+
+        if (testHtmlFilePath == null) {
             testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html')
-//        }
+        }
     }
 
-//    @AfterClass
-//    static void tearDown() {
-//        if (testCase && testCase.stepRunner) {
-//            testCase.stepRunner.finishTestCase()
-//        }
-//    }
+    @AfterClass
+    static void tearDown() {
+
+        if (currentInstance.testCase && currentInstance.testCase.stepRunner) {
+            currentInstance.testCase.stepRunner.finishTestCase()
+        }
+
+        currentInstance.testCase = null;
+    }
 }
