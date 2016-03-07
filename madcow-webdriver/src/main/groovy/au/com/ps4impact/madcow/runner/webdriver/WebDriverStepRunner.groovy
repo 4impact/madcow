@@ -24,6 +24,7 @@ package au.com.ps4impact.madcow.runner.webdriver
 import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
+import com.machinepublishers.jbrowserdriver.Settings
 import org.apache.commons.io.FileUtils
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.ElementNotVisibleException
@@ -138,6 +139,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     break;
 
                 case WebDriverType.IE:
+                    break;
+
+                case WebDriverType.JBROWSER:
+                    driverParameters = Settings.builder().ssl('trustanything').build()
                     break;
 
                 case WebDriverType.HTMLUNIT:
