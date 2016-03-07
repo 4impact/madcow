@@ -29,6 +29,7 @@ package au.com.ps4impact.madcow.runner.webdriver.driver
 public enum WebDriverType {
 
     HTMLUNIT('HtmlUnit', au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver),
+    JBROWSER('JBrowser', com.machinepublishers.jbrowserdriver.JBrowserDriver),
     FIREFOX('Firefox', org.openqa.selenium.firefox.FirefoxDriver),
     CHROME('Chrome', org.openqa.selenium.chrome.ChromeDriver),
     IE('IE', org.openqa.selenium.ie.InternetExplorerDriver),
