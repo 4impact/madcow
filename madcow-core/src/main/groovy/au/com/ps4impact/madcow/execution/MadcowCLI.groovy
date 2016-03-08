@@ -22,6 +22,8 @@
 package au.com.ps4impact.madcow.execution
 
 import au.com.ps4impact.madcow.MadcowProject
+import au.com.ps4impact.madcow.MadcowTestSuite
+import au.com.ps4impact.madcow.MadcowTestSuiteResult
 import groovy.io.FileType;
 import groovyjarjarcommonscli.ParseException;
 import groovyjarjarcommonscli.Option
@@ -91,23 +93,26 @@ class MadcowCLI {
         }
 
         try {
+            MadcowTestSuite executedSuite;
+
             if (options.test) {
                 println('tests: ' + options.tests)
-                MadcowTestRunner.executeTests(options.tests as ArrayList<String>, MadcowConfig.SHARED_CONFIG);
+                executedSuite = MadcowTestRunner.executeTests(options.tests as ArrayList<String>, MadcowConfig.SHARED_CONFIG);
             } else if (options.suite)    {
                 def list=[]
-                new File(options.suite).eachFileRecurse(FileType.FILES) {
+                new File(options.suite as String).eachFileRecurse(FileType.FILES) {
                     if(it.name.endsWith('.grass')) {
                         list << it.getName()
                     }
                 }
                 println(list)
-                MadcowTestRunner.executeTests(list, MadcowConfig.SHARED_CONFIG);
+                executedSuite = MadcowTestRunner.executeTests(list, MadcowConfig.SHARED_CONFIG);
             } else {
-                MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
+                executedSuite = MadcowTestRunner.executeTests(MadcowConfig.SHARED_CONFIG);
             }
 
             try {
+                // try and open the report
                 File reportFile = new File(MadcowProject.MADCOW_REPORT_DIRECTORY + '/index.html');
                 Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
                 if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
@@ -116,9 +121,14 @@ class MadcowCLI {
             } catch (Exception ignored) {
                 // failed to open report... oh well
             }
+
+            MadcowTestSuiteResult results = executedSuite.buildResults();
+            int testsFailed = (results.testsError + results.testsFailed);
+            System.exit(testsFailed);
+
         } catch (Exception e) {
             println("There was an error running Madcow: ${e.message}");
-            System.exit(1);
+            System.exit(9999);
         }
     }
 

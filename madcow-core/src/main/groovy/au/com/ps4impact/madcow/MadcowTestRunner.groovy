@@ -72,8 +72,9 @@ class MadcowTestRunner {
 
     /**
      * Main entry point to execute all the given tests.
+     * Returns the root test suite for possible evaluation of results.
      */
-    static void executeTests(ArrayList<String> testNames = [], MadcowConfig madcowConfig) {
+    static MadcowTestSuite executeTests(ArrayList<String> testNames = [], MadcowConfig madcowConfig) {
 
         prepareResultsDirectory();
 
@@ -144,6 +145,8 @@ class MadcowTestRunner {
 
         rootTestSuite.stopWatch.stop();
         reporters.each() { reporter -> reporter.createTestSuiteReport(rootTestSuite) };
+
+        return rootTestSuite;
     }
 
     /**
