@@ -64,10 +64,10 @@ class MadcowCLI {
      * Entry point.
      */
     static main(def args) {
-        // requires at least JDK 1.6
+
         def javaVersion = Integer.parseInt(System.getProperty("java.version").split("\\.")[1])
-        if (javaVersion < 6) {
-            println("Madcow currently requires at least Java JDK 1.6+, please update your JAVA_HOME accordingly and retry");
+        if (javaVersion < 8) {
+            println("Madcow currently requires at least Java JDK 1.8+, please update your JAVA_HOME accordingly and retry");
             return;
         }
 
