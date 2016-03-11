@@ -21,32 +21,22 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the CheckValue BladeRunner.
  *
  * @author Gavin Bunney
  */
-class CheckValueTest extends GroovyTestCase {
+class CheckValueTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def checkValue;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('CheckValueTest', new MadcowConfig(), []);
-        checkValue = new CheckValue();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    CheckValue checkValue = new CheckValue();
 
     protected verifyCheckValueContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +45,7 @@ class CheckValueTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testCheckValueByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link', testCase.grassParser);
@@ -66,6 +57,7 @@ class CheckValueTest extends GroovyTestCase {
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueByCss() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link', testCase.grassParser);
@@ -77,39 +69,46 @@ class CheckValueTest extends GroovyTestCase {
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueIncorrect() {
         GrassBlade blade = new GrassBlade('aLinkId.checkValue = A link that isn\'t a link is still a link', testCase.grassParser);
         verifyCheckValueContents(blade, false);
     }
 
+    @Test
     void testCheckValueByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.checkValue = A link', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.checkValue = A link', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.checkValue = A link', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueForTextArea() {
         GrassBlade blade = new GrassBlade('aTextAreaId.checkValue = Text area contents', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.checkValue = ', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValue = Tennis', testCase.grassParser);
@@ -121,6 +120,7 @@ class CheckValueTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValue = Tennis', testCase.grassParser);
@@ -132,6 +132,7 @@ class CheckValueTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValue', testCase.grassParser);

@@ -22,31 +22,21 @@
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
 import au.com.ps4impact.madcow.grass.GrassBlade
-import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.mappings.MadcowMappings
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the ClickLink BladeRunner.
  *
  * @author Gavin Bunney
  */
-class ClickLinkTest extends GroovyTestCase {
+class ClickLinkTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def clickLink;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('ClickLinkTest', new MadcowConfig(), []);
-        clickLink = new ClickLink();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    ClickLink clickLink = new ClickLink();
 
     protected verifyLinkExecution(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +45,7 @@ class ClickLinkTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testLinkByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.clickLink', testCase.grassParser);
@@ -66,6 +57,7 @@ class ClickLinkTest extends GroovyTestCase {
         verifyLinkExecution(blade, true);
     }
 
+    @Test
     void testLinkByCss() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.clickLink = A link', testCase.grassParser);
@@ -77,34 +69,40 @@ class ClickLinkTest extends GroovyTestCase {
         verifyLinkExecution(blade, true);
     }
 
+    @Test
     void testLinkByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
+    @Test
     void testLinkByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
+    @Test
     void testLinkByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
+    @Test
     void testLinkDoesNotExist() {
         GrassBlade blade = new GrassBlade('aLinkThatDoesntExist.clickLink', testCase.grassParser);
         verifyLinkExecution(blade, false);
     }
 
+    @Test
     void testDefaultMappingSelector() {
         GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.grassParser);
         assertTrue(clickLink.isValidBladeToExecute(blade));
     }
 
+    @Test
     void testLinkByHtmlIdOffScreen() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkOffScreenId.clickLink', testCase.grassParser);
@@ -116,11 +114,13 @@ class ClickLinkTest extends GroovyTestCase {
         verifyLinkExecution(blade, true);
     }
 
+    @Test
     void testLinkByEquationParameter() {
         GrassBlade blade = new GrassBlade('clickLink = This is a link to google that should off the bottom of the viewable screen area on most resolutions', testCase.grassParser);
         verifyLinkExecution(blade, true);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.clickLink', testCase.grassParser);

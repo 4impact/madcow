@@ -22,31 +22,21 @@
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
 import au.com.ps4impact.madcow.grass.GrassBlade
-import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.config.MadcowConfig
-import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.mappings.MadcowMappings
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the WaitFor BladeRunner.
  *
  * @author Gavin Bunney
  */
-class WaitForTest extends GroovyTestCase {
+class WaitForTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def waitFor;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('WaitForTest', new MadcowConfig(), []);
-        waitFor = new WaitFor();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def waitFor = new WaitFor()
 
     protected verifyWaitFor(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +45,7 @@ class WaitForTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testWaitForByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.waitFor', testCase.grassParser);
@@ -66,40 +57,47 @@ class WaitForTest extends GroovyTestCase {
         verifyWaitFor(blade, true);
     }
 
+    @Test
     void testWaitForIncorrect() {
         GrassBlade blade = new GrassBlade('aLinkId.waitFor = A link that isn\'t a link is still a link', testCase.grassParser);
         verifyWaitFor(blade, false);
     }
 
+    @Test
     void testWaitForByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.waitFor = A link', testCase.grassParser);
         verifyWaitFor(blade, true);
     }
 
+    @Test
     void testWaitForHTML() {
         GrassBlade blade = new GrassBlade('waitFor = <button id="enabledButton" name="enabledButton">enabledButton</button>', testCase.grassParser);
         verifyWaitFor(blade, true);
         assertEquals(blade.parameters, "<button id=\"enabledButton\" name=\"enabledButton\">enabledButton</button>")
     }
 
+    @Test
     void testWaitForByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.waitFor = A link', testCase.grassParser);
         verifyWaitFor(blade, true);
     }
 
+    @Test
     void testWaitForByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.waitFor = A link', testCase.grassParser);
         verifyWaitFor(blade, true);
     }
 
+    @Test
     void testWaitForEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.waitFor = ', testCase.grassParser);
         verifyWaitFor(blade, true);
     }
 
+    @Test
     void testWaitForPageText() {
         GrassBlade blade = new GrassBlade('waitFor = Madcow WebDriver Runner Test HTML', testCase.grassParser);
         verifyWaitFor(blade, true);

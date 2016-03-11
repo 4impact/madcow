@@ -21,31 +21,21 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the TestInfo BladeRunner.
  *
  * @author Gavin Bunney
  */
-class TestInfoTest extends GroovyTestCase {
+class TestInfoTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def testInfo;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('TestInfoTest', new MadcowConfig(), []);
-        testInfo = new TestInfo();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    TestInfo testInfo = new TestInfo()
 
     protected verifyTestInfo(GrassBlade blade, boolean shouldPass, String expectedMessage) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,17 +45,20 @@ class TestInfoTest extends GroovyTestCase {
         assertEquals(expectedMessage, step.result.message)
     }
 
+    @Test
     void testTestInfoValid() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('testInfo = This is my awesome test case', testCase.grassParser);
         verifyTestInfo(blade, true, "This is my awesome test case");
     }
 
+    @Test
     void testTestInfoValidAlso() {
         GrassBlade blade = new GrassBlade('testInfo = The link name', testCase.grassParser);
         verifyTestInfo(blade, true, "The link name");
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.testInfo = Tennis', testCase.grassParser);
@@ -77,12 +70,14 @@ class TestInfoTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorNotRequired() {
         GrassBlade blade = new GrassBlade('aLinkId.testInfo = Tennis', testCase.grassParser);
         blade.mappingSelectorType = null;
         assertTrue(testInfo.isValidBladeToExecute(blade));
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.testInfo', testCase.grassParser);

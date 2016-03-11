@@ -26,6 +26,7 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
+import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.Keys
 import au.com.ps4impact.madcow.runner.webdriver.driver.htmlunit.MadcowHtmlUnitDriver
 import com.gargoylesoftware.htmlunit.html.HtmlPage
@@ -78,6 +79,13 @@ class Value extends WebDriverBladeRunner {
             }
         } else {
             element.clear();
+
+            // check the element was _actually_ cleared - manually backspace if needed.. yikes!
+            String value = element.getTagName().toLowerCase() == 'input' ? element.getAttribute('value') : element.text;
+            if (value?.length() > 0) {
+                (0..value.length()).each { element.sendKeys(Keys.BACK_SPACE) }
+            }
+
             if (submitAfterSet) {
                 element.sendKeys(valueToSet, Keys.ENTER);
             } else {

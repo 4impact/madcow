@@ -21,25 +21,15 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
 
-class VerifyRegexTextTest extends GroovyTestCase {
+import static groovy.test.GroovyAssert.*
 
-    MadcowTestCase testCase;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('VerifyRegexTextTest', new MadcowConfig(), []);
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+class VerifyRegexTextTest extends AbstractBladeTestCase {
 
     protected verifyRegexTextContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -48,45 +38,53 @@ class VerifyRegexTextTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testVerifyRegexTextOnElementByHtmlId() {
         GrassBlade blade = new GrassBlade('textDiv.verifyRegexText = I ate 23[\\w\\s]*2day. Roxor.', testCase.grassParser);
         verifyRegexTextContents(blade, true);
     }
 
+    @Test
     void testVerifyRegexTextOnElementByName() {
         MadcowMappings.addMapping(testCase, 'squid', ['name': 'textDivName']);
         GrassBlade blade = new GrassBlade('squid.verifyRegexText = I ate 23 (children|monkeys) for lunch 2day. Roxor.', testCase.grassParser);
         verifyRegexTextContents(blade, true);
     }
 
+    @Test
     void testVerifyRegexTextOnElementByXpath() {
         MadcowMappings.addMapping(testCase, 'squid', ['xpath': "//div[@id='textDiv']"]);
         GrassBlade blade = new GrassBlade('squid.verifyRegexText = .*monkeys.*', testCase.grassParser);
         verifyRegexTextContents(blade, true);
     }
 
+    @Test
     void testVerifyRegexTextOnPage() {
         GrassBlade blade = new GrassBlade('verifyRegexText = Column Number [\\d]', testCase.grassParser);
         verifyRegexTextContents(blade, true);
     }
 
+    @Test
     void testVerifyRegexTextFailingOnElementByHtmlId() {
         GrassBlade blade = new GrassBlade('textDiv.verifyRegexText = I ate 23[\\w]*2day. Roxor.', testCase.grassParser);
         verifyRegexTextContents(blade, false);
     }
 
+    @Test
     void testVerifyRegexTextFailingOnElementByName() {
         MadcowMappings.addMapping(testCase, 'squid', ['name': 'textDivName']);
         GrassBlade blade = new GrassBlade('squid.verifyRegexText = I ate 23 (children|nkeys) for lunch 2day. Roxor.', testCase.grassParser);
         verifyRegexTextContents(blade, false);
     }
 
+    @Test
     void testVerifyRegexTextFailingOnElementByXpath() {
         MadcowMappings.addMapping(testCase, 'squid', ['xpath': "//div[@id='textDiv']"]);
         GrassBlade blade = new GrassBlade('squid.verifyRegexText = monkeys.*', testCase.grassParser);
         verifyRegexTextContents(blade, false);
     }
 
+    @Test
     void testVerifyRegexTextFailingOnPage() {
         GrassBlade blade = new GrassBlade('verifyRegexText = Column Number x', testCase.grassParser);
         verifyRegexTextContents(blade, false);

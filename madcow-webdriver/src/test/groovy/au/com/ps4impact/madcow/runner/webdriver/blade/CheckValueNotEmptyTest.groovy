@@ -21,32 +21,22 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the CheckValueNotEmpty BladeRunner.
  *
  * @author Paul Bevis
  */
-class CheckValueNotEmptyTest extends GroovyTestCase {
+class CheckValueNotEmptyTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def checkValueNotEmpty;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('CheckValueTest', new MadcowConfig(), []);
-        checkValueNotEmpty = new CheckValueNotEmpty();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    CheckValueNotEmpty checkValueNotEmpty = new CheckValueNotEmpty()
 
     protected verifyCheckValueContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +45,7 @@ class CheckValueNotEmptyTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testCheckValueByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.checkValueNotEmpty', testCase.grassParser);
@@ -66,6 +57,7 @@ class CheckValueNotEmptyTest extends GroovyTestCase {
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueByCss() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.checkValueNotEmpty = A link', testCase.grassParser);
@@ -77,34 +69,40 @@ class CheckValueNotEmptyTest extends GroovyTestCase {
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.checkValueNotEmpty', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.checkValueNotEmpty', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.checkValueNotEmpty', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueForTextArea() {
         GrassBlade blade = new GrassBlade('aTextAreaId.checkValueNotEmpty ', testCase.grassParser);
         verifyCheckValueContents(blade, true);
     }
 
+    @Test
     void testCheckValueEmptyFails() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.checkValueNotEmpty ', testCase.grassParser);
         verifyCheckValueContents(blade, false);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValueNotEmpty', testCase.grassParser);
@@ -116,6 +114,7 @@ class CheckValueNotEmptyTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkValueNotEmpty', testCase.grassParser);

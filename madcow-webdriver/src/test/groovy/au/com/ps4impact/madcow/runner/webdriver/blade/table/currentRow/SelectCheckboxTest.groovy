@@ -23,29 +23,18 @@ package au.com.ps4impact.madcow.runner.webdriver.blade.table.currentRow
 
 import au.com.ps4impact.madcow.MadcowTestCase
 import au.com.ps4impact.madcow.config.MadcowConfig
+import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.grass.GrassBlade
-import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
+import au.com.ps4impact.madcow.runner.webdriver.blade.AbstractBladeTestCase
+import org.junit.Test
 
-/**
- * User: andy.souyave
- * Date: 24/09/12
- * Time: 10:44 AM
- */
-class SelectCheckboxTest extends GroovyTestCase {
+import static groovy.test.GroovyAssert.*
 
-    MadcowTestCase testCase;
-    def selectCheckbox;
-    String testHtmlFilePath;
+class SelectCheckboxTest extends AbstractBladeTestCase {
 
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('SelectCheckboxTest', new MadcowConfig(), []);
-        selectCheckbox = new SelectCheckbox();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def selectCheckbox = new SelectCheckbox();
 
     protected MadcowStep executeBlade(GrassBlade blade, boolean reloadPage = true) {
         if (reloadPage){
@@ -62,6 +51,7 @@ class SelectCheckboxTest extends GroovyTestCase {
         return step;
     }
 
+    @Test
     void testClickTableCheckboxById() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'A checkbox\']', testCase.grassParser);
         executeBlade(blade, true);
@@ -70,6 +60,7 @@ class SelectCheckboxTest extends GroovyTestCase {
         verifyTableValue(blade, true, false);
     }
 
+    @Test
     void testClickTableCheckboxByName() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'A checkbox\']', testCase.grassParser);
         executeBlade(blade, true);
@@ -78,6 +69,7 @@ class SelectCheckboxTest extends GroovyTestCase {
         verifyTableValue(blade, true, false);
     }
 
+    @Test
     void testClickTableCheckboxByColumn() {
         GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'A checkbox\']', testCase.grassParser);
         executeBlade(blade, true);
@@ -86,12 +78,14 @@ class SelectCheckboxTest extends GroovyTestCase {
         verifyTableValue(blade, true, false);
     }
 
+    @Test
     void testClickTableCheckboxNeedToSelectRowFirst() {
         GrassBlade blade = new GrassBlade("theTable.table.currentRow.selectCheckbox = ['Column Number 2' : 'Tent']", testCase.grassParser);
         MadcowStep step = verifyTableValue(blade, false);
         assertEquals('No row has been selected - call selectRow first', step.result.message);
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.currentRow.selectCheckbox', testCase.grassParser);

@@ -20,32 +20,22 @@
  */
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * This class is to test the DoesNotHaveClass madcow operation
  *
  * @author Tom Romano
  */
-class DoesNotHaveClassTest extends GroovyTestCase {
+class DoesNotHaveClassTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def doesNotHaveClass;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('DoesNotHaveClassTest', new MadcowConfig(), []);
-        doesNotHaveClass = new DoesNotHaveClass();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    DoesNotHaveClass doesNotHaveClass = new DoesNotHaveClass();
 
     protected verifyDoesNotHaveClassContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -54,6 +44,7 @@ class DoesNotHaveClassTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testDoesNotHaveClassByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.doesNotHaveClass = aLinkClass', testCase.grassParser);
@@ -65,69 +56,81 @@ class DoesNotHaveClassTest extends GroovyTestCase {
         verifyDoesNotHaveClassContents(blade, false);
     }
 
+    @Test
     void testDoesNotHaveClassCorrect() {
         GrassBlade blade = new GrassBlade('aLinkId.doesNotHaveClass = aClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, true);
     }
 
+    @Test
     void testDoesNotHaveClassWrongOrderButValidByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.doesNotHaveClass =  aSecondLinkClass aLinkClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, false);
     }
 
+    @Test
     void testDoesntHaveSecondClassByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.doesNotHaveClass = aClass aSecondLinkClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, true);
     }
 
+    @Test
     void testDoesntHaveEitherClassByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.doesNotHaveClass = aClass aLinkClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, true);
     }
 
+    @Test
     void testHasSecondClassByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.doesNotHaveClass = aSecondLinkClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, false);
     }
 
+    @Test
     void testNotHasSecondClassByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.doesNotHaveClass = aSecondClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, true);
     }
 
+    @Test
     void testDoesNotHaveClassByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.doesNotHaveClass = aLinkClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, false);
     }
 
+    @Test
     void testDoesNotHaveClassByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.doesNotHaveClass = aLinkClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, false);
     }
 
+    @Test
     void testDoesNotHaveClassByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.doesNotHaveClass = aLinkClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, false);
     }
 
+    @Test
     void testDoesNotHaveClassForTextArea() {
         GrassBlade blade = new GrassBlade('aTextAreaId.doesNotHaveClass = aTextAreaClass', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, false);
     }
 
+    @Test
     void testDoesNotHaveClassEmpty() {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.doesNotHaveClass = ', testCase.grassParser);
         verifyDoesNotHaveClassContents(blade, false);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.doesNotHaveClass = Tennis', testCase.grassParser);
@@ -139,6 +142,7 @@ class DoesNotHaveClassTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.doesNotHaveClass = Tennis', testCase.grassParser);
@@ -150,6 +154,7 @@ class DoesNotHaveClassTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.doesNotHaveClass', testCase.grassParser);

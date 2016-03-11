@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.machinepublishers:jbrowserdriver:0.10.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/machinepublishers/jbrowserdriver/0.10.1/jbrowserdriver-0.10.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/machinepublishers/jbrowserdriver/0.10.1/jbrowserdriver-0.10.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

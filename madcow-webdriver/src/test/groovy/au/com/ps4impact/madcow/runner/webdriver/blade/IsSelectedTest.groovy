@@ -19,36 +19,24 @@
  * under the License.
  */
 
-
-
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the SelectCheckbox BladeRunner.
  *
  * @author Andy Souyave
  */
-class IsSelectedTest extends GroovyTestCase {
+class IsSelectedTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def selectCheckbox;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('IsSelectedTest', new MadcowConfig(), []);
-        selectCheckbox = new SelectCheckbox();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    SelectCheckbox selectCheckbox = new SelectCheckbox();
 
     protected verifyIsSelectedExecution(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -57,6 +45,7 @@ class IsSelectedTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testCheckboxByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aRadioButtonId.isSelected', testCase.grassParser);
@@ -70,28 +59,33 @@ class IsSelectedTest extends GroovyTestCase {
         verifyIsSelectedExecution(blade, true);
     }
 
+    @Test
     void testCheckboxByName() {
         MadcowMappings.addMapping(testCase, 'aRadioButtonName', ['name': 'aRadioButtonName']);
         GrassBlade blade = new GrassBlade('aRadioButtonName.isSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, true);
     }
 
+    @Test
     void testCheckboxByXPath() {
         MadcowMappings.addMapping(testCase, 'aRadioButtonXPath', ['xpath': '//input[@id=\'aRadioButtonId\']']);
         GrassBlade blade = new GrassBlade('aRadioButtonXPath.selectCheckbox', testCase.grassParser);
         verifyIsSelectedExecution(blade, true);
     }
-    
+
+    @Test
     void testCheckboxDoesNotExist() {
         GrassBlade blade = new GrassBlade('aRadioButtonThatDoesntExist.isSelected', testCase.grassParser);
         verifyIsSelectedExecution(blade, false);
     }
 
+    @Test
     void testDefaultMappingSelector() {
         GrassBlade blade = new GrassBlade('testsite_menu_createAddress.isSelected', testCase.grassParser);
         assertTrue(selectCheckbox.isValidBladeToExecute(blade));
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.isSelected', testCase.grassParser);
@@ -103,6 +97,7 @@ class IsSelectedTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.isSelected', testCase.grassParser);
@@ -114,6 +109,7 @@ class IsSelectedTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testEquationNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.isSelected = yeah yeah', testCase.grassParser);

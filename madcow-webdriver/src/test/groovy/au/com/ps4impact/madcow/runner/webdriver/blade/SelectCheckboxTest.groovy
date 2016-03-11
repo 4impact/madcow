@@ -19,36 +19,25 @@
  * under the License.
  */
 
-
-
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the SelectCheckbox BladeRunner.
  *
  * @author Andy Souyave
  */
-class SelectCheckboxTest extends GroovyTestCase {
+class SelectCheckboxTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def selectCheckbox;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('SelectCheckboxTest', new MadcowConfig(), []);
-        selectCheckbox = new SelectCheckbox();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    SelectCheckbox selectCheckbox = new SelectCheckbox();
 
     protected verifyCheckboxExecution(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -57,6 +46,7 @@ class SelectCheckboxTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testCheckboxByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aCheckboxId.selectCheckbox', testCase.grassParser);
@@ -68,28 +58,33 @@ class SelectCheckboxTest extends GroovyTestCase {
         verifyCheckboxExecution(blade, true);
     }
 
+    @Test
     void testCheckboxByName() {
         MadcowMappings.addMapping(testCase, 'aCheckboxName', ['name': 'aCheckboxName']);
         GrassBlade blade = new GrassBlade('aCheckboxName.selectCheckbox', testCase.grassParser);
         verifyCheckboxExecution(blade, true);
     }
 
+    @Test
     void testCheckboxByXPath() {
         MadcowMappings.addMapping(testCase, 'aCheckboxXPath', ['xpath': '//input[@id=\'aCheckboxId\']']);
         GrassBlade blade = new GrassBlade('aCheckboxXPath.selectCheckbox', testCase.grassParser);
         verifyCheckboxExecution(blade, true);
     }
-    
+
+    @Test
     void testCheckboxDoesNotExist() {
         GrassBlade blade = new GrassBlade('aCheckboxThatDoesntExist.selectCheckbox', testCase.grassParser);
         verifyCheckboxExecution(blade, false);
     }
 
+    @Test
     void testDefaultMappingSelector() {
         GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectCheckbox', testCase.grassParser);
         assertTrue(selectCheckbox.isValidBladeToExecute(blade));
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectCheckbox', testCase.grassParser);
@@ -101,6 +96,7 @@ class SelectCheckboxTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectCheckbox', testCase.grassParser);
@@ -112,6 +108,7 @@ class SelectCheckboxTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testEquationNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.selectCheckbox = yeah yeah', testCase.grassParser);

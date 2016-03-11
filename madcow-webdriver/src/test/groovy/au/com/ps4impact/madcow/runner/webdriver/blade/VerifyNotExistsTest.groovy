@@ -27,26 +27,18 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * This class is a test case for verifying that the element does not exist
  *
  * @author Paul Bevis
  */
-class VerifyNotExistsTest extends GroovyTestCase {
+class VerifyNotExistsTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def verifyNotExists;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('VerifyNotExistsTest', new MadcowConfig(), []);
-        verifyNotExists = new VerifyExists();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def verifyNotExists = new VerifyExists()
 
     protected verifyNotExistsExecution(GrassBlade blade, boolean shouldFail) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +47,7 @@ class VerifyNotExistsTest extends GroovyTestCase {
         assertEquals(shouldFail, step.result.passed());
     }
 
+    @Test
     void testLinkByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aLinkId.verifyNotExists', testCase.grassParser);
@@ -66,40 +59,47 @@ class VerifyNotExistsTest extends GroovyTestCase {
         verifyNotExistsExecution(blade, false);
     }
 
+    @Test
     void testLinkByHtmlIdHidden() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('hiddenTextInput.verifyNotExists', testCase.grassParser);
         verifyNotExistsExecution(blade, false);
     }
 
+    @Test
     void testLinkByName() {
         MadcowMappings.addMapping(testCase, 'aLinkName', ['name': 'aLinkName']);
         GrassBlade blade = new GrassBlade('aLinkName.verifyNotExists', testCase.grassParser);
         verifyNotExistsExecution(blade, false);
     }
 
+    @Test
     void testLinkByXPath() {
         MadcowMappings.addMapping(testCase, 'aLinkXPath', ['xpath': '//a[@id=\'aLinkId\']']);
         GrassBlade blade = new GrassBlade('aLinkXPath.verifyNotExists', testCase.grassParser);
         verifyNotExistsExecution(blade, false);
     }
 
+    @Test
     void testLinkByText() {
         MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
         GrassBlade blade = new GrassBlade('aLinkText.verifyNotExists', testCase.grassParser);
         verifyNotExistsExecution(blade, false);
     }
 
+    @Test
     void testLinkDoesNotExist() {
         GrassBlade blade = new GrassBlade('aLinkThatDoesntExist.verifyNotExists', testCase.grassParser);
         verifyNotExistsExecution(blade, true);
     }
 
+    @Test
     void testDefaultMappingSelector() {
         GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifyNotExists', testCase.grassParser);
         assertTrue(verifyNotExists.isValidBladeToExecute(blade));
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifyNotExists', testCase.grassParser);
@@ -111,6 +111,7 @@ class VerifyNotExistsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifyNotExists', testCase.grassParser);
@@ -122,6 +123,7 @@ class VerifyNotExistsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testEquationNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('testsite_menu_createAddress.verifyNotExists = yeah yeah', testCase.grassParser);

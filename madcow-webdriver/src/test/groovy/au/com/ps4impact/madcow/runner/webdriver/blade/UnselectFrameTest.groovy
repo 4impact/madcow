@@ -21,32 +21,22 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
-import au.com.ps4impact.madcow.util.ResourceFinder
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for the UnselectFrame Madcow operation Blade Runner.
  *
  * @author Tom Romano
  */
-class UnselectFrameTest extends GroovyTestCase {
+class UnselectFrameTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def unselectFrame;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('UnselectFrameTest', new MadcowConfig(), []);
-        unselectFrame = new UnselectFrame();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    UnselectFrame unselectFrame = new UnselectFrame()
 
     protected unselectFrameValid(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +45,7 @@ class UnselectFrameTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testUnselectFrameByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('aIframeId.unselectFrame', testCase.grassParser);
@@ -66,45 +57,53 @@ class UnselectFrameTest extends GroovyTestCase {
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameValidWithIncorrectParam() {
         GrassBlade blade = new GrassBlade('aIframeId.unselectFrame = A link that isn\'t a link is still a link', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameByName() {
         MadcowMappings.addMapping(testCase, 'aIframeByName', ['name': 'aIframeName']);
         GrassBlade blade = new GrassBlade('aIframeByName.unselectFrame', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameByNameWithParam() {
         MadcowMappings.addMapping(testCase, 'aIframeByName', ['name': 'aIframeName']);
         GrassBlade blade = new GrassBlade('aIframeByName.unselectFrame = Bob', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameByInvalidName() {
         GrassBlade blade = new GrassBlade('aIframeIdWrong.unselectFrame = A link that isn\'t a link is still a link', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameByXPath() {
         MadcowMappings.addMapping(testCase, 'aIframeXPath', ['xpath': '//iframe[@id=\'aIframeId\']']);
         GrassBlade blade = new GrassBlade('aIframeXPath.unselectFrame', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameByText() {
         MadcowMappings.addMapping(testCase, 'aIframeText', ['text': 'Like']);
         GrassBlade blade = new GrassBlade('aIframeText.unselectFrame', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameEmpty() {
         GrassBlade blade = new GrassBlade('aIframeId.unselectFrame = ', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameNoSelectorNoParams() {
         try {
             GrassBlade blade = new GrassBlade('unselectFrame', testCase.grassParser);
@@ -115,16 +114,19 @@ class UnselectFrameTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testUnselectFrameNoParams() {
         GrassBlade blade = new GrassBlade('page.unselectFrame', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameOnPage() {
         GrassBlade blade = new GrassBlade('unselectFrame = Madcow WebDriver Runner Test HTML', testCase.grassParser);
         unselectFrameValid(blade, true);
     }
 
+    @Test
     void testUnselectFrameNotOnPage() {
         GrassBlade blade = new GrassBlade('unselectFrame = This won\'t be on the page', testCase.grassParser);
         unselectFrameValid(blade, true);

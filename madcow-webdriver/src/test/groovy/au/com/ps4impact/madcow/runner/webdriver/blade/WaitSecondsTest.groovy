@@ -21,40 +21,35 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.step.MadcowStep
 import org.apache.commons.lang3.time.StopWatch
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for InvokeUrl Blade Runner
  *
  * @author Gavin Bunney
  */
-class WaitSecondsTest extends GroovyTestCase {
+class WaitSecondsTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def waitSeconds;
+    def waitSeconds = new WaitSeconds()
 
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('WaitSecondsTest', new MadcowConfig(), []);
-        waitSeconds = new WaitSeconds();
-    }
-
+    @Test
     void testWaitSeconds() {
         StopWatch watch = new StopWatch();
-        GrassBlade blade = new GrassBlade('waitSeconds = 2', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('waitSeconds = 1', testCase.grassParser);
         MadcowStep step = new MadcowStep(testCase, blade, null);
         watch.start();
         testCase.stepRunner.execute(step);
         watch.stop();
         assertTrue(step.result.passed());
-        assertTrue(watch.time >= 2000);
+        assertTrue(watch.time >= 1000);
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('someElement.waitSeconds', testCase.grassParser);
@@ -65,6 +60,7 @@ class WaitSecondsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testParameterMustBeSupplied() {
         try {
             GrassBlade blade = new GrassBlade('waitSeconds =   ', testCase.grassParser);

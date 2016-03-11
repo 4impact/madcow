@@ -102,6 +102,7 @@ project(':madcow-core') {
 project(':madcow-webdriver') {
     dependencies {
         compile "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+        compile "com.machinepublishers:jbrowserdriver:0.10.1"
         compile(project(':madcow-core'))
         testCompile project(path: ':madcow-core', configuration: 'tests')
     }

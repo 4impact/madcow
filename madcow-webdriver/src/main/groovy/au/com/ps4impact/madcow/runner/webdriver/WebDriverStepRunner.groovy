@@ -24,6 +24,7 @@ package au.com.ps4impact.madcow.runner.webdriver
 import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
+import com.machinepublishers.jbrowserdriver.Settings
 import org.apache.commons.io.FileUtils
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.ElementNotVisibleException
@@ -52,12 +53,13 @@ import java.util.concurrent.TimeUnit
  */
 class WebDriverStepRunner extends MadcowStepRunner {
 
-    public EventFiringWebDriver driver;
+    private EventFiringWebDriver _lazyDriver;
     public WebDriverType driverType;
+
     public String currentPageSource;
     public String lastPageSource;
     public String lastPageTitle;
-    public boolean initRemoteTimedOut = false;
+
     def driverParameters = null;
     private Dimension windowSize = null;
     private Long implicitTimeout;
@@ -140,6 +142,10 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 case WebDriverType.IE:
                     break;
 
+                case WebDriverType.JBROWSER:
+                    driverParameters = Settings.builder().ssl('trustanything').build()
+                    break;
+
                 case WebDriverType.HTMLUNIT:
                     driverParameters = BrowserVersion.FIREFOX_38;
                     if ((parameters.emulate ?: '') != '') {
@@ -166,8 +172,6 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 default:
                     break;
             }
-
-            initialiseDriver();
 
         } catch (ClassNotFoundException cnfe) {
             throw new Exception("The specified Browser '${parameters.browser}' cannot be found: $cnfe.message");
@@ -199,11 +203,15 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     /**
-     * Attempts to initialise the drive, retrying as required.
+     * Attempts to initialise the driver, retrying as required.
      */
-    private initialiseDriver() {
+    public EventFiringWebDriver getDriver() {
+        if (this._lazyDriver) {
+            return this._lazyDriver;
+        }
+
         def retryCount = 0;
-        while (retryCount <= 3 && this.driver == null) {
+        while (retryCount <= 3 && this._lazyDriver == null) {
 
             retryCount++;
             try {
@@ -218,14 +226,31 @@ class WebDriverStepRunner extends MadcowStepRunner {
                     }
 
                     if (browserDriver != null) {
-                        this.driver = new EventFiringWebDriver(browserDriver);
+                        this._lazyDriver = new EventFiringWebDriver(browserDriver);
 
                         testCase.logDebug("Setting up timeouts...")
-                        setupDriverTimeouts();
+
+                        try {
+                            if (implicitTimeout) {
+                                //attempt to set the provided timeout value
+                                this._lazyDriver.manage().timeouts().implicitlyWait(implicitTimeout, TimeUnit.SECONDS);
+                            }
+                            if (scriptTimeout) {
+                                //attempt to set the javascript timeout value
+                                this._lazyDriver.manage().timeouts().setScriptTimeout(scriptTimeout, TimeUnit.SECONDS);
+                            }
+
+                            if (pageLoadTimeout) {
+                                //attempt to set the page load timeout value
+                                this._lazyDriver.manage().timeouts().pageLoadTimeout(pageLoadTimeout, TimeUnit.SECONDS);
+                            }
+                        } catch (ignored) {
+                            // ignore any errors setting up timeouts - e.g. html unit doesn't support them all!
+                        }
 
                         if (windowSize) {
                             testCase.logInfo("Resizing default browser size to ${windowSize.width} x ${windowSize.height}")
-                            driver.manage().window().setSize(windowSize);
+                            this._lazyDriver.manage().window().setSize(windowSize);
                         }
 
                         this.afterDriverInitialised();
@@ -245,38 +270,14 @@ class WebDriverStepRunner extends MadcowStepRunner {
                 testCase.logDebug("Exception was ${ex}")
             }
         }
-    }
 
-    /**
-     * Setup the required driver timeout values as provided in config
-     *
-     * @param madcowDriverParams driver params
-     */
-    private setupDriverTimeouts() {
-
-        try {
-            if (implicitTimeout) {
-                //attempt to set the provided timeout value
-                this.driver.manage().timeouts().implicitlyWait(implicitTimeout, TimeUnit.SECONDS);
-            }
-            if (scriptTimeout) {
-                //attempt to set the javascript timeout value
-                this.driver.manage().timeouts().setScriptTimeout(scriptTimeout, TimeUnit.SECONDS);
-            }
-
-            if (pageLoadTimeout) {
-                //attempt to set the page load timeout value
-                this.driver.manage().timeouts().pageLoadTimeout(pageLoadTimeout, TimeUnit.SECONDS);
-            }
-        } catch (ignored) {
-            // ignore any errors setting up timeouts - e.g. html unit doesn't support them all!
-        }
+        return this._lazyDriver;
     }
 
     /**
      * Get a blade runner for the given GrassBlade.
      */
-    protected WebDriverBladeRunner getBladeRunner(GrassBlade blade) {
+    static protected WebDriverBladeRunner getBladeRunner(GrassBlade blade) {
         String operation = blade.operation;
 
         if (StringUtils.contains(operation, '.')) {
@@ -431,12 +432,13 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     public void finishTestCase() {
-        if (driver != null) {
-            if (driverType == WebDriverType.CHROME) {
-                driver.quit();
-            } else {
-                driver.close();
-            }
+        if (_lazyDriver == null) {
+            return;
+        }
+        if (driverType == WebDriverType.CHROME) {
+            driver.quit();
+        } else {
+            driver.close();
         }
     }
 }

@@ -28,25 +28,19 @@ import au.com.ps4impact.madcow.mappings.MadcowMappings
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.util.ResourceFinder
+import au.com.ps4impact.madcow.runner.webdriver.blade.AbstractBladeTestCase
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for Table Equals blade runner.
  *
  * @author Paul Bevis
  */
-class CountRowsEqualsTest extends GroovyTestCase {
+class CountRowsEqualsTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def countRowsEquals;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('CountRowsEqualsTest', new MadcowConfig(), []);
-        countRowsEquals = new Equals();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    Equals countRowsEquals = new Equals();
 
     protected verifyCountRow(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -55,6 +49,7 @@ class CountRowsEqualsTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testCountByHtmlId() {
         // defaults to html id
         GrassBlade blade = new GrassBlade('theTable.table.countRows.equals = 2', testCase.grassParser);
@@ -70,18 +65,21 @@ class CountRowsEqualsTest extends GroovyTestCase {
         verifyCountRow(blade, false);
     }
 
+    @Test
     void testCountByName() {
         MadcowMappings.addMapping(testCase, 'theTableMapping', ['name': 'theTableName']);
         GrassBlade blade = new GrassBlade('theTableMapping.table.countRows.equals = 5', testCase.grassParser);
         verifyCountRow(blade, true);
     }
 
+    @Test
     void testCountByXPath() {
         MadcowMappings.addMapping(testCase, 'theTableMapping', ['xpath': '//table[@id=\'theTable\']']);
         GrassBlade blade = new GrassBlade('theTableMapping.table.countRows.equals = 5', testCase.grassParser);
         verifyCountRow(blade, true);
     }
 
+    @Test
     void testMappingSelectorInvalidRequired() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.countRows.equals = 5', testCase.grassParser);
@@ -93,6 +91,7 @@ class CountRowsEqualsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testMappingSelectorRequired() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.countRows.equals = 5', testCase.grassParser);
@@ -104,6 +103,7 @@ class CountRowsEqualsTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('theTable.table.countRows.equals', testCase.grassParser);

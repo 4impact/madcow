@@ -21,28 +21,22 @@
 
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
-import au.com.ps4impact.madcow.MadcowTestCase
-import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.step.MadcowStep
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for InvokeUrl Blade Runner
  *
  * @author Gavin Bunney
  */
-class InvokeUrlTest extends GroovyTestCase {
+class InvokeUrlTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def invokeUrl;
+    InvokeUrl invokeUrl = new InvokeUrl();
 
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('InvokeUrlTest', new MadcowConfig(), []);
-        invokeUrl = new InvokeUrl();
-    }
-
+    @Test
     void testInvokeUrl() {
         GrassBlade blade = new GrassBlade('invokeUrl = ADDRESSBOOK/test.html', testCase.grassParser);
         MadcowStep step = new MadcowStep(testCase, blade, null);
@@ -51,6 +45,7 @@ class InvokeUrlTest extends GroovyTestCase {
         assertTrue(step.result.message.startsWith("URL now:"));
     }
 
+    @Test
     void testInvokeUrlRefresh() {
         GrassBlade blade = new GrassBlade('invokeUrl = ADDRESSBOOK/test.html', testCase.grassParser);
         MadcowStep step = new MadcowStep(testCase, blade, null);
@@ -64,6 +59,7 @@ class InvokeUrlTest extends GroovyTestCase {
         assertTrue(step2.result.message.startsWith("Page Refreshed. URL now:"));
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('someElement.invokeUrl', testCase.grassParser);
@@ -74,6 +70,7 @@ class InvokeUrlTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testParameterMustBeSupplied() {
         try {
             GrassBlade blade = new GrassBlade('invokeUrl =   ', testCase.grassParser);
@@ -84,6 +81,7 @@ class InvokeUrlTest extends GroovyTestCase {
         }
     }
 
+    @Test
     void testRefreshWithoutInitialPageSetup() {
         GrassBlade blade2 = new GrassBlade('invokeUrl = REFRESH', testCase.grassParser);
         MadcowStep step2 = new MadcowStep(testCase, blade2, null);

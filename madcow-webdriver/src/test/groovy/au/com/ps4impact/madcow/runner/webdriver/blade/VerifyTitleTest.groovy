@@ -19,8 +19,6 @@
  * under the License.
  */
 
-
-
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
 import au.com.ps4impact.madcow.MadcowTestCase
@@ -29,25 +27,18 @@ import au.com.ps4impact.madcow.grass.GrassBlade
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.util.ResourceFinder
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
+import org.junit.Test
+
+import static groovy.test.GroovyAssert.*
 
 /**
  * Test for VerifyTitle Blade Runner
  *
  * @author Gavin Bunney
  */
-class VerifyTitleTest extends GroovyTestCase {
+class VerifyTitleTest extends AbstractBladeTestCase {
 
-    MadcowTestCase testCase;
-    def verifyTitle;
-    String testHtmlFilePath;
-
-    void setUp() {
-        super.setUp();
-
-        testCase = new MadcowTestCase('VerifyTitleTest', new MadcowConfig(), []);
-        verifyTitle = new VerifyTitle();
-        testHtmlFilePath = ResourceFinder.locateFileOnClasspath(this.class.classLoader, 'test.html', 'html').absolutePath;
-    }
+    def verifyTitle = new VerifyTitle()
 
     protected verifyTitleContents(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -56,16 +47,19 @@ class VerifyTitleTest extends GroovyTestCase {
         assertEquals(shouldPass, step.result.passed());
     }
 
+    @Test
     void testVerifyTitle() {
         GrassBlade blade = new GrassBlade('verifyTitle = Test Page', testCase.grassParser);
         verifyTitleContents(blade, true);
     }
 
+    @Test
     void testVerifyTitleDifferent() {
         GrassBlade blade = new GrassBlade('verifyTitle = Test Page with a different title', testCase.grassParser);
         verifyTitleContents(blade, false);
     }
 
+    @Test
     void testStatementNotSupported() {
         try {
             GrassBlade blade = new GrassBlade('someElement.verifyTitle', testCase.grassParser);

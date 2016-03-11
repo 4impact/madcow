@@ -40,8 +40,12 @@ class Click extends WebDriverBladeRunner {
 
         WebElement webElement = findElementForClickStep(stepRunner, step);
 
-        // scroll the element into view
-        ((Locatable)webElement).getCoordinates().inViewPort()
+        try {
+            // scroll the element into view
+            ((Locatable)webElement).getCoordinates()?.inViewPort();
+        } catch (ignored) {
+            // this can exception when there is _no_ viewport.. ignore it
+        }
 
         webElement.click();
 
