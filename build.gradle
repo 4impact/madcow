@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     id 'net.saliman.cobertura' version '2.3.0'
+    id 'com.github.kt3k.coveralls' version '2.4.0'
 }
 
 configure(allprojects) { project ->
@@ -161,3 +162,11 @@ project(':madcow-project') {
     }
 }
 
+def subCoberturaFiles = subprojects.collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }
+
+cobertura {
+    coverageFormats = [ 'xml', 'html' ]
+    coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
+    coverageMergeDatafiles = subCoberturaFiles
+}
+test.dependsOn(subprojects.test)
