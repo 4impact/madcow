@@ -21,4 +21,4 @@ deploy:
   on:
     tags: true
 after_success:
-  - gradle cobertura coveralls
+  - gradle coveralls
