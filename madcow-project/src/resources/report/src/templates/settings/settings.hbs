@@ -15,6 +15,12 @@
                   {{> setting this}}
                 {{/eachInMap}}
 
+                {{#eachInMap overview}}
+                  {{#if_eq key "madcowVersion"}}
+                    {{> setting this}}
+                  {{/if_eq}}
+                {{/eachInMap}}
+
                 </tbody>
             </table>
         </div>

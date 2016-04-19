@@ -26,6 +26,7 @@ configure(allprojects) { project ->
     ext.groovyVersion    = '2.4.6'
 
     apply plugin: 'groovy'
+    apply plugin: 'idea'    
     apply plugin: 'net.saliman.cobertura'
 
     dependencies {
@@ -47,6 +48,31 @@ configure(allprojects) { project ->
     compileTestGroovy {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    processResources { 
+        from (sourceSets.main.allSource) {
+            include 'madcow.version'
+              expand([
+                    version : "${project.version}",
+                    buildNumber : System.getenv("TRAVIS_BUILD_NUMBER")?:"0",
+                    buildTimeStamp : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+              ])
+        }
+        from (sourceSets.main.allSource) {
+            exclude 'madcow.version'
+        }
+        into sourceSets.main.output.resourcesDir
+        outputs.upToDateWhen { false }
+    }
+
+    jar {
+        manifest {
+            attributes("Implementation-Title": project.name,
+                       "Implementation-Version": version
+//                    ,"Build-Time-ISO-8601": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                       )
+        }
     }
 
     task sourcesJar(type: Jar, dependsOn:classes) {
@@ -98,6 +124,7 @@ project(':madcow-core') {
     artifacts {
         tests testJar
     }
+
 }
 
 project(':madcow-webdriver') {
