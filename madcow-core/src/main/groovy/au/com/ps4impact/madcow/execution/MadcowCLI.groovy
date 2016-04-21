@@ -96,8 +96,8 @@ class MadcowCLI {
             MadcowTestSuite executedSuite;
 
             if (options.test) {
-                println('tests: ' + options.tests)
-                executedSuite = MadcowTestRunner.executeTests(options.tests as ArrayList<String>, MadcowConfig.SHARED_CONFIG);
+                println('tests: ' + options.tests*.trim())
+                executedSuite = MadcowTestRunner.executeTests(options.tests*.trim() as ArrayList<String>, MadcowConfig.SHARED_CONFIG);
             } else if (options.suite)    {
                 def list=[]
                 new File(options.suite as String).eachFileRecurse(FileType.FILES) {

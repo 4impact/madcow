@@ -33,15 +33,14 @@ class MadcowCLITest extends GroovyTestCase {
 
     public static String DEFAULT_HELP = """usage: runMadcow [options]
 Options:
- -a,--all                Run all tests
- -c,--conf <conf-file>   Name of the configuration file to use, defaults
-                         to madcow-config.xml
- -e,--env <env-name>     Environment to load from the madcow-config.xml
- -h,--help               Show usage information
- -m,--mappings           Generate the Mappings Reference files
- -s,--suite <suite-dir>  Name of the top level directory
- -t,--test <testname>    Comma separated list of test names
- -v,--version            Show the current version of Madcow
+ -a,--all                 Run all tests
+ -c,--conf <conf-file>    Name of the configuration file to use, defaults
+                          to madcow-config.xml
+ -e,--env <env-name>      Environment to load from the madcow-config.xml
+ -h,--help                Show usage information
+ -s,--suite <suite-dir>   Name of the top level directory
+ -t,--test <testname>     Comma separated list of test names
+ -v,--version             Show the current version of Madcow
 """;
 
     void testTestToRunOption() {
@@ -60,6 +59,10 @@ Options:
         options = MadcowCLI.parseArgs(['-t', '"AddressTest.grass,AddressTest2.grass"'].toArray() as String[]);
         assertArrayEquals(['AddressTest.grass', 'AddressTest2.grass'].toArray(), options.ts.toArray());
         assertArrayEquals(['AddressTest.grass', 'AddressTest2.grass'].toArray(), options.tests.toArray());
+
+        options = MadcowCLI.parseArgs(['-t', '"AddressTest.grass, AddressTest2.grass ,  AddressTest3.grass"'].toArray() as String[]);
+        assertArrayEquals(['AddressTest.grass', 'AddressTest2.grass', 'AddressTest3.grass'].toArray(), options.ts*.trim().toArray());
+        assertArrayEquals(['AddressTest.grass', 'AddressTest2.grass', 'AddressTest3.grass'].toArray(), options.tests*.trim().toArray());
 
         options = MadcowCLI.parseArgs(['-s', '"../"'].toArray() as String[]);
         assertEquals('../', options.s);
@@ -87,21 +90,22 @@ Options:
 
     protected void checkHelpOutput(Closure functionCall, String expectedHelpMessage) {
 
+        //save std out original
         def saveOut = System.out
 
         // capture the system output stream so we can look at the help printed stuff
         ByteArrayOutputStream systemOutOutputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(systemOutOutputStream));
 
+        //call the closure under test
         functionCall.call();
 
+        //save it's output
         String systemOutput = systemOutOutputStream.toString();
 
         assertEquals(expectedHelpMessage.trim(), systemOutput.trim().replace("\r\n", "\n"));
 
-        MadcowCLI.main(['-h'] as String[])
-        assertEquals(expectedHelpMessage.trim(), systemOutput.trim().replace("\r\n", "\n"));
-
+        //set the system out back again
         System.setOut(saveOut);
     }
 
