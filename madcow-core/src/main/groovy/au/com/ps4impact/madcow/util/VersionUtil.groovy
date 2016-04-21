@@ -36,6 +36,8 @@ public class VersionUtil {
 
     public static String version = "?";
     public static int buildNumber = 0;
+    public static String buildTag = "";
+    public static String commitHash = "";
     public static DateTime timestamp = new DateTime();
 
     static {
@@ -47,6 +49,10 @@ public class VersionUtil {
                     version = parts[1].trim();
                 } else if ('madcow.build'.equals(parts[0].trim())) {
                     buildNumber = parts[1].trim() as int;
+                } else if ('madcow.tag'.equals(parts[0].trim())) {
+                    buildTag = parts[1].trim();
+                } else if ('madcow.commit'.equals(parts[0].trim())) {
+                    commitHash = parts[1].trim();
                 } else if ('madcow.buildTimestamp'.equals(parts[0].trim())) {
                     DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
                     timestamp = parser.parseDateTime(parts[1].trim());
@@ -56,6 +62,15 @@ public class VersionUtil {
     }
 
     static String getVersionString() {
-        return "v${version} (${buildNumber})";
+        return "v${version} build (${buildNumber})";
+    }
+
+    static String getFullVersionString() {
+        return """ Madcow Version v${version}
+                     Build\t\t${buildNumber}
+                     Release\t\t${buildTag}
+                     Commit\t\t#${commitHash}
+                     Built On\t\t${timestamp}
+        """;
     }
 }

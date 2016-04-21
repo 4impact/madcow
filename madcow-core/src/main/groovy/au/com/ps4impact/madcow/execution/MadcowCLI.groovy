@@ -80,9 +80,9 @@ class MadcowCLI {
         }
 
         if (options.version) {
-            println("----------------------------------------------------");
-            println("Madcow Version " + VersionUtil.getVersionString());
-            println("----------------------------------------------------");
+            println("-------------------------------------------")
+            println(VersionUtil.getFullVersionString());
+            println("-------------------------------------------")
             return;
         }
 

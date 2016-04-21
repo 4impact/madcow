@@ -1,3 +1,5 @@
 madcow.version = ${version}
 madcow.build = ${buildNumber}
+madcow.tag = ${tagName}
+madcow.commit = ${commit}
 madcow.buildTimestamp = ${buildTimeStamp}
