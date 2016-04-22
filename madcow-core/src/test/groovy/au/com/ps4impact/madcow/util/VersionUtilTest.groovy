@@ -40,4 +40,10 @@ class VersionUtilTest extends GroovyTestCase {
         String versionString = VersionUtil.getVersionString();
         assertTrue(versionString.length() > 6);
     }
+
+    void testFullVersionString() {
+        String versionString = VersionUtil.getFullVersionString();
+        println(VersionUtil.getFullVersionString())
+        assertTrue(versionString.length() > 60);
+    }
 }
