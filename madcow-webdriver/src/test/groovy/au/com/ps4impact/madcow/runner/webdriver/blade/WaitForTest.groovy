@@ -71,10 +71,17 @@ class WaitForTest extends AbstractBladeTestCase {
     }
 
     @Test
+    void testWaitForHTMLNoMatch() {
+        GrassBlade blade = new GrassBlade('waitFor = <BUGEDDYBUGGEDY />', testCase.grassParser);
+        verifyWaitFor(blade, false);
+    }
+
+    @Test
     void testWaitForHTML() {
-        GrassBlade blade = new GrassBlade('waitFor = <button id="enabledButton" name="enabledButton">enabledButton</button>', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('waitFor =<button id="enabledButton" name="enabledButton">\n' +
+                '                enabledButton\n' +
+                '              </button>', testCase.grassParser);
         verifyWaitFor(blade, true);
-        assertEquals(blade.parameters, "<button id=\"enabledButton\" name=\"enabledButton\">enabledButton</button>")
     }
 
     @Test
