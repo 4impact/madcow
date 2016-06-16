@@ -36,7 +36,7 @@ import static groovy.test.GroovyAssert.*
  */
 class CheckAttributeContainsTest extends AbstractBladeTestCase {
 
-	CheckAttribute checkAttribute = new CheckAttribute()
+	CheckAttributeContains checkAttributeContains = new CheckAttributeContains()
 
     protected verifyCheckAttributeContains(GrassBlade blade, boolean shouldPass) {
         (testCase.stepRunner as WebDriverStepRunner).driver.get("file://${testHtmlFilePath}");
@@ -65,11 +65,18 @@ class CheckAttributeContainsTest extends AbstractBladeTestCase {
 	}
 
 	@Test
+	void testCheckAttributeElementNotFound() {
+		// defaults to html id
+		GrassBlade blade = new GrassBlade('nuSuchElement.checkAttributeContains = [name:"Link"]', testCase.grassParser);
+		verifyCheckAttributeContains(blade, false);
+	}
+
+	@Test
 	void testMappingSelectorInvalidRequired() {
 		try {
-			GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkAttributeContains = [name:"something"]', testCase.grassParser);
+			GrassBlade blade = new GrassBlade('aLinkId.checkAttributeContains = [name:"something"]', testCase.grassParser);
 			blade.mappingSelectorType = 'invalidOne';
-			assertFalse(checkAttribute.isValidBladeToExecute(blade));
+			assertFalse(checkAttributeContains.isValidBladeToExecute(blade));
 			fail('should always exception');
 		} catch (e) {
 			assertEquals('Unsupported mapping selector type \'invalidOne\'. Only [ID, NAME, XPATH, CSS] are supported.', e.message);
@@ -79,9 +86,9 @@ class CheckAttributeContainsTest extends AbstractBladeTestCase {
 	@Test
 	void testMappingSelectorRequired() {
 		try {
-			GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkAttributeContains = [name:"something"]', testCase.grassParser);
+			GrassBlade blade = new GrassBlade('aLinkId.checkAttributeContains = [name:"something"]', testCase.grassParser);
 			blade.mappingSelectorType = null;
-			assertFalse(checkAttribute.isValidBladeToExecute(blade));
+			assertFalse(checkAttributeContains.isValidBladeToExecute(blade));
 			fail('should always exception');
 		} catch (e) {
 			assertEquals('Mapping selector must be supplied. One of [ID, NAME, XPATH, CSS] are supported.', e.message);
@@ -91,11 +98,17 @@ class CheckAttributeContainsTest extends AbstractBladeTestCase {
 	@Test
 	void testStatementNotSupported() {
 		try {
-			GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkAttributeContains', testCase.grassParser);
-			assertFalse(checkAttribute.isValidBladeToExecute(blade));
+			GrassBlade blade = new GrassBlade('aLinkId.checkAttributeContains', testCase.grassParser);
+			assertFalse(checkAttributeContains.isValidBladeToExecute(blade));
 			fail('should always exception');
 		} catch (e) {
 			assertEquals('Unsupported grass format. Only grass blades of type \'[EQUATION]\' are supported.', e.message);
 		}
+	}
+
+	@Test
+	void testPrimitiveMethods() {
+		assertTrue(checkAttributeContains.allowEmptyParameterValue())
+		assertNotNull(checkAttributeContains.getSupportedParameterTypes())
 	}
 }

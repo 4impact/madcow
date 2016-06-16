@@ -65,9 +65,16 @@ class CheckAttributeTest extends AbstractBladeTestCase {
 	}
 
 	@Test
+	void testCheckAttributeNoElement() {
+		// defaults to html id
+		GrassBlade blade = new GrassBlade('noSuchElement.checkAttribute = [name:"aLinkName"]', testCase.grassParser);
+		verifyCheckAttribute(blade, false);
+	}
+
+	@Test
 	void testMappingSelectorInvalidRequired() {
 		try {
-			GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkAttribute = [name:"something"]', testCase.grassParser);
+			GrassBlade blade = new GrassBlade('aLinkId.checkAttribute = [name:"something"]', testCase.grassParser);
 			blade.mappingSelectorType = 'invalidOne';
 			assertFalse(checkAttribute.isValidBladeToExecute(blade));
 			fail('should always exception');
@@ -79,7 +86,7 @@ class CheckAttributeTest extends AbstractBladeTestCase {
 	@Test
 	void testMappingSelectorRequired() {
 		try {
-			GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkAttribute = [name:"something"]', testCase.grassParser);
+			GrassBlade blade = new GrassBlade('aLinkId.checkAttribute = [name:"something"]', testCase.grassParser);
 			blade.mappingSelectorType = null;
 			assertFalse(checkAttribute.isValidBladeToExecute(blade));
 			fail('should always exception');
@@ -91,11 +98,17 @@ class CheckAttributeTest extends AbstractBladeTestCase {
 	@Test
 	void testStatementNotSupported() {
 		try {
-			GrassBlade blade = new GrassBlade('testsite_menu_createAddress.checkAttribute', testCase.grassParser);
+			GrassBlade blade = new GrassBlade('aLinkId.checkAttribute', testCase.grassParser);
 			assertFalse(checkAttribute.isValidBladeToExecute(blade));
 			fail('should always exception');
 		} catch (e) {
 			assertEquals('Unsupported grass format. Only grass blades of type \'[EQUATION]\' are supported.', e.message);
 		}
+	}
+
+	@Test
+	void testPrimitiveMethods() {
+		assertTrue(checkAttribute.allowEmptyParameterValue())
+		assertNotNull(checkAttribute.getSupportedParameterTypes())
 	}
 }

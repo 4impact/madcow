@@ -60,6 +60,12 @@ class CheckValueContainsTest extends AbstractBladeTestCase {
 
         blade = new GrassBlade('theTable.table.currentRow.checkValueContains = [\'Column Number 2\' : \'try\']', testCase.grassParser);
         verifyTableCheckValueContains(blade, true);
+
+        blade = new GrassBlade('theTable.table.currentRow.checkValueContains = [\'lastColumn\' : \'try\']', testCase.grassParser);
+        verifyTableCheckValueContains(blade, true);
+
+        blade = new GrassBlade('theTable.table.currentRow.checkValueContains = [\'column2\' : \'try\']', testCase.grassParser);
+        verifyTableCheckValueContains(blade, true);
     }
 
     @Test
@@ -68,6 +74,12 @@ class CheckValueContainsTest extends AbstractBladeTestCase {
         executeBlade(blade);
 
         blade = new GrassBlade('theTable.table.currentRow.checkValueContains = [\'Column Number 1\' : \'Value\']', testCase.grassParser);
+        verifyTableCheckValueContains(blade, true);
+
+        blade = new GrassBlade('theTable.table.currentRow.checkValueContains = [\'firstColumn\' : \'Value\']', testCase.grassParser);
+        verifyTableCheckValueContains(blade, true);
+
+        blade = new GrassBlade('theTable.table.currentRow.checkValueContains = [\'column1\' : \'Value\']', testCase.grassParser);
         verifyTableCheckValueContains(blade, true);
     }
 
