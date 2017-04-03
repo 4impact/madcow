@@ -1,8 +1,10 @@
 # This is the default format.
 # For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
 permalink: /:categories/:title.html
-auto: true
-server: true
 
-pygments: true
+# deprecated options
+#auto: true
+#server: true
+#pygments: true
+highlighter: true
 exclude: ["README.md"]

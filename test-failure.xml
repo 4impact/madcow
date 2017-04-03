@@ -1,0 +1,7 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<test:Response xmlns:test="urn:com:example">
+			<test:success>false</test:success>
+		</test:Response>
+	</soapenv:Body>
+</soapenv:Envelope>
