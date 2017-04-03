@@ -6,5 +6,5 @@ permalink: /:categories/:title.html
 #auto: true
 #server: true
 #pygments: true
-highlighter: true
+highlighter: rouge
 exclude: ["README.md"]
