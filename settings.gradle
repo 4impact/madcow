@@ -1,0 +1,5 @@
+rootProject.name='madcow'
+
+include 'madcow-core'
+include 'madcow-webdriver'
+include 'madcow-project'

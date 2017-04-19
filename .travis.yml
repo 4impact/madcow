@@ -1,9 +1,8 @@
 language: java
 sudo: false
 jdk:
-- openjdk6
-install: mvn clean install
-before_script: mvn clean
+- oraclejdk8
+before_script: gradle clean
 notifications:
   webhooks:
     urls:
@@ -13,11 +12,17 @@ notifications:
     on_start: never
   slack:
     secure: OpHPVXixQOZovw4OFZAeH9UsX8pqxt7RrrfzvlRq0khkV9KNWlOGPXVRLO1PpNlx3lGaLbPntz/XNqJImHRloZRPB40pZgqsoptO7yNGE4QfRwA5oQGt3nrGWbBG5CWLH/C5YvF/kRTV/4Mp/FoMjLFLlFOf0I3TG+EAUN1quTQ=
+before_deploy: gradle installZip upgradeZip
 deploy:
   provider: releases
   api_key:
     secure: arKEreSKqK8bbx13l5cduV9dn3ZQGdKs32B08V2rUUJWsJmoLc02VzJsQlSmdmUWBODNx/Vt6oi4pb0taea800caTY/4Vds2n4yAEov4a4sp4r4gOM3xkwzIIKISjzt0ShS4I8w5WlDt2qm2rahdOOCatgcVqGlpO/wuTmni/6k=
-  file: madcow-project/target/madcow-project-2.0-SNAPSHOT-install.zip
+  file:
+    - madcow-project/build/distributions/madcow-2.0-SNAPSHOT-install.zip
+    - madcow-project/build/distributions/madcow-2.0-SNAPSHOT-upgrade.zip
   skip_cleanup: true
   on:
     tags: true
+after_deploy: "echo deployment done"
+after_success:
+  - gradle coveralls

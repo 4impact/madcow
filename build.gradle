@@ -1,0 +1,201 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.saliman:gradle-cobertura-plugin:2.3.0"
+    }
+}
+
+plugins {
+    id 'net.saliman.cobertura' version '2.3.0'
+    id 'com.github.kt3k.coveralls' version '2.4.0'
+}
+
+configure(allprojects) { project ->
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    group = "au.com.ps4impact.${rootProject.name}"
+
+    ext.antVersion       = '1.8.2'
+    ext.seleniumVersion  = '2.52.0'
+    ext.groovyVersion    = '2.4.6'
+
+    apply plugin: 'groovy'
+    apply plugin: 'idea'    
+    apply plugin: 'net.saliman.cobertura'
+
+    dependencies {
+        compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+        compile "org.apache.commons:commons-lang3:3.4"
+        compile "log4j:log4j:1.2.17"
+        compile "org.fusesource.jansi:jansi:1.11"
+        compile "org.functionaljava:functionaljava:3.1"
+        compile "joda-time:joda-time:2.7"
+        testCompile "junit:junit:4.2"
+        testRuntime "org.slf4j:slf4j-api:1.7.10"
+    }
+
+    compileGroovy {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    compileTestGroovy {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    processResources { 
+        from (sourceSets.main.allSource) {
+            include 'madcow.version'
+              expand([
+                    version : "${project.version}",
+                    buildNumber : System.getenv("TRAVIS_BUILD_NUMBER")?:"0",
+                    tagName : System.getenv("TRAVIS_TAG")?:"unknown",
+                    commit : System.getenv("TRAVIS_COMMIT")?:"-",
+                    buildTimeStamp : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+              ])
+        }
+        from (sourceSets.main.allSource) {
+            exclude 'madcow.version'
+        }
+        into sourceSets.main.output.resourcesDir
+        outputs.upToDateWhen { false }
+    }
+
+    jar {
+        manifest {
+            attributes("Implementation-Title": project.name,
+                       "Implementation-Version": version
+//                    ,"Build-Time-ISO-8601": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                       )
+        }
+    }
+
+    task sourcesJar(type: Jar, dependsOn:classes) {
+        from sourceSets.main.allSource
+        classifier 'sources'
+        extension 'jar'
+    }
+
+    task testJar(type: Jar, dependsOn: testClasses) {
+        baseName = "test-${project.archivesBaseName}"
+        from sourceSets.test.output
+    }
+
+    cobertura {
+        coverageFormats = ['html', 'xml']
+        coverageIgnoreTrivial = true
+        coverageIgnores = ['org.slf4j.Logger.*']
+        coverageReportDir = new File("${buildDir}/reports/cobertura")
+    }
+
+    test.finalizedBy(project.tasks.cobertura)
+
+    artifacts {
+        archives sourcesJar
+    }
+}
+
+project(':madcow-core') {
+    dependencies {
+        compile 'commons-cli:commons-cli:1.2'
+        compile 'commons-io:commons-io:2.4'
+        compile('org.springframework:spring-core:3.1.0.RELEASE') {
+            exclude group: 'log4j'
+            exclude group: 'asm'
+            exclude group: 'backport-util-concurrent'
+        }
+        compile "org.apache.ant:ant:${antVersion}"
+        compile ("org.apache.ant:ant-junit:${antVersion}") {
+            exclude group: 'junit'
+            exclude group: 'org.apache.ant', module: 'ant'
+        }
+        testCompile "org.seleniumhq.selenium:selenium-api:${seleniumVersion}"
+    }
+
+    configurations {
+        tests
+    }
+
+    artifacts {
+        tests testJar
+    }
+
+}
+
+project(':madcow-webdriver') {
+    dependencies {
+        compile "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+        compile "com.machinepublishers:jbrowserdriver:0.10.1"
+        compile(project(':madcow-core'))
+        testCompile project(path: ':madcow-core', configuration: 'tests')
+    }
+}
+
+project(':madcow-project') {
+    dependencies {
+        compile(project(':madcow-core'))
+        compile(project(':madcow-webdriver'))
+    }
+
+    // don't publish the default jar for this project
+    configurations.archives.artifacts.clear()
+
+    task upgradeZip(dependsOn: 'compileGroovy', type: Zip) { zipTask ->
+        group = "Distribution"
+        baseName = "madcow"
+        classifier = "upgrade"
+        description = "Builds -${classifier} archive, containing just the madcow release changes."
+
+        ext.baseDir = "${baseName}-${project.version}";
+
+        into(".madcow/lib") {
+            from project(':madcow-core').jar
+            from project(':madcow-core').configurations.runtime
+
+            from project(':madcow-webdriver').jar
+            from project(':madcow-webdriver').configurations.runtime
+        }
+
+        from('src/resources/project-template') {
+            include('.madcow/**/*.*')
+            include('runMadcow.*')
+        }
+    }
+
+    task installZip(dependsOn: [upgradeZip], type: Zip) { zipTask ->
+        group = "Distribution"
+        baseName = "madcow"
+        classifier = "install"
+        description = "Builds -${classifier} archive, containing all jars and project template."
+
+        ext.baseDir = "${baseName}-${project.version}";
+
+        from('src/resources/project-template') {
+            include('**/*.*')
+        }
+
+        from(zipTree(upgradeZip.archivePath))
+    }
+
+    
+
+    artifacts {
+        archives installZip
+    }
+}
+
+def subCoberturaFiles = subprojects.collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }
+
+cobertura {
+    coverageFormats = [ 'xml', 'html' ]
+    coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
+    coverageMergeDatafiles = subCoberturaFiles
+}
+test.dependsOn(subprojects.test)

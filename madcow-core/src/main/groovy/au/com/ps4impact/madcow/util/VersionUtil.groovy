@@ -34,26 +34,62 @@ public class VersionUtil {
 
     protected static final String VERSION_FILENAME = "madcow.version";
 
-    public static String version;
-    public static int buildNumber;
-    public static DateTime timestamp;
+    public static String version = "?";
+    public static int buildNumber = 0;
+    public static String buildTag = "";
+    public static String commitHash = "";
+    public static DateTime timestamp = new DateTime();
 
     static {
-        List<String> lines = ResourceFinder.locateResourceOnClasspath(VersionUtil.class.classLoader, VERSION_FILENAME).URL.readLines();
-        lines.each { line ->
-            String[] parts = line.split('=');
-            if ('madcow.version'.equals(parts[0].trim())) {
-                version = parts[1].trim();
-            } else if ('madcow.build'.equals(parts[0].trim())) {
-                buildNumber = parts[1].trim() as int;
-            } else if ('madcow.buildTimestamp'.equals(parts[0].trim())) {
-                DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
-                timestamp = parser.parseDateTime(parts[1].trim());
+        try {
+            List<String> lines = ResourceFinder.locateResourceOnClasspath(VersionUtil.class.classLoader, VERSION_FILENAME).URL.readLines();
+            lines.each { line ->
+                String[] parts = line.split('=');
+                if ('madcow.version'.equals(parts[0].trim())) {
+                    version = parts[1].trim();
+                } else if ('madcow.build'.equals(parts[0].trim())) {
+                    buildNumber = parts[1].trim() as int;
+                } else if ('madcow.tag'.equals(parts[0].trim())) {
+                    buildTag = parts[1].trim();
+                } else if ('madcow.commit'.equals(parts[0].trim())) {
+                    commitHash = parts[1].trim()
+                    if (commitHash.length()>7){
+                        commitHash = commitHash.substring(0,7);
+                    }
+                } else if ('madcow.buildTimestamp'.equals(parts[0].trim())) {
+                    DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
+                    timestamp = parser.parseDateTime(parts[1].trim());
+                }
             }
-        }
+        } catch (ignored) { }
     }
 
     static String getVersionString() {
-        return "v${version} (${buildNumber})";
+        return "v${version} build (${buildNumber})";
+    }
+
+    static String getFullVersionString() {
+        def out = new StringBuffer()
+        out << '|'
+        out << ' Madcow '.center(45, "*")
+        out << '|' << '\n'
+        out << '| Version:  '.padRight(43-version.length()+2)
+        out << "${version} "
+        out << '|'.padRight(46-version.length()+2) << '\n'
+        out << '| Build:    '.padRight(43-String.valueOf(buildNumber).length()+2)
+        out << "${buildNumber} "
+        out << '|'.padRight(46-String.valueOf(buildNumber).length()+2) << '\n'
+        out << '| Release:  '.padRight(43-buildTag.length()+2)
+        out << "${buildTag} "
+        out << '|'.padRight(46-buildTag.length()+2) << '\n'
+        out << '| Commit #: '.padRight(43-commitHash.length()+2)
+        out << "${commitHash} "
+        out << '|'.padRight(46-commitHash.length()+2) << '\n'
+        out << '| Built On: '.padRight(43-timestamp.toString().length()+2)
+        out << "${timestamp} "
+        out << '|'.padRight(46-timestamp.toString().length()+2) << '\n'
+        out << '|'
+        out << '********'.center(45, "*")
+        out << '|' << '\n'
     }
 }

@@ -14,7 +14,8 @@
     render: function() {
       $('.sidebar').html(JST.sidebar({}));
       $('.content').html(JST['settings/settings']({
-        config: dataService.config
+        config: dataService.config,
+        overview: dataService.overview
       }));
 
       window.document.title = 'Madcow Settings';

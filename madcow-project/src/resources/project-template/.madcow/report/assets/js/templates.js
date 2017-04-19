@@ -196,9 +196,22 @@ this["JST"]["settings/settings"] = Handlebars.template({"1":function(depth0,help
   stack1 = this.invokePartial(partials.setting, '                  ', 'setting', depth0, undefined, helpers, partials, data);
   if (stack1 != null) { buffer += stack1; }
   return buffer;
+},"3":function(depth0,helpers,partials,data) {
+  var stack1, helperMissing=helpers.helperMissing, buffer = "";
+  stack1 = ((helpers.if_eq || (depth0 && depth0.if_eq) || helperMissing).call(depth0, (depth0 != null ? depth0.key : depth0), "madcowVersion", {"name":"if_eq","hash":{},"fn":this.program(4, data),"inverse":this.noop,"data":data}));
+  if (stack1 != null) { buffer += stack1; }
+  return buffer;
+},"4":function(depth0,helpers,partials,data) {
+  var stack1, buffer = "";
+  stack1 = this.invokePartial(partials.setting, '                    ', 'setting', depth0, undefined, helpers, partials, data);
+  if (stack1 != null) { buffer += stack1; }
+  return buffer;
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helperMissing=helpers.helperMissing, buffer = "<div class=\"header\">\n    <h1>\n      Settings\n    </h1>\n</div>\n\n<div class=\"settings\">\n\n    <div class=\"settings-list box\">\n        <div class=\"box-body\">\n            <table>\n                <tbody>\n\n";
   stack1 = ((helpers.eachInMap || (depth0 && depth0.eachInMap) || helperMissing).call(depth0, (depth0 != null ? depth0.config : depth0), {"name":"eachInMap","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}));
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n";
+  stack1 = ((helpers.eachInMap || (depth0 && depth0.eachInMap) || helperMissing).call(depth0, (depth0 != null ? depth0.overview : depth0), {"name":"eachInMap","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data}));
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n                </tbody>\n            </table>\n        </div>\n    </div>\n\n</div>";
 },"usePartial":true,"useData":true});
@@ -238,7 +251,10 @@ this["JST"]["suite/suite"] = Handlebars.template({"1":function(depth0,helpers,pa
   buffer += "            </tbody>\n        </table>\n      </div>\n  </div>\n\n";
   stack1 = helpers.each.call(depth0, ((stack1 = (depth0 != null ? depth0.suite : depth0)) != null ? stack1.suites : stack1), {"name":"each","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n</div>";
+  buffer += "\n  <p class=\"footer version\">";
+  stack1 = lambda(((stack1 = (depth0 != null ? depth0.overview : depth0)) != null ? stack1.madcowVersion : stack1), depth0);
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "</p>\n\n</div>";
 },"usePartial":true,"useData":true});
 
 this["JST"]["testcase/testcase"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {

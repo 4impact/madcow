@@ -22,6 +22,7 @@
 package au.com.ps4impact.madcow
 
 import au.com.ps4impact.madcow.report.IJSONSerializable
+import au.com.ps4impact.madcow.step.MadcowStepResult
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import org.apache.commons.lang3.StringUtils
@@ -59,6 +60,10 @@ class MadcowTestSuite implements IJSONSerializable {
 
     public String toString() {
         return fullyQualifiedName();
+    }
+
+    public MadcowTestSuiteResult buildResults() {
+        return new MadcowTestSuiteResult(this);
     }
 
     /**

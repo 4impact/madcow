@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: org.zeroturnaround:zt-process:1.4-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/zeroturnaround/zt-process/1.4-SNAPSHOT/zt-process-1.4-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

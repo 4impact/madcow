@@ -129,16 +129,20 @@ class MadcowTestCase implements IJSONSerializable {
      * MadcowStepRunner specified by configuration for handling the step execution.
      */
     public void execute() {
-        parseScript();
+        try {
+            parseScript();
 
-        stopWatch = new StopWatch();
-        stopWatch.start();
+            stopWatch = new StopWatch();
+            stopWatch.start();
 
-        steps.each { step ->
-            executeStep(step);
+            steps.each { step ->
+                executeStep(step);
+            }
+
+            stopWatch.stop();
+        } finally {
+            stepRunner.finishTestCase()
         }
-
-        stopWatch.stop();
     }
 
     /**

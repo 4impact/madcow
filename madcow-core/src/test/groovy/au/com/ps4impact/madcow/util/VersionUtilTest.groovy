@@ -30,9 +30,7 @@ class VersionUtilTest extends GroovyTestCase {
 
     void testVersionReading() {
         assertNotNull(VersionUtil.version);
-        assertTrue(VersionUtil.version.length() >= 3)
-
-        assertTrue(VersionUtil.buildNumber >= 1);
+        assertTrue(VersionUtil.buildNumber >= 0);
 
         assertNotNull(VersionUtil.timestamp);
         assertTrue(VersionUtil.timestamp.year >= 2012);
@@ -41,5 +39,11 @@ class VersionUtilTest extends GroovyTestCase {
     void testVersionString() {
         String versionString = VersionUtil.getVersionString();
         assertTrue(versionString.length() > 6);
+    }
+
+    void testFullVersionString() {
+        String versionString = VersionUtil.getFullVersionString();
+        println(VersionUtil.getFullVersionString())
+        assertTrue(versionString.length() > 60);
     }
 }

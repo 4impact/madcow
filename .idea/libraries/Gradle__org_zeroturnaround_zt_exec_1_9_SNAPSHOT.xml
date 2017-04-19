@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.zeroturnaround:zt-exec:1.9-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/zeroturnaround/zt-exec/1.9-SNAPSHOT/zt-exec-1.9-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/zeroturnaround/zt-exec/1.9-SNAPSHOT/zt-exec-1.9-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -4,11 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/madcow.iml" filepath="$PROJECT_DIR$/madcow.iml" />
       <module fileurl="file://$PROJECT_DIR$/madcow-core/madcow-core.iml" filepath="$PROJECT_DIR$/madcow-core/madcow-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/madcow-parent-pom/madcow-parent-pom.iml" filepath="$PROJECT_DIR$/madcow-parent-pom/madcow-parent-pom.iml" />
       <module fileurl="file://$PROJECT_DIR$/madcow-project/madcow-project.iml" filepath="$PROJECT_DIR$/madcow-project/madcow-project.iml" />
-      <module fileurl="file://$PROJECT_DIR$/madcow-webdriver-plugin/madcow-webdriver-plugin.iml" filepath="$PROJECT_DIR$/madcow-webdriver-plugin/madcow-webdriver-plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/madcow-webdriver-runner/madcow-webdriver-runner.iml" filepath="$PROJECT_DIR$/madcow-webdriver-runner/madcow-webdriver-runner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/madcow-webdriver/madcow-webdriver.iml" filepath="$PROJECT_DIR$/madcow-webdriver/madcow-webdriver.iml" />
     </modules>
   </component>
 </project>
-
