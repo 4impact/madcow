@@ -46,6 +46,7 @@ class MadcowTestCase implements IJSONSerializable {
     public GrassParser grassParser;
     public MadcowStepRunner stepRunner;
     public boolean ignoreTestCase = false;
+    public boolean testCaseError = false;
     
     public ArrayList<MadcowStep> steps = new ArrayList<MadcowStep>();
     public MadcowStep lastExecutedStep;
@@ -230,6 +231,10 @@ class MadcowTestCase implements IJSONSerializable {
                 status = MadcowStepResult.StatusType.PARSE_ERROR;
             else if (step.result.failed())
                 status = MadcowStepResult.StatusType.FAIL;
+        }
+
+        if(this.testCaseError == true) {
+            status = MadcowStepResult.StatusType.FAIL;
         }
 
         return [
