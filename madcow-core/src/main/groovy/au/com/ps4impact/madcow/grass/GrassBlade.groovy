@@ -129,16 +129,74 @@ class GrassBlade implements IJSONSerializable {
      * Returns the type of blade, DATA_PARAMETER or EQUATION.
      */
     public GrassBladeType parseParameters(String parametersString, GrassParser parser) {
+        def paramEval = null
+        try {
+            paramEval = ParseUtils.evalMe(parametersString);
+            switch (paramEval) {
+                case String:
+                    parametersString = parseStringParameter(paramEval as String, parser)
+                    break;
+                case Map:
+                    //This will parse the variable inside Map<String, String>
+                    if((paramEval as Map).values().first() instanceof String) {
+                        parametersString = "[${(paramEval as Map).collect{"'${it.key}' : '${parseStringParameter(it.value, parser).replace("'","\\\'")}'"}.join(",")}]"
+                    }
+                    //This will parse the variable inside Map<String, List>
+                    if((paramEval as Map).values().first() instanceof List) {
+                        parametersString = (paramEval as Map).collect{
+                            String key, List vals -> [
+                                    "'${key}':[${vals.collect{"'${parseStringParameter(it, parser)}'"}.join(",")}]"
+                            ]
+                        }.join(",")
+                    }
+                    break;
+                case List:
+                    parametersString = "["+(paramEval as List).collect {"'${parseStringParameter(it, parser)}'"}.join(",")+"]"
+                    break;
+            }
+        } catch (Exception e) {
+            if (e instanceof GrassParseException) {
+                throw e
+            }
+        }
+
+        boolean isSettingDataParameter = false;
+        if (this.operation.startsWith(DATA_PARAMETER_KEY)) {
+            isSettingDataParameter = true;
+            parser.setDataParameter(this.operation, parametersString);
+        }
+
+        // If the param is to be stored at runtime, then set a placeholder for runtime processing
+        if (this.operation.equals('store')) {
+            parser.setDataParameter(DATA_PARAMETER_KEY + parametersString, "${DATA_PARAMETER_KEY}{${parametersString}}")
+        }
+
+        if (this.operation.equals('table.currentRow.store')) {
+            if (paramEval instanceof Map ) {
+                paramEval.each{ String key, String paramName ->
+                    parser.setDataParameter(DATA_PARAMETER_KEY + paramName, "${DATA_PARAMETER_KEY}{${paramName}}")
+                }
+            } else{
+                throw new GrassParseException(line, "Invalid table current row parameters . Please use ['columnName' :'parameterName'] format");
+            }
+        }
+
+        this.parameters = ParseUtils.evalMe(parametersString); // why do we need to parse it again?
+        return this.type != null ? this.type : isSettingDataParameter ? GrassBladeType.DATA_PARAMETER : GrassBladeType.EQUATION;
+    }
+
+    public String parseStringParameter(String parametersString, GrassParser parser) throws GrassParseException {
 
         Matcher inlineParameters = parametersString =~ DATA_PARAMETER_INLINE_REGEX;
         if (inlineParameters.size() > 0) {
             inlineParameters.each { String paramMatch, String paramName ->
                 parametersString = StringUtils.replace(parametersString, paramMatch, parser.getDataParameter("${DATA_PARAMETER_KEY}${paramName}"));
+
             }
         }
 
         if (parametersString.startsWith(DATA_PARAMETER_KEY)) {
-            parametersString = parser.getDataParameter(parametersString);
+            parametersString = parser.getDataParameter(parametersString)
         }
 
         Matcher inlineMacros = parametersString =~ EVAL_MACRO_INLINE_REGEX;
@@ -152,19 +210,7 @@ class GrassBlade implements IJSONSerializable {
             }
         }
 
-        boolean isSettingDataParameter = false;
-        if (this.operation.startsWith(DATA_PARAMETER_KEY)) {
-            isSettingDataParameter = true;
-            parser.setDataParameter(this.operation, parametersString);
-        }
-
-        // If the param is to be stored at runtime, then set a placeholder for runtime processing
-        if (this.operation.equals('store')){
-            parser.setDataParameter(DATA_PARAMETER_KEY + parametersString, "${DATA_PARAMETER_KEY}{${parametersString}}")
-        }
-
-        this.parameters = ParseUtils.evalMe(parametersString);
-        return this.type != null ? this.type : isSettingDataParameter ? GrassBladeType.DATA_PARAMETER : GrassBladeType.EQUATION;
+        return parametersString
     }
 
     /**
