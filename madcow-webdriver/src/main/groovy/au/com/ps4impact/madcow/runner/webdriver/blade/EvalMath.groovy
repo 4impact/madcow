@@ -12,6 +12,10 @@ import java.math.RoundingMode
 /**
  * This will allow math operations
  * Created by framos on 4/27/2017.
+ *
+ * evalMath = [name:'sum',value:'@{val1} + @{val2} + 2']
+ * evalMath = [name:'sum2',value:'sum + 1']
+ * evalMath = [name:'total',value:'sum2 + sum']
  */
 class EvalMath extends WebDriverBladeRunner{
 
