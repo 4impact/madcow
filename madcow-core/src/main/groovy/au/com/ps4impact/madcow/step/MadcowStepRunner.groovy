@@ -32,6 +32,7 @@ import au.com.ps4impact.madcow.MadcowTestCase
 abstract class MadcowStepRunner {
 
     public MadcowTestCase testCase;
+    private boolean isFailed = false
 
     public MadcowStepRunner() {
         this(null);
@@ -46,6 +47,13 @@ abstract class MadcowStepRunner {
         // overridden in children
     }
 
+    public boolean isFailed(){
+        return isFailed
+    }
+
+    public boolean setFailed(){
+        isFailed = true
+    }
     /**
      * Execute a MadcowStep. This is the main entry point for calling
      * out to a MadcowStepRunner.
