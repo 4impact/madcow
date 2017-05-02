@@ -123,9 +123,10 @@ class MadcowConfig implements IJSONSerializable {
         if (closeBrowserOnFailTxt != '') {
             try {
                 closeBrowserOnFail = !closeBrowserOnFailTxt.equals("false") as boolean;
-            } catch (ignored) {
-                throw new Exception('Invalid "closeBrowserOnFail" field specified - only true or false is allowed');
+            } catch (Exception e) {
+                throw new Exception("Unexpected error in closeBrowserOnFail - $e.message");
             }
+
         }
 
         // get the default retry count and use it if none is set
