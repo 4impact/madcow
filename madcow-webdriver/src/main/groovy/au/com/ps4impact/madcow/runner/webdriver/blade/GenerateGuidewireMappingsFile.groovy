@@ -6,6 +6,7 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
@@ -66,8 +67,8 @@ class GenerateGuidewireMappingsFile extends WebDriverBladeRunner{
     private void storeElement(WebElement element){
         String id = element.getAttribute("id").replace("-inputRow","")
         WebElement labelElement = getElement(element, id + "-labelCell")
-        String label = null
-        String mapping = null
+        String label = ""
+        String mapping = ""
         if(labelElement != null){
             label = labelElement.getText().replaceAll("\\W","")
         }
@@ -123,12 +124,7 @@ class GenerateGuidewireMappingsFile extends WebDriverBladeRunner{
             e.printStackTrace();
         } finally {
             try {
-                if (bw != null)
-                    bw.close();
-
-                if (fw != null)
-                    fw.close();
-
+                IOUtils.closeQuietly(bw, fw);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
