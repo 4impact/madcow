@@ -121,12 +121,12 @@ class GenerateGuidewireMappingsFile extends WebDriverBladeRunner{
             bw.write(content);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Catch IO if something happens within 3 lines above. If not, proceed to finally.
         } finally {
             try {
                 IOUtils.closeQuietly(bw, fw);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(); // Catch IO if something happens during closeQuietly.
             }
         }
     }
