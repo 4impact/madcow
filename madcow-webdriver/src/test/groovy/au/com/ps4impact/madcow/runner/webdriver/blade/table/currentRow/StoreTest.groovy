@@ -25,38 +25,38 @@ class StoreTest extends AbstractBladeTestCase {
 
     @Test
     void testStoreInDataParameter() {
-        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('storeTable.table.selectRow = [\'Column Number 2\' : \'Country\']', testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.value = ['Column Number 1' : 'Tennis']", testCase.grassParser);
+        blade = new GrassBlade("storeTable.table.currentRow.value = ['Column Number 1' : 'Tennis']", testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.store = ['Column Number 1' : 'Parameter']", testCase.grassParser);
+        blade = new GrassBlade("storeTable.table.currentRow.store = ['Column Number 1' : 'Parameter']", testCase.grassParser);
         executeBlade(blade, true);
 
     }
 
     @Test
     void testStoredDateInDataParameter() {
-        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'2013-01-08\']', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('storeTable.table.selectRow = [\'Column Number 1\' : \'2013-01-08\']', testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.store = ['Column Number 1' : 'Parameter']", testCase.grassParser);
+        blade = new GrassBlade("storeTable.table.currentRow.store = ['Column Number 1' : 'Parameter']", testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.value = ['Column Number 2' : '@Parameter']", testCase.grassParser);
+        blade = new GrassBlade("storeTable.table.currentRow.value = ['Column Number 2' : '@Parameter']", testCase.grassParser);
         executeBlade(blade, true);
     }
 
     @Test
     void testStoredDateTimeInDataParameter() {
-        GrassBlade blade = new GrassBlade('theTable.table.selectRow = [\'Column Number 1\' : \'2013-10-09T15:38:15\']', testCase.grassParser);
+        GrassBlade blade = new GrassBlade('storeTable.table.selectRow = [\'Column Number 1\' : \'2013-10-09T15:38:15\']', testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.store = ['Column Number 1' : 'Parameter']", testCase.grassParser);
+        blade = new GrassBlade("storeTable.table.currentRow.store = ['Column Number 1' : 'Parameter']", testCase.grassParser);
         executeBlade(blade, true);
 
-        blade = new GrassBlade("theTable.table.currentRow.value = ['Column Number 2' : '@Parameter']", testCase.grassParser);
+        blade = new GrassBlade("storeTable.table.currentRow.value = ['Column Number 2' : '@Parameter']", testCase.grassParser);
         executeBlade(blade, true);
     }
 
