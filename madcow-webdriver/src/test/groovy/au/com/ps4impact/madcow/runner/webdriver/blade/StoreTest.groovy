@@ -94,4 +94,18 @@ class StoreTest extends AbstractBladeTestCase {
         GrassBlade blade = new GrassBlade('anEmptyParagraphId.store = ', testCase.grassParser);
         verifyStoreContents(blade, false);
     }
+
+    @Test
+    void testStoreDateTest () {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('tblDate.store = saveDate', testCase.grassParser);
+        verifyStoreContents(blade, true);
+    }
+
+    @Test
+    void testStoreDateTimeTest () {
+        // defaults to html id
+        GrassBlade blade = new GrassBlade('tblDateTime.store = saveDateTime', testCase.grassParser);
+        verifyStoreContents(blade, true);
+    }
 }
