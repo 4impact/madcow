@@ -137,4 +137,16 @@ class WaitForTest extends AbstractBladeTestCase {
         GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'text\': \'link\' , \'seconds\': \'10\']', testCase.grassParser);
         verifyWaitFor(blade, false);
     }
+
+    @Test
+    void testWaitForRetryWithRefresh() {
+        GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'text\': \'link\' , \'seconds\': \'2\', \'retry\': \'3\', \'refresh\': \'true\']', testCase.grassParser);
+        verifyWaitFor(blade, false);
+    }
+
+    @Test
+    void testWaitForRetry() {
+        GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'text\': \'link\' , \'seconds\': \'2\', \'retry\': \'3\']', testCase.grassParser);
+        verifyWaitFor(blade, false);
+    }
 }

@@ -39,6 +39,11 @@ class WaitFor extends WebDriverBladeRunner {
     private static final int maxSeconds = 30; // default seconds
     private static final String TEXT = "text"
     private static final String SECONDS = "seconds"
+    private static final String RETRY = "retry"
+    private static final String REFRESH = "refresh"
+
+    private boolean refresh = false;
+    private int retryCount = 1;
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
         boolean found = false;
@@ -54,6 +59,8 @@ class WaitFor extends WebDriverBladeRunner {
                              step.blade.parameters = textValue;
                              break;
                         case SECONDS: waitSeconds = Integer.parseInt(entry.getValue()); break;
+                        case RETRY: retryCount = Integer.parseInt(entry.getValue()); break;
+                        case REFRESH: refresh = Boolean.parseBoolean(entry.getValue()); break;
                         default: break;
                     }
                 }
@@ -74,10 +81,22 @@ class WaitFor extends WebDriverBladeRunner {
     }
     private boolean checkWaitForCondition(int waitSeconds, MadcowStep step, WebDriverStepRunner stepRunner, boolean found) {
         boolean flag = false
-        for (count in 1..waitSeconds) {
-            flag = isDesiredConditionFound(count, step, stepRunner, found)
-            if (flag) break;
-            Thread.sleep(1000);
+        retry:
+        for(;retryCount>0;retryCount--) {
+            for (count in 1..waitSeconds) {
+                flag = isDesiredConditionFound(count, step, stepRunner, found)
+                if (flag) break;
+                Thread.sleep(1000);
+            }
+
+            if(refresh == true) {
+                step.testCase.logInfo("Refreshing Current Page: $stepRunner.driver.currentUrl")
+                stepRunner.driver.navigate().refresh();
+                try {
+                    stepRunner.driver.switchTo().alert().accept();
+                } catch(ignore) {
+                }
+            }
         }
         return flag
     }
@@ -131,5 +150,9 @@ class WaitFor extends WebDriverBladeRunner {
      */
     protected boolean allowEmptyParameterValue() {
         return true;
+    }
+
+    protected List<Class> getSupportedParameterTypes() {
+        return [String.class, Map.class]
     }
 }
