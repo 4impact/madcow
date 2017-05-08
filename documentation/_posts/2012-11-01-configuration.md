@@ -52,6 +52,7 @@ These include the following:
 *   `<parallel>` [Parallel Execution](#parallel_execution)
 *   `<threads>` [Threads](#threads)
 *   `<retries>` [Retry Count](#retry_count)
+*   `<closeBrowserOnFail>` [Close Browser On Fail](#closeBrowserOnFail)
 
 
 
@@ -93,6 +94,12 @@ For example:
 {% endhighlight %}
 will effectively execute a failed test a second time, marking it as failed if and only if it fails a second time as well. (Useful for remote server mode if experiencing connection dropouts)
 
+#### Close Browser On Fail
+> Working for both Chrome and Firefox. Defaults to false.
+{% highlight xml %}
+<closeBrowserOnFail>true</closeBrowserOnFail> = Closes browser every time test fails.
+<closeBrowserOnFail>false</closeBrowserOnFail> = Retains browser open and can be manually close.
+{% endhighlight %}
 ------------------
 
 ### Execution Runner
