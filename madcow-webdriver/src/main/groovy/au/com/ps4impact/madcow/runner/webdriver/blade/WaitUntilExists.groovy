@@ -5,6 +5,7 @@ import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
 import au.com.ps4impact.madcow.step.MadcowStepResult
+import au.com.ps4impact.madcow.step.MadcowStepRunner
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
@@ -28,13 +29,13 @@ class WaitUntilExists extends WebDriverBladeRunner{
      * @param step
      */
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
+        MadcowStepResult result = null
         try{
-            findElementInPage(stepRunner, step)
-
+            result = findElementInPage(stepRunner, step)
         }catch (Exception e){
-            step.result = MadcowStepResult.FAIL("Element not found within specified timeout of ${timeout} seconds.")
+            result = MadcowStepResult.FAIL("Element not found within specified timeout of ${timeout} seconds.")
         }
-
+        step.result = result
     }
 
     /**
@@ -89,7 +90,7 @@ class WaitUntilExists extends WebDriverBladeRunner{
      * @param stepRunner
      * @param step
      */
-    private void findElementInPage(WebDriverStepRunner stepRunner, MadcowStep step){
+    private MadcowStepResult findElementInPage(WebDriverStepRunner stepRunner, MadcowStep step){
         String id = step.blade.mappingSelectorValue != null ? step.blade.mappingSelectorValue : ""
         String txt = ""
         int sec = 0
@@ -99,17 +100,19 @@ class WaitUntilExists extends WebDriverBladeRunner{
             timeout = sec
             txt = map.value != null ? map.value : ""
             if(StringUtils.isEmpty(map.seconds) || StringUtils.isEmpty(map.value)){
-                step.result = MadcowStepResult.FAIL("seconds and value are required in a Map parameter. waitUntilExists =[seconds:'', value:'' ]")
+                return MadcowStepResult.FAIL("seconds and value are required in a Map parameter. waitUntilExists =[seconds:'', value:'' ]")
             }else{
                 waitTilExists(stepRunner,null,txt, sec)
+                return MadcowStepResult.PASS()
             }
         }else{
             sec = step.blade.parameters as int
             timeout = sec
             if(StringUtils.isEmpty(id) || StringUtils.isEmpty(step.blade.parameters)){
-                step.result = MadcowStepResult.FAIL("mapping is required. Page_element.waitUntilExists = 2")
+                return MadcowStepResult.FAIL("mapping is required. Page_element.waitUntilExists = 2")
             }else{
                 waitTilExists(stepRunner,id,null, sec)
+                return MadcowStepResult.PASS()
             }
         }
     }
