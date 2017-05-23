@@ -101,3 +101,12 @@ This is done through `@{...}` syntax, with the contents within the curly braces 
 @expectedResultCount = 20
 verifyText = There are @{expectedResultCount} countries found
 {% endhighlight %}
+
+## Ignore "@" symbol as String value
+
+Symbol that start with "@" sign as value can be also treated a string value by appending curly braces "{}" between them.
+
+{% highlight bash %}
+@invalidEmail = {@gmail.com}, this will be saved as invalidEmail = "@gmail.com"
+id.value = {@gmail.com}
+{% endhighlight %}

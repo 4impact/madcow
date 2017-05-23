@@ -7,7 +7,7 @@ category: table operations
 
 ## Usage
 {% highlight bash %}
-[MADCOW:htmlElementReference].table.currentRow.selectField = <<text value of index>>
+[MADCOW:htmlElementReference].table.currentRow.selectField = <<text value>>
 {% endhighlight %}
 
 ## Examples
