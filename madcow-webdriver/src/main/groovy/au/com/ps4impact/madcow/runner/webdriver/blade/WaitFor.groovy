@@ -36,15 +36,34 @@ import org.apache.log4j.Logger
  */
 class WaitFor extends WebDriverBladeRunner {
 
-    private static final int maxSeconds = 30;
-
+    private static final int maxSeconds = 30; // default seconds
+    private static final String TEXT = "text"
+    private static final String SECONDS = "seconds"
 
     public void execute(WebDriverStepRunner stepRunner, MadcowStep step) {
         boolean found = false;
-        for (count in 1..maxSeconds) {
-            found = isDesiredConditionFound(count, step, stepRunner, found)
-            if (found) break;
-            Thread.sleep(1000);
+        try {
+            if (step.blade.parameters != null && (step.blade.parameters instanceof LinkedHashMap)) {
+                // For parameter:  aLinkText.waitFor =  ['text': 'A link' , 'seconds': '10']
+                String textValue = null;
+                int waitSeconds = maxSeconds;
+                step.blade.parameters.entrySet().each { Map.Entry<String, String> entry ->
+                    String key = entry.getKey();
+                    switch (key) {
+                        case TEXT: textValue = entry.getValue();
+                             step.blade.parameters = textValue;
+                             break;
+                        case SECONDS: waitSeconds = Integer.parseInt(entry.getValue()); break;
+                        default: break;
+                    }
+                }
+                if (StringUtils.isNotEmpty(textValue))
+                    found = checkWaitForCondition(waitSeconds, step, stepRunner, found)
+            } else
+                // For paramter :  aLinkText.waitFor and aLinkText.waitFor = A link
+                found = checkWaitForCondition(maxSeconds, step, stepRunner, found)
+        } catch (Exception ignored) {
+            found = false;
         }
 
         if (found)
@@ -52,6 +71,15 @@ class WaitFor extends WebDriverBladeRunner {
         else
             step.result = MadcowStepResult.FAIL('Element didn\'t appear within the timeout');
 
+    }
+    private boolean checkWaitForCondition(int waitSeconds, MadcowStep step, WebDriverStepRunner stepRunner, boolean found) {
+        boolean flag = false
+        for (count in 1..waitSeconds) {
+            flag = isDesiredConditionFound(count, step, stepRunner, found)
+            if (flag) break;
+            Thread.sleep(1000);
+        }
+        return flag
     }
 
     private boolean isDesiredConditionFound(int count, MadcowStep step, WebDriverStepRunner stepRunner, boolean found) {
