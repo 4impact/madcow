@@ -163,9 +163,12 @@ class MadcowTestCase implements IJSONSerializable {
         }
 
         this.lastExecutedStep = step;
-        if (step.result.failed())
+        if (step.result.failed()) {
+            if (!new MadcowConfig().closeBrowserOnFail) {
+                stepRunner.setFailed()
+            }
             throw new RuntimeException("Step <${step.blade.line}> failed - ${step.result}");
-
+        }
         if ((step.children != null) && (!step.children.empty)) {
             step.stopWatch.reset();
             step.stopWatch.start();
