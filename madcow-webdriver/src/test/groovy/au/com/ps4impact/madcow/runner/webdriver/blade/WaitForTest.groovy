@@ -70,6 +70,7 @@ class WaitForTest extends AbstractBladeTestCase {
         verifyWaitFor(blade, true);
     }
 
+
     @Test
     void testWaitForHTMLNoMatch() {
         GrassBlade blade = new GrassBlade('waitFor = <BUGEDDYBUGGEDY />', testCase.grassParser);
@@ -108,5 +109,44 @@ class WaitForTest extends AbstractBladeTestCase {
     void testWaitForPageText() {
         GrassBlade blade = new GrassBlade('waitFor = Madcow WebDriver Runner Test HTML', testCase.grassParser);
         verifyWaitFor(blade, true);
+    }
+
+    @Test
+    void testWaitForWithTextAndSeconds() {
+        MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
+        GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'text\': \'A link\' , \'seconds\': \'10\']', testCase.grassParser);
+        verifyWaitFor(blade, true);
+    }
+
+    @Test
+    void testWaitForWithoutSeconds() {
+        MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
+        GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'text\': \'A link\']', testCase.grassParser);
+        verifyWaitFor(blade, true);
+    }
+
+    @Test
+    void testWaitForWithSeconds() {
+        MadcowMappings.addMapping(testCase, 'aLinkText', ['text': 'A link']);
+        GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'seconds\': \'10\']', testCase.grassParser);
+        verifyWaitFor(blade, false);
+    }
+
+    @Test
+    void testWaitForNoResponse() {
+        GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'text\': \'link\' , \'seconds\': \'10\']', testCase.grassParser);
+        verifyWaitFor(blade, false);
+    }
+
+    @Test
+    void testWaitForRetryWithRefresh() {
+        GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'text\': \'link\' , \'seconds\': \'2\', \'retry\': \'3\', \'refresh\': \'true\']', testCase.grassParser);
+        verifyWaitFor(blade, false);
+    }
+
+    @Test
+    void testWaitForRetry() {
+        GrassBlade blade = new GrassBlade('aLinkText.waitFor =  [\'text\': \'link\' , \'seconds\': \'2\', \'retry\': \'3\']', testCase.grassParser);
+        verifyWaitFor(blade, false);
     }
 }
