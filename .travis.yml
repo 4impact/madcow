@@ -30,7 +30,7 @@ addons:
   sonarcloud:
     organization: "4impactSonar"
     token:
-      secure: "i85TqgE6pEt/c8tArrYFom6HKcT5Z8VVmHYfTe5w3X0ifcx5x6Sb/O6rChcl+Q6KF+4m/vgAOyPAnfQiaiaFdpN21mWk5qtEPM/ih2AnL0KbpEcM1AIQbKD7k0y4Bm+JEkTKHgdmDxZ/BwhizMIVDEioDgreq/pUcO5UwFrlnBk="
+      secure: "YqhpHimuvDUQr0fFj+pafxU8csSv1KX0uh2CcggUbZXbqZmEh2ylSGKAYy2QSePPV6y+Za9/p/hKnq+Tp9ewASw2LDt7gaicGXxGnugwQN2SghoSqbsjdduxnmjobdLlODk0L9LrL4W2BYOREEsfTKdYIZoizGVLRQ2CNORO/XY="
 script:
   - gradle sonarqube
 cache:
