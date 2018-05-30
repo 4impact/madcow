@@ -28,7 +28,7 @@ after_success:
   - gradle coveralls
 addons:
   sonarcloud:
-    organization: "4impactSonar"
+    organization: "4impact"
     token:
       secure: "YqhpHimuvDUQr0fFj+pafxU8csSv1KX0uh2CcggUbZXbqZmEh2ylSGKAYy2QSePPV6y+Za9/p/hKnq+Tp9ewASw2LDt7gaicGXxGnugwQN2SghoSqbsjdduxnmjobdLlODk0L9LrL4W2BYOREEsfTKdYIZoizGVLRQ2CNORO/XY="
 script:
