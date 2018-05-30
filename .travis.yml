@@ -1,7 +1,8 @@
 language: java
+install: true
 sudo: false
 jdk:
-- oraclejdk8
+  - oraclejdk8
 before_script: gradle clean
 notifications:
   webhooks:
@@ -26,3 +27,16 @@ deploy:
 after_deploy: "echo deployment done"
 after_success:
   - gradle coveralls
+addons:
+  sonarcloud:
+    organization: "4impactSonar"
+    token:
+      secure: "i85TqgE6pEt/c8tArrYFom6HKcT5Z8VVmHYfTe5w3X0ifcx5x6Sb/O6rChcl+Q6KF+4m/vgAOyPAnfQiaiaFdpN21mWk5qtEPM/ih2AnL0KbpEcM1AIQbKD7k0y4Bm+JEkTKHgdmDxZ/BwhizMIVDEioDgreq/pUcO5UwFrlnBk="
+script:
+  - ./gradlew sonarqube
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
+    - '$HOME/.gradle'
+    - '.gradle'
