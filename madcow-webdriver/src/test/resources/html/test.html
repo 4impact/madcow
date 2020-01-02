@@ -23,6 +23,12 @@
 <head>
   <title>Test Page</title>
   <link rel="stylesheet" type="text/css" href="test.css" media="screen"/>
+  <script>
+    function myFunction() {
+        var t = window.open("", "","location=no,top=500,left=500,width=400,height=400");
+        t.document.title = "SampleTitle"
+    }
+</script>
 </head>
 
 <style>
@@ -231,6 +237,8 @@
   <a href="www.google.com" id="aLinkOffScreenId" name="aLinkOffScreenName">This is a link to google that should off the bottom of the viewable screen area on most resolutions</a>
   <input type="radio" id="aRadioOffScreenId" name="aRadioOffScreenName" value="false"/>
 </form>
+
+<a href="#" id="myBtn" onclick="myFunction()">Try it</a>
 
 <footer id="footerId">My footer</footer>
 </body>
