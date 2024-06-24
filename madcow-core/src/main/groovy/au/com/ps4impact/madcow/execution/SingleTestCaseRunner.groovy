@@ -49,6 +49,7 @@ class SingleTestCaseRunner {
                     testCase.execute();
                     testCase.logInfo("Test ${testCase.name} Passed");
                 } catch (e) {
+                    testCase.testCaseError = true;
                     testCase.logError("Test ${testCase.name} Failed!\n\nException: $e");
                 }
             }

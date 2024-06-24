@@ -67,6 +67,7 @@ class ParallelTestCaseRunner {
                             testCase.execute();
                             testCase.logInfo("Test ${testCase.name} Passed");
                         } catch (e) {
+                            testCase.testCaseError = true;
                             testCase.logError("Test ${testCase.name} Failed!\nException: $e");
                             return callback.act(P.p(testCase, some(e)));
                         }
