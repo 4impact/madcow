@@ -46,6 +46,7 @@ class MadcowConfig implements IJSONSerializable {
     public int retryCount = 0;
 
     public boolean parallel = true;
+    public boolean closeBrowserOnFail = true;
 
     public String stepRunner;
     public HashMap<String, String> stepRunnerParameters;
@@ -115,6 +116,17 @@ class MadcowConfig implements IJSONSerializable {
             } catch (ignored) {
                 throw new Exception('Invalid "parallel" field specified - only true or false is allowed');
             }
+        }
+
+        //get the default closeBrowserOnFail run setting if set
+        def closeBrowserOnFailTxt = this.execution."closeBrowserOnFail"?.text() ?: '';
+        if (closeBrowserOnFailTxt != '') {
+            try {
+                closeBrowserOnFail = !closeBrowserOnFailTxt.equals("false") as boolean;
+            } catch (Exception e) {
+                throw new Exception("Unexpected error in closeBrowserOnFail - $e.message");
+            }
+
         }
 
         // get the default retry count and use it if none is set

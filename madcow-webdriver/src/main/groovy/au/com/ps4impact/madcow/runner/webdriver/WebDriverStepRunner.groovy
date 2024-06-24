@@ -21,6 +21,7 @@
 
 package au.com.ps4impact.madcow.runner.webdriver
 
+import au.com.ps4impact.madcow.config.MadcowConfig
 import au.com.ps4impact.madcow.runner.webdriver.driver.WebDriverType
 import au.com.ps4impact.madcow.step.MadcowStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
@@ -432,7 +433,8 @@ class WebDriverStepRunner extends MadcowStepRunner {
     }
 
     public void finishTestCase() {
-        if (_lazyDriver == null) {
+        //if test is failed and closeBrowserOnFail = false then don't close the browser
+        if (_lazyDriver == null || ( isFailed())) {
             return;
         }
         if (driverType == WebDriverType.CHROME) {
