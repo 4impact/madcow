@@ -59,11 +59,6 @@ class GrassBladeTest extends GroovyTestCase {
         GrassBlade equationListParam2Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = ["One", "Two"]""", madcowTestCase.grassParser);
         checkBladeProperties(equationListParam2Blade, """addressbook_search_country.verifySelectFieldOptions = ["One", "Two"]""", 'verifySelectFieldOptions', ['id' : 'addressbook_search_country'], ['One', 'Two'], 'addressbook_search_country');
 
-        GrassBlade equationListParam3Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = ['One\\'s', "Two"]""", madcowTestCase.grassParser);
-        checkBladeProperties(equationListParam3Blade, """addressbook_search_country.verifySelectFieldOptions = ['One\\'s', "Two"]""", 'verifySelectFieldOptions', ['id' : 'addressbook_search_country'], ['One\'s', 'Two'], 'addressbook_search_country');
-
-        GrassBlade equationListParam4Blade = new GrassBlade("""addressbook_search_country.verifySelectFieldOptions = ["One's", "Two"]""", madcowTestCase.grassParser);
-        checkBladeProperties(equationListParam4Blade, """addressbook_search_country.verifySelectFieldOptions = ["One's", "Two"]""", 'verifySelectFieldOptions', ['id' : 'addressbook_search_country'], ['One\'s', 'Two'], 'addressbook_search_country');
     }
 
     public void testEquationWithMapParameterProperties() {

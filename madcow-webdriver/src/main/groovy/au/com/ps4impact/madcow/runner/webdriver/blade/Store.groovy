@@ -22,6 +22,7 @@
 package au.com.ps4impact.madcow.runner.webdriver.blade
 
 import au.com.ps4impact.madcow.grass.GrassBlade
+import au.com.ps4impact.madcow.grass.ParseUtils
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverBladeRunner
 import au.com.ps4impact.madcow.runner.webdriver.WebDriverStepRunner
 import au.com.ps4impact.madcow.step.MadcowStep
@@ -67,12 +68,24 @@ class Store extends WebDriverBladeRunner {
     protected void updateStepParameters(ArrayList<MadcowStep> steps, def storedParamName, def storedDataParam) {
 
         // TODO - this really isn't the best solution. We should have a pre-eval step on each execute that checks for run-time parameters and sets it that way.
-
         // replace all the stored param placeholders with the corresponding value from the html element
         steps.each { MadcowStep madStep ->
-
-            if ((madStep?.blade?.parameters as String)?.contains("${GrassBlade.DATA_PARAMETER_KEY}{${storedParamName}}"))
-                madStep.blade.parameters = (madStep?.blade?.parameters as String).replaceAll("${GrassBlade.DATA_PARAMETER_KEY}\\{${storedParamName}\\}", madStep.testCase.grassParser.getDataParameter(storedDataParam))
+            final parameters = madStep?.blade?.parameters
+            String regexToReplace = "${GrassBlade.DATA_PARAMETER_KEY}\\{${storedParamName}\\}"
+            if (parameters instanceof String) {
+                String replacement = madStep.testCase.grassParser.getDataParameter(storedDataParam)
+                replacement = ParseUtils.unDollarify(replacement) ;
+                madStep.blade.parameters = parameters.replaceAll(regexToReplace, replacement)
+            }
+            if (parameters instanceof Map) {
+                parameters?.each { entry ->
+                    if (entry.value instanceof String) {
+                        String replacement = madStep.testCase.grassParser.getDataParameter(storedDataParam)
+                        replacement = ParseUtils.unDollarify(replacement) ;
+                        entry.value = (entry.value as String).replaceAll(regexToReplace, replacement)
+                    }
+                }
+            }
 
             if (!madStep.children?.isEmpty()) {
                 this.updateStepParameters(madStep.children, storedParamName, storedDataParam)
@@ -102,5 +115,12 @@ class Store extends WebDriverBladeRunner {
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.NAME,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.XPATH,
                 WebDriverBladeRunner.BLADE_MAPPING_SELECTOR_TYPE.CSS];
+    }
+
+    /**
+     * Get the list of supported parameter types, which for table operations is a map
+     */
+    protected List<Class> getSupportedParameterTypes() {
+        return [Map.class, String.class]
     }
 }

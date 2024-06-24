@@ -46,6 +46,7 @@ class Value extends WebDriverBladeRunner {
 
         def valueToSet
         def submitAfterSet = false
+        def setByAttribute = false
         if (Map.class.isInstance(step.blade.parameters)) {
             Map paramMap = step.blade.parameters as Map;
 
@@ -53,7 +54,12 @@ class Value extends WebDriverBladeRunner {
                 submitAfterSet = true
             }
 
+            if (paramMap.setByAttribute != null && (paramMap.setByAttribute == true || (paramMap.setByAttribute as String).toLowerCase() == 'true')) {
+                setByAttribute = true
+            }
+
             valueToSet = paramMap.value as String
+
         } else {
             valueToSet = step.blade.parameters as String
         }
@@ -78,7 +84,9 @@ class Value extends WebDriverBladeRunner {
                 ((HtmlPage) htmlUnitWebElement.getPage()).setFocusedElement(null);
             }
         } else {
-            element.clear();
+            try {
+                element.clear();
+            } catch(ignored){}
 
             // check the element was _actually_ cleared - manually backspace if needed.. yikes!
             String value = element.getTagName().toLowerCase() == 'input' ? element.getAttribute('value') : element.text;
@@ -86,7 +94,10 @@ class Value extends WebDriverBladeRunner {
                 (0..value.length()).each { element.sendKeys(Keys.BACK_SPACE) }
             }
 
-            if (submitAfterSet) {
+            if(setByAttribute) {
+                JavascriptExecutor js = (JavascriptExecutor) stepRunner.driver
+                js.executeScript("arguments[0].setAttribute('value','" + valueToSet +"')",element)
+            } else if (submitAfterSet) {
                 element.sendKeys(valueToSet, Keys.ENTER);
             } else {
                 element.sendKeys(valueToSet, Keys.TAB);
